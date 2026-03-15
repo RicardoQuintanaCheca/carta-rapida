@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta Rápida — Kartia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; color: #111; font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 0 24px 80px; }
+  .wrap { width: 100%; max-width: 560px; }
+  header { padding: 32px 0 48px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #111; text-decoration: none; text-transform: uppercase; }
+  .badge { font-size: 11px; color: #999; }
+  .title-block { margin-bottom: 36px; }
+  h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(18px, 3vw, 24px); font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: #111; margin-bottom: 12px; }
+  .sub { font-size: 13px; color: #999; line-height: 1.6; }
+
+  .messages { display: flex; flex-direction: column; gap: 24px; margin-bottom: 24px; }
+  .msg { display: flex; gap: 14px; align-items: flex-start; animation: up 0.35s ease both; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; background: #111; color: #fff; font-size: 10px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .bubble { font-size: 13px; line-height: 1.7; color: #444; max-width: 480px; }
+  .countdown { font-size: 13px; color: #999; font-variant-numeric: tabular-nums; }
+
+  .card { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-top: 4px; width: 100%; }
+  .card-head { padding: 20px 18px 16px; border-bottom: 0.5px solid #e0e0e0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .card-logo { height: auto; width: 140px; max-width: 100%; object-fit: contain; display: none; }
+  .card-logo.visible { display: block; }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #111; text-align: center; }
+  .card-tag { font-size: 10px; color: #bbb; letter-spacing: 0.08em; text-transform: uppercase; }
+  .card-body { padding: 8px 18px 18px; }
+  .sec-block { margin-top: 28px; }
+  .sec-block:first-child { margin-top: 10px; }
+  .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 8px; border-bottom: 1px solid #111; margin-bottom: 4px; }
+  .item { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 0; }
+  .item-name { font-size: 13px; font-weight: 400; color: #111; }
+  .item-desc { font-size: 11px; color: #bbb; margin-top: 2px; line-height: 1.5; }
+  .item-alergenos { font-size: 10px; color: #ccc; margin-top: 2px; font-style: italic; }
+  .item-price { font-size: 13px; color: #444; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .nota-pie { font-size: 10px; color: #ccc; text-align: right; padding: 14px 0 0; border-top: 0.5px solid #f0f0f0; margin-top: 14px; }
+
+  .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: border-color 0.2s; margin-bottom: 12px; }
+  .input-wrap:focus-within { border-color: #bbb; }
+
+  .upload { position: relative; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; transition: background 0.15s; }
+  .upload:hover { background: #fafafa; }
+  .upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .upload-icon { width: 36px; height: 36px; border: 0.5px solid #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .upload-icon svg { width: 15px; height: 15px; stroke: #666; fill: none; stroke-width: 1.5; }
+  .upload-text { font-size: 13px; color: #333; }
+  .upload-text span { display: block; font-size: 11px; color: #999; margin-top: 2px; }
+
+  .fotos-preview { display: none; padding: 12px 20px; gap: 8px; flex-wrap: wrap; border-bottom: 0.5px solid #f0f0f0; align-items: center; }
+  .fotos-preview.on { display: flex; }
+  .foto-thumb-wrap { position: relative; }
+  .foto-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 0.5px solid #eee; display: block; }
+  .foto-remove { position: absolute; top: -5px; right: -5px; width: 15px; height: 15px; background: #111; border: none; border-radius: 50%; color: #fff; font-size: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .fotos-add { width: 44px; height: 44px; border: 1px dashed #ddd; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: #ccc; position: relative; flex-shrink: 0; }
+  .fotos-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .fotos-count { font-size: 11px; color: #999; }
+
+  .text-zone { padding: 4px 20px 12px; }
+  .text-divider { font-size: 11px; color: #bbb; text-align: center; padding: 10px 0 6px; }
+  textarea { width: 100%; background: none; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 300; color: #111; resize: none; height: 40px; max-height: 140px; line-height: 1.6; padding: 4px 0; display: block; }
+  textarea::placeholder { color: #ccc; }
+
+  .personalizar-section { border-top: 0.5px solid #f0f0f0; padding: 10px 20px 14px; }
+  .personalizar-titulo { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; margin-bottom: 4px; }
+
+  .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-top: 0.5px solid #f0f0f0; }
+  .opcion-izq { display: flex; align-items: center; gap: 10px; }
+  .opcion-izq svg { width: 14px; height: 14px; stroke: #888; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+  .opcion-texto { font-size: 13px; color: #333; }
+  .opcion-subtexto { font-size: 11px; color: #999; margin-top: 1px; }
+
+  .toggle-wrap { width: 36px; height: 20px; border-radius: 10px; background: #e0e0e0; position: relative; flex-shrink: 0; transition: background 0.2s; }
+  .toggle-wrap.on { background: #111; }
+  .toggle-dot { width: 14px; height: 14px; border-radius: 50%; background: white; position: absolute; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .toggle-wrap.on .toggle-dot { left: 19px; }
+
+  .logo-drop { display: none; padding: 10px 0 6px; align-items: center; gap: 12px; border-top: 0.5px solid #f0f0f0; }
+  .logo-drop.on { display: flex; }
+  .logo-drop-zone { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; width: 100%; }
+  .logo-drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .logo-drop-icon { width: 32px; height: 32px; border: 0.5px solid #e0e0e0; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-drop-icon svg { width: 13px; height: 13px; stroke: #666; fill: none; stroke-width: 1.5; }
+
+  .logo-preview-row { display: none; padding: 8px 0 4px; align-items: center; gap: 10px; border-top: 0.5px solid #f0f0f0; }
+  .logo-preview-row.on { display: flex; }
+  .logo-thumb { height: 28px; max-width: 90px; object-fit: contain; border-radius: 4px; }
+  .logo-preview-name { font-size: 12px; color: #333; flex: 1; }
+  .logo-remove-btn { background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; line-height: 1; }
+  .logo-remove-btn:hover { color: #999; }
+
+  .main-btn { width: 100%; padding: 14px; font-size: 12px; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; }
+  .main-btn:hover:not(:disabled) { opacity: 0.85; }
+  .main-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  .actions { margin-top: 12px; display: none; }
+  .actions.on { display: block; }
+  .dl-btn { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: none; font-family: 'Inter', sans-serif; font-size: 13px; color: #333; cursor: pointer; transition: border-color 0.15s; font-weight: 300; width: 100%; }
+  .dl-btn:hover { border-color: #bbb; }
+  .dl-btn svg { width: 14px; height: 14px; opacity: 0.5; flex-shrink: 0; }
+
+  .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; }
+  .cta.on { display: flex; }
+  .cta p { font-size: 13px; color: #666; line-height: 1.65; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; align-self: flex-start; }
+  .cta-btn:hover { background: #111; color: #fff; }
+  .cta-btn svg { width: 11px; height: 11px; }
+
+  .foot { margin-top: 32px; font-size: 11px; color: #ccc; text-align: center; letter-spacing: 0.03em; }
+  .foot-copy { margin-top: 12px; font-size: 11px; color: #bbb; line-height: 1.8; text-align: center; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+  #printTable { display: none; }
+
+  @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media print {
+    @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { padding: 0; background: white; display: block; }
+    .wrap { max-width: 100%; }
+    header, .title-block, .messages, .input-wrap, .main-btn, .actions, .cta, .foot, .foot-copy { display: none !important; }
+    #printTable { display: table !important; width: 100%; border-collapse: collapse; }
+    #printTable thead { display: table-header-group; }
+    #printTable tbody { display: table-row-group; }
+    .print-thead-cell { padding: 10px 0 8px; text-align: center; border-bottom: none; }
+    .print-thead-cell img { height: 70px; width: auto; max-width: 240px; display: block; margin: 0 auto; object-fit: contain; }
+    .print-thead-cell .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; line-height: 1.3; }
+    .print-tbody-cell { padding: 0; vertical-align: top; }
+    .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
+    .sec-block:first-child { margin-top: 8px; }
+    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; letter-spacing: 0.02em; page-break-after: avoid !important; break-after: avoid !important; }
+    .item { padding: 6px 0; page-break-inside: avoid !important; break-inside: avoid !important; }
+    .item-name { font-size: 12.5px; color: #111; font-weight: 400; }
+    .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
+    .item-alergenos { font-size: 9.5px; color: #ccc; font-style: italic; margin-top: 1px; }
+    .item-price { font-size: 12.5px; color: #111; font-weight: 400; }
+    .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
+    .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+  }
+</style>
+</head>
+<body>
+
+<table id="printTable">
+  <thead>
+    <tr><td><div class="print-thead-cell" id="printTheadContent"></div></td></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="print-tbody-cell">
+        <div id="printBodyContent"></div>
+        <span class="print-kartia">kartia.es</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="wrap">
+  <header>
+    <a href="https://kartia.es" class="logo">Kartia</a>
+    <span class="badge">Herramienta gratuita</span>
+  </header>
+
+  <div class="title-block">
+    <h1>REDISEÑA TU CARTA<br>EN SEGUNDOS</h1>
+    <p class="sub">Sube una foto. La IA hace el resto.</p>
+  </div>
+
+  <div class="messages" id="msgs">
+    <div class="msg">
+      <div class="avatar">K</div>
+      <div class="bubble">Sube las fotos de tu carta o pega el texto directamente. Te la devuelvo con un diseño limpio y profesional.</div>
+    </div>
+    <div class="msg" id="msgTyping" style="display:none">
+      <div class="avatar">K</div>
+      <div class="bubble">
+        <div class="countdown">Analizando tu carta… <span id="countNum">15</span>s</div>
+      </div>
+    </div>
+    <div class="msg" id="msgStatus" style="display:none">
+      <div class="avatar">K</div>
+      <div class="bubble" id="statusText"></div>
+    </div>
+    <div class="msg" id="msgResult" style="display:none">
+      <div class="avatar">K</div>
+      <div style="flex:1">
+        <div class="bubble" style="margin-bottom:10px">Aquí está tu carta rediseñada.</div>
+        <div class="card" id="cartaResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-wrap">
+
+    <!-- Zona fotos -->
+    <div class="upload" id="uploadZone">
+      <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+      </div>
+      <div class="upload-text">
+        Sube las fotos de tu carta
+        <span>JPG, PNG — puedes subir varias</span>
+      </div>
+    </div>
+
+    <div class="fotos-preview" id="fotosPreview">
+      <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+      <div class="fotos-add" title="Añadir más fotos">
+        <input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">
+        +
+      </div>
+      <span class="fotos-count" id="fotosCount"></span>
+    </div>
+
+    <!-- Zona texto — sin botón avión -->
+    <div class="text-zone">
+      <div class="text-divider">o también, copia y pega aquí tu carta</div>
+      <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." rows="2" oninput="onTextInput(this)"></textarea>
+    </div>
+
+    <!-- Personalizar -->
+    <div class="personalizar-section">
+      <div class="personalizar-titulo">Personalizar</div>
+
+      <!-- Toggle logotipo -->
+      <div class="opcion-fila" onclick="toggleLogo()">
+        <div class="opcion-izq">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <div>
+            <div class="opcion-texto">Añadir logotipo</div>
+            <div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div>
+          </div>
+        </div>
+        <div class="toggle-wrap" id="logoToggle">
+          <div class="toggle-dot"></div>
+        </div>
+      </div>
+
+      <!-- Desplegable subida logo -->
+      <div class="logo-drop" id="logoDrop">
+        <div class="logo-drop-zone">
+          <input type="file" accept="image/*" onchange="handleLogo(this)">
+          <div class="logo-drop-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          </div>
+          <div>
+            <div class="opcion-texto">Sube tu logotipo</div>
+            <div class="opcion-subtexto">JPG o PNG</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview logo -->
+      <div class="logo-preview-row" id="logoPreview">
+        <img class="logo-thumb" id="logoThumb" src="" alt="">
+        <span class="logo-preview-name" id="logoName"></span>
+        <button class="logo-remove-btn" onclick="removeLogo()">×</button>
+      </div>
+
+      <!-- Toggle descripciones -->
+      <div class="opcion-fila" onclick="toggleDesc()">
+        <div class="opcion-izq">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <div>
+            <div class="opcion-texto">Crear descripciones de los platos</div>
+            <div class="opcion-subtexto">La IA redacta textos apetecibles para cada plato</div>
+          </div>
+        </div>
+        <div class="toggle-wrap" id="descToggle">
+          <div class="toggle-dot"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
+
+  <div class="actions" id="actions">
+    <button class="dl-btn" onclick="descargar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Descargar PDF
+    </button>
+  </div>
+
+  <div class="cta" id="cta">
+    <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
+    <a href="https://kartia.es" class="cta-btn" target="_blank">
+      Ver portamenús
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <p class="foot">Tu carta se analiza en segundos y se elimina de inmediato — nunca la almacenamos.</p>
+  <p class="foot-copy">Aplicamos neuromarketing y principios de diseño persuasivo para reorganizar tu carta: jerarquía visual, orden de lectura y estructura de precios que guían al cliente hacia lo que más te interesa vender.</p>
+</div>
+
+<script>
+  let filesList = [];
+  let logoFile = null;
+  let logoDataUrl = null;
+  let countdownInterval = null;
+  let descActivo = false;
+  let logoActivo = false;
+
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => e.preventDefault());
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (files.length) addFiles(files);
+  });
+
+  function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
+  function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
+
+  function addFiles(newFiles) {
+    let pendientes = newFiles.length;
+    newFiles.forEach(file => {
+      const r = new FileReader();
+      r.onload = e => {
+        filesList.push({ file, dataUrl: e.target.result });
+        renderThumbs();
+        pendientes--;
+        if (pendientes === 0) checkReady();
+      };
+      r.readAsDataURL(file);
+    });
+    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('fotosPreview').classList.add('on');
+  }
+
+  function removePhoto(index) {
+    filesList.splice(index, 1);
+    if (filesList.length === 0) {
+      document.getElementById('uploadZone').style.display = 'flex';
+      document.getElementById('fotosPreview').classList.remove('on');
+    }
+    renderThumbs();
+    checkReady();
+  }
+
+  function renderThumbs() {
+    const container = document.getElementById('fotosContainer');
+    container.innerHTML = filesList.map((f, i) => `
+      <div class="foto-thumb-wrap">
+        <img class="foto-thumb" src="${f.dataUrl}" alt="">
+        <button class="foto-remove" onclick="removePhoto(${i})">×</button>
+      </div>`).join('');
+    document.getElementById('fotosCount').textContent = filesList.length > 1 ? `${filesList.length} fotos` : '';
+  }
+
+  function toggleLogo() {
+    logoActivo = !logoActivo;
+    document.getElementById('logoToggle').classList.toggle('on', logoActivo);
+    document.getElementById('logoDrop').classList.toggle('on', logoActivo);
+    if (!logoActivo) removeLogo();
+  }
+
+  function toggleDesc() {
+    descActivo = !descActivo;
+    document.getElementById('descToggle').classList.toggle('on', descActivo);
+  }
+
+  function handleLogo(input) {
+    if (!input.files[0]) return;
+    logoFile = input.files[0];
+    const r = new FileReader();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let top = canvas.height, bottom = 0, left = canvas.width, right = 0;
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            const idx = (y * canvas.width + x) * 4;
+            const rr = data[idx], g = data[idx+1], b = data[idx+2], a = data[idx+3];
+            if (!(a < 20 || (rr > 235 && g > 235 && b > 235))) {
+              if (y < top) top = y; if (y > bottom) bottom = y;
+              if (x < left) left = x; if (x > right) right = x;
+            }
+          }
+        }
+        if (top > bottom || left > right) {
+          logoDataUrl = e.target.result;
+        } else {
+          const pad = 4;
+          const cx = Math.max(0, left-pad), cy = Math.max(0, top-pad);
+          const cw = Math.min(canvas.width-cx, right-left+pad*2+1);
+          const ch = Math.min(canvas.height-cy, bottom-top+pad*2+1);
+          const out = document.createElement('canvas');
+          out.width = cw; out.height = ch;
+          out.getContext('2d').drawImage(canvas, cx, cy, cw, ch, 0, 0, cw, ch);
+          logoDataUrl = out.toDataURL('image/png');
+        }
+        document.getElementById('logoThumb').src = logoDataUrl;
+        document.getElementById('logoName').textContent = logoFile.name;
+        document.getElementById('logoDrop').classList.remove('on');
+        document.getElementById('logoPreview').classList.add('on');
+      };
+      img.src = e.target.result;
+    };
+    r.readAsDataURL(logoFile);
+  }
+
+  function removeLogo() {
+    logoFile = null; logoDataUrl = null;
+    document.getElementById('logoPreview').classList.remove('on');
+    if (logoActivo) document.getElementById('logoDrop').classList.add('on');
+  }
+
+  function checkReady() {
+    const hayContenido = filesList.length > 0 || document.getElementById('txt').value.trim();
+    document.getElementById('mainBtn').disabled = !hayContenido;
+  }
+
+  function onTextInput(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+    checkReady();
+  }
+
+  function startCountdown(seconds) {
+    const el = document.getElementById('countNum');
+    let remaining = seconds;
+    el.textContent = remaining;
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) { el.textContent = '…'; clearInterval(countdownInterval); }
+      else el.textContent = remaining;
+    }, 1000);
+  }
+
+  function stopCountdown() { clearInterval(countdownInterval); }
+
+  function status(text) {
+    stopCountdown();
+    document.getElementById('msgTyping').style.display = 'none';
+    document.getElementById('statusText').textContent = text;
+    document.getElementById('msgStatus').style.display = 'flex';
+    scroll();
+  }
+
+  function formatPrice(precio) {
+    if (!precio) return '';
+    const s = precio.toString();
+    if (s.includes('.')) return s.replace(/\.?0+$/, '');
+    return s;
+  }
+
+  async function run() {
+    const textoManual = document.getElementById('txt').value.trim();
+    if (filesList.length === 0 && !textoManual) return;
+
+    document.querySelector('.input-wrap').style.opacity = '0.4';
+    document.querySelector('.input-wrap').style.pointerEvents = 'none';
+    document.getElementById('mainBtn').style.opacity = '0.4';
+    document.getElementById('mainBtn').style.pointerEvents = 'none';
+
+    const segundos = filesList.length > 1 ? 25 : 15;
+    document.getElementById('msgTyping').style.display = 'flex';
+    startCountdown(segundos);
+    scroll();
+
+    try {
+      const formData = new FormData();
+      filesList.forEach((f, i) => formData.append(`foto_${i}`, f.file));
+      if (logoFile) formData.append('logo', logoFile);
+      if (textoManual) formData.append('texto', textoManual);
+      formData.append('descripciones', descActivo ? 'si' : 'no');
+
+      const res = await fetch('/procesar', { method: 'POST', body: formData });
+      const data = await res.json();
+      stopCountdown();
+      if (!data.ok) throw new Error(data.error);
+      if (data.logo) logoDataUrl = data.logo;
+
+      status('Aplicando diseño…');
+      setTimeout(() => mostrarCarta(data.carta), 600);
+    } catch (err) {
+      stopCountdown();
+      status('Algo salió mal: ' + err.message);
+    }
+  }
+
+  function mostrarCarta(carta) {
+    document.getElementById('msgStatus').style.display = 'none';
+    const tienelogo = !!logoDataUrl;
+
+    const thead = document.getElementById('printTheadContent');
+    if (tienelogo) {
+      thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
+    } else if (carta.nombre_restaurante) {
+      thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
+    } else {
+      thead.innerHTML = '';
+    }
+
+    let bodyHtml = '';
+    carta.secciones.forEach(sec => {
+      bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
+      sec.platos.forEach(p => {
+        bodyHtml += `<div class="item"><div>
+          <div class="item-name">${p.nombre}</div>
+          ${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}
+          ${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}
+        </div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
+      });
+      bodyHtml += `</div>`;
+    });
+    if (carta.nota_pie) bodyHtml += `<div class="nota-pie">${carta.nota_pie}</div>`;
+    document.getElementById('printBodyContent').innerHTML = bodyHtml;
+
+    const container = document.getElementById('cartaResult');
+    const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
+    const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
+    const mostrarHead = tienelogo || carta.nombre_restaurante;
+
+    let html = mostrarHead ? `<div class="card-head">${logoHtml}${nombreHtml}<span class="card-tag">Vista previa</span></div>` : '';
+    html += `<div class="card-body">`;
+    carta.secciones.forEach(sec => {
+      html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
+      sec.platos.forEach(p => {
+        html += `<div class="item"><div>
+          <div class="item-name">${p.nombre}</div>
+          ${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}
+          ${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}
+        </div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
+      });
+      html += `</div>`;
+    });
+    if (carta.nota_pie) html += `<div class="nota-pie">${carta.nota_pie}</div>`;
+    html += '</div>';
+    container.innerHTML = html;
+
+    document.getElementById('msgResult').style.display = 'flex';
+    document.getElementById('actions').classList.add('on');
+    setTimeout(() => { document.getElementById('cta').classList.add('on'); scroll(); }, 500);
+    scroll();
+  }
+
+  function descargar() { window.print(); }
+  function scroll() { setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 80); }
+</script>
+</body>
+</html>
