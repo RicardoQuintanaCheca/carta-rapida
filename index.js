@@ -159,7 +159,7 @@ EJEMPLOS DE BUEN ESTILO para guiarte:
 REGLAS ABSOLUTAS:
 - Máximo 1 línea por descripción
 - Tono elegante, neutro, sin exageraciones
-- Bebidas, pan, bolsa y extras: descripción siempre vacía ""
+- Bebidas, pan y extras: descripción siempre vacía ""
 
 REGLAS DE ALÉRGENOS:
 - Si aparecen, consérvelos sin la palabra "Alérgenos:"
@@ -298,6 +298,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Servidor funcionando en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor funcionando en puerto ${PORT}`);
 });
