@@ -93,15 +93,15 @@
   .logo-remove-btn { background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; line-height: 1; }
   .logo-remove-btn:hover { color: #999; }
 
-  .main-btn { width: 100%; padding: 14px; font-size: 12px; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; }
+  .main-btn { width: 100%; padding: 14px; font-size: 12px; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .main-btn:hover:not(:disabled) { opacity: 0.85; }
   .main-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
 
   .actions { margin-top: 12px; display: none; }
   .actions.on { display: block; }
-  .dl-btn { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: none; font-family: 'Inter', sans-serif; font-size: 13px; color: #333; cursor: pointer; transition: border-color 0.15s; font-weight: 300; width: 100%; }
-  .dl-btn:hover { border-color: #bbb; }
-  .dl-btn svg { width: 14px; height: 14px; opacity: 0.5; flex-shrink: 0; }
+  .dl-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border: none; border-radius: 10px; background: #111; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; width: 100%; }
+  .dl-btn:hover { opacity: 0.85; }
+  .dl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
   .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; }
   .cta.on { display: flex; }
@@ -190,13 +190,18 @@
       <div style="flex:1">
         <div class="bubble" style="margin-bottom:10px">Aquí está tu carta rediseñada.</div>
         <div class="card" id="cartaResult"></div>
+        <div class="actions" id="actions">
+          <button class="dl-btn" onclick="descargar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            DESCARGAR PDF
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="input-wrap">
 
-    <!-- Zona fotos -->
     <div class="upload" id="uploadZone">
       <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
       <div class="upload-icon">
@@ -217,13 +222,11 @@
       <span class="fotos-count" id="fotosCount"></span>
     </div>
 
-    <!-- Zona texto — sin botón avión -->
     <div class="text-zone">
       <div class="text-divider">o también, copia y pega aquí tu carta</div>
       <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." rows="2" oninput="onTextInput(this)"></textarea>
     </div>
 
-    <!-- Personalizar -->
     <div class="personalizar-section">
       <div class="personalizar-titulo">Personalizar</div>
 
@@ -241,7 +244,6 @@
         </div>
       </div>
 
-      <!-- Desplegable subida logo -->
       <div class="logo-drop" id="logoDrop">
         <div class="logo-drop-zone">
           <input type="file" accept="image/*" onchange="handleLogo(this)">
@@ -255,7 +257,6 @@
         </div>
       </div>
 
-      <!-- Preview logo -->
       <div class="logo-preview-row" id="logoPreview">
         <img class="logo-thumb" id="logoThumb" src="" alt="">
         <span class="logo-preview-name" id="logoName"></span>
@@ -276,17 +277,24 @@
         </div>
       </div>
 
+      <!-- Toggle neuromarketing — activado por defecto -->
+      <div class="opcion-fila" onclick="toggleNeuro()">
+        <div class="opcion-izq">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
+          <div>
+            <div class="opcion-texto">Ordenar platos por rentabilidad</div>
+            <div class="opcion-subtexto">La IA coloca los platos más rentables primero</div>
+          </div>
+        </div>
+        <div class="toggle-wrap on" id="neuroToggle">
+          <div class="toggle-dot"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
-
-  <div class="actions" id="actions">
-    <button class="dl-btn" onclick="descargar()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Descargar PDF
-    </button>
-  </div>
 
   <div class="cta" id="cta">
     <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
@@ -307,6 +315,7 @@
   let countdownInterval = null;
   let descActivo = false;
   let logoActivo = false;
+  let neuroActivo = true;
 
   const zone = document.getElementById('uploadZone');
   zone.addEventListener('dragover', e => e.preventDefault());
@@ -365,6 +374,11 @@
   function toggleDesc() {
     descActivo = !descActivo;
     document.getElementById('descToggle').classList.toggle('on', descActivo);
+  }
+
+  function toggleNeuro() {
+    neuroActivo = !neuroActivo;
+    document.getElementById('neuroToggle').classList.toggle('on', neuroActivo);
   }
 
   function handleLogo(input) {
@@ -478,6 +492,7 @@
       if (logoFile) formData.append('logo', logoFile);
       if (textoManual) formData.append('texto', textoManual);
       formData.append('descripciones', descActivo ? 'si' : 'no');
+      formData.append('neuromarketing', neuroActivo ? 'si' : 'no');
 
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
