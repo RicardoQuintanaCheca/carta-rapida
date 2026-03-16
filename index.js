@@ -191,16 +191,12 @@ TRANSLATE EVERYTHING:
 TRANSLATION STYLE — HOSPITALITY PROFESSIONAL:
 - Use professional hospitality terminology in ${nombreIdioma}
 - Maintain the elegant and appetizing tone of a premium restaurant
-- For well-known Spanish dishes with no direct translation (paella, jamón ibérico, gazpacho, tortilla, croquetas, fabada, cocido), keep the Spanish name but add a brief description in ${nombreIdioma} if there is no description already
-- For dishes that have a standard translation in ${nombreIdioma}, use the correct culinary term
+- For well-known Spanish dishes with no direct translation, keep the Spanish name but add a brief description in ${nombreIdioma}
+- For dishes that have a standard translation, use the correct culinary term
 
-DO NOT TRANSLATE:
-- Prices and quantities (numbers)
-- Indicators like (V), (VG)
-- Abbreviations like SPM
-- The restaurant name
+DO NOT TRANSLATE: prices, quantities, (V), (VG), SPM, restaurant name.
 
-IMPORTANT: Every dish name and section name MUST be in ${nombreIdioma}. If you leave any text in Spanish, that is an error.`;
+IMPORTANT: Every dish name and section name MUST be in ${nombreIdioma}.`;
 }
 
 function limpiarYParsearJSON(texto) {
@@ -240,9 +236,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
     const conTraduccion = idioma !== 'es';
 
     let PROMPT = getPrompt(conDescripciones, conNeuro);
-    if (conTraduccion) {
-      PROMPT += getInstruccionTraduccion(idioma);
-    }
+    if (conTraduccion) PROMPT += getInstruccionTraduccion(idioma);
 
     console.log(`Modo: desc=${conDescripciones} neuro=${conNeuro} idioma=${idioma}`);
 
@@ -255,10 +249,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
     if (logoFile) {
       if (logoFile.mimetype === 'application/pdf') {
         fs.unlinkSync(logoFile.path);
-        return res.json({
-          ok: false,
-          error: 'El logotipo debe ser una imagen JPG o PNG.'
-        });
+        return res.json({ ok: false, error: 'El logotipo debe ser una imagen JPG o PNG.' });
       }
       const logoBuffer = fs.readFileSync(logoFile.path);
       fs.unlinkSync(logoFile.path);
@@ -275,47 +266,73 @@ app.post('/procesar', upload.any(), async (req, res) => {
         const base64 = imageData.toString('base64');
         const mimeType = foto.mimetype;
         fs.unlinkSync(foto.path);
-        content.push({
-          type: 'image_url',
-          image_url: { url: `data:${mimeType};base64,${base64}` }
-        });
+        content.push({ type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } });
       });
 
       const textoPrompt = fotos.length > 1
-        ? `${PROMPT}\n\nThis menu has ${fotos.length} pages. Analyze ALL images in maximum detail. Do not omit any dish from any page. Unify everything into a single ordered JSON.`
+        ? `${PROMPT}\n\nThis menu has ${fotos.length} pages. Analyze ALL images. Do not omit any dish. Unify into a single JSON.`
         : PROMPT;
 
       content.push({ type: 'text', text: textoPrompt });
       messages = [{ role: 'user', content }];
 
     } else if (textoManual) {
-      messages = [{
-        role: 'user',
-        content: PROMPT + '\n\nMenu:\n' + textoManual
-      }];
+      messages = [{ role: 'user', content: PROMPT + '\n\nMenu:\n' + textoManual }];
     } else {
       return res.json({ ok: false, error: 'No se recibió imagen ni texto' });
     }
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 8000,
-      messages
-    });
-
+    const response = await openai.chat.completions.create({ model: 'gpt-4o', max_tokens: 8000, messages });
     const texto = response.choices[0].message.content;
-    console.log('RESPUESTA IA (primeros 300 chars):', texto.substring(0, 300));
-
+    console.log('RESPUESTA IA:', texto.substring(0, 300));
     const json = limpiarYParsearJSON(texto);
 
-    res.json({
-      ok: true,
-      carta: json,
-      logo: logoBase64 ? `data:${logoMime};base64,${logoBase64}` : null
-    });
+    res.json({ ok: true, carta: json, logo: logoBase64 ? `data:${logoMime};base64,${logoBase64}` : null });
 
   } catch (error) {
     console.error('ERROR:', error.message);
+    res.json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/rehacer', async (req, res) => {
+  try {
+    const { carta, ajuste } = req.body;
+    if (!carta || !ajuste) return res.json({ ok: false, error: 'Faltan datos' });
+
+    const prompt = `Eres un experto en diseño de cartas de restaurante. Tienes una carta ya procesada en formato JSON y el cliente quiere hacer un ajuste específico.
+
+CARTA ACTUAL EN JSON:
+${JSON.stringify(carta, null, 2)}
+
+AJUSTE SOLICITADO POR EL CLIENTE:
+"${ajuste}"
+
+INSTRUCCIONES:
+- Aplica EXACTAMENTE el ajuste solicitado
+- No cambies nada que no haya pedido el cliente
+- Conserva todos los platos, precios y descripciones tal como están, salvo lo que el ajuste indique
+- Si pide traducir, traduce todo con terminología profesional de hostelería
+- Si pide cambiar el orden, reordena según lo indicado
+- Si pide añadir o cambiar algo concreto, hazlo con precisión
+- Devuelve ÚNICAMENTE el JSON corregido, sin texto adicional, sin comillas de bloque
+
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      max_tokens: 8000,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    const texto = response.choices[0].message.content;
+    console.log('REHACER IA:', texto.substring(0, 300));
+    const json = limpiarYParsearJSON(texto);
+
+    res.json({ ok: true, carta: json });
+
+  } catch (error) {
+    console.error('ERROR REHACER:', error.message);
     res.json({ ok: false, error: error.message });
   }
 });

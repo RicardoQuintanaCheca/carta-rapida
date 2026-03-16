@@ -115,6 +115,19 @@
   .dl-btn:hover { opacity: 0.85; }
   .dl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
+  /* Cuadro de ajuste */
+  .ajuste-wrap { display: none; border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-top: 10px; }
+  .ajuste-wrap.on { display: block; }
+  .ajuste-inner { padding: 14px 16px 6px; }
+  .ajuste-label { font-size: 12px; color: #999; margin-bottom: 8px; }
+  .ajuste-textarea { width: 100%; height: 60px; resize: none; font-size: 13px; color: #111; background: none; border: none; outline: none; font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; padding: 0 0 10px; }
+  .ajuste-textarea::placeholder { color: #ccc; }
+  .ajuste-footer { border-top: 0.5px solid #f0f0f0; padding: 10px 16px; }
+  .rehacer-btn { width: 100%; padding: 11px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; background: none; color: #111; border: 0.5px solid #e0e0e0; border-radius: 8px; cursor: default; opacity: 0.3; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+  .rehacer-btn.activo { background: #111; color: #fff; border-color: #111; opacity: 1; cursor: pointer; }
+  .rehacer-btn.activo:hover { opacity: 0.85; }
+  .rehacer-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
   .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
   .cta.on { display: flex; }
   .cta p { font-size: 13px; color: #666; line-height: 1.65; text-align: center; }
@@ -133,7 +146,7 @@
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { padding: 0; background: white; display: block; }
     .wrap { max-width: 100%; }
-    header, .title-block, .messages, .input-wrap, .main-btn, .cta, .foot, .foot-copy { display: none !important; }
+    header, .title-block, .messages, .input-wrap, .main-btn, .ajuste-wrap, .cta, .foot, .foot-copy { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tbody { display: table-row-group; }
@@ -208,6 +221,20 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Cuadro de ajuste -->
+  <div class="ajuste-wrap" id="ajusteWrap">
+    <div class="ajuste-inner">
+      <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
+      <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, el nombre del restaurante es Casa Pepe, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
+    </div>
+    <div class="ajuste-footer">
+      <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        REHACER CON ESTE AJUSTE
+      </button>
     </div>
   </div>
 
@@ -351,6 +378,7 @@
   let tradActivo = false;
   let idiomaSeleccionado = null;
   let textoActivo = false;
+  let cartaActual = null; // guarda el JSON de la carta generada
 
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
@@ -486,6 +514,12 @@
     document.getElementById('mainBtn').disabled = !hayContenido;
   }
 
+  function checkAjuste(el) {
+    const btn = document.getElementById('rehacerBtn');
+    const hayTexto = el.value.trim().length > 0;
+    btn.classList.toggle('activo', hayTexto);
+  }
+
   function onTextInput(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 140) + 'px';
@@ -558,7 +592,47 @@
     }
   }
 
+  async function rehacer() {
+    const ajuste = document.getElementById('ajusteTxt').value.trim();
+    if (!ajuste || !cartaActual) return;
+
+    const btn = document.getElementById('rehacerBtn');
+    btn.classList.remove('activo');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACIENDO…`;
+
+    document.getElementById('msgStatus').style.display = 'none';
+    document.getElementById('msgTyping').style.display = 'flex';
+    startCountdown(10);
+    scroll();
+
+    try {
+      const res = await fetch('/rehacer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          carta: cartaActual,
+          ajuste: ajuste
+        })
+      });
+      const data = await res.json();
+      stopCountdown();
+      if (!data.ok) throw new Error(data.error);
+
+      document.getElementById('ajusteTxt').value = '';
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
+
+      status('Aplicando ajuste…');
+      setTimeout(() => mostrarCarta(data.carta), 600);
+    } catch (err) {
+      stopCountdown();
+      status('Algo salió mal: ' + err.message);
+      btn.classList.add('activo');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
+    }
+  }
+
   function mostrarCarta(carta) {
+    cartaActual = carta;
     document.getElementById('msgStatus').style.display = 'none';
     const tienelogo = !!logoDataUrl;
 
@@ -610,6 +684,7 @@
 
     document.getElementById('msgResult').style.display = 'flex';
     document.getElementById('actions').classList.add('on');
+    document.getElementById('ajusteWrap').classList.add('on');
     document.getElementById('inputWrap').style.display = 'none';
     document.getElementById('mainBtn').style.display = 'none';
     setTimeout(() => { document.getElementById('cta').classList.add('on'); scroll(); }, 500);
