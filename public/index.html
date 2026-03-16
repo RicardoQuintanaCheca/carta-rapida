@@ -115,10 +115,10 @@
   .dl-btn:hover { opacity: 0.85; }
   .dl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-  .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; }
+  .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
   .cta.on { display: flex; }
-  .cta p { font-size: 13px; color: #666; line-height: 1.65; }
-  .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; align-self: flex-start; }
+  .cta p { font-size: 13px; color: #666; line-height: 1.65; text-align: center; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; }
   .cta-btn:hover { background: #111; color: #fff; }
   .cta-btn svg { width: 11px; height: 11px; }
 
@@ -211,7 +211,7 @@
     </div>
   </div>
 
-  <div class="input-wrap">
+  <div class="input-wrap" id="inputWrap">
 
     <div class="upload-grid" id="uploadGrid">
       <div class="upload-btn">
@@ -238,7 +238,6 @@
 
     <div class="opciones-section">
 
-      <!-- Logotipo -->
       <div class="opcion-fila" onclick="toggleLogo()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -264,7 +263,6 @@
         <button class="logo-remove-btn" onclick="removeLogo()">×</button>
       </div>
 
-      <!-- Descripciones -->
       <div class="opcion-fila" onclick="toggleDesc()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -276,7 +274,6 @@
         <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
       </div>
 
-      <!-- Neuromarketing -->
       <div class="opcion-fila" onclick="toggleNeuro()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
@@ -288,7 +285,6 @@
         <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
       </div>
 
-      <!-- Traducir -->
       <div class="opcion-fila" onclick="toggleTraducir()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
@@ -312,8 +308,7 @@
         </div>
       </div>
 
-      <!-- Pegar texto -->
-      <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom: none;">
+      <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom:none;">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
           <div>
@@ -530,8 +525,8 @@
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
 
-    document.querySelector('.input-wrap').style.opacity = '0.4';
-    document.querySelector('.input-wrap').style.pointerEvents = 'none';
+    document.getElementById('inputWrap').style.opacity = '0.4';
+    document.getElementById('inputWrap').style.pointerEvents = 'none';
     document.getElementById('mainBtn').style.opacity = '0.4';
     document.getElementById('mainBtn').style.pointerEvents = 'none';
 
@@ -615,6 +610,8 @@
 
     document.getElementById('msgResult').style.display = 'flex';
     document.getElementById('actions').classList.add('on');
+    document.getElementById('inputWrap').style.display = 'none';
+    document.getElementById('mainBtn').style.display = 'none';
     setTimeout(() => { document.getElementById('cta').classList.add('on'); scroll(); }, 500);
     scroll();
   }

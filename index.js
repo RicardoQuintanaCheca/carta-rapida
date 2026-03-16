@@ -15,19 +15,19 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const IDIOMAS = {
-  en: 'inglés',
-  fr: 'francés',
-  de: 'alemán',
-  it: 'italiano',
-  pt: 'portugués',
-  zh: 'chino'
+  en: 'English',
+  fr: 'French',
+  de: 'German',
+  it: 'Italian',
+  pt: 'Portuguese',
+  zh: 'Chinese'
 };
 
 const PROMPT_BASE = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante.
 
 INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Es preferible tardar más tiempo en analizar que saltarse cualquier contenido. Revisa cada imagen con máximo detalle antes de responder.
 
-ORDEN LÓGICO DE SECCIONES (aplica siempre este orden, independientemente del orden en que aparezcan en las imágenes):
+ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
 1. Menús del día o menús especiales (si existen)
 2. Entrantes, tapas, para compartir
 3. Ensaladas
@@ -41,169 +41,39 @@ ORDEN LÓGICO DE SECCIONES (aplica siempre este orden, independientemente del or
 11. Vinos y bebidas
 12. Otros (pan, extras, bolsa, tupper, etc.)
 
-Si una sección no existe en la carta, no la incluyas. Si hay secciones que no encajan claramente, colócalas donde tenga más sentido gastronómicamente.
+Si una sección no existe en la carta, no la incluyas.
 
 NEUROMARKETING — APLICA ESTAS TÉCNICAS:
 - Coloca los platos más rentables (precio medio-alto) en las primeras posiciones de cada sección
 - Si hay un plato estrella o especial de la casa, ponlo el primero de su sección
 - Platos con "por encargo" o disponibilidad limitada van al final de su sección
-- No reordenes por precio de menor a mayor
 
 REGLAS DE PRECIOS:
 - Elimina siempre el símbolo €. Solo el número: "16" no "16€"
 - Conserva decimales reales con punto: "16.5" no "16,50"
-- Elimina ceros finales innecesarios: "16" no "16.00", "16.5" no "16.50"
-- Conserva precios por unidad: "5/u"
-- Conserva precios por kilo: "84/k"
-- Conserva precios dobles media/entera: "9 | 16"
-- Si el precio es SPM o consultar, conserva "SPM"
+- Elimina ceros finales innecesarios: "16" no "16.00"
+- Conserva precios especiales: "5/u", "84/k", "9 | 16", "SPM"
 - Si no hay precio, deja el campo vacío ""
 
 REGLAS DE NOMBRES:
 - Respeta el nombre original exactamente
 - Corrige errores ortográficos evidentes
-- Conserva indicadores: (V), (VG)
-- Conserva pesos y cantidades: (80g), (6 uds), (por encargo), (2 pax)
+- Conserva indicadores: (V), (VG), (80g), (6 uds), (por encargo), (2 pax)
 
 REGLAS DE DESCRIPCIONES:
 - SOLO puedes usar texto que aparezca literalmente en la carta original
-- Si hay texto descriptivo bajo el nombre del plato en la carta, cópialo exactamente
-- Si no hay descripción en la carta, el campo debe ser siempre ""
-- NUNCA escribas nada que no esté copiado literalmente de la carta
+- Si hay texto descriptivo bajo el nombre del plato, cópialo exactamente
+- Si no hay descripción, deja vacío ""
 
 REGLAS DE ALÉRGENOS:
 - Si aparecen, consérvelos sin la palabra "Alérgenos:"
 - Formato: "Gluten, lácteos, huevo"
 - Si no hay, deja vacío ""
 
-NOTAS AL PIE:
-- Si aparece IVA incluido, notas legales, notas comerciales o cualquier texto que no sea un plato, ponlo en "nota_pie"
+NOTAS AL PIE: textos legales o comerciales van en "nota_pie"
+NOMBRE DEL RESTAURANTE: solo si aparece claramente, si no deja vacío ""
 
-NOMBRE DEL RESTAURANTE:
-- Solo ponlo si aparece claramente en la carta
-- Si no aparece, deja el campo vacío ""
-
-NUNCA:
-- No inventes platos, precios ni descripciones
-- No añadas el símbolo € en ningún caso
-- No omitas ningún plato, sección ni nota aunque parezca secundaria
-
-CRÍTICO — FORMATO DE RESPUESTA:
-- Devuelve ÚNICAMENTE el JSON
-- Sin texto antes ni después
-- Sin comillas de bloque tipo \`\`\`
-- Sin comentarios dentro del JSON
-- Todos los campos de texto deben usar comillas dobles
-- Las comillas dentro de los valores deben escaparse así: \\"
-- El JSON debe ser válido y parseable directamente
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-const PROMPT_BASE_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar y mejorar el formato de la carta respetando el orden original del restaurante.
-
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Revisa cada imagen con máximo detalle antes de responder.
-
-ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
-1. Menús del día o menús especiales (si existen)
-2. Entrantes, tapas, para compartir
-3. Ensaladas
-4. Sopas, cremas y especialidades de cuchara
-5. Arroces y pastas
-6. Pescados
-7. Carnes
-8. Postres
-9. Quesos
-10. Café e infusiones
-11. Vinos y bebidas
-12. Otros (pan, extras, bolsa, tupper, etc.)
-
-ORDEN DE PLATOS:
-- Respeta EXACTAMENTE el orden original de los platos dentro de cada sección
-- NO reordenes los platos bajo ningún concepto
-
-REGLAS DE PRECIOS:
-- Elimina siempre el símbolo €. Solo el número
-- Conserva decimales con punto: "16.5"
-- Elimina ceros finales: "16" no "16.00"
-- Si no hay precio, deja el campo vacío ""
-
-REGLAS DE NOMBRES:
-- Respeta el nombre original exactamente
-- Corrige errores ortográficos evidentes
-
-REGLAS DE DESCRIPCIONES:
-- SOLO puedes usar texto que aparezca literalmente en la carta original
-- Si no hay descripción, deja vacío ""
-
-REGLAS DE ALÉRGENOS:
-- Si aparecen, consérvelos sin la palabra "Alérgenos:"
-- Si no hay, deja vacío ""
-
-NOTAS AL PIE: cualquier texto legal o comercial va en "nota_pie"
-NOMBRE DEL RESTAURANTE: solo si aparece claramente en la carta
-
-NUNCA:
-- No inventes platos, precios ni descripciones
-- No añadas el símbolo € en ningún caso
-
-CRÍTICO — FORMATO DE RESPUESTA:
-- Devuelve ÚNICAMENTE el JSON válido y parseable
-- Sin texto antes ni después, sin comillas de bloque
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante, y redactar descripciones atractivas para cada plato.
-
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Revisa cada imagen con máximo detalle antes de responder.
-
-ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
-1. Menús del día o menús especiales (si existen)
-2. Entrantes, tapas, para compartir
-3. Ensaladas
-4. Sopas, cremas y especialidades de cuchara
-5. Arroces y pastas
-6. Pescados
-7. Carnes
-8. Postres
-9. Quesos
-10. Café e infusiones
-11. Vinos y bebidas
-12. Otros (pan, extras, bolsa, tupper, etc.)
-
-NEUROMARKETING — APLICA ESTAS TÉCNICAS:
-- Coloca los platos más rentables (precio medio-alto) en las primeras posiciones de cada sección
-- Si hay un plato estrella o especial de la casa, ponlo el primero de su sección
-- Platos con "por encargo" o disponibilidad limitada van al final de su sección
-
-REGLAS DE PRECIOS:
-- Elimina siempre el símbolo €. Solo el número
-- Conserva decimales con punto: "16.5"
-- Elimina ceros finales innecesarios
-
-REGLAS DE NOMBRES:
-- Respeta el nombre original exactamente
-- Corrige errores ortográficos evidentes
-
-REGLAS DE DESCRIPCIONES — MODO CREATIVO ACTIVADO:
-PASO 1 — Si el plato ya tiene descripción: cópiala exactamente
-PASO 2 — Si no tiene descripción: escribe una frase corta y elegante de máximo 1 línea
-- Tono elegante, como en un restaurante de nivel medio-alto
-- NUNCA menciones ingredientes que contradigan el nombre del plato
-- NUNCA hagas afirmaciones como "el mejor de Madrid"
-- Bebidas, pan y extras: descripción vacía ""
-
-EJEMPLOS:
-- "Calamares fritos" → "Calamares en su punto, dorados y crujientes"
-- "Jamón ibérico" → "Finas lonchas de jamón ibérico, listas para degustar"
-- "Tarta de queso" → "Cremosa tarta de queso al horno, con base crujiente"
-- "Croquetas caseras" → "Croquetas de elaboración propia, cremosas por dentro"
-
-REGLAS DE ALÉRGENOS:
-- Si aparecen, consérvelos sin la palabra "Alérgenos:"
-- Si no hay, deja vacío ""
-
-NOTAS AL PIE: cualquier texto legal va en "nota_pie"
-NOMBRE DEL RESTAURANTE: solo si aparece claramente
+NUNCA: no inventes platos, precios ni descripciones. No añadas €.
 
 CRÍTICO — FORMATO:
 - Devuelve ÚNICAMENTE el JSON válido
@@ -211,25 +81,89 @@ CRÍTICO — FORMATO:
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
-const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar la carta respetando el orden original y añadir descripciones atractivas.
+const PROMPT_BASE_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar y mejorar el formato de la carta respetando el orden original.
 
 INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA.
 
-ORDEN DE SECCIONES: menús especiales, entrantes, ensaladas, sopas/cuchara, arroces/pastas, pescados, carnes, postres, quesos, café, bebidas, otros.
+ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
+1. Menús del día o menús especiales
+2. Entrantes, tapas, para compartir
+3. Ensaladas
+4. Sopas, cremas y especialidades de cuchara
+5. Arroces y pastas
+6. Pescados
+7. Carnes
+8. Postres
+9. Quesos
+10. Café e infusiones
+11. Vinos y bebidas
+12. Otros
 
-ORDEN DE PLATOS: respeta EXACTAMENTE el orden original, NO reordenes.
+ORDEN DE PLATOS: respeta EXACTAMENTE el orden original. NO reordenes.
 
-REGLAS DE PRECIOS: elimina €, conserva decimales con punto, elimina ceros finales.
+REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales, sin precio = ""
+REGLAS DE NOMBRES: respeta exactamente, corrige errores evidentes
+REGLAS DE DESCRIPCIONES: copia literal si existe, si no deja ""
+REGLAS DE ALÉRGENOS: sin "Alérgenos:", si no hay deja ""
+NOTAS AL PIE: textos legales en "nota_pie"
+NOMBRE DEL RESTAURANTE: solo si aparece claramente
+
+NUNCA inventes nada. CRÍTICO: devuelve ÚNICAMENTE JSON válido.
+
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+
+const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar la carta y redactar descripciones atractivas para cada plato.
+
+INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA.
+
+ORDEN LÓGICO DE SECCIONES:
+1. Menús especiales, 2. Entrantes/tapas, 3. Ensaladas, 4. Sopas/cuchara, 5. Arroces/pastas, 6. Pescados, 7. Carnes, 8. Postres, 9. Quesos, 10. Café, 11. Bebidas, 12. Otros
+
+NEUROMARKETING: platos más rentables primero, plato estrella al inicio, "por encargo" al final.
+
+REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
+REGLAS DE NOMBRES: respeta exactamente, corrige errores evidentes.
 
 REGLAS DE DESCRIPCIONES:
-PASO 1 — Si tiene descripción: cópiala exactamente
-PASO 2 — Si no tiene: escribe 1 línea elegante y honesta. Bebidas/pan/extras: vacío ""
+- Si tiene descripción en la carta: cópiala exactamente
+- Si NO tiene: escribe 1 línea elegante, tono hostelería premium
+- Bebidas, pan, extras: descripción siempre vacía ""
+- NUNCA menciones ingredientes que contradigan el nombre
 
-REGLAS DE ALÉRGENOS: consérvelos sin "Alérgenos:", vacío si no hay.
+EJEMPLOS DE ESTILO HOSTELERÍA:
+- "Calamares fritos" → "Calamares en su punto, dorados y crujientes"
+- "Jamón ibérico" → "Finas lonchas de jamón ibérico, listas para degustar"
+- "Tarta de queso" → "Cremosa tarta de queso al horno, con base crujiente"
+- "Pulpo a la brasa" → "Pulpo tierno cocinado sobre brasas, con pimentón de la Vera"
+- "Tartar de atún" → "Dados de atún rojo aliñados al momento, servidos fríos"
 
-NOTAS AL PIE: textos legales en "nota_pie". NOMBRE: solo si aparece.
+REGLAS DE ALÉRGENOS: sin "Alérgenos:", si no hay deja ""
+NOTAS AL PIE: textos legales en "nota_pie"
+NOMBRE DEL RESTAURANTE: solo si aparece claramente
 
-CRÍTICO: devuelve ÚNICAMENTE JSON válido sin texto adicional.
+CRÍTICO: devuelve ÚNICAMENTE JSON válido.
+
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+
+const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Digitaliza la carta respetando el orden original y añade descripciones atractivas.
+
+INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO.
+
+ORDEN DE SECCIONES: menús especiales, entrantes, ensaladas, sopas, arroces/pastas, pescados, carnes, postres, quesos, café, bebidas, otros.
+ORDEN DE PLATOS: respeta EXACTAMENTE el orden original, NO reordenes.
+
+REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
+REGLAS DE NOMBRES: respeta exactamente.
+
+REGLAS DE DESCRIPCIONES:
+- Si tiene: cópiala exactamente
+- Si no tiene: 1 línea elegante, tono hostelería premium
+- Bebidas/pan/extras: vacío ""
+
+REGLAS DE ALÉRGENOS: sin "Alérgenos:", vacío si no hay.
+NOTAS AL PIE: en "nota_pie". NOMBRE: solo si aparece.
+
+CRÍTICO: ÚNICAMENTE JSON válido.
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
@@ -240,17 +174,33 @@ function getPrompt(conDescripciones, conNeuro) {
   return PROMPT_BASE_SIN_NEURO;
 }
 
-function getInstruccionTraduccion(idioma) {
-  const nombreIdioma = IDIOMAS[idioma] || idioma;
-  return `\n\nINSTRUCCIÓN ADICIONAL — TRADUCCIÓN:
-Traduce TODOS los textos de la carta al ${nombreIdioma}:
-- Nombres de platos
-- Descripciones
-- Nombres de secciones
-- Nota al pie
-- El campo "idioma" del JSON debe ser "${idioma}"
-NO traduzcas: precios, cantidades numéricas, indicadores (V), (VG), abreviaciones como SPM.
-Mantén los nombres propios de platos muy conocidos si es apropiado (ej: "Jamón ibérico" puede quedarse en español en inglés).`;
+function getInstruccionTraduccion(codigoIdioma) {
+  const nombreIdioma = IDIOMAS[codigoIdioma] || codigoIdioma;
+  return `
+
+TRANSLATION INSTRUCTION — CRITICAL:
+You must translate the ENTIRE menu into ${nombreIdioma}. This is mandatory.
+
+TRANSLATE EVERYTHING:
+- ALL dish names (every single one, no exceptions)
+- ALL descriptions
+- ALL section names
+- The "nota_pie" field
+- Set the "idioma" field to "${codigoIdioma}"
+
+TRANSLATION STYLE — HOSPITALITY PROFESSIONAL:
+- Use professional hospitality terminology in ${nombreIdioma}
+- Maintain the elegant and appetizing tone of a premium restaurant
+- For well-known Spanish dishes with no direct translation (paella, jamón ibérico, gazpacho, tortilla, croquetas, fabada, cocido), keep the Spanish name but add a brief description in ${nombreIdioma} if there is no description already
+- For dishes that have a standard translation in ${nombreIdioma}, use the correct culinary term
+
+DO NOT TRANSLATE:
+- Prices and quantities (numbers)
+- Indicators like (V), (VG)
+- Abbreviations like SPM
+- The restaurant name
+
+IMPORTANT: Every dish name and section name MUST be in ${nombreIdioma}. If you leave any text in Spanish, that is an error.`;
 }
 
 function limpiarYParsearJSON(texto) {
@@ -332,7 +282,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
       });
 
       const textoPrompt = fotos.length > 1
-        ? `${PROMPT}\n\nEsta carta tiene ${fotos.length} páginas. Analiza TODAS las imágenes con máximo detalle. No omitas ningún plato de ninguna página. Unifica todo en un único JSON ordenado.`
+        ? `${PROMPT}\n\nThis menu has ${fotos.length} pages. Analyze ALL images in maximum detail. Do not omit any dish from any page. Unify everything into a single ordered JSON.`
         : PROMPT;
 
       content.push({ type: 'text', text: textoPrompt });
@@ -341,7 +291,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
     } else if (textoManual) {
       messages = [{
         role: 'user',
-        content: PROMPT + '\n\nCarta:\n' + textoManual
+        content: PROMPT + '\n\nMenu:\n' + textoManual
       }];
     } else {
       return res.json({ ok: false, error: 'No se recibió imagen ni texto' });
