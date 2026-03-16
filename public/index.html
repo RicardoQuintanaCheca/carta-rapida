@@ -43,7 +43,6 @@
   .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: border-color 0.2s; margin-bottom: 12px; }
   .input-wrap:focus-within { border-color: #bbb; }
 
-  /* Dos botones de subida */
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
   .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
   .upload-btn:hover { background: #fafafa; }
@@ -65,14 +64,9 @@
   .fotos-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
   .fotos-count { font-size: 11px; color: #999; }
 
-  .text-zone { padding: 4px 20px 12px; }
-  .text-divider { font-size: 11px; color: #bbb; text-align: center; padding: 10px 0 6px; }
-  textarea { width: 100%; background: none; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 300; color: #111; resize: none; height: 40px; max-height: 140px; line-height: 1.6; padding: 4px 0; display: block; }
-  textarea::placeholder { color: #ccc; }
-
-  .personalizar-section { border-top: 0.5px solid #f0f0f0; padding: 10px 20px 14px; }
-  .personalizar-titulo { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; margin-bottom: 4px; }
-  .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-top: 0.5px solid #f0f0f0; }
+  .opciones-section { padding: 4px 20px 14px; }
+  .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; }
+  .opcion-fila:last-child { border-bottom: none; }
   .opcion-izq { display: flex; align-items: center; gap: 10px; }
   .opcion-izq svg { width: 14px; height: 14px; stroke: #888; fill: none; stroke-width: 1.5; flex-shrink: 0; }
   .opcion-texto { font-size: 13px; color: #333; }
@@ -83,19 +77,33 @@
   .toggle-dot { width: 14px; height: 14px; border-radius: 50%; background: white; position: absolute; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
   .toggle-wrap.on .toggle-dot { left: 19px; }
 
-  .logo-drop { display: none; padding: 10px 0 6px; align-items: center; gap: 12px; border-top: 0.5px solid #f0f0f0; }
+  .logo-drop { display: none; padding: 10px 0 6px; align-items: center; gap: 12px; border-bottom: 0.5px solid #f0f0f0; }
   .logo-drop.on { display: flex; }
   .logo-drop-zone { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; width: 100%; }
   .logo-drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
   .logo-drop-icon { width: 32px; height: 32px; border: 0.5px solid #e0e0e0; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .logo-drop-icon svg { width: 13px; height: 13px; stroke: #666; fill: none; stroke-width: 1.5; }
-
-  .logo-preview-row { display: none; padding: 8px 0 4px; align-items: center; gap: 10px; border-top: 0.5px solid #f0f0f0; }
+  .logo-preview-row { display: none; padding: 8px 0 4px; align-items: center; gap: 10px; border-bottom: 0.5px solid #f0f0f0; }
   .logo-preview-row.on { display: flex; }
   .logo-thumb { height: 28px; max-width: 90px; object-fit: contain; border-radius: 4px; }
   .logo-preview-name { font-size: 12px; color: #333; flex: 1; }
   .logo-remove-btn { background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; line-height: 1; }
-  .logo-remove-btn:hover { color: #999; }
+
+  .idioma-zone { display: none; padding: 10px 0 6px; border-bottom: 0.5px solid #f0f0f0; }
+  .idioma-zone.on { display: block; }
+  .idioma-label { font-size: 11px; color: #999; margin-bottom: 8px; }
+  .idioma-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .idioma-btn { padding: 10px 12px; border: 0.5px solid #e0e0e0; border-radius: 8px; font-size: 13px; color: #333; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s; font-family: 'Inter', sans-serif; background: none; }
+  .idioma-btn:hover { border-color: #bbb; }
+  .idioma-btn.on { background: #111; border-color: #111; color: #fff; }
+  .idioma-btn .flag { font-size: 16px; }
+
+  .texto-drop { display: none; padding: 8px 0 2px; }
+  .texto-drop.on { display: block; }
+  .texto-drop textarea { width: 100%; height: 80px; resize: none; font-size: 13px; color: #111; background: #fafafa; border: 0.5px solid #e0e0e0; border-radius: 8px; outline: none; font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; padding: 10px 12px; }
+  .texto-drop textarea::placeholder { color: #ccc; }
+  .opcion-arrow { transition: transform 0.2s; color: #bbb; flex-shrink: 0; }
+  .opcion-arrow.open { transform: rotate(180deg); }
 
   .main-btn { width: 100%; padding: 14px; font-size: 12px; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .main-btn:hover:not(:disabled) { opacity: 0.85; }
@@ -205,49 +213,32 @@
 
   <div class="input-wrap">
 
-    <!-- Dos botones: cámara y galería -->
     <div class="upload-grid" id="uploadGrid">
-      <!-- Cámara -->
       <div class="upload-btn">
         <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
         <div class="upload-btn-icon azul">
-          <svg viewBox="0 0 24 24" stroke="#3b6fd4"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <svg viewBox="0 0 24 24" stroke="#3b6fd4"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
         </div>
-        <div class="upload-btn-text">
-          Usar cámara
-          <span>Fotografía ahora</span>
-        </div>
+        <div class="upload-btn-text">Usar cámara<span>Fotografía ahora</span></div>
       </div>
-      <!-- Galería -->
       <div class="upload-btn">
         <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
         <div class="upload-btn-icon gris">
           <svg viewBox="0 0 24 24" stroke="#666"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
         </div>
-        <div class="upload-btn-text">
-          Subir fotos
-          <span>Desde tu galería</span>
-        </div>
+        <div class="upload-btn-text">Subir fotos<span>Desde tu galería</span></div>
       </div>
     </div>
 
     <div class="fotos-preview" id="fotosPreview">
       <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-      <div class="fotos-add" title="Añadir más fotos">
-        <input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">
-        +
-      </div>
+      <div class="fotos-add"><input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">+</div>
       <span class="fotos-count" id="fotosCount"></span>
     </div>
 
-    <div class="text-zone">
-      <div class="text-divider">o también, copia y pega aquí tu carta</div>
-      <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." rows="2" oninput="onTextInput(this)"></textarea>
-    </div>
+    <div class="opciones-section">
 
-    <div class="personalizar-section">
-      <div class="personalizar-titulo">Personalizar</div>
-
+      <!-- Logotipo -->
       <div class="opcion-fila" onclick="toggleLogo()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -262,13 +253,8 @@
       <div class="logo-drop" id="logoDrop">
         <div class="logo-drop-zone">
           <input type="file" accept="image/*" onchange="handleLogo(this)">
-          <div class="logo-drop-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-          </div>
-          <div>
-            <div class="opcion-texto">Sube tu logotipo</div>
-            <div class="opcion-subtexto">JPG o PNG</div>
-          </div>
+          <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
+          <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG o PNG</div></div>
         </div>
       </div>
 
@@ -278,6 +264,7 @@
         <button class="logo-remove-btn" onclick="removeLogo()">×</button>
       </div>
 
+      <!-- Descripciones -->
       <div class="opcion-fila" onclick="toggleDesc()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -289,6 +276,7 @@
         <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
       </div>
 
+      <!-- Neuromarketing -->
       <div class="opcion-fila" onclick="toggleNeuro()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
@@ -298,6 +286,46 @@
           </div>
         </div>
         <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
+      </div>
+
+      <!-- Traducir -->
+      <div class="opcion-fila" onclick="toggleTraducir()">
+        <div class="opcion-izq">
+          <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          <div>
+            <div class="opcion-texto">Traducir la carta</div>
+            <div class="opcion-subtexto">La IA traduce todos los platos y secciones</div>
+          </div>
+        </div>
+        <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
+      </div>
+
+      <div class="idioma-zone" id="idiomaZone">
+        <div class="idioma-label">Selecciona el idioma:</div>
+        <div class="idioma-grid">
+          <button class="idioma-btn" onclick="selIdioma(this,'en')"><span class="flag">🇬🇧</span> Inglés</button>
+          <button class="idioma-btn" onclick="selIdioma(this,'fr')"><span class="flag">🇫🇷</span> Francés</button>
+          <button class="idioma-btn" onclick="selIdioma(this,'de')"><span class="flag">🇩🇪</span> Alemán</button>
+          <button class="idioma-btn" onclick="selIdioma(this,'it')"><span class="flag">🇮🇹</span> Italiano</button>
+          <button class="idioma-btn" onclick="selIdioma(this,'pt')"><span class="flag">🇵🇹</span> Portugués</button>
+          <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
+        </div>
+      </div>
+
+      <!-- Pegar texto -->
+      <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom: none;">
+        <div class="opcion-izq">
+          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+          <div>
+            <div class="opcion-texto">Pegar texto de la carta</div>
+            <div class="opcion-subtexto">Si tienes el texto en digital</div>
+          </div>
+        </div>
+        <svg class="opcion-arrow" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+
+      <div class="texto-drop" id="textoDrop">
+        <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
       </div>
 
     </div>
@@ -325,6 +353,9 @@
   let descActivo = false;
   let logoActivo = false;
   let neuroActivo = true;
+  let tradActivo = false;
+  let idiomaSeleccionado = null;
+  let textoActivo = false;
 
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
@@ -380,6 +411,28 @@
   function toggleNeuro() {
     neuroActivo = !neuroActivo;
     document.getElementById('neuroToggle').classList.toggle('on', neuroActivo);
+  }
+
+  function toggleTraducir() {
+    tradActivo = !tradActivo;
+    document.getElementById('tradToggle').classList.toggle('on', tradActivo);
+    document.getElementById('idiomaZone').classList.toggle('on', tradActivo);
+    if (!tradActivo) {
+      idiomaSeleccionado = null;
+      document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on'));
+    }
+  }
+
+  function selIdioma(el, codigo) {
+    idiomaSeleccionado = codigo;
+    document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+  }
+
+  function toggleTexto() {
+    textoActivo = !textoActivo;
+    document.getElementById('textoDrop').classList.toggle('on', textoActivo);
+    document.getElementById('textoArrow').classList.toggle('open', textoActivo);
   }
 
   function handleLogo(input) {
@@ -494,6 +547,7 @@
       if (textoManual) formData.append('texto', textoManual);
       formData.append('descripciones', descActivo ? 'si' : 'no');
       formData.append('neuromarketing', neuroActivo ? 'si' : 'no');
+      formData.append('idioma', tradActivo && idiomaSeleccionado ? idiomaSeleccionado : 'es');
 
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
