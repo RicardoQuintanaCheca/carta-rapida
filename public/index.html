@@ -43,13 +43,18 @@
   .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: border-color 0.2s; margin-bottom: 12px; }
   .input-wrap:focus-within { border-color: #bbb; }
 
-  .upload { position: relative; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 0.5px solid #f0f0f0; cursor: pointer; transition: background 0.15s; }
-  .upload:hover { background: #fafafa; }
-  .upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
-  .upload-icon { width: 36px; height: 36px; border: 0.5px solid #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .upload-icon svg { width: 15px; height: 15px; stroke: #666; fill: none; stroke-width: 1.5; }
-  .upload-text { font-size: 13px; color: #333; }
-  .upload-text span { display: block; font-size: 11px; color: #999; margin-top: 2px; }
+  /* Dos botones de subida */
+  .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
+  .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
+  .upload-btn:hover { background: #fafafa; }
+  .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .upload-btn:first-child { border-right: 0.5px solid #f0f0f0; }
+  .upload-btn-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .upload-btn-icon.azul { background: #e8f0fe; }
+  .upload-btn-icon.gris { border: 0.5px solid #e0e0e0; }
+  .upload-btn-icon svg { width: 16px; height: 16px; fill: none; stroke-width: 1.8; }
+  .upload-btn-text { font-size: 13px; color: #333; }
+  .upload-btn-text span { display: block; font-size: 11px; color: #999; margin-top: 1px; }
 
   .fotos-preview { display: none; padding: 12px 20px; gap: 8px; flex-wrap: wrap; border-bottom: 0.5px solid #f0f0f0; align-items: center; }
   .fotos-preview.on { display: flex; }
@@ -67,7 +72,6 @@
 
   .personalizar-section { border-top: 0.5px solid #f0f0f0; padding: 10px 20px 14px; }
   .personalizar-titulo { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #bbb; margin-bottom: 4px; }
-
   .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-top: 0.5px solid #f0f0f0; }
   .opcion-izq { display: flex; align-items: center; gap: 10px; }
   .opcion-izq svg { width: 14px; height: 14px; stroke: #888; fill: none; stroke-width: 1.5; flex-shrink: 0; }
@@ -99,7 +103,7 @@
 
   .actions { margin-top: 12px; display: none; }
   .actions.on { display: block; }
-  .dl-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border: none; border-radius: 10px; background: #111; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; width: 100%; }
+  .dl-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border: none; border-radius: 10px; background: #111; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; width: 100%; margin-top: 12px; }
   .dl-btn:hover { opacity: 0.85; }
   .dl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
@@ -114,7 +118,6 @@
   .foot-copy { margin-top: 12px; font-size: 11px; color: #bbb; line-height: 1.8; text-align: center; max-width: 480px; margin-left: auto; margin-right: auto; }
 
   #printTable { display: none; }
-
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   @media print {
@@ -122,7 +125,7 @@
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { padding: 0; background: white; display: block; }
     .wrap { max-width: 100%; }
-    header, .title-block, .messages, .input-wrap, .main-btn, .actions, .cta, .foot, .foot-copy { display: none !important; }
+    header, .title-block, .messages, .input-wrap, .main-btn, .cta, .foot, .foot-copy { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tbody { display: table-row-group; }
@@ -132,7 +135,7 @@
     .print-tbody-cell { padding: 0; vertical-align: top; }
     .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
     .sec-block:first-child { margin-top: 8px; }
-    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; letter-spacing: 0.02em; page-break-after: avoid !important; break-after: avoid !important; }
+    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; break-after: avoid !important; }
     .item { padding: 6px 0; page-break-inside: avoid !important; break-inside: avoid !important; }
     .item-name { font-size: 12.5px; color: #111; font-weight: 400; }
     .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
@@ -202,14 +205,29 @@
 
   <div class="input-wrap">
 
-    <div class="upload" id="uploadZone">
-      <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
-      <div class="upload-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+    <!-- Dos botones: cámara y galería -->
+    <div class="upload-grid" id="uploadGrid">
+      <!-- Cámara -->
+      <div class="upload-btn">
+        <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
+        <div class="upload-btn-icon azul">
+          <svg viewBox="0 0 24 24" stroke="#3b6fd4"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="upload-btn-text">
+          Usar cámara
+          <span>Fotografía ahora</span>
+        </div>
       </div>
-      <div class="upload-text">
-        Sube las fotos de tu carta
-        <span>JPG, PNG — puedes subir varias</span>
+      <!-- Galería -->
+      <div class="upload-btn">
+        <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
+        <div class="upload-btn-icon gris">
+          <svg viewBox="0 0 24 24" stroke="#666"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        </div>
+        <div class="upload-btn-text">
+          Subir fotos
+          <span>Desde tu galería</span>
+        </div>
       </div>
     </div>
 
@@ -230,7 +248,6 @@
     <div class="personalizar-section">
       <div class="personalizar-titulo">Personalizar</div>
 
-      <!-- Toggle logotipo -->
       <div class="opcion-fila" onclick="toggleLogo()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -239,9 +256,7 @@
             <div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div>
           </div>
         </div>
-        <div class="toggle-wrap" id="logoToggle">
-          <div class="toggle-dot"></div>
-        </div>
+        <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
       </div>
 
       <div class="logo-drop" id="logoDrop">
@@ -263,7 +278,6 @@
         <button class="logo-remove-btn" onclick="removeLogo()">×</button>
       </div>
 
-      <!-- Toggle descripciones -->
       <div class="opcion-fila" onclick="toggleDesc()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -272,12 +286,9 @@
             <div class="opcion-subtexto">La IA redacta textos apetecibles para cada plato</div>
           </div>
         </div>
-        <div class="toggle-wrap" id="descToggle">
-          <div class="toggle-dot"></div>
-        </div>
+        <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
       </div>
 
-      <!-- Toggle neuromarketing — activado por defecto -->
       <div class="opcion-fila" onclick="toggleNeuro()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
@@ -286,9 +297,7 @@
             <div class="opcion-subtexto">La IA coloca los platos más rentables primero</div>
           </div>
         </div>
-        <div class="toggle-wrap on" id="neuroToggle">
-          <div class="toggle-dot"></div>
-        </div>
+        <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
       </div>
 
     </div>
@@ -317,14 +326,6 @@
   let logoActivo = false;
   let neuroActivo = true;
 
-  const zone = document.getElementById('uploadZone');
-  zone.addEventListener('dragover', e => e.preventDefault());
-  zone.addEventListener('drop', e => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-    if (files.length) addFiles(files);
-  });
-
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
 
@@ -340,14 +341,14 @@
       };
       r.readAsDataURL(file);
     });
-    document.getElementById('uploadZone').style.display = 'none';
+    document.getElementById('uploadGrid').style.display = 'none';
     document.getElementById('fotosPreview').classList.add('on');
   }
 
   function removePhoto(index) {
     filesList.splice(index, 1);
     if (filesList.length === 0) {
-      document.getElementById('uploadZone').style.display = 'flex';
+      document.getElementById('uploadGrid').style.display = 'grid';
       document.getElementById('fotosPreview').classList.remove('on');
     }
     renderThumbs();
