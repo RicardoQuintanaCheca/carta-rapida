@@ -91,6 +91,80 @@ CRÍTICO — FORMATO DE RESPUESTA:
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
+const PROMPT_BASE_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar y mejorar el formato de la carta respetando el orden original del restaurante.
+
+INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Es preferible tardar más tiempo en analizar que saltarse cualquier contenido. Revisa cada imagen con máximo detalle antes de responder.
+
+ORDEN LÓGICO DE SECCIONES (aplica siempre este orden, independientemente del orden en que aparezcan en las imágenes):
+1. Menús del día o menús especiales (si existen)
+2. Entrantes, tapas, para compartir
+3. Ensaladas
+4. Sopas, cremas y especialidades de cuchara
+5. Arroces y pastas
+6. Pescados
+7. Carnes
+8. Postres
+9. Quesos
+10. Café e infusiones
+11. Vinos y bebidas
+12. Otros (pan, extras, bolsa, tupper, etc.)
+
+Si una sección no existe en la carta, no la incluyas.
+
+ORDEN DE PLATOS:
+- Respeta EXACTAMENTE el orden original de los platos dentro de cada sección
+- NO reordenes los platos bajo ningún concepto
+- Mantén el orden tal como aparece en la carta original
+
+REGLAS DE PRECIOS:
+- Elimina siempre el símbolo €. Solo el número: "16" no "16€"
+- Conserva decimales reales con punto: "16.5" no "16,50"
+- Elimina ceros finales innecesarios: "16" no "16.00", "16.5" no "16.50"
+- Conserva precios por unidad: "5/u"
+- Conserva precios por kilo: "84/k"
+- Conserva precios dobles media/entera: "9 | 16"
+- Si el precio es SPM o consultar, conserva "SPM"
+- Si no hay precio, deja el campo vacío ""
+
+REGLAS DE NOMBRES:
+- Respeta el nombre original exactamente
+- Corrige errores ortográficos evidentes
+- Conserva indicadores: (V), (VG)
+- Conserva pesos y cantidades: (80g), (6 uds), (por encargo), (2 pax)
+
+REGLAS DE DESCRIPCIONES:
+- SOLO puedes usar texto que aparezca literalmente en la carta original
+- Si hay texto descriptivo bajo el nombre del plato en la carta, cópialo exactamente
+- Si no hay descripción en la carta, el campo debe ser siempre ""
+
+REGLAS DE ALÉRGENOS:
+- Si aparecen, consérvelos sin la palabra "Alérgenos:"
+- Formato: "Gluten, lácteos, huevo"
+- Si no hay, deja vacío ""
+
+NOTAS AL PIE:
+- Si aparece IVA incluido, notas legales, notas comerciales o cualquier texto que no sea un plato, ponlo en "nota_pie"
+
+NOMBRE DEL RESTAURANTE:
+- Solo ponlo si aparece claramente en la carta
+- Si no aparece, deja el campo vacío ""
+
+NUNCA:
+- No inventes platos, precios ni descripciones
+- No añadas el símbolo € en ningún caso
+- No omitas ningún plato, sección ni nota aunque parezca secundaria
+
+CRÍTICO — FORMATO DE RESPUESTA:
+- Devuelve ÚNICAMENTE el JSON
+- Sin texto antes ni después
+- Sin comillas de bloque tipo \`\`\`
+- Sin comentarios dentro del JSON
+- Todos los campos de texto deben usar comillas dobles
+- Las comillas dentro de los valores deben escaparse así: \\"
+- El JSON debe ser válido y parseable directamente
+
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+
 const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante, y redactar descripciones atractivas para cada plato.
 
 INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Es preferible tardar más tiempo en analizar que saltarse cualquier contenido. Revisa cada imagen con máximo detalle antes de responder.
@@ -148,13 +222,12 @@ PASO 2 — Si el plato NO tiene descripción en la carta:
 - NUNCA hagas afirmaciones que no puedas sostener como "el mejor de Madrid", "único en España"
 - Para platos muy simples como "Ración de pan" o bebidas: descripción vacía ""
 
-EJEMPLOS DE BUEN ESTILO para guiarte:
+EJEMPLOS DE BUEN ESTILO:
 - "Calamares fritos" → "Calamares en su punto, dorados y crujientes"
 - "Jamón ibérico" → "Finas lonchas de jamón ibérico, listas para degustar"
 - "Tarta de queso" → "Cremosa tarta de queso al horno, con base crujiente"
 - "Croquetas caseras" → "Croquetas de elaboración propia, cremosas por dentro"
 - "Arroz con leche" → "Arroz con leche cremoso, aromatizado con canela"
-- "Gamoneo del Valle" → "Queso asturiano de pasta azul, sabor intenso y profundo"
 
 REGLAS ABSOLUTAS:
 - Máximo 1 línea por descripción
@@ -186,6 +259,55 @@ CRÍTICO — FORMATO DE RESPUESTA:
 - Todos los campos de texto deben usar comillas dobles
 - Las comillas dentro de los valores deben escaparse así: \\"
 - El JSON debe ser válido y parseable directamente
+
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+
+const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar la carta respetando el orden original y añadir descripciones atractivas para cada plato.
+
+INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Revisa cada imagen con máximo detalle antes de responder.
+
+ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
+1. Menús del día o menús especiales (si existen)
+2. Entrantes, tapas, para compartir
+3. Ensaladas
+4. Sopas, cremas y especialidades de cuchara
+5. Arroces y pastas
+6. Pescados
+7. Carnes
+8. Postres
+9. Quesos
+10. Café e infusiones
+11. Vinos y bebidas
+12. Otros (pan, extras, bolsa, tupper, etc.)
+
+ORDEN DE PLATOS:
+- Respeta EXACTAMENTE el orden original de los platos dentro de cada sección
+- NO reordenes los platos bajo ningún concepto
+
+REGLAS DE PRECIOS:
+- Elimina siempre el símbolo €. Solo el número
+- Conserva decimales con punto: "16.5"
+- Elimina ceros finales: "16" no "16.00"
+- Si no hay precio, deja el campo vacío ""
+
+REGLAS DE NOMBRES:
+- Respeta el nombre original exactamente
+- Corrige errores ortográficos evidentes
+
+REGLAS DE DESCRIPCIONES — MODO CREATIVO ACTIVADO:
+PASO 1 — Si el plato ya tiene descripción: cópiala exactamente
+PASO 2 — Si no tiene descripción: escribe una frase corta y elegante de máximo 1 línea usando solo lo que se deduce del nombre. Bebidas, pan y extras: descripción vacía ""
+
+REGLAS DE ALÉRGENOS:
+- Si aparecen, consérvelos sin la palabra "Alérgenos:"
+- Si no hay, deja vacío ""
+
+NOTAS AL PIE: cualquier texto legal o comercial va en "nota_pie"
+NOMBRE DEL RESTAURANTE: solo si aparece claramente en la carta
+
+CRÍTICO — FORMATO DE RESPUESTA:
+- Devuelve ÚNICAMENTE el JSON válido y parseable
+- Sin texto antes ni después, sin comillas de bloque
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
@@ -221,7 +343,16 @@ app.post('/procesar', upload.any(), async (req, res) => {
   try {
     const textoManual = req.body.texto || '';
     const conDescripciones = req.body.descripciones === 'si';
-    const PROMPT = conDescripciones ? PROMPT_DESCRIPCIONES : PROMPT_BASE;
+    const conNeuro = req.body.neuromarketing !== 'no';
+
+    // Seleccionar el prompt según las opciones del usuario
+    let PROMPT;
+    if (conDescripciones && conNeuro) PROMPT = PROMPT_DESCRIPCIONES;
+    else if (conDescripciones && !conNeuro) PROMPT = PROMPT_DESCRIPCIONES_SIN_NEURO;
+    else if (!conDescripciones && conNeuro) PROMPT = PROMPT_BASE;
+    else PROMPT = PROMPT_BASE_SIN_NEURO;
+
+    console.log(`Modo: descripciones=${conDescripciones} neuro=${conNeuro}`);
 
     const todosLosArchivos = (req.files || []);
     const fotos = todosLosArchivos.filter(f => f.fieldname.startsWith('foto'));
@@ -234,7 +365,7 @@ app.post('/procesar', upload.any(), async (req, res) => {
         fs.unlinkSync(logoFile.path);
         return res.json({
           ok: false,
-          error: 'El logotipo debe ser una imagen JPG o PNG. Si solo tienes PDF, haz una captura de pantalla del logo y súbela como imagen.'
+          error: 'El logotipo debe ser una imagen JPG o PNG.'
         });
       }
       const logoBuffer = fs.readFileSync(logoFile.path);
@@ -282,7 +413,6 @@ app.post('/procesar', upload.any(), async (req, res) => {
 
     const texto = response.choices[0].message.content;
     console.log('RESPUESTA IA (primeros 300 chars):', texto.substring(0, 300));
-    console.log('Modo descripciones:', conDescripciones ? 'ACTIVADO' : 'desactivado');
 
     const json = limpiarYParsearJSON(texto);
 
