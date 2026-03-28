@@ -40,9 +40,16 @@
   .item-price { font-size: 13px; color: #444; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
   .nota-pie { font-size: 10px; color: #ccc; text-align: right; padding: 14px 0 0; border-top: 0.5px solid #f0f0f0; margin-top: 14px; }
 
-  .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: border-color 0.2s; margin-bottom: 12px; }
-  .input-wrap:focus-within { border-color: #bbb; }
+  .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
 
+  /* ── ESTILO SEGMENTED ── */
+  .estilo-section { padding: 14px 20px; border-bottom: 0.5px solid #f0f0f0; }
+  .estilo-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 10px; }
+  .segmented { background: #f4f4f4; border-radius: 8px; padding: 3px; display: flex; gap: 2px; }
+  .seg-btn { flex: 1; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; color: #999; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 400; border: none; background: none; transition: all 0.15s; }
+  .seg-btn.on { background: white; color: #111; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  /* ── UPLOAD ── */
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
   .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
   .upload-btn:hover { background: #fafafa; }
@@ -64,6 +71,7 @@
   .fotos-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
   .fotos-count { font-size: 11px; color: #999; }
 
+  /* ── OPCIONES ── */
   .opciones-section { padding: 4px 20px 14px; }
   .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; }
   .opcion-fila:last-child { border-bottom: none; }
@@ -100,7 +108,7 @@
 
   .texto-drop { display: none; padding: 8px 0 2px; }
   .texto-drop.on { display: block; }
-  .texto-drop textarea { width: 100%; height: 80px; resize: none; font-size: 13px; color: #111; background: #fafafa; border: 0.5px solid #e0e0e0; border-radius: 8px; outline: none; font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; padding: 10px 12px; }
+  .texto-drop textarea { width: 100%; height: 80px; resize: none; font-size: 13px; color: #111; background: #f4f4f4; border: 0.5px solid #e0e0e0; border-radius: 8px; outline: none; font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; padding: 10px 12px; }
   .texto-drop textarea::placeholder { color: #ccc; }
   .opcion-arrow { transition: transform 0.2s; color: #bbb; flex-shrink: 0; }
   .opcion-arrow.open { transform: rotate(180deg); }
@@ -115,7 +123,6 @@
   .dl-btn:hover { opacity: 0.85; }
   .dl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-  /* Cuadro de ajuste */
   .ajuste-wrap { display: none; border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-top: 10px; }
   .ajuste-wrap.on { display: block; }
   .ajuste-inner { padding: 14px 16px 6px; }
@@ -224,22 +231,19 @@
     </div>
   </div>
 
-  <!-- Cuadro de ajuste -->
-  <div class="ajuste-wrap" id="ajusteWrap">
-    <div class="ajuste-inner">
-      <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
-      <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, el nombre del restaurante es Casa Pepe, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
-    </div>
-    <div class="ajuste-footer">
-      <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-        REHACER CON ESTE AJUSTE
-      </button>
-    </div>
-  </div>
-
   <div class="input-wrap" id="inputWrap">
 
+    <!-- 1. ESTILO DE CARTA -->
+    <div class="estilo-section">
+      <div class="estilo-label">Estilo de carta</div>
+      <div class="segmented">
+        <button class="seg-btn on" onclick="selEstilo(this,'clasico')">Clásico</button>
+        <button class="seg-btn" onclick="selEstilo(this,'bistro')">Bistró</button>
+        <button class="seg-btn" onclick="selEstilo(this,'minimalista')">Minimalista</button>
+      </div>
+    </div>
+
+    <!-- 2. SUBIDA FOTOS -->
     <div class="upload-grid" id="uploadGrid">
       <div class="upload-btn">
         <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
@@ -263,15 +267,14 @@
       <span class="fotos-count" id="fotosCount"></span>
     </div>
 
+    <!-- 3. OPCIONES -->
     <div class="opciones-section">
 
+      <!-- Logotipo -->
       <div class="opcion-fila" onclick="toggleLogo()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <div>
-            <div class="opcion-texto">Añadir logotipo</div>
-            <div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div>
-          </div>
+          <div><div class="opcion-texto">Añadir logotipo</div><div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div></div>
         </div>
         <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
       </div>
@@ -290,35 +293,29 @@
         <button class="logo-remove-btn" onclick="removeLogo()">×</button>
       </div>
 
+      <!-- Descripciones -->
       <div class="opcion-fila" onclick="toggleDesc()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <div>
-            <div class="opcion-texto">Crear descripciones de los platos</div>
-            <div class="opcion-subtexto">La IA redacta textos apetecibles para cada plato</div>
-          </div>
+          <div><div class="opcion-texto">Crear descripciones de los platos</div><div class="opcion-subtexto">La IA redacta textos apetecibles para cada plato</div></div>
         </div>
         <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
       </div>
 
+      <!-- Neuromarketing -->
       <div class="opcion-fila" onclick="toggleNeuro()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
-          <div>
-            <div class="opcion-texto">Ordenar platos por rentabilidad</div>
-            <div class="opcion-subtexto">La IA coloca los platos más rentables primero</div>
-          </div>
+          <div><div class="opcion-texto">Ordenar platos por rentabilidad</div><div class="opcion-subtexto">La IA coloca los platos más rentables primero</div></div>
         </div>
         <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
       </div>
 
+      <!-- Traducir -->
       <div class="opcion-fila" onclick="toggleTraducir()">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-          <div>
-            <div class="opcion-texto">Traducir la carta</div>
-            <div class="opcion-subtexto">La IA traduce todos los platos y secciones</div>
-          </div>
+          <div><div class="opcion-texto">Traducir la carta</div><div class="opcion-subtexto">La IA traduce todos los platos y secciones</div></div>
         </div>
         <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
       </div>
@@ -335,13 +332,11 @@
         </div>
       </div>
 
+      <!-- Pegar texto -->
       <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom:none;">
         <div class="opcion-izq">
           <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
-          <div>
-            <div class="opcion-texto">Pegar texto de la carta</div>
-            <div class="opcion-subtexto">Si tienes el texto en digital</div>
-          </div>
+          <div><div class="opcion-texto">Pegar texto de la carta</div><div class="opcion-subtexto">Si tienes el texto en digital</div></div>
         </div>
         <svg class="opcion-arrow" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
       </div>
@@ -354,6 +349,19 @@
   </div>
 
   <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
+
+  <div class="ajuste-wrap" id="ajusteWrap">
+    <div class="ajuste-inner">
+      <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
+      <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
+    </div>
+    <div class="ajuste-footer">
+      <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        REHACER CON ESTE AJUSTE
+      </button>
+    </div>
+  </div>
 
   <div class="cta" id="cta">
     <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
@@ -368,17 +376,16 @@
 </div>
 
 <script>
-  let filesList = [];
-  let logoFile = null;
-  let logoDataUrl = null;
-  let countdownInterval = null;
-  let descActivo = false;
-  let logoActivo = false;
-  let neuroActivo = true;
-  let tradActivo = false;
-  let idiomaSeleccionado = null;
-  let textoActivo = false;
-  let cartaActual = null; // guarda el JSON de la carta generada
+  let filesList = [], logoFile = null, logoDataUrl = null, countdownInterval = null;
+  let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
+  let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
+  let estiloActual = 'clasico';
+
+  function selEstilo(el, estilo) {
+    estiloActual = estilo;
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+  }
 
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
@@ -389,8 +396,7 @@
       const r = new FileReader();
       r.onload = e => {
         filesList.push({ file, dataUrl: e.target.result });
-        renderThumbs();
-        pendientes--;
+        renderThumbs(); pendientes--;
         if (pendientes === 0) checkReady();
       };
       r.readAsDataURL(file);
@@ -405,13 +411,11 @@
       document.getElementById('uploadGrid').style.display = 'grid';
       document.getElementById('fotosPreview').classList.remove('on');
     }
-    renderThumbs();
-    checkReady();
+    renderThumbs(); checkReady();
   }
 
   function renderThumbs() {
-    const container = document.getElementById('fotosContainer');
-    container.innerHTML = filesList.map((f, i) => `
+    document.getElementById('fotosContainer').innerHTML = filesList.map((f, i) => `
       <div class="foto-thumb-wrap">
         <img class="foto-thumb" src="${f.dataUrl}" alt="">
         <button class="foto-remove" onclick="removePhoto(${i})">×</button>
@@ -426,24 +430,14 @@
     if (!logoActivo) removeLogo();
   }
 
-  function toggleDesc() {
-    descActivo = !descActivo;
-    document.getElementById('descToggle').classList.toggle('on', descActivo);
-  }
-
-  function toggleNeuro() {
-    neuroActivo = !neuroActivo;
-    document.getElementById('neuroToggle').classList.toggle('on', neuroActivo);
-  }
+  function toggleDesc() { descActivo = !descActivo; document.getElementById('descToggle').classList.toggle('on', descActivo); }
+  function toggleNeuro() { neuroActivo = !neuroActivo; document.getElementById('neuroToggle').classList.toggle('on', neuroActivo); }
 
   function toggleTraducir() {
     tradActivo = !tradActivo;
     document.getElementById('tradToggle').classList.toggle('on', tradActivo);
     document.getElementById('idiomaZone').classList.toggle('on', tradActivo);
-    if (!tradActivo) {
-      idiomaSeleccionado = null;
-      document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on'));
-    }
+    if (!tradActivo) { idiomaSeleccionado = null; document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on')); }
   }
 
   function selIdioma(el, codigo) {
@@ -481,15 +475,11 @@
             }
           }
         }
-        if (top > bottom || left > right) {
-          logoDataUrl = e.target.result;
-        } else {
-          const pad = 4;
-          const cx = Math.max(0, left-pad), cy = Math.max(0, top-pad);
-          const cw = Math.min(canvas.width-cx, right-left+pad*2+1);
-          const ch = Math.min(canvas.height-cy, bottom-top+pad*2+1);
-          const out = document.createElement('canvas');
-          out.width = cw; out.height = ch;
+        if (top > bottom || left > right) { logoDataUrl = e.target.result; }
+        else {
+          const pad = 4, cx = Math.max(0,left-pad), cy = Math.max(0,top-pad);
+          const cw = Math.min(canvas.width-cx,right-left+pad*2+1), ch = Math.min(canvas.height-cy,bottom-top+pad*2+1);
+          const out = document.createElement('canvas'); out.width = cw; out.height = ch;
           out.getContext('2d').drawImage(canvas, cx, cy, cw, ch, 0, 0, cw, ch);
           logoDataUrl = out.toDataURL('image/png');
         }
@@ -510,14 +500,12 @@
   }
 
   function checkReady() {
-    const hayContenido = filesList.length > 0 || document.getElementById('txt').value.trim();
-    document.getElementById('mainBtn').disabled = !hayContenido;
+    const hay = filesList.length > 0 || document.getElementById('txt').value.trim();
+    document.getElementById('mainBtn').disabled = !hay;
   }
 
   function checkAjuste(el) {
-    const btn = document.getElementById('rehacerBtn');
-    const hayTexto = el.value.trim().length > 0;
-    btn.classList.toggle('activo', hayTexto);
+    document.getElementById('rehacerBtn').classList.toggle('activo', el.value.trim().length > 0);
   }
 
   function onTextInput(el) {
@@ -526,16 +514,11 @@
     checkReady();
   }
 
-  function startCountdown(seconds) {
+  function startCountdown(s) {
     const el = document.getElementById('countNum');
-    let remaining = seconds;
-    el.textContent = remaining;
+    let r = s; el.textContent = r;
     clearInterval(countdownInterval);
-    countdownInterval = setInterval(() => {
-      remaining--;
-      if (remaining <= 0) { el.textContent = '…'; clearInterval(countdownInterval); }
-      else el.textContent = remaining;
-    }, 1000);
+    countdownInterval = setInterval(() => { r--; if (r <= 0) { el.textContent = '…'; clearInterval(countdownInterval); } else el.textContent = r; }, 1000);
   }
 
   function stopCountdown() { clearInterval(countdownInterval); }
@@ -551,24 +534,19 @@
   function formatPrice(precio) {
     if (!precio) return '';
     const s = precio.toString();
-    if (s.includes('.')) return s.replace(/\.?0+$/, '');
-    return s;
+    return s.includes('.') ? s.replace(/\.?0+$/, '') : s;
   }
 
   async function run() {
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
-
     document.getElementById('inputWrap').style.opacity = '0.4';
     document.getElementById('inputWrap').style.pointerEvents = 'none';
     document.getElementById('mainBtn').style.opacity = '0.4';
     document.getElementById('mainBtn').style.pointerEvents = 'none';
-
     const segundos = filesList.length > 1 ? 25 : 15;
     document.getElementById('msgTyping').style.display = 'flex';
-    startCountdown(segundos);
-    scroll();
-
+    startCountdown(segundos); scroll();
     try {
       const formData = new FormData();
       filesList.forEach((f, i) => formData.append(`foto_${i}`, f.file));
@@ -577,57 +555,39 @@
       formData.append('descripciones', descActivo ? 'si' : 'no');
       formData.append('neuromarketing', neuroActivo ? 'si' : 'no');
       formData.append('idioma', tradActivo && idiomaSeleccionado ? idiomaSeleccionado : 'es');
-
+      formData.append('estilo', estiloActual);
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
       stopCountdown();
       if (!data.ok) throw new Error(data.error);
       if (data.logo) logoDataUrl = data.logo;
-
       status('Aplicando diseño…');
       setTimeout(() => mostrarCarta(data.carta), 600);
-    } catch (err) {
-      stopCountdown();
-      status('Algo salió mal: ' + err.message);
-    }
+    } catch (err) { stopCountdown(); status('Algo salió mal: ' + err.message); }
   }
 
   async function rehacer() {
     const ajuste = document.getElementById('ajusteTxt').value.trim();
     if (!ajuste || !cartaActual) return;
-
     const btn = document.getElementById('rehacerBtn');
     btn.classList.remove('activo');
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACIENDO…`;
-
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACIENDO…`;
     document.getElementById('msgStatus').style.display = 'none';
     document.getElementById('msgTyping').style.display = 'flex';
-    startCountdown(10);
-    scroll();
-
+    startCountdown(10); scroll();
     try {
-      const res = await fetch('/rehacer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          carta: cartaActual,
-          ajuste: ajuste
-        })
-      });
+      const res = await fetch('/rehacer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carta: cartaActual, ajuste }) });
       const data = await res.json();
       stopCountdown();
       if (!data.ok) throw new Error(data.error);
-
       document.getElementById('ajusteTxt').value = '';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
-
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
       status('Aplicando ajuste…');
       setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
-      stopCountdown();
-      status('Algo salió mal: ' + err.message);
+      stopCountdown(); status('Algo salió mal: ' + err.message);
       btn.classList.add('activo');
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
     }
   }
 
@@ -635,15 +595,10 @@
     cartaActual = carta;
     document.getElementById('msgStatus').style.display = 'none';
     const tienelogo = !!logoDataUrl;
-
     const thead = document.getElementById('printTheadContent');
-    if (tienelogo) {
-      thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
-    } else if (carta.nombre_restaurante) {
-      thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
-    } else {
-      thead.innerHTML = '';
-    }
+    if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
+    else if (carta.nombre_restaurante) thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
+    else thead.innerHTML = '';
 
     let bodyHtml = '';
     carta.secciones.forEach(sec => {
@@ -664,7 +619,6 @@
     const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
     const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
     const mostrarHead = tienelogo || carta.nombre_restaurante;
-
     let html = mostrarHead ? `<div class="card-head">${logoHtml}${nombreHtml}<span class="card-tag">Vista previa</span></div>` : '';
     html += `<div class="card-body">`;
     carta.secciones.forEach(sec => {
