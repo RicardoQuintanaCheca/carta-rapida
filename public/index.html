@@ -3,19 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carta Rápida — Kartia</title>
+
+<!-- SEO -->
+<title>Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia</title>
+<meta name="description" content="Sube una foto de tu carta y aplicamos neuromarketing profesional para reorganizarla. Gratis, sin registro. Descripciones apetecibles y traducción a 6 idiomas. Para restaurantes, hoteles y cafeterías.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cartarapida.kartia.es">
+<meta name="author" content="Kartia — Gastrotouch Marketing Solutions S.L.">
+<meta name="keywords" content="rediseñar carta restaurante gratis, diseño carta restaurante, neuromarketing carta restaurante, mejorar carta restaurante, carta menú profesional">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Haz que tu Carta de Restaurante Venda Más — Gratis | Kartia">
+<meta property="og:description" content="Sube una foto de tu carta. Aplicamos neuromarketing profesional, descripciones apetecibles y traducción a 6 idiomas. Completamente gratis.">
+<meta property="og:url" content="https://cartarapida.kartia.es">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Kartia">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Haz que tu Carta de Restaurante Venda Más — Gratis | Kartia">
+<meta name="twitter:description" content="Sube una foto de tu carta. Aplicamos neuromarketing profesional para reorganizarla. Gratis, sin registro.">
+
+<!-- Schema.org WebApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Carta Rápida",
+  "description": "Herramienta gratuita que rediseña cartas de restaurante aplicando neuromarketing profesional. Genera descripciones de platos y traduce a 6 idiomas.",
+  "url": "https://cartarapida.kartia.es",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Kartia — Gastrotouch Marketing Solutions S.L.",
+    "url": "https://kartia.es"
+  }
+}
+</script>
+
+<!-- Schema.org FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo funciona Carta Rápida?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sube una foto de tu carta actual o pega el texto directamente. Analizamos todos los platos, precios y secciones, los reorganizamos aplicando técnicas de neuromarketing y generamos un PDF profesional listo para descargar en segundos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Es realmente gratuita?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, completamente gratuita. Sin registro, sin límite de usos y sin coste de ningún tipo. Kartia ofrece esta herramienta como servicio gratuito para el sector HORECA."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es el neuromarketing aplicado a cartas de restaurante?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El neuromarketing aplicado a cartas consiste en reorganizar los platos estratégicamente para maximizar las ventas. Los platos más rentables se colocan en primer lugar dentro de cada sección, ya que los clientes tienden a pedir los primeros que leen. Estudios de la Cornell University demuestran que esta técnica puede aumentar el ticket medio hasta un 18%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo traducir mi carta a otros idiomas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Carta Rápida traduce automáticamente toda la carta — platos, secciones y descripciones — a inglés, francés, alemán, italiano, portugués y chino, usando terminología profesional de hostelería."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Mis datos y los datos de mi carta están seguros?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Las imágenes y textos que subes se procesan en el momento y se eliminan de inmediato. Nunca almacenamos el contenido de tu carta ni lo compartimos con terceros."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #fff; color: #111; font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 0 24px 80px; }
-  .wrap { width: 100%; max-width: 560px; }
-  header { padding: 32px 0 48px; display: flex; justify-content: space-between; align-items: center; }
-  .logo { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #111; text-decoration: none; text-transform: uppercase; }
-  .badge { font-size: 11px; color: #999; }
-  .title-block { margin-bottom: 36px; }
-  h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(18px, 3vw, 24px); font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: #111; margin-bottom: 12px; }
-  .sub { font-size: 13px; color: #999; line-height: 1.6; }
+
+  :root {
+    --black: #111;
+    --gray: #666;
+    --light-gray: #999;
+    --border: #e0e0e0;
+    --bg-light: #f4f4f4;
+    --blue: #3b6fd4;
+    --blue-light: #e8f0fe;
+    --orange: #E8622A;
+  }
+
+  body { background: #fff; color: var(--black); font-family: 'Inter', sans-serif; font-weight: 300; }
+
+  /* ── SITE HEADER ── */
+  .site-header { border-bottom: 0.5px solid var(--border); padding: 0 24px; }
+  .site-header-inner { max-width: 960px; margin: 0 auto; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .site-logo img { height: 28px; width: auto; display: block; }
+  .site-nav { display: flex; align-items: center; gap: 24px; }
+  .site-nav a { font-size: 12px; color: var(--light-gray); text-decoration: none; transition: color 0.15s; }
+  .site-nav a:hover { color: var(--black); }
+  .nav-cta { font-size: 11px; font-weight: 500; color: var(--black) !important; border: 0.5px solid var(--black); border-radius: 6px; padding: 6px 12px; }
+
+  /* ── HERO ── */
+  .hero { padding: 72px 24px 64px; text-align: center; max-width: 720px; margin: 0 auto; }
+
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--bg-light); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 400; letter-spacing: 0.06em; color: var(--gray); margin-bottom: 24px; }
+  .hero-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
+
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--orange);
+    font-size: 1.05em;
+  }
+
+  .hero-sub { font-size: 16px; color: var(--gray); line-height: 1.75; max-width: 540px; margin: 0 auto 32px; }
+
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 36px; }
+  .hero-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--bg-light); border-radius: 20px; padding: 5px 12px; font-size: 11px; color: var(--gray); }
+
+  .hero-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--black); color: white; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: opacity 0.15s; }
+  .hero-cta:hover { opacity: 0.85; }
+  .hero-meta { margin-top: 14px; font-size: 11px; color: #bbb; letter-spacing: 0.04em; }
+
+  /* ── TOOL SECTION ── */
+  .tool-section { padding: 0 24px 80px; max-width: 608px; margin: 0 auto; scroll-margin-top: 80px; }
+  .wrap { width: 100%; max-width: 560px; margin: 0 auto; }
 
   .messages { display: flex; flex-direction: column; gap: 24px; margin-bottom: 24px; }
   .msg { display: flex; gap: 14px; align-items: flex-start; animation: up 0.35s ease both; }
@@ -42,14 +188,12 @@
 
   .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
 
-  /* ── ESTILO SEGMENTED ── */
   .estilo-section { padding: 14px 20px; border-bottom: 0.5px solid #f0f0f0; }
   .estilo-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 10px; }
   .segmented { background: #f4f4f4; border-radius: 8px; padding: 3px; display: flex; gap: 2px; }
   .seg-btn { flex: 1; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; color: #999; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 400; border: none; background: none; transition: all 0.15s; }
   .seg-btn.on { background: white; color: #111; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
-  /* ── UPLOAD ── */
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
   .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
   .upload-btn:hover { background: #fafafa; }
@@ -71,7 +215,6 @@
   .fotos-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
   .fotos-count { font-size: 11px; color: #999; }
 
-  /* ── OPCIONES ── */
   .opciones-section { padding: 4px 20px 14px; }
   .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; }
   .opcion-fila:last-child { border-bottom: none; }
@@ -135,15 +278,66 @@
   .rehacer-btn.activo:hover { opacity: 0.85; }
   .rehacer-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-  .cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
-  .cta.on { display: flex; }
-  .cta p { font-size: 13px; color: #666; line-height: 1.65; text-align: center; }
-  .cta-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; }
-  .cta-btn:hover { background: #111; color: #fff; }
-  .cta-btn svg { width: 11px; height: 11px; }
+  .tool-cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+  .tool-cta.on { display: flex; }
+  .tool-cta p { font-size: 13px; color: #666; line-height: 1.65; }
+  .tool-cta-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; }
+  .tool-cta-btn:hover { background: #111; color: #fff; }
 
-  .foot { margin-top: 32px; font-size: 11px; color: #ccc; text-align: center; letter-spacing: 0.03em; }
-  .foot-copy { margin-top: 12px; font-size: 11px; color: #bbb; line-height: 1.8; text-align: center; max-width: 480px; margin-left: auto; margin-right: auto; }
+  /* ── COMO FUNCIONA ── */
+  .como-section { background: #f9f9f9; padding: 80px 24px; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+  .section-inner { max-width: 960px; margin: 0 auto; }
+  .section-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--light-gray); margin-bottom: 12px; text-align: center; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 32px); font-weight: 600; color: var(--black); text-align: center; margin-bottom: 48px; line-height: 1.3; }
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .step { text-align: center; padding: 24px 16px; }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 400; color: #e0e0e0; line-height: 1; margin-bottom: 12px; }
+  .step h3 { font-size: 15px; font-weight: 500; color: var(--black); margin-bottom: 8px; }
+  .step p { font-size: 13px; color: var(--gray); line-height: 1.7; }
+
+  /* ── TEXTO SEO ── */
+  .seo-section { padding: 80px 24px; max-width: 720px; margin: 0 auto; }
+  .seo-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(20px, 2.5vw, 28px); font-weight: 600; color: var(--black); margin-bottom: 16px; margin-top: 48px; line-height: 1.3; }
+  .seo-section h2:first-child { margin-top: 0; }
+  .seo-section h3 { font-size: 16px; font-weight: 500; color: var(--black); margin-bottom: 12px; margin-top: 32px; }
+  .seo-section p { font-size: 14px; color: var(--gray); line-height: 1.85; margin-bottom: 16px; }
+  .seo-section ul { margin: 12px 0 20px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .seo-section li { font-size: 14px; color: var(--gray); line-height: 1.7; }
+  .seo-divider { border: none; border-top: 0.5px solid var(--border); margin: 48px 0; }
+
+  /* ── FAQ ── */
+  .faq-section { padding: 80px 24px; background: #f9f9f9; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+  .faq-inner { max-width: 720px; margin: 0 auto; }
+  .faq-item { border-bottom: 0.5px solid var(--border); padding: 20px 0; cursor: pointer; }
+  .faq-item:first-child { border-top: 0.5px solid var(--border); }
+  .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .faq-question h3 { font-size: 15px; font-weight: 400; color: var(--black); line-height: 1.5; margin: 0; }
+  .faq-arrow { flex-shrink: 0; transition: transform 0.2s; color: #bbb; }
+  .faq-arrow.open { transform: rotate(180deg); }
+  .faq-answer { display: none; font-size: 13.5px; color: var(--gray); line-height: 1.8; padding-top: 12px; }
+  .faq-answer.on { display: block; }
+
+  /* ── CTA FINAL ── */
+  .final-cta { padding: 96px 24px; text-align: center; max-width: 640px; margin: 0 auto; }
+  .final-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3vw, 36px); font-weight: 600; color: var(--black); margin-bottom: 16px; line-height: 1.3; }
+  .final-cta p { font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 32px; }
+  .final-cta-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--black); color: white; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 28px; border-radius: 10px; text-decoration: none; transition: opacity 0.15s; }
+  .final-cta-btn:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  .site-footer { border-top: 0.5px solid var(--border); padding: 24px; }
+  .site-footer-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-copy { font-size: 11px; color: #bbb; }
+  .footer-links { display: flex; gap: 16px; }
+  .footer-links a { font-size: 11px; color: #bbb; text-decoration: none; }
+  .footer-links a:hover { color: var(--black); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr; gap: 24px; }
+    .hero h1 { font-size: 32px; }
+    .site-nav { display: none; }
+  }
 
   #printTable { display: none; }
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -151,24 +345,22 @@
   @media print {
     @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body { padding: 0; background: white; display: block; }
-    .wrap { max-width: 100%; }
-    header, .title-block, .messages, .input-wrap, .main-btn, .ajuste-wrap, .cta, .foot, .foot-copy { display: none !important; }
+    body { background: white; }
+    .site-header, .hero, .tool-section > *:not(#printTable):not(.wrap), .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tbody { display: table-row-group; }
     .print-thead-cell { padding: 10px 0 8px; text-align: center; border-bottom: none; }
     .print-thead-cell img { height: 70px; width: auto; max-width: 240px; display: block; margin: 0 auto; object-fit: contain; }
-    .print-thead-cell .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; line-height: 1.3; }
+    .print-thead-cell .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
     .print-tbody-cell { padding: 0; vertical-align: top; }
     .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
     .sec-block:first-child { margin-top: 8px; }
-    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; break-after: avoid !important; }
-    .item { padding: 6px 0; page-break-inside: avoid !important; break-inside: avoid !important; }
-    .item-name { font-size: 12.5px; color: #111; font-weight: 400; }
+    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; }
+    .item { padding: 6px 0; page-break-inside: avoid !important; }
+    .item-name { font-size: 12.5px; color: #111; }
     .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
-    .item-alergenos { font-size: 9.5px; color: #ccc; font-style: italic; margin-top: 1px; }
-    .item-price { font-size: 12.5px; color: #111; font-weight: 400; }
+    .item-price { font-size: 12.5px; color: #111; }
     .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
     .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
   }
@@ -176,204 +368,350 @@
 </head>
 <body>
 
+<!-- PRINT TABLE -->
 <table id="printTable">
-  <thead>
-    <tr><td><div class="print-thead-cell" id="printTheadContent"></div></td></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="print-tbody-cell">
-        <div id="printBodyContent"></div>
-        <span class="print-kartia">kartia.es</span>
-      </td>
-    </tr>
-  </tbody>
+  <thead><tr><td><div class="print-thead-cell" id="printTheadContent"></div></td></tr></thead>
+  <tbody><tr><td class="print-tbody-cell"><div id="printBodyContent"></div><span class="print-kartia">kartia.es</span></td></tr></tbody>
 </table>
 
-<div class="wrap">
-  <header>
-    <a href="https://kartia.es" class="logo">Kartia</a>
-    <span class="badge">Herramienta gratuita</span>
-  </header>
-
-  <div class="title-block">
-    <h1>REDISEÑA TU CARTA<br>EN SEGUNDOS</h1>
-    <p class="sub">Sube una foto. La IA hace el resto.</p>
-  </div>
-
-  <div class="messages" id="msgs">
-    <div class="msg">
-      <div class="avatar">K</div>
-      <div class="bubble">Sube las fotos de tu carta o pega el texto directamente. Te la devuelvo con un diseño limpio y profesional.</div>
-    </div>
-    <div class="msg" id="msgTyping" style="display:none">
-      <div class="avatar">K</div>
-      <div class="bubble">
-        <div class="countdown">Analizando tu carta… <span id="countNum">15</span>s</div>
-      </div>
-    </div>
-    <div class="msg" id="msgStatus" style="display:none">
-      <div class="avatar">K</div>
-      <div class="bubble" id="statusText"></div>
-    </div>
-    <div class="msg" id="msgResult" style="display:none">
-      <div class="avatar">K</div>
-      <div style="flex:1">
-        <div class="bubble" style="margin-bottom:10px">Aquí está tu carta rediseñada.</div>
-        <div class="card" id="cartaResult"></div>
-        <div class="actions" id="actions">
-          <button class="dl-btn" onclick="descargar()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            DESCARGAR PDF
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="input-wrap" id="inputWrap">
-
-    <!-- 1. ESTILO DE CARTA -->
-    <div class="estilo-section">
-      <div class="estilo-label">Estilo de carta</div>
-      <div class="segmented">
-        <button class="seg-btn on" onclick="selEstilo(this,'clasico')">Clásico</button>
-        <button class="seg-btn" onclick="selEstilo(this,'bistro')">Bistró</button>
-        <button class="seg-btn" onclick="selEstilo(this,'minimalista')">Minimalista</button>
-      </div>
-    </div>
-
-    <!-- 2. SUBIDA FOTOS -->
-    <div class="upload-grid" id="uploadGrid">
-      <div class="upload-btn">
-        <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
-        <div class="upload-btn-icon azul">
-          <svg viewBox="0 0 24 24" stroke="#3b6fd4"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-        </div>
-        <div class="upload-btn-text">Usar cámara<span>Fotografía ahora</span></div>
-      </div>
-      <div class="upload-btn">
-        <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
-        <div class="upload-btn-icon gris">
-          <svg viewBox="0 0 24 24" stroke="#666"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-        </div>
-        <div class="upload-btn-text">Subir fotos<span>Desde tu galería</span></div>
-      </div>
-    </div>
-
-    <div class="fotos-preview" id="fotosPreview">
-      <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-      <div class="fotos-add"><input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">+</div>
-      <span class="fotos-count" id="fotosCount"></span>
-    </div>
-
-    <!-- 3. OPCIONES -->
-    <div class="opciones-section">
-
-      <!-- Logotipo -->
-      <div class="opcion-fila" onclick="toggleLogo()">
-        <div class="opcion-izq">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <div><div class="opcion-texto">Añadir logotipo</div><div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div></div>
-        </div>
-        <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
-      </div>
-
-      <div class="logo-drop" id="logoDrop">
-        <div class="logo-drop-zone">
-          <input type="file" accept="image/*" onchange="handleLogo(this)">
-          <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
-          <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG o PNG</div></div>
-        </div>
-      </div>
-
-      <div class="logo-preview-row" id="logoPreview">
-        <img class="logo-thumb" id="logoThumb" src="" alt="">
-        <span class="logo-preview-name" id="logoName"></span>
-        <button class="logo-remove-btn" onclick="removeLogo()">×</button>
-      </div>
-
-      <!-- Descripciones -->
-      <div class="opcion-fila" onclick="toggleDesc()">
-        <div class="opcion-izq">
-          <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <div><div class="opcion-texto">Crear descripciones de los platos</div><div class="opcion-subtexto">La IA redacta textos apetecibles para cada plato</div></div>
-        </div>
-        <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
-      </div>
-
-      <!-- Neuromarketing -->
-      <div class="opcion-fila" onclick="toggleNeuro()">
-        <div class="opcion-izq">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
-          <div><div class="opcion-texto">Ordenar platos por rentabilidad</div><div class="opcion-subtexto">La IA coloca los platos más rentables primero</div></div>
-        </div>
-        <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
-      </div>
-
-      <!-- Traducir -->
-      <div class="opcion-fila" onclick="toggleTraducir()">
-        <div class="opcion-izq">
-          <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-          <div><div class="opcion-texto">Traducir la carta</div><div class="opcion-subtexto">La IA traduce todos los platos y secciones</div></div>
-        </div>
-        <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
-      </div>
-
-      <div class="idioma-zone" id="idiomaZone">
-        <div class="idioma-label">Selecciona el idioma:</div>
-        <div class="idioma-grid">
-          <button class="idioma-btn" onclick="selIdioma(this,'en')"><span class="flag">🇬🇧</span> Inglés</button>
-          <button class="idioma-btn" onclick="selIdioma(this,'fr')"><span class="flag">🇫🇷</span> Francés</button>
-          <button class="idioma-btn" onclick="selIdioma(this,'de')"><span class="flag">🇩🇪</span> Alemán</button>
-          <button class="idioma-btn" onclick="selIdioma(this,'it')"><span class="flag">🇮🇹</span> Italiano</button>
-          <button class="idioma-btn" onclick="selIdioma(this,'pt')"><span class="flag">🇵🇹</span> Portugués</button>
-          <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
-        </div>
-      </div>
-
-      <!-- Pegar texto -->
-      <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom:none;">
-        <div class="opcion-izq">
-          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
-          <div><div class="opcion-texto">Pegar texto de la carta</div><div class="opcion-subtexto">Si tienes el texto en digital</div></div>
-        </div>
-        <svg class="opcion-arrow" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
-      </div>
-
-      <div class="texto-drop" id="textoDrop">
-        <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
-      </div>
-
-    </div>
-  </div>
-
-  <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
-
-  <div class="ajuste-wrap" id="ajusteWrap">
-    <div class="ajuste-inner">
-      <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
-      <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
-    </div>
-    <div class="ajuste-footer">
-      <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-        REHACER CON ESTE AJUSTE
-      </button>
-    </div>
-  </div>
-
-  <div class="cta" id="cta">
-    <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
-    <a href="https://kartia.es" class="cta-btn" target="_blank">
-      Ver portamenús
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="https://kartia.es" class="site-logo">
+      <img src="/logo-kartia.png" alt="Kartia — Portamenús premium para restaurantes" onerror="this.style.display='none'">
     </a>
+    <nav class="site-nav">
+      <a href="#herramienta">La herramienta</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="https://kartia.es" class="nav-cta">Ver portamenús →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Neuromarketing para restaurantes
   </div>
 
-  <p class="foot">Tu carta se analiza en segundos y se elimina de inmediato — nunca la almacenamos.</p>
-  <p class="foot-copy">Aplicamos neuromarketing y principios de diseño persuasivo para reorganizar tu carta: jerarquía visual, orden de lectura y estructura de precios que guían al cliente hacia lo que más te interesa vender.</p>
-</div>
+  <h1>Haz que tu carta<br>venda más.<br><em>En segundos.</em></h1>
+
+  <p class="hero-sub">Sube una foto de tu carta. Aplicamos neuromarketing profesional para reorganizarla, añadimos descripciones apetecibles y la traducimos a 6 idiomas. Sin registro, sin coste.</p>
+
+  <div class="hero-pills">
+    <span class="hero-pill">✓ Gratis y sin registro</span>
+    <span class="hero-pill">✓ Neuromarketing automático</span>
+    <span class="hero-pill">✓ PDF listo para imprimir</span>
+    <span class="hero-pill">✓ Traduce a 6 idiomas</span>
+  </div>
+
+  <a href="#herramienta" class="hero-cta">
+    Rediseñar mi carta — gratis
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </a>
+
+  <p class="hero-meta">Sin tarjeta de crédito · Sin instalación · Sin límite de usos</p>
+</section>
+
+<!-- HERRAMIENTA -->
+<section class="tool-section" id="herramienta">
+  <div class="wrap">
+
+    <div class="messages" id="msgs">
+      <div class="msg">
+        <div class="avatar">K</div>
+        <div class="bubble">Sube las fotos de tu carta o pega el texto directamente. Te la devuelvo con diseño profesional y neuromarketing aplicado.</div>
+      </div>
+      <div class="msg" id="msgTyping" style="display:none">
+        <div class="avatar">K</div>
+        <div class="bubble"><div class="countdown">Analizando tu carta… <span id="countNum">15</span>s</div></div>
+      </div>
+      <div class="msg" id="msgStatus" style="display:none">
+        <div class="avatar">K</div>
+        <div class="bubble" id="statusText"></div>
+      </div>
+      <div class="msg" id="msgResult" style="display:none">
+        <div class="avatar">K</div>
+        <div style="flex:1">
+          <div class="bubble" style="margin-bottom:10px">Aquí está tu carta rediseñada.</div>
+          <div class="card" id="cartaResult"></div>
+          <div class="actions" id="actions">
+            <button class="dl-btn" onclick="descargar()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              DESCARGAR PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-wrap" id="inputWrap">
+
+      <div class="estilo-section">
+        <div class="estilo-label">Estilo de carta</div>
+        <div class="segmented">
+          <button class="seg-btn on" onclick="selEstilo(this,'clasico')">Clásico</button>
+          <button class="seg-btn" onclick="selEstilo(this,'bistro')">Bistró</button>
+          <button class="seg-btn" onclick="selEstilo(this,'minimalista')">Minimalista</button>
+        </div>
+      </div>
+
+      <div class="upload-grid" id="uploadGrid">
+        <div class="upload-btn">
+          <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
+          <div class="upload-btn-icon azul">
+            <svg viewBox="0 0 24 24" stroke="#3b6fd4"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
+          <div class="upload-btn-text">Usar cámara<span>Fotografía ahora</span></div>
+        </div>
+        <div class="upload-btn">
+          <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
+          <div class="upload-btn-icon gris">
+            <svg viewBox="0 0 24 24" stroke="#666"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </div>
+          <div class="upload-btn-text">Subir fotos<span>Desde tu galería</span></div>
+        </div>
+      </div>
+
+      <div class="fotos-preview" id="fotosPreview">
+        <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        <div class="fotos-add"><input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">+</div>
+        <span class="fotos-count" id="fotosCount"></span>
+      </div>
+
+      <div class="opciones-section">
+
+        <div class="opcion-fila" onclick="toggleLogo()">
+          <div class="opcion-izq">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <div><div class="opcion-texto">Añadir logotipo</div><div class="opcion-subtexto">Aparecerá en la cabecera de cada página</div></div>
+          </div>
+          <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
+        </div>
+
+        <div class="logo-drop" id="logoDrop">
+          <div class="logo-drop-zone">
+            <input type="file" accept="image/*" onchange="handleLogo(this)">
+            <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
+            <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG o PNG</div></div>
+          </div>
+        </div>
+
+        <div class="logo-preview-row" id="logoPreview">
+          <img class="logo-thumb" id="logoThumb" src="" alt="">
+          <span class="logo-preview-name" id="logoName"></span>
+          <button class="logo-remove-btn" onclick="removeLogo()">×</button>
+        </div>
+
+        <div class="opcion-fila" onclick="toggleDesc()">
+          <div class="opcion-izq">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <div><div class="opcion-texto">Crear descripciones de los platos</div><div class="opcion-subtexto">Textos apetecibles para cada plato</div></div>
+          </div>
+          <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
+        </div>
+
+        <div class="opcion-fila" onclick="toggleNeuro()">
+          <div class="opcion-izq">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
+            <div><div class="opcion-texto">Ordenar platos por rentabilidad</div><div class="opcion-subtexto">Los platos más rentables primero</div></div>
+          </div>
+          <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
+        </div>
+
+        <div class="opcion-fila" onclick="toggleTraducir()">
+          <div class="opcion-izq">
+            <svg viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+            <div><div class="opcion-texto">Traducir la carta</div><div class="opcion-subtexto">La herramienta traduce todos los platos y secciones</div></div>
+          </div>
+          <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
+        </div>
+
+        <div class="idioma-zone" id="idiomaZone">
+          <div class="idioma-label">Selecciona el idioma:</div>
+          <div class="idioma-grid">
+            <button class="idioma-btn" onclick="selIdioma(this,'en')"><span class="flag">🇬🇧</span> Inglés</button>
+            <button class="idioma-btn" onclick="selIdioma(this,'fr')"><span class="flag">🇫🇷</span> Francés</button>
+            <button class="idioma-btn" onclick="selIdioma(this,'de')"><span class="flag">🇩🇪</span> Alemán</button>
+            <button class="idioma-btn" onclick="selIdioma(this,'it')"><span class="flag">🇮🇹</span> Italiano</button>
+            <button class="idioma-btn" onclick="selIdioma(this,'pt')"><span class="flag">🇵🇹</span> Portugués</button>
+            <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
+          </div>
+        </div>
+
+        <div class="opcion-fila" onclick="toggleTexto()" style="border-bottom:none;">
+          <div class="opcion-izq">
+            <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+            <div><div class="opcion-texto">Pegar texto de la carta</div><div class="opcion-subtexto">Si tienes el texto en digital</div></div>
+          </div>
+          <svg class="opcion-arrow" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+
+        <div class="texto-drop" id="textoDrop">
+          <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
+
+    <div class="ajuste-wrap" id="ajusteWrap">
+      <div class="ajuste-inner">
+        <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
+        <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
+      </div>
+      <div class="ajuste-footer">
+        <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          REHACER CON ESTE AJUSTE
+        </button>
+      </div>
+    </div>
+
+    <div class="tool-cta" id="toolCta">
+      <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
+      <a href="https://kartia.es" class="tool-cta-btn" target="_blank">Ver portamenús →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="como-section" id="como-funciona">
+  <div class="section-inner">
+    <div class="section-eyebrow">Proceso</div>
+    <h2 class="section-title">¿Cómo funciona Carta Rápida?</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Sube la foto de tu carta</h3>
+        <p>Fotografía tu carta actual desde el móvil o sube una imagen desde tu galería. También puedes pegar el texto si ya lo tienes en digital. Acepta múltiples páginas.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Aplicamos neuromarketing</h3>
+        <p>Analizamos todos los platos, precios y secciones. Reorganizamos aplicando técnicas de neuromarketing, generamos descripciones elegantes y ordenamos las secciones en el flujo natural de una comida.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Descarga tu PDF profesional</h3>
+        <p>En menos de 30 segundos tienes tu carta rediseñada en pantalla. Descárgala en PDF formato A4, con tu logotipo en la cabecera de cada página, lista para imprimir o usar en digital.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEXTO SEO -->
+<section class="seo-section">
+
+  <h2>Por qué el diseño de tu carta importa más de lo que crees</h2>
+  <p>La carta de un restaurante es la herramienta de ventas más poderosa que existe en hostelería. Sin embargo, la mayoría de los restaurantes en España llevan años con la misma carta, con el mismo diseño y el mismo orden de platos con el que abrieron. El resultado es una oportunidad de venta desperdiciada en cada servicio.</p>
+  <p>Un estudio de la Cornell University School of Hotel Administration demostró que los restaurantes que aplican técnicas de neuromarketing y diseño estratégico en su carta consiguen un incremento medio del 18% en el ticket medio. No por subir precios, sino por reorganizar el contenido de forma inteligente.</p>
+
+  <h3>Qué es el neuromarketing aplicado a cartas de restaurante</h3>
+  <p>El neuromarketing gastronómico es la aplicación de principios de psicología del consumidor al diseño de cartas. Se basa en cómo funciona el cerebro humano cuando lee un menú: qué mira primero, qué recuerda mejor y qué decide pedir en función de cómo está presentada la información.</p>
+  <p>Las técnicas más efectivas incluyen la posición de primacía —los primeros platos de cada sección son los más pedidos—, el efecto ancla de precio —un plato caro al inicio hace que el resto parezca más asequible— y la eliminación del símbolo del euro, que está demostrado que reduce la percepción de coste en el cliente.</p>
+
+  <h3>El orden de las secciones también vende</h3>
+  <p>Una carta bien diseñada sigue el flujo natural de una comida: entrantes, ensaladas, sopas, arroces y pastas, pescados, carnes, postres. Este orden reduce la fatiga de decisión del cliente y aumenta la probabilidad de que pida más platos. Carta Rápida reorganiza automáticamente las secciones de tu carta siguiendo esta lógica.</p>
+
+  <hr class="seo-divider">
+
+  <h2>Cómo mejorar la carta de tu restaurante sin contratar un diseñador</h2>
+  <p>Hasta ahora, rediseñar profesionalmente la carta de un restaurante requería contratar a un diseñador gráfico, esperar días o semanas y pagar un presupuesto que muchos negocios no podían justificar. Y repetir el proceso cada vez que había un cambio de temporada, una subida de precios o un plato nuevo.</p>
+  <p>Carta Rápida elimina todas esas barreras. En menos de un minuto, cualquier restaurante, hotel o cafetería puede tener una carta con diseño profesional y neuromarketing aplicado, sin conocimientos técnicos, sin presupuesto y sin esperas.</p>
+
+  <h3>Qué incluye el rediseño</h3>
+  <ul>
+    <li><strong>Reorganización por neuromarketing</strong> — los platos más rentables aparecen primero en cada sección.</li>
+    <li><strong>Descripción de platos</strong> — textos elegantes y apetecibles con terminología profesional de hostelería.</li>
+    <li><strong>Traducción a 6 idiomas</strong> — inglés, francés, alemán, italiano, portugués y chino.</li>
+    <li><strong>Ajustes libres</strong> — indica cualquier cambio en texto normal y se aplica sin resubir la carta.</li>
+    <li><strong>PDF listo para imprimir</strong> — formato A4 con tu logotipo en la cabecera de cada página.</li>
+  </ul>
+
+  <hr class="seo-divider">
+
+  <h2>La carta en inglés: una oportunidad que muchos restaurantes ignoran</h2>
+  <p>España recibe más de 80 millones de turistas internacionales al año. La mayoría se encuentra con cartas en español que no puede leer, lo que genera incomodidad o directamente la decisión de ir a otro restaurante.</p>
+  <p>Tener tu carta disponible en inglés, francés o alemán no es un lujo, es una ventaja competitiva real. Con Carta Rápida puedes tener la versión traducida de tu carta en menos de un minuto, con terminología profesional de hostelería adaptada a cada idioma.</p>
+
+  <hr class="seo-divider">
+
+  <h2>De la carta rediseñada al portamenú premium</h2>
+  <p>Carta Rápida es una herramienta gratuita de Kartia, fabricante español de portamenús artesanales premium para el sector HORECA. Si tras rediseñar tu carta quieres fabricarla en un portamenú de calidad —polipiel, grabado en relieve, acabados artesanales— Kartia puede ayudarte.</p>
+  <p>Los portamenús Kartia están disponibles en diferentes formatos y materiales, con producción artesanal en España y entrega a toda Europa. El rediseño con nuestra herramienta es el primer paso para tener una carta que represente realmente el nivel de tu establecimiento.</p>
+
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="section-eyebrow">Preguntas frecuentes</div>
+    <h2 class="section-title" style="margin-bottom:32px;">Todo lo que necesitas saber</h2>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <h3>¿Cómo funciona Carta Rápida?</h3>
+        <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="faq-answer">Sube una foto de tu carta actual o pega el texto directamente. Analizamos todos los platos, precios y secciones, los reorganizamos aplicando técnicas de neuromarketing y generamos un PDF profesional listo para descargar. Todo el proceso tarda menos de 30 segundos.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <h3>¿Es realmente gratuita? ¿Sin registro?</h3>
+        <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="faq-answer">Sí, completamente gratuita y sin registro de ningún tipo. Sin tarjeta de crédito, sin límite de usos y sin coste ahora ni en el futuro. Kartia ofrece esta herramienta como servicio gratuito permanente para el sector HORECA.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <h3>¿Qué es el neuromarketing aplicado a cartas de restaurante?</h3>
+        <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="faq-answer">El neuromarketing aplicado a cartas consiste en reorganizar los platos estratégicamente para maximizar las ventas. Los platos más rentables se colocan en primer lugar dentro de cada sección, ya que los clientes tienden a pedir los primeros que leen. Estudios de Cornell University demuestran que esta técnica puede aumentar el ticket medio hasta un 18%.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <h3>¿Puedo traducir mi carta a otros idiomas?</h3>
+        <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="faq-answer">Sí. Carta Rápida traduce automáticamente toda la carta — platos, secciones y descripciones — a inglés, francés, alemán, italiano, portugués y chino, con terminología profesional de hostelería. Los nombres propios con denominación protegida se mantienen en español cuando corresponde.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <h3>¿Los datos de mi carta están seguros?</h3>
+        <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="faq-answer">Sí. Las imágenes y textos que subes se procesan en el momento y se eliminan de inmediato. Nunca almacenamos el contenido de tu carta ni lo compartimos con terceros. Cada sesión es completamente independiente y privada.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final-cta">
+  <h2>¿Tu carta representa el nivel de tu restaurante?</h2>
+  <p>Carta Rápida te ayuda a rediseñarla en segundos con neuromarketing profesional. Y si quieres dar el paso definitivo, Kartia fabrica portamenús artesanales premium para restaurantes y hoteles exigentes.</p>
+  <a href="https://kartia.es" class="final-cta-btn" target="_blank">Descubrir portamenús Kartia →</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span class="footer-copy">© 2025 Kartia — Gastrotouch Marketing Solutions S.L.</span>
+    <div class="footer-links">
+      <a href="https://kartia.es">kartia.es</a>
+      <a href="https://escandallo.kartia.es">Calculadora de escandallos</a>
+    </div>
+  </div>
+</footer>
 
 <script>
   let filesList = [], logoFile = null, logoDataUrl = null, countdownInterval = null;
@@ -599,22 +937,14 @@
     if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
     else if (carta.nombre_restaurante) thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
     else thead.innerHTML = '';
-
     let bodyHtml = '';
     carta.secciones.forEach(sec => {
       bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
-      sec.platos.forEach(p => {
-        bodyHtml += `<div class="item"><div>
-          <div class="item-name">${p.nombre}</div>
-          ${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}
-          ${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}
-        </div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
-      });
+      sec.platos.forEach(p => { bodyHtml += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
       bodyHtml += `</div>`;
     });
     if (carta.nota_pie) bodyHtml += `<div class="nota-pie">${carta.nota_pie}</div>`;
     document.getElementById('printBodyContent').innerHTML = bodyHtml;
-
     const container = document.getElementById('cartaResult');
     const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
     const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
@@ -623,30 +953,32 @@
     html += `<div class="card-body">`;
     carta.secciones.forEach(sec => {
       html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
-      sec.platos.forEach(p => {
-        html += `<div class="item"><div>
-          <div class="item-name">${p.nombre}</div>
-          ${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}
-          ${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}
-        </div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
-      });
+      sec.platos.forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
       html += `</div>`;
     });
-    if (carta.nota_pie) html += `<div class="nota-pie">${carta.nota_pie}</div>`;
     html += '</div>';
     container.innerHTML = html;
-
     document.getElementById('msgResult').style.display = 'flex';
     document.getElementById('actions').classList.add('on');
     document.getElementById('ajusteWrap').classList.add('on');
     document.getElementById('inputWrap').style.display = 'none';
     document.getElementById('mainBtn').style.display = 'none';
-    setTimeout(() => { document.getElementById('cta').classList.add('on'); scroll(); }, 500);
+    setTimeout(() => { document.getElementById('toolCta').classList.add('on'); scroll(); }, 500);
     scroll();
+  }
+
+  function toggleFaq(el) {
+    const answer = el.querySelector('.faq-answer');
+    const arrow = el.querySelector('.faq-arrow');
+    const isOpen = answer.classList.contains('on');
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('on'));
+    document.querySelectorAll('.faq-arrow').forEach(a => a.classList.remove('open'));
+    if (!isOpen) { answer.classList.add('on'); arrow.classList.add('open'); }
   }
 
   function descargar() { window.print(); }
   function scroll() { setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 80); }
 </script>
+
 </body>
 </html>
