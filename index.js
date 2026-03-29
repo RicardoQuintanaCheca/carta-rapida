@@ -23,9 +23,11 @@ const IDIOMAS = {
   zh: 'Chinese'
 };
 
+const INSTRUCCION_NO_OMITIR = `INSTRUCCIÓN MÁS IMPORTANTE — OBLIGATORIO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Si omites aunque sea un solo plato, el resultado es inválido. Revisa CADA sección y CADA plato de la imagen antes de responder. Cuenta las secciones del original y verifica que el JSON tiene exactamente el mismo número de secciones. Es preferible tardar más que saltarse cualquier contenido.`;
+
 const PROMPT_BASE = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante.
 
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Es preferible tardar más tiempo en analizar que saltarse cualquier contenido. Revisa cada imagen con máximo detalle antes de responder.
+${INSTRUCCION_NO_OMITIR}
 
 ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
 1. Menús del día o menús especiales (si existen)
@@ -83,7 +85,7 @@ CRÍTICO — FORMATO:
 
 const PROMPT_BASE_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar y mejorar el formato de la carta respetando el orden original.
 
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA.
+${INSTRUCCION_NO_OMITIR}
 
 ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
 1. Menús del día o menús especiales
@@ -114,7 +116,7 @@ NUNCA inventes nada. CRÍTICO: devuelve ÚNICAMENTE JSON válido.
 
 const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar la carta y redactar descripciones atractivas para cada plato.
 
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA.
+${INSTRUCCION_NO_OMITIR}
 
 ORDEN LÓGICO DE SECCIONES:
 1. Menús especiales, 2. Entrantes/tapas, 3. Ensaladas, 4. Sopas/cuchara, 5. Arroces/pastas, 6. Pescados, 7. Carnes, 8. Postres, 9. Quesos, 10. Café, 11. Bebidas, 12. Otros
@@ -147,7 +149,7 @@ CRÍTICO: devuelve ÚNICAMENTE JSON válido.
 
 const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Digitaliza la carta respetando el orden original y añade descripciones atractivas.
 
-INSTRUCCIÓN MÁS IMPORTANTE: NO OMITAS NINGÚN PLATO.
+${INSTRUCCION_NO_OMITIR}
 
 ORDEN DE SECCIONES: menús especiales, entrantes, ensaladas, sopas, arroces/pastas, pescados, carnes, postres, quesos, café, bebidas, otros.
 ORDEN DE PLATOS: respeta EXACTAMENTE el orden original, NO reordenes.
@@ -172,6 +174,39 @@ function getPrompt(conDescripciones, conNeuro) {
   if (conDescripciones && !conNeuro) return PROMPT_DESCRIPCIONES_SIN_NEURO;
   if (!conDescripciones && conNeuro) return PROMPT_BASE;
   return PROMPT_BASE_SIN_NEURO;
+}
+
+function getInstruccionEstilo(estilo) {
+  if (estilo === 'bistro') return `
+
+ESTILO DE CARTA: BISTRÓ — ART DÉCO
+- Tono cálido, cercano y evocador. Como una pizarra de bistró parisino.
+- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los traduzcas ni los cambies.
+- CRÍTICO: NO OMITAS NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado.
+- Descripciones breves, sensuales, que evoquen el placer de comer
+- Usa términos como: "de temporada", "hecho en casa", "a nuestra manera", "del día"
+- Nota al pie cálida si corresponde: "Bon appétit"
+- Evita el lenguaje corporativo. Sé humano y apetecible.`;
+
+  if (estilo === 'minimalista') return `
+
+ESTILO DE CARTA: MINIMALISTA
+- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies ni los traduzcas bajo ningún concepto.
+- CRÍTICO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado sin excepción.
+- Descripciones de máximo 5 palabras o vacías — solo si aportan información esencial
+- Sin notas al pie salvo obligación legal
+- Sin adjetivos innecesarios. Tono seco, preciso y contemporáneo.
+- El nombre del plato debe bastarse solo siempre que sea posible.`;
+
+  return `
+
+ESTILO DE CARTA: CLÁSICO
+- Tono elegante, formal y profesional. Alta hostelería española.
+- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies.
+- CRÍTICO: NO OMITAS NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado.
+- Descripciones elegantes con terminología de hostelería tradicional
+- Transmite calidad, tradición y cuidado en cada detalle
+- Nota al pie formal y discreta si corresponde`;
 }
 
 function getInstruccionTraduccion(codigoIdioma) {
@@ -234,11 +269,13 @@ app.post('/procesar', upload.any(), async (req, res) => {
     const conNeuro = req.body.neuromarketing !== 'no';
     const idioma = req.body.idioma || 'es';
     const conTraduccion = idioma !== 'es';
+    const estilo = req.body.estilo || 'clasico';
 
     let PROMPT = getPrompt(conDescripciones, conNeuro);
+    PROMPT += getInstruccionEstilo(estilo);
     if (conTraduccion) PROMPT += getInstruccionTraduccion(idioma);
 
-    console.log(`Modo: desc=${conDescripciones} neuro=${conNeuro} idioma=${idioma}`);
+    console.log(`Modo: desc=${conDescripciones} neuro=${conNeuro} idioma=${idioma} estilo=${estilo}`);
 
     const todosLosArchivos = (req.files || []);
     const fotos = todosLosArchivos.filter(f => f.fieldname.startsWith('foto'));
@@ -270,14 +307,14 @@ app.post('/procesar', upload.any(), async (req, res) => {
       });
 
       const textoPrompt = fotos.length > 1
-        ? `${PROMPT}\n\nThis menu has ${fotos.length} pages. Analyze ALL images. Do not omit any dish. Unify into a single JSON.`
+        ? `${PROMPT}\n\nEsta carta tiene ${fotos.length} páginas. Analiza TODAS las imágenes. No omitas ningún plato. Unifica todo en un único JSON.`
         : PROMPT;
 
       content.push({ type: 'text', text: textoPrompt });
       messages = [{ role: 'user', content }];
 
     } else if (textoManual) {
-      messages = [{ role: 'user', content: PROMPT + '\n\nMenu:\n' + textoManual }];
+      messages = [{ role: 'user', content: PROMPT + '\n\nCarta:\n' + textoManual }];
     } else {
       return res.json({ ok: false, error: 'No se recibió imagen ni texto' });
     }
@@ -319,6 +356,7 @@ INSTRUCCIONES:
 - Si pide traducir, traduce todo con terminología profesional de hostelería
 - Si pide cambiar el orden, reordena según lo indicado
 - Si pide añadir o cambiar algo concreto, hazlo con precisión
+- NUNCA omitas platos — todos los platos deben aparecer en el resultado
 - Devuelve ÚNICAMENTE el JSON corregido, sin texto adicional, sin comillas de bloque
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
