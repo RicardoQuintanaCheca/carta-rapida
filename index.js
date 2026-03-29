@@ -291,7 +291,11 @@ app.post('/procesar', upload.any(), async (req, res) => {
 
   } catch (error) {
     console.error('ERROR:', error.message);
-    res.json({ ok: false, error: error.message });
+    let mensajeError = error.message;
+    if (mensajeError.includes('unsupported image') || mensajeError.includes('image_parse_error')) {
+      mensajeError = 'Formato de imagen no compatible. Por favor, usa JPG, PNG o WEBP.';
+    }
+    res.json({ ok: false, error: mensajeError });
   }
 });
 
