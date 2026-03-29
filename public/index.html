@@ -397,7 +397,28 @@
     .item-price { font-size: 12.5px; color: #111; }
     .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
     .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
-  }
+
+/* PRINT BISTRÓ */
+.print-bistro { background: #faf6f0; }
+.print-bistro .print-thead-cell { background: #faf6f0; }
+.print-bistro .print-nombre { font-family: 'Newsreader', serif; font-size: 16px; font-weight: 300; letter-spacing: 0.1em; color: #2c1810; }
+.print-bistro .sec-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 300; font-size: 14px; color: #8b3a3a; border-bottom: none; padding-bottom: 0; }
+.print-bistro .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 11px; font-weight: 300; color: #2c1810; letter-spacing: 0.06em; }
+.print-bistro .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 200; color: #9b7b6a; font-style: normal; }
+.print-bistro .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; color: #8b3a3a; }
+.print-bistro .item { border-bottom: 0.5px solid #e8d5c0; }
+.print-bistro .sec-block { border-top: 0.5px solid #c8a882; padding-top: 8px; }
+.print-bistro .nota-pie { font-family: 'Newsreader', serif; font-style: italic; font-size: 9px; color: #c8a882; text-align: center; border-top: none; }
+
+/* PRINT MINIMALISTA */
+.print-minimalista .print-nombre { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase; color: #111; }
+.print-minimalista .sec-label { font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 7px; letter-spacing: 0.42em; text-transform: uppercase; color: #aaa; border-bottom: none; padding-bottom: 0; text-align: center; }
+.print-minimalista .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 11px; font-weight: 300; color: #111; letter-spacing: 0.06em; }
+.print-minimalista .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 200; color: #bbb; font-style: normal; }
+.print-minimalista .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #999; }
+.print-minimalista .item { border-bottom: none; }
+.print-minimalista .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; border-top: none; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -949,7 +970,11 @@
     cartaActual = carta;
     document.getElementById('msgStatus').style.display = 'none';
     const tienelogo = !!logoDataUrl;
-
+// Aplicar estilo al print table
+const printTable = document.getElementById('printTable');
+    printTable.className = '';
+    if (estiloActual === 'bistro') printTable.classList.add('print-bistro');
+    if (estiloActual === 'minimalista') printTable.classList.add('print-minimalista');
     // Print table
     const thead = document.getElementById('printTheadContent');
     if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
