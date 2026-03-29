@@ -346,7 +346,9 @@
     @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { background: white; }
-    .site-header, .hero, .tool-section > *:not(#printTable):not(.wrap), .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
+    .site-header, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer, .input-wrap, .main-btn, .ajuste-wrap, .tool-cta, .messages, .wrap { display: none !important; }
+#printTable { display: table !important; }
+body { padding: 0 !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tbody { display: table-row-group; }
