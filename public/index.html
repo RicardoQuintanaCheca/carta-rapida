@@ -206,6 +206,10 @@
   .carta-minimalista .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #999; }
   .carta-minimalista .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; text-align: center; border-top: none; }
 
+  .nueva-carta-btn { width: 100%; padding: 12px; font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; background: none; color: #999; border: 0.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; display: none; }
+  .nueva-carta-btn.on { display: block; }
+  .nueva-carta-btn:hover { border-color: #111; color: #111; }
+
   .input-wrap { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
   .estilo-section { padding: 14px 20px; border-bottom: 0.5px solid #f0f0f0; }
   .estilo-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 10px; }
@@ -613,6 +617,10 @@
       <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
       <a href="https://kartia.es" class="tool-cta-btn" target="_blank">Ver portamenús →</a>
     </div>
+
+    <button class="nueva-carta-btn" id="nuevaCartaBtn" onclick="nuevaCarta()">
+      ↺ Nueva carta
+    </button>
   </div>
 </section>
 
@@ -1033,7 +1041,7 @@
     document.getElementById('ajusteWrap').classList.add('on');
     document.getElementById('inputWrap').style.display = 'none';
     document.getElementById('mainBtn').style.display = 'none';
-    setTimeout(() => { document.getElementById('toolCta').classList.add('on'); scroll(); }, 500);
+    setTimeout(() => { document.getElementById('toolCta').classList.add('on'); document.getElementById('nuevaCartaBtn').classList.add('on'); scroll(); }, 500);
     scroll();
   }
 
@@ -1044,6 +1052,68 @@
     document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('on'));
     document.querySelectorAll('.faq-arrow').forEach(a => a.classList.remove('open'));
     if (!isOpen) { answer.classList.add('on'); arrow.classList.add('open'); }
+  }
+
+  function nuevaCarta() {
+    // Reset estado
+    filesList = []; logoFile = null; logoDataUrl = null;
+    descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
+    idiomaSeleccionado = null; textoActivo = false; cartaActual = null;
+    estiloActual = 'clasico';
+
+    // Reset UI — mensajes y resultado
+    document.getElementById('msgResult').style.display = 'none';
+    document.getElementById('msgStatus').style.display = 'none';
+    document.getElementById('msgTyping').style.display = 'none';
+    document.getElementById('cartaResult').innerHTML = '';
+    document.getElementById('actions').classList.remove('on');
+    document.getElementById('ajusteWrap').classList.remove('on');
+    document.getElementById('ajusteTxt').value = '';
+    document.getElementById('toolCta').classList.remove('on');
+    document.getElementById('nuevaCartaBtn').classList.remove('on');
+
+    // Reset input
+    document.getElementById('inputWrap').style.display = 'block';
+    document.getElementById('inputWrap').style.opacity = '1';
+    document.getElementById('inputWrap').style.pointerEvents = 'auto';
+    document.getElementById('mainBtn').style.display = 'flex';
+    document.getElementById('mainBtn').style.opacity = '1';
+    document.getElementById('mainBtn').style.pointerEvents = 'auto';
+    document.getElementById('mainBtn').disabled = true;
+
+    // Reset fotos
+    document.getElementById('uploadGrid').style.display = 'grid';
+    document.getElementById('fotosPreview').classList.remove('on');
+    document.getElementById('fotosContainer').innerHTML = '';
+    document.getElementById('addCamaraBtn').classList.remove('on');
+
+    // Reset logo
+    document.getElementById('logoToggle').classList.remove('on');
+    document.getElementById('logoDrop').classList.remove('on');
+    document.getElementById('logoPreview').classList.remove('on');
+
+    // Reset toggles
+    document.getElementById('descToggle').classList.remove('on');
+    document.getElementById('neuroToggle').classList.add('on');
+    document.getElementById('tradToggle').classList.remove('on');
+    document.getElementById('idiomaZone').classList.remove('on');
+    document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on'));
+
+    // Reset texto
+    document.getElementById('txt').value = '';
+    document.getElementById('textoDrop').classList.remove('on');
+    document.getElementById('textoArrow').classList.remove('open');
+
+    // Reset estilo segmented
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
+    document.querySelector('.seg-btn').classList.add('on');
+
+    // Reset clases estilo en wrap
+    const wrap = document.getElementById('cartaResult').closest('.wrap');
+    wrap.classList.remove('carta-gourmet', 'carta-minimalista');
+
+    // Scroll arriba
+    document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
   }
 
   function descargar() { window.print(); }
