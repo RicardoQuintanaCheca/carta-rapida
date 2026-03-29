@@ -214,6 +214,9 @@
   .fotos-add { width: 44px; height: 44px; border: 1px dashed #ddd; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: #ccc; position: relative; flex-shrink: 0; }
   .fotos-add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
   .fotos-count { font-size: 11px; color: #999; }
+  .add-camara-btn { display: none; align-items: center; gap: 8px; padding: 8px 14px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: none; font-size: 12px; color: #555; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 4px; position: relative; }
+.add-camara-btn.on { display: flex; }
+.add-camara-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
 
   .opciones-section { padding: 4px 20px 14px; }
   .opcion-fila { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; cursor: pointer; border-bottom: 0.5px solid #f0f0f0; }
@@ -478,6 +481,11 @@ body { padding: 0 !important; }
 
       <div class="fotos-preview" id="fotosPreview">
         <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        <div class="add-camara-btn" id="addCamaraBtn">
+          <input type="file" accept="image/*" capture="environment" onchange="addMoreFiles(this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          Otra página con cámara
+        </div>
         <div class="fotos-add"><input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">+</div>
         <span class="fotos-count" id="fotosCount"></span>
       </div>
@@ -743,6 +751,7 @@ body { padding: 0 !important; }
     });
     document.getElementById('uploadGrid').style.display = 'none';
     document.getElementById('fotosPreview').classList.add('on');
+    document.getElementById('addCamaraBtn').classList.add('on');
   }
 
   function removePhoto(index) {
