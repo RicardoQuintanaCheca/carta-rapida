@@ -571,7 +571,7 @@ body { padding: 0 !important; }
       </div>
     </div>
 
-    <button class="main-btn" id="mainBtn" onclick="run()" disabled>REDISEÑAR CARTA</button>
+    <div id="procesandoMsg" style="display:none; text-align:center; font-size:13px; color:#111; padding: 12px 0; font-weight:400; letter-spacing:0.02em;">Diseñando tu carta… <span id="countNum2">15</span>s</div>
 
     <div class="ajuste-wrap" id="ajusteWrap">
       <div class="ajuste-inner">
@@ -871,12 +871,27 @@ body { padding: 0 !important; }
 
   function startCountdown(s) {
     const el = document.getElementById('countNum');
-    let r = s; el.textContent = r;
+    const el2 = document.getElementById('countNum2');
+    const msg = document.getElementById('procesandoMsg');
+    if (msg) msg.style.display = 'block';
+    let r = s; el.textContent = r; if (el2) el2.textContent = r;
     clearInterval(countdownInterval);
-    countdownInterval = setInterval(() => { r--; if (r <= 0) { el.textContent = '…'; clearInterval(countdownInterval); } else el.textContent = r; }, 1000);
+    countdownInterval = setInterval(() => {
+      r--;
+      if (r <= 0) {
+        el.textContent = '…'; if (el2) el2.textContent = '…';
+        clearInterval(countdownInterval);
+      } else {
+        el.textContent = r; if (el2) el2.textContent = r;
+      }
+    }, 1000);
   }
 
-  function stopCountdown() { clearInterval(countdownInterval); }
+  function stopCountdown() {
+    clearInterval(countdownInterval);
+    const msg = document.getElementById('procesandoMsg');
+    if (msg) msg.style.display = 'none';
+  }
 
   function status(text) {
     stopCountdown();
