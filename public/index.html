@@ -100,7 +100,7 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@200;300;400&family=Raleway:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -174,32 +174,22 @@
   .item-price { font-size: 13px; color: #444; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
   .nota-pie { font-size: 10px; color: #ccc; text-align: right; padding: 14px 0 0; border-top: 0.5px solid #f0f0f0; margin-top: 14px; }
 
-  /* ── ESTILO BISTRÓ ── */
-  .carta-bistro .card { border-color: #c8a882; background: #faf6f0; border-radius: 2px; position: relative; overflow: visible; }
-  .carta-bistro .card-head { border-bottom: none; background: #faf6f0; padding: 22px 28px 16px; }
-  .carta-bistro .card-name { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 300; letter-spacing: 0.1em; color: #2c1810; }
-  .carta-bistro .card-tag { display: none; }
-  .carta-bistro .card-body { padding: 4px 24px 20px; }
-  .carta-bistro .sec-block { margin-top: 18px; }
-  .carta-bistro .sec-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 300; font-size: 14px; color: #8b3a3a; border-bottom: none; padding-bottom: 0; margin-bottom: 8px; }
-  .carta-bistro .item { padding: 5px 0; border-bottom: 0.5px solid #e8d5c0; }
-  .carta-bistro .item:last-child { border-bottom: none; }
-  .carta-bistro .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 11px; font-weight: 300; color: #2c1810; letter-spacing: 0.06em; line-height: 1.4; }
-  .carta-bistro .item-desc { font-family: 'Josefin Sans', sans-serif; font-style: normal; font-size: 9px; font-weight: 200; color: #9b7b6a; letter-spacing: 0.04em; line-height: 1.3; margin-top: 0; }
-  .carta-bistro .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #8b3a3a; }
-  .carta-bistro .nota-pie { border-top: none; font-family: 'Newsreader', serif; font-style: italic; font-size: 9px; color: #c8a882; letter-spacing: 0.06em; text-align: center; }
-  .bistro-corner { position: absolute; width: 28px; height: 28px; border-color: #8b3a3a; border-style: solid; border-width: 0; pointer-events: none; z-index: 1; }
-  .bistro-corner.tl { top: 7px; left: 7px; border-top-width: 1.5px; border-left-width: 1.5px; }
-  .bistro-corner.tr { top: 7px; right: 7px; border-top-width: 1.5px; border-right-width: 1.5px; }
-  .bistro-corner.bl { bottom: 7px; left: 7px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
-  .bistro-corner.br { bottom: 7px; right: 7px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
-  .bistro-ornament { display: flex; align-items: center; gap: 8px; margin: 7px 0; }
-  .bistro-ornament-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, #c8a882); }
-  .bistro-ornament-line.right { background: linear-gradient(to left, transparent, #c8a882); }
-  .bistro-ornament-diamond { width: 5px; height: 5px; background: #8b3a3a; transform: rotate(45deg); flex-shrink: 0; }
-  .bistro-sec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .bistro-sec-line { flex: 1; height: 0.5px; background: #c8a882; }
-  .bistro-pie { font-family: 'Newsreader', serif; font-style: italic; font-size: 9px; font-weight: 300; color: #c8a882; text-align: center; padding: 12px 24px 20px; }
+  /* ── ESTILO GOURMET ── */
+  .carta-gourmet .card { border: 0.5px solid #e0e0e0; border-radius: 0; background: #fff; }
+  .carta-gourmet .card-head { border-bottom: none; padding: 36px 32px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .carta-gourmet .card-name { font-family: 'Raleway', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #111; }
+  .carta-gourmet .card-tag { display: none; }
+  .carta-gourmet .card-logo { max-height: 48px; width: auto; }
+  .carta-gourmet .card-body { padding: 0 32px 36px; text-align: center; }
+  .carta-gourmet .sec-block { margin-top: 28px; }
+  .carta-gourmet .sec-label { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: #111; border-bottom: none; padding-bottom: 0; margin-bottom: 0; display: block; text-align: center; }
+  .carta-gourmet .gourmet-sec-linea { width: 36px; height: 0.5px; background: #ccc; margin: 8px auto 14px; }
+  .carta-gourmet .item { padding: 0 0 12px; border-bottom: none; display: block; text-align: center; }
+  .carta-gourmet .item-name { font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 400; color: #111; letter-spacing: 0.03em; line-height: 1.4; }
+  .carta-gourmet .item-desc { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 11px; font-weight: 300; color: #999; line-height: 1.5; margin-top: 2px; }
+  .carta-gourmet .item-price { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 200; color: #bbb; margin-top: 3px; letter-spacing: 0.08em; display: block; }
+  .carta-gourmet .item-alergenos { font-family: 'Raleway', sans-serif; font-size: 9px; color: #ccc; margin-top: 1px; }
+  .carta-gourmet .nota-pie { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 9px; font-weight: 300; color: #ccc; text-align: center; border-top: 0.5px solid #eee; padding-top: 14px; margin-top: 20px; letter-spacing: 0.04em; }
 
   /* ── ESTILO MINIMALISTA ── */
   .carta-minimalista .card { border: 0.5px solid #e0e0e0; border-radius: 0; background: #fff; }
@@ -399,26 +389,17 @@
     .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
     .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
 
-    /* ── BISTRÓ ── */
-    .print-bistro-wrap { background: #faf6f0; position: relative; border: 1px solid #c8a882; padding: 16px; }
-    .print-bistro-corner { position: fixed; width: 24px; height: 24px; border-color: #8b3a3a; border-style: solid; border-width: 0; }
-    .print-bistro-corner.tl { top: 14px; left: 14px; border-top-width: 1.5px; border-left-width: 1.5px; }
-    .print-bistro-corner.tr { top: 14px; right: 14px; border-top-width: 1.5px; border-right-width: 1.5px; }
-    .print-bistro-corner.bl { bottom: 14px; left: 14px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
-    .print-bistro-corner.br { bottom: 14px; right: 14px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
-    .print-bistro-orn { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
-    .print-bistro-orn-line { flex: 1; height: 0.5px; background: #c8a882; }
-    .print-bistro-orn-dia { width: 5px; height: 5px; background: #8b3a3a; transform: rotate(45deg); flex-shrink: 0; }
-    .print-bistro-wrap .print-nombre { font-family: 'Newsreader', serif; font-size: 16px; font-weight: 300; letter-spacing: 0.1em; color: #2c1810; display: block; text-align: center; margin: 8px 0; }
-    .print-bistro-wrap .print-thead-cell img { filter: none; }
-    .print-bistro-sec { display: flex; align-items: center; gap: 8px; margin: 16px 0 8px; }
-    .print-bistro-sec-line { flex: 1; height: 0.5px; background: #c8a882; }
-    .print-bistro-wrap .sec-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 300; font-size: 13px; color: #8b3a3a; border-bottom: none; padding-bottom: 0; margin-bottom: 0; white-space: nowrap; }
-    .print-bistro-wrap .item { border-bottom: 0.5px solid #e8d5c0; padding: 5px 0; }
-    .print-bistro-wrap .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #2c1810; letter-spacing: 0.06em; }
-    .print-bistro-wrap .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 8px; font-weight: 200; color: #9b7b6a; font-style: normal; margin-top: 0; }
-    .print-bistro-wrap .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 9px; color: #8b3a3a; }
-    .print-bistro-wrap .nota-pie { font-family: 'Newsreader', serif; font-style: italic; font-size: 8px; color: #c8a882; text-align: center; border-top: none; margin-top: 12px; }
+    /* ── GOURMET ── */
+    .print-gourmet-wrap { text-align: center; }
+    .print-gourmet-wrap .print-nombre { font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #111; display: block; text-align: center; margin: 8px 0; }
+    .print-gourmet-wrap .sec-label { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: #111; display: block; text-align: center; border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .print-gourmet-wrap .gourmet-sec-linea { width: 30px; height: 0.5px; background: #ccc; margin: 6px auto 10px; }
+    .print-gourmet-wrap .sec-block { margin-top: 20px; }
+    .print-gourmet-wrap .item { border-bottom: none; padding: 5px 0; display: block; text-align: center; }
+    .print-gourmet-wrap .item-name { font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 400; color: #111; letter-spacing: 0.03em; display: block; }
+    .print-gourmet-wrap .item-desc { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 9px; font-weight: 300; color: #999; display: block; margin-top: 1px; }
+    .print-gourmet-wrap .item-price { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 200; color: #bbb; display: block; margin-top: 2px; }
+    .print-gourmet-wrap .nota-pie { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 8px; font-weight: 300; color: #ccc; text-align: center; border-top: 0.5px solid #eee; padding-top: 10px; margin-top: 16px; }
 
     /* ── MINIMALISTA ── */
     .print-mini-wrap .print-nombre { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; color: #111; display: block; text-align: center; margin: 8px 0; }
@@ -511,8 +492,8 @@
         <div class="estilo-label">Estilo de carta</div>
         <div class="segmented">
           <button class="seg-btn on" onclick="selEstilo(this,'clasico')">Clásico</button>
-          <button class="seg-btn" onclick="selEstilo(this,'bistro')">Bistró</button>
           <button class="seg-btn" onclick="selEstilo(this,'minimalista')">Minimalista</button>
+          <button class="seg-btn" onclick="selEstilo(this,'gourmet')">Gourmet</button>
         </div>
       </div>
 
@@ -984,42 +965,31 @@
 
     // Print table — construir según estilo
     const thead = document.getElementById('printTheadContent');
-    const orn = `<div class="print-bistro-orn"><div class="print-bistro-orn-line"></div><div class="print-bistro-orn-dia"></div><div class="print-bistro-orn-line"></div></div>`;
-
-    if (estiloActual === 'bistro') {
-      // Cabecera bistró con ornamentos
-      if (tienelogo) thead.innerHTML = `${orn}<img src="${logoDataUrl}" alt="Logo" style="height:50px;width:auto;max-width:200px;display:block;margin:8px auto;">${orn}`;
-      else if (carta.nombre_restaurante) thead.innerHTML = `${orn}<div class="print-nombre">${carta.nombre_restaurante}</div>${orn}`;
-      else thead.innerHTML = orn;
-    } else {
-      if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
-      else if (carta.nombre_restaurante) thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
-      else thead.innerHTML = '';
-    }
+    if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
+    else if (carta.nombre_restaurante) thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
+    else thead.innerHTML = '';
 
     // Construir body según estilo
-    const wrapClass = estiloActual === 'bistro' ? 'print-bistro-wrap' : estiloActual === 'minimalista' ? 'print-mini-wrap' : '';
+    const wrapClass = estiloActual === 'gourmet' ? 'print-gourmet-wrap' : estiloActual === 'minimalista' ? 'print-mini-wrap' : '';
     let bodyHtml = wrapClass ? `<div class="${wrapClass}">` : '';
 
-    // Esquinas para bistró
-    if (estiloActual === 'bistro') {
-      bodyHtml += `<div class="print-bistro-corner tl"></div><div class="print-bistro-corner tr"></div><div class="print-bistro-corner bl"></div><div class="print-bistro-corner br"></div>`;
-    }
-
     carta.secciones.forEach(sec => {
-      if (estiloActual === 'bistro') {
-        bodyHtml += `<div class="sec-block"><div class="print-bistro-sec"><div class="print-bistro-sec-line"></div><span class="sec-label">${sec.nombre}</span><div class="print-bistro-sec-line"></div></div>`;
+      if (estiloActual === 'gourmet') {
+        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
       } else {
         bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
       }
       sec.platos.forEach(p => {
-        bodyHtml += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
+        if (estiloActual === 'gourmet') {
+          bodyHtml += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`;
+        } else {
+          bodyHtml += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
+        }
       });
       bodyHtml += `</div>`;
     });
 
     if (carta.nota_pie) bodyHtml += `<div class="nota-pie">${carta.nota_pie}</div>`;
-    if (estiloActual === 'bistro') bodyHtml += orn;
     if (wrapClass) bodyHtml += `</div>`;
     document.getElementById('printBodyContent').innerHTML = bodyHtml;
 
@@ -1027,39 +997,34 @@
 
     // Aplicar clase de estilo al wrap
     const wrap = container.closest('.wrap');
-    wrap.classList.remove('carta-bistro', 'carta-minimalista');
-    document.querySelectorAll('.bistro-corner, .bistro-ornament').forEach(e => e.remove());
-    if (estiloActual === 'bistro') wrap.classList.add('carta-bistro');
+    wrap.classList.remove('carta-gourmet', 'carta-minimalista');
+    if (estiloActual === 'gourmet') wrap.classList.add('carta-gourmet');
     if (estiloActual === 'minimalista') wrap.classList.add('carta-minimalista');
 
     const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
     const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
     const mostrarHead = tienelogo || carta.nombre_restaurante;
 
-    const ornamento = `<div class="bistro-ornament"><div class="bistro-ornament-line"></div><div class="bistro-ornament-diamond"></div><div class="bistro-ornament-line right"></div></div>`;
-
     let html = '';
-    if (estiloActual === 'bistro') {
-      html += `<div class="bistro-corner tl"></div><div class="bistro-corner tr"></div><div class="bistro-corner bl"></div><div class="bistro-corner br"></div>`;
-      html += `<div class="card-head">${ornamento}${logoHtml}${nombreHtml}${ornamento}</div>`;
-    } else if (mostrarHead) {
-      html = `<div class="card-head">${logoHtml}${nombreHtml}<span class="card-tag">Vista previa</span></div>`;
+    if (mostrarHead) {
+      html = `<div class="card-head">${logoHtml}${nombreHtml}${estiloActual === 'clasico' ? '<span class="card-tag">Vista previa</span>' : ''}</div>`;
     }
 
     html += `<div class="card-body">`;
     carta.secciones.forEach(sec => {
-      const secHead = estiloActual === 'bistro'
-        ? `<div class="bistro-sec-head"><div class="bistro-sec-line"></div><span class="sec-label">${sec.nombre}</span><div class="bistro-sec-line"></div></div>`
-        : `<div class="sec-label">${sec.nombre}</div>`;
-      html += `<div class="sec-block">${secHead}`;
-      sec.platos.forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
+      if (estiloActual === 'gourmet') {
+        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
+      } else {
+        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
+      }
+      if (estiloActual === 'gourmet') {
+        sec.platos.forEach(p => { html += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`; });
+      } else {
+        sec.platos.forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
+      }
       html += `</div>`;
     });
-    if (carta.nota_pie) {
-      html += estiloActual === 'bistro'
-        ? `<div class="bistro-pie">${ornamento}${carta.nota_pie}</div>`
-        : `<div class="nota-pie">${carta.nota_pie}</div>`;
-    }
+    if (carta.nota_pie) html += `<div class="nota-pie">${carta.nota_pie}</div>`;
     html += '</div>';
 
     container.innerHTML = html;

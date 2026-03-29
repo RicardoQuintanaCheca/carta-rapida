@@ -177,16 +177,15 @@ function getPrompt(conDescripciones, conNeuro) {
 }
 
 function getInstruccionEstilo(estilo) {
-  if (estilo === 'bistro') return `
+  if (estilo === 'gourmet') return `
 
-ESTILO DE CARTA: BISTRÓ — ART DÉCO
-- Tono cálido, cercano y evocador. Como una pizarra de bistró parisino.
-- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los traduzcas ni los cambies.
-- CRÍTICO: NO OMITAS NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado.
-- Descripciones breves, sensuales, que evoquen el placer de comer
-- Usa términos como: "de temporada", "hecho en casa", "a nuestra manera", "del día"
-- Nota al pie cálida si corresponde: "Bon appétit"
-- Evita el lenguaje corporativo. Sé humano y apetecible.`;
+ESTILO DE CARTA: GOURMET
+- Tono elegante, refinado y gastronómico. Alta cocina española.
+- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies ni los traduzcas bajo ningún concepto.
+- CRÍTICO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado sin excepción.
+- Descripciones elegantes y precisas que transmitan calidad
+- Tono sofisticado pero accesible, evocador sin ser recargado
+- Nota al pie discreta si corresponde`;
 
   if (estilo === 'minimalista') return `
 
