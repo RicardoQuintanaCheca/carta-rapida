@@ -377,47 +377,70 @@
     @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { background: white; }
-    .site-header, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer, .input-wrap, .main-btn, .ajuste-wrap, .tool-cta, .messages, .wrap { display: none !important; }
-    #printTable { display: table !important; }
-    body { padding: 0 !important; }
-    #printTable { display: table !important; width: 100%; border-collapse: collapse; }
-    #printTable thead { display: table-header-group; }
-    #printTable tbody { display: table-row-group; }
-    .print-thead-cell { padding: 10px 0 8px; text-align: center; border-bottom: none; }
-    .print-thead-cell img { height: 70px; width: auto; max-width: 240px; display: block; margin: 0 auto; object-fit: contain; }
-    .print-thead-cell .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
-    .print-tbody-cell { padding: 0; vertical-align: top; }
-    .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
-    .sec-block:first-child { margin-top: 8px; }
-    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; }
-    .item { padding: 6px 0; page-break-inside: avoid !important; }
-    .item-name { font-size: 12.5px; color: #111; }
-    .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
-    .item-price { font-size: 12.5px; color: #111; }
-    .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
+    /* CLÁSICO — usa printTable */
+    body.print-clasico #printTable { display: table !important; width: 100%; border-collapse: collapse; }
+    body.print-clasico #printTable thead { display: table-header-group; }
+    body.print-clasico #printTable tbody { display: table-row-group; }
+    body.print-clasico .print-thead-cell { padding: 10px 0 8px; text-align: center; }
+    body.print-clasico .print-thead-cell img { height: 70px; width: auto; max-width: 240px; display: block; margin: 0 auto; object-fit: contain; }
+    body.print-clasico .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
+    body.print-clasico .print-tbody-cell { padding: 0; vertical-align: top; }
+    body.print-clasico .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
+    body.print-clasico .sec-block:first-child { margin-top: 8px; }
+    body.print-clasico .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; }
+    body.print-clasico .item { padding: 6px 0; page-break-inside: avoid !important; }
+    body.print-clasico .item-name { font-size: 12.5px; color: #111; }
+    body.print-clasico .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
+    body.print-clasico .item-price { font-size: 12.5px; color: #111; }
+    body.print-clasico .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
+
+    /* BISTRÓ y MINIMALISTA — imprimen el cartaResult directamente */
+    body.print-bistro #printTable,
+    body.print-minimalista #printTable { display: none !important; }
+
+    body.print-bistro .tool-section,
+    body.print-minimalista .tool-section { display: block !important; padding: 0 !important; max-width: 100% !important; }
+
+    body.print-bistro .wrap,
+    body.print-minimalista .wrap { display: block !important; max-width: 100% !important; }
+
+    body.print-bistro .messages,
+    body.print-minimalista .messages { display: none !important; }
+
+    body.print-bistro #inputWrap,
+    body.print-minimalista #inputWrap { display: none !important; }
+
+    body.print-bistro #mainBtn,
+    body.print-minimalista #mainBtn { display: none !important; }
+
+    body.print-bistro #procesandoMsg,
+    body.print-minimalista #procesandoMsg { display: none !important; }
+
+    body.print-bistro .ajuste-wrap,
+    body.print-minimalista .ajuste-wrap { display: none !important; }
+
+    body.print-bistro .tool-cta,
+    body.print-minimalista .tool-cta { display: none !important; }
+
+    body.print-bistro #msgResult,
+    body.print-minimalista #msgResult { display: block !important; }
+
+    body.print-bistro .actions,
+    body.print-minimalista .actions { display: none !important; }
+
+    body.print-bistro #cartaResult,
+    body.print-minimalista #cartaResult { display: block !important; width: 100% !important; }
+
+    body.print-bistro .card,
+    body.print-minimalista .card { border-radius: 0 !important; }
+
+    body.print-bistro .sec-block,
+    body.print-minimalista .sec-block { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+    body.print-bistro .item,
+    body.print-minimalista .item { page-break-inside: avoid !important; }
+
     .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
-
-    /* PRINT BISTRÓ */
-    .print-bistro { background: #faf6f0; }
-    .print-bistro .print-thead-cell { background: #faf6f0; padding: 16px 0 12px; }
-    .print-bistro .print-nombre { font-family: 'Newsreader', serif; font-size: 16px; font-weight: 300; letter-spacing: 0.1em; color: #2c1810; }
-    .print-bistro .sec-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 300; font-size: 13px; color: #8b3a3a; border-bottom: none; padding-bottom: 0; margin-bottom: 6px; }
-    .print-bistro .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #2c1810; letter-spacing: 0.06em; }
-    .print-bistro .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 8px; font-weight: 200; color: #9b7b6a; font-style: normal; margin-top: 0; }
-    .print-bistro .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 9px; color: #8b3a3a; }
-    .print-bistro .item { border-bottom: 0.5px solid #e8d5c0; padding: 5px 0; }
-    .print-bistro .sec-block { border-top: 0.5px solid #c8a882; padding-top: 8px; margin-top: 16px; }
-    .print-bistro .nota-pie { font-family: 'Newsreader', serif; font-style: italic; font-size: 8px; color: #c8a882; text-align: center; border-top: none; }
-
-    /* PRINT MINIMALISTA */
-    .print-minimalista .print-nombre { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; color: #111; }
-    .print-minimalista .sec-label { font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 7px; letter-spacing: 0.42em; text-transform: uppercase; color: #aaa; border-bottom: none; padding-bottom: 0; margin-bottom: 14px; text-align: center; }
-    .print-minimalista .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #111; letter-spacing: 0.06em; }
-    .print-minimalista .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 8px; font-weight: 200; color: #bbb; font-style: normal; margin-top: 0; }
-    .print-minimalista .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 300; color: #999; }
-    .print-minimalista .item { border-bottom: none; padding: 6px 0; }
-    .print-minimalista .sec-block { margin-top: 24px; }
-    .print-minimalista .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; border-top: none; text-align: center; }
   }
 </style>
 </head>
