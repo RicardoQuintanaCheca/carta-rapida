@@ -501,14 +501,7 @@
       </div>
       <div class="msg" id="msgTyping" style="display:none">
         <div class="avatar">K</div>
-        <div class="bubble">
-          <div class="progress-wrap">
-            <div class="progress-texto" id="progressTexto">Analizando tu carta…</div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" id="progressFill"></div>
-            </div>
-          </div>
-        </div>
+        <div class="bubble" id="msgTypingTexto">Procesando tu carta…</div>
       </div>
       <div class="msg" id="msgStatus" style="display:none">
         <div class="avatar">K</div>
@@ -678,6 +671,13 @@
     <button class="main-btn" id="mainBtn" onclick="run()" disabled>
       REDISEÑAR CARTA
     </button>
+
+    <div id="progressBarWrap" style="display:none; padding: 14px 0 4px;">
+      <div class="progress-texto" id="progressTexto">Analizando tu carta…</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
 
     <div class="ajuste-wrap" id="ajusteWrap">
       <div class="ajuste-inner">
@@ -962,7 +962,9 @@
     progressPct = 0;
     const fill = document.getElementById('progressFill');
     const texto = document.getElementById('progressTexto');
-    if (!fill || !texto) return;
+    const barWrap = document.getElementById('progressBarWrap');
+    if (!fill || !texto || !barWrap) return;
+    barWrap.style.display = 'block';
     fill.style.transition = 'none';
     fill.style.width = '0%';
     clearInterval(progressInterval);
@@ -983,9 +985,11 @@
     clearInterval(progressInterval);
     const fill = document.getElementById('progressFill');
     const texto = document.getElementById('progressTexto');
-    if (fill) { fill.style.width = '100%'; }
-    if (texto) { texto.textContent = 'Listo.'; }
+    const barWrap = document.getElementById('progressBarWrap');
+    if (fill) fill.style.width = '100%';
+    if (texto) texto.textContent = 'Listo.';
     setTimeout(() => {
+      if (barWrap) barWrap.style.display = 'none';
       document.getElementById('msgTyping').style.display = 'none';
     }, 400);
   }
