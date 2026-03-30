@@ -217,6 +217,32 @@
   .seg-btn { flex: 1; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; color: #999; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 400; border: none; background: none; transition: all 0.15s; }
   .seg-btn.on { background: white; color: #111; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
+  .estilo-preview-box { overflow: hidden; max-height: 0; transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+  .estilo-preview-box.visible { max-height: 160px; opacity: 1; margin-top: 10px; }
+  .estilo-preview-inner { border: 0.5px solid #e8e8e8; border-radius: 8px; padding: 10px 12px; background: #fafafa; }
+  .estilo-preview-titulo { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
+  .estilo-preview-cols { display: flex; gap: 14px; }
+  .estilo-preview-col { flex: 1; min-width: 0; }
+  /* Clásico preview */
+  .prev-clasico .ps { font-family: 'Playfair Display', serif; font-size: 7.5px; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 2px; margin-bottom: 4px; }
+  .prev-clasico .pp { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 3px; }
+  .prev-clasico .pn { font-family: 'Playfair Display', serif; font-size: 7px; color: #111; }
+  .prev-clasico .pd { font-family: 'Playfair Display', serif; font-style: italic; font-size: 6px; color: #888; }
+  .prev-clasico .ppr { font-family: 'Playfair Display', serif; font-size: 7px; color: #444; white-space: nowrap; }
+  /* Minimalista preview */
+  .prev-minimalista .ps { font-family: 'Josefin Sans', sans-serif; font-size: 6px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
+  .prev-minimalista .pp { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 4px; }
+  .prev-minimalista .pn { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #111; }
+  .prev-minimalista .pd { font-family: 'Josefin Sans', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; }
+  .prev-minimalista .ppr { font-family: 'Josefin Sans', sans-serif; font-size: 6.5px; font-weight: 300; color: #999; white-space: nowrap; }
+  /* Gourmet preview */
+  .prev-gourmet .ps { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #111; text-align: center; margin-bottom: 2px; }
+  .prev-gourmet .pl { width: 16px; height: 0.5px; background: #ccc; margin: 0 auto 5px; }
+  .prev-gourmet .pp { text-align: center; margin-bottom: 5px; }
+  .prev-gourmet .pn { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 400; color: #111; display: block; }
+  .prev-gourmet .pd { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 6px; font-weight: 300; color: #999; display: block; }
+  .prev-gourmet .ppr { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; display: block; }
+
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
   .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
   .upload-btn:hover { background: #fafafa; }
@@ -499,6 +525,62 @@
           <button class="seg-btn" onclick="selEstilo(this,'minimalista')">Minimalista</button>
           <button class="seg-btn" onclick="selEstilo(this,'gourmet')">Gourmet</button>
         </div>
+
+        <div class="estilo-preview-box visible" id="prev-clasico">
+          <div class="estilo-preview-inner prev-clasico">
+            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-cols">
+              <div class="estilo-preview-col">
+                <div class="ps">Entrantes</div>
+                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div></div><div class="ppr">36</div></div>
+                <div class="pp"><div><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div></div><div class="ppr">14</div></div>
+              </div>
+              <div class="estilo-preview-col">
+                <div class="ps">Del mar</div>
+                <div class="pp"><div><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div></div><div class="ppr">28</div></div>
+                <div class="pp"><div><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div></div><div class="ppr">21</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="estilo-preview-box" id="prev-minimalista">
+          <div class="estilo-preview-inner prev-minimalista">
+            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-cols">
+              <div class="estilo-preview-col">
+                <div class="ps">Entrantes</div>
+                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div></div><div class="ppr">36</div></div>
+                <div class="pp"><div><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div></div><div class="ppr">14</div></div>
+              </div>
+              <div class="estilo-preview-col">
+                <div class="ps">Del mar</div>
+                <div class="pp"><div><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div></div><div class="ppr">28</div></div>
+                <div class="pp"><div><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div></div><div class="ppr">21</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="estilo-preview-box" id="prev-gourmet">
+          <div class="estilo-preview-inner prev-gourmet">
+            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-cols">
+              <div class="estilo-preview-col">
+                <div class="ps">Entrantes</div>
+                <div class="pl"></div>
+                <div class="pp"><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div><div class="ppr">36</div></div>
+                <div class="pp"><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div><div class="ppr">14</div></div>
+              </div>
+              <div class="estilo-preview-col">
+                <div class="ps">Del mar</div>
+                <div class="pl"></div>
+                <div class="pp"><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div><div class="ppr">28</div></div>
+                <div class="pp"><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div><div class="ppr">21</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="upload-grid" id="uploadGrid">
@@ -737,6 +819,8 @@
     estiloActual = estilo;
     document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
+    document.querySelectorAll('.estilo-preview-box').forEach(p => p.classList.remove('visible'));
+    document.getElementById('prev-' + estilo).classList.add('visible');
   }
 
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
@@ -935,9 +1019,22 @@
       stopCountdown();
       let mensajeError = err.message;
       if (mensajeError.includes('unsupported image') || mensajeError.includes('image_parse_error')) {
-        mensajeError = 'Formato de imagen no compatible. Por favor, usa JPG, PNG o WEBP.';
+        mensajeError = 'La imagen no es compatible. Usa JPG, PNG o WEBP e inténtalo de nuevo.';
+      } else if (mensajeError.includes('fetch') || mensajeError.includes('network') || mensajeError.includes('Failed to fetch')) {
+        mensajeError = 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
+      } else if (mensajeError.includes('formato inesperado') || mensajeError.includes('JSON')) {
+        mensajeError = 'Ha habido un problema al procesar tu carta. Inténtalo de nuevo.';
+      } else if (mensajeError.includes('timeout') || mensajeError.includes('504') || mensajeError.includes('503')) {
+        mensajeError = 'El servidor ha tardado demasiado. Inténtalo de nuevo en unos segundos.';
+      } else {
+        mensajeError = 'Ha habido un problema. Inténtalo de nuevo.';
       }
-      status('Algo salió mal: ' + mensajeError);
+      document.getElementById('inputWrap').style.opacity = '1';
+      document.getElementById('inputWrap').style.pointerEvents = 'auto';
+      document.getElementById('mainBtn').style.opacity = '1';
+      document.getElementById('mainBtn').style.pointerEvents = 'auto';
+      document.getElementById('mainBtn').disabled = false;
+      status(mensajeError);
     }
   }
 
@@ -960,7 +1057,14 @@
       status('Aplicando ajuste…');
       setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
-      stopCountdown(); status('Algo salió mal: ' + err.message);
+      stopCountdown();
+      let mensajeError = err.message;
+      if (mensajeError.includes('fetch') || mensajeError.includes('network') || mensajeError.includes('Failed to fetch')) {
+        mensajeError = 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
+      } else {
+        mensajeError = 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.';
+      }
+      status(mensajeError);
       btn.classList.add('activo');
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
     }
@@ -1004,10 +1108,10 @@
     const container = document.getElementById('cartaResult');
 
     // Aplicar clase de estilo al wrap
-    const wrap = container.closest('.wrap');
-    wrap.classList.remove('carta-gourmet', 'carta-minimalista');
-    if (estiloActual === 'gourmet') wrap.classList.add('carta-gourmet');
-    if (estiloActual === 'minimalista') wrap.classList.add('carta-minimalista');
+    const cartaWrap = container.closest('.wrap');
+    cartaWrap.classList.remove('carta-gourmet', 'carta-minimalista');
+    if (estiloActual === 'gourmet') cartaWrap.classList.add('carta-gourmet');
+    if (estiloActual === 'minimalista') cartaWrap.classList.add('carta-minimalista');
 
     const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
     const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
@@ -1055,8 +1159,6 @@
   }
 
   function nuevaCarta() {
-    window.location.reload();
-  }
     // Reset estado
     filesList = []; logoFile = null; logoDataUrl = null;
     descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
@@ -1111,8 +1213,8 @@
     document.querySelector('.seg-btn').classList.add('on');
 
     // Reset clases estilo en wrap
-    const wrap = document.getElementById('cartaResult').closest('.wrap');
-    wrap.classList.remove('carta-gourmet', 'carta-minimalista');
+    const wrapEl = document.getElementById('cartaResult').closest('.wrap');
+    wrapEl.classList.remove('carta-gourmet', 'carta-minimalista');
 
     // Scroll arriba
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
