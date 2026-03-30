@@ -1207,7 +1207,20 @@
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function descargar() { window.print(); }
+  function descargar() {
+    if (cartaActual && cartaActual.nombre_restaurante) {
+      const nombre = cartaActual.nombre_restaurante
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+        .substring(0, 40);
+      document.title = `carta-${nombre}`;
+    } else {
+      document.title = 'carta-kartia';
+    }
+    window.print();
+    setTimeout(() => { document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia'; }, 1000);
+  }
   function scroll() {}
 </script>
 
