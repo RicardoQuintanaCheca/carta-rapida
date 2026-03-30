@@ -218,11 +218,11 @@
   .seg-btn.on { background: white; color: #111; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
   .estilo-preview-box { overflow: hidden; max-height: 0; transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
-  .estilo-preview-box.visible { max-height: 160px; opacity: 1; margin-top: 10px; }
+  .estilo-preview-box.visible { max-height: 200px; opacity: 1; margin-top: 10px; }
   .estilo-preview-inner { border: 0.5px solid #e8e8e8; border-radius: 8px; padding: 10px 12px; background: #fafafa; }
   .estilo-preview-titulo { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
-  .estilo-preview-cols { display: flex; gap: 14px; }
-  .estilo-preview-col { flex: 1; min-width: 0; }
+  .estilo-preview-cols { display: flex; flex-direction: column; gap: 4px; }
+  .estilo-preview-col { width: 100%; }
   /* Clásico preview */
   .prev-clasico .ps { font-family: 'Playfair Display', serif; font-size: 7.5px; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 2px; margin-bottom: 4px; }
   .prev-clasico .pp { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 3px; }
@@ -528,17 +528,13 @@
 
         <div class="estilo-preview-box visible" id="prev-clasico">
           <div class="estilo-preview-inner prev-clasico">
-            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-titulo">Vista previa — Clásico</div>
             <div class="estilo-preview-cols">
               <div class="estilo-preview-col">
                 <div class="ps">Entrantes</div>
-                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div></div><div class="ppr">36</div></div>
-                <div class="pp"><div><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div></div><div class="ppr">14</div></div>
-              </div>
-              <div class="estilo-preview-col">
-                <div class="ps">Del mar</div>
-                <div class="pp"><div><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div></div><div class="ppr">28</div></div>
-                <div class="pp"><div><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div></div><div class="ppr">21</div></div>
+                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div></div><div class="ppr">36</div></div>
+                <div class="pp"><div><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div></div><div class="ppr">14</div></div>
+                <div class="pp"><div><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div></div><div class="ppr">9</div></div>
               </div>
             </div>
           </div>
@@ -546,17 +542,13 @@
 
         <div class="estilo-preview-box" id="prev-minimalista">
           <div class="estilo-preview-inner prev-minimalista">
-            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-titulo">Vista previa — Minimalista</div>
             <div class="estilo-preview-cols">
               <div class="estilo-preview-col">
                 <div class="ps">Entrantes</div>
-                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div></div><div class="ppr">36</div></div>
-                <div class="pp"><div><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div></div><div class="ppr">14</div></div>
-              </div>
-              <div class="estilo-preview-col">
-                <div class="ps">Del mar</div>
-                <div class="pp"><div><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div></div><div class="ppr">28</div></div>
-                <div class="pp"><div><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div></div><div class="ppr">21</div></div>
+                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div></div><div class="ppr">36</div></div>
+                <div class="pp"><div><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div></div><div class="ppr">14</div></div>
+                <div class="pp"><div><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div></div><div class="ppr">9</div></div>
               </div>
             </div>
           </div>
@@ -564,19 +556,14 @@
 
         <div class="estilo-preview-box" id="prev-gourmet">
           <div class="estilo-preview-inner prev-gourmet">
-            <div class="estilo-preview-titulo">Vista previa</div>
+            <div class="estilo-preview-titulo">Vista previa — Gourmet</div>
             <div class="estilo-preview-cols">
               <div class="estilo-preview-col">
                 <div class="ps">Entrantes</div>
                 <div class="pl"></div>
-                <div class="pp"><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan</div><div class="ppr">36</div></div>
-                <div class="pp"><div class="pn">Burrata</div><div class="pd">Tomate, albahaca</div><div class="ppr">14</div></div>
-              </div>
-              <div class="estilo-preview-col">
-                <div class="ps">Del mar</div>
-                <div class="pl"></div>
-                <div class="pp"><div class="pn">Lubina salvaje</div><div class="pd">Lima, bilbaína</div><div class="ppr">28</div></div>
-                <div class="pp"><div class="pn">Tartar de atún</div><div class="pd">Aliñado al momento</div><div class="ppr">21</div></div>
+                <div class="pp"><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div><div class="ppr">36</div></div>
+                <div class="pp"><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div><div class="ppr">14</div></div>
+                <div class="pp"><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div><div class="ppr">9</div></div>
               </div>
             </div>
           </div>
