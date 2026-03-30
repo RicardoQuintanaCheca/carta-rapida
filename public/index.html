@@ -206,6 +206,11 @@
   .carta-minimalista .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #999; }
   .carta-minimalista .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; text-align: center; border-top: none; }
 
+  .progress-wrap { margin-top: 2px; }
+  .progress-texto { font-size: 12px; color: #999; margin-bottom: 8px; font-weight: 300; }
+  .progress-bar-bg { width: 100%; height: 3px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #111; border-radius: 2px; width: 0%; transition: width 0.5s ease; }
+
   .nueva-carta-btn { width: 100%; padding: 12px; font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; background: none; color: #999; border: 0.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; display: none; }
   .nueva-carta-btn.on { display: block; }
   .nueva-carta-btn:hover { border-color: #111; color: #111; }
@@ -496,7 +501,14 @@
       </div>
       <div class="msg" id="msgTyping" style="display:none">
         <div class="avatar">K</div>
-        <div class="bubble"><div class="countdown">Analizando tu carta… <span id="countNum">15</span>s</div></div>
+        <div class="bubble">
+          <div class="progress-wrap">
+            <div class="progress-texto" id="progressTexto">Analizando tu carta…</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="msg" id="msgStatus" style="display:none">
         <div class="avatar">K</div>
@@ -667,8 +679,6 @@
       REDISEÑAR CARTA
     </button>
 
-    <div id="procesandoMsg" style="display:none; text-align:center; font-size:13px; color:#111; padding: 12px 0; font-weight:400; letter-spacing:0.02em;">Diseñando tu carta… <span id="countNum2">15</span>s</div>
-
     <div class="ajuste-wrap" id="ajusteWrap">
       <div class="ajuste-inner">
         <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
@@ -797,7 +807,7 @@
 </footer>
 
 <script>
-  let filesList = [], logoFile = null, logoDataUrl = null, countdownInterval = null;
+  let filesList = [], logoFile = null, logoDataUrl = null;
   let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
   let estiloActual = 'clasico';
@@ -938,33 +948,50 @@
     checkReady();
   }
 
+  const FASES = [
+    { hasta: 25, txt: 'Analizando tu carta…' },
+    { hasta: 55, txt: 'Identificando platos y precios…' },
+    { hasta: 80, txt: 'Aplicando neuromarketing…' },
+    { hasta: 95, txt: 'Diseñando tu carta…' },
+    { hasta: 100, txt: 'Finalizando…' }
+  ];
+  let progressInterval = null;
+  let progressPct = 0;
+
   function startCountdown(s) {
-    const el = document.getElementById('countNum');
-    const el2 = document.getElementById('countNum2');
-    const msg = document.getElementById('procesandoMsg');
-    if (msg) msg.style.display = 'block';
-    let r = s; el.textContent = r; if (el2) el2.textContent = r;
-    clearInterval(countdownInterval);
-    countdownInterval = setInterval(() => {
-      r--;
-      if (r <= 0) {
-        el.textContent = '…'; if (el2) el2.textContent = '…';
-        clearInterval(countdownInterval);
-      } else {
-        el.textContent = r; if (el2) el2.textContent = r;
-      }
-    }, 1000);
+    progressPct = 0;
+    const fill = document.getElementById('progressFill');
+    const texto = document.getElementById('progressTexto');
+    if (!fill || !texto) return;
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    clearInterval(progressInterval);
+    setTimeout(() => {
+      fill.style.transition = 'width 0.5s ease';
+      progressInterval = setInterval(() => {
+        const incremento = progressPct < 60 ? (Math.random() * 3 + 1.5) : (Math.random() * 1 + 0.3);
+        progressPct += incremento;
+        if (progressPct > 95) progressPct = 95;
+        fill.style.width = progressPct + '%';
+        const fase = FASES.find(f => progressPct <= f.hasta) || FASES[FASES.length - 1];
+        texto.textContent = fase.txt;
+      }, 400);
+    }, 50);
   }
 
   function stopCountdown() {
-    clearInterval(countdownInterval);
-    const msg = document.getElementById('procesandoMsg');
-    if (msg) msg.style.display = 'none';
+    clearInterval(progressInterval);
+    const fill = document.getElementById('progressFill');
+    const texto = document.getElementById('progressTexto');
+    if (fill) { fill.style.width = '100%'; }
+    if (texto) { texto.textContent = 'Listo.'; }
+    setTimeout(() => {
+      document.getElementById('msgTyping').style.display = 'none';
+    }, 400);
   }
 
   function status(text) {
     stopCountdown();
-    document.getElementById('msgTyping').style.display = 'none';
     document.getElementById('statusText').textContent = text;
     document.getElementById('msgStatus').style.display = 'flex';
     scroll();
@@ -1207,20 +1234,7 @@
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function descargar() {
-    if (cartaActual && cartaActual.nombre_restaurante) {
-      const nombre = cartaActual.nombre_restaurante
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '')
-        .substring(0, 40);
-      document.title = `carta-${nombre}`;
-    } else {
-      document.title = 'carta-kartia';
-    }
-    window.print();
-    setTimeout(() => { document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia'; }, 1000);
-  }
+  function descargar() { window.print(); }
   function scroll() {}
 </script>
 
