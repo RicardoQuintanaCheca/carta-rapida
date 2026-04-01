@@ -3,7 +3,6 @@ const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const fs = require('fs');
-const { google } = require('googleapis');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -11,32 +10,6 @@ const upload = multer({ dest: 'uploads/' });
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
-
-// Google Sheets setup
-const SHEET_ID = '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8';
-const CREDENTIALS_FILE = './airy-lodge-291011-85ef8427df92.json';
-
-async function guardarEmailEnSheets(email) {
-  try {
-    const auth = new google.auth.GoogleAuth({
-      keyFile: './airy-lodge-291011-85ef8427df92.json',
-      scopes: ['https://www.googleapis.com/auth/spreadsheets']
-    });
-    const sheets = google.sheets({ version: 'v4', auth });
-    const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: 'Hoja 1!A:B',
-      valueInputOption: 'RAW',
-      resource: { values: [[email, fecha]] }
-    });
-    console.log('Email guardado en Sheets:', email);
-    return true;
-  } catch (err) {
-    console.error('Error Sheets:', err.message, err.code);
-    return false;
-  }
-}
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -411,10 +384,11 @@ app.post('/guardar-email', async (req, res) => {
     if (!email || !email.includes('@')) {
       return res.json({ ok: false, error: 'Email no válido' });
     }
-    const ok = await guardarEmailEnSheets(email);
-    res.json({ ok });
+    const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+    console.log(`LEAD: ${email} | ${fecha}`);
+    res.json({ ok: true });
   } catch (error) {
-    console.error('ERROR GUARDAR EMAIL:', error.message);
+    console.error('ERROR EMAIL:', error.message);
     res.json({ ok: false, error: error.message });
   }
 });
