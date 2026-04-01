@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const fs = require('fs');
+const { google } = require('googleapis');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -10,6 +11,33 @@ const upload = multer({ dest: 'uploads/' });
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
+
+// Google Sheets setup
+const SHEET_ID = '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8';
+async function guardarEmailEnSheets(email) {
+  try {
+    const credentials = process.env.GOOGLE_CREDENTIALS
+      ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
+      : require('./airy-lodge-291011-4e7a264a0f23.json');
+    const auth = new google.auth.GoogleAuth({
+      credentials,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+    const sheets = google.sheets({ version: 'v4', auth });
+    const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SHEET_ID,
+      range: 'Hoja1!A:B',
+      valueInputOption: 'RAW',
+      resource: { values: [[email, fecha]] }
+    });
+    console.log('Email guardado en Sheets:', email);
+    return true;
+  } catch (err) {
+    console.error('Error Sheets:', err.message);
+    return false;
+  }
+}
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -378,57 +406,16 @@ INSTRUCCIONES:
   }
 });
 
-app.post('/suscribir', async (req, res) => {
+app.post('/guardar-email', async (req, res) => {
   try {
     const { email } = req.body;
     if (!email || !email.includes('@')) {
       return res.json({ ok: false, error: 'Email no válido' });
     }
-
-    console.log('BREVO KEY:', process.env.BREVO_API_KEY ? 'OK' : 'UNDEFINED');
-
-    const https = require('https');
-    const payload = JSON.stringify({
-      email: email,
-      listIds: [7],
-      updateEnabled: true,
-      attributes: { FUENTE: 'CartaRapida' }
-    });
-
-    const result = await new Promise((resolve, reject) => {
-      const options = {
-        hostname: 'api.brevo.com',
-        path: '/v3/contacts',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': process.env.BREVO_API_KEY,
-          'Content-Length': Buffer.byteLength(payload)
-        }
-      };
-      const request = https.request(options, (response) => {
-        let data = '';
-        response.on('data', chunk => data += chunk);
-        response.on('end', () => resolve({ status: response.statusCode, body: data }));
-      });
-      request.on('error', reject);
-      request.write(payload);
-      request.end();
-    });
-
-    console.log('Brevo status:', result.status, result.body);
-
-    if (result.status === 201 || result.status === 204) {
-      return res.json({ ok: true });
-    }
-    const data = JSON.parse(result.body || '{}');
-    if (data.code === 'duplicate_parameter') {
-      return res.json({ ok: true });
-    }
-    return res.json({ ok: false, error: 'Error al suscribir' });
-
+    const ok = await guardarEmailEnSheets(email);
+    res.json({ ok });
   } catch (error) {
-    console.error('ERROR SUSCRIBIR:', error.message);
+    console.error('ERROR GUARDAR EMAIL:', error.message);
     res.json({ ok: false, error: error.message });
   }
 });

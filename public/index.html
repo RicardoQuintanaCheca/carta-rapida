@@ -1326,14 +1326,27 @@
     } else {
       document.title = 'carta-kartia';
     }
-    window.print();
-    setTimeout(() => {
-      document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
+
+    // Si es gourmet o minimalista, pedir email primero
+    if (estiloActual === 'gourmet' || estiloActual === 'minimalista') {
+      const nombreEstilo = estiloActual === 'gourmet' ? 'Estilo Gourmet' : 'Estilo Minimalista';
+      document.getElementById('modalEstiloNombre').textContent = nombreEstilo;
       document.getElementById('modalForm').style.display = 'block';
       document.getElementById('modalSuccess').style.display = 'none';
       document.getElementById('modalEmail').value = '';
       document.getElementById('modalEmail').classList.remove('error');
       document.getElementById('modalOverlay').classList.add('on');
+    } else {
+      // Clásico — descarga directa
+      descargarDirecto();
+    }
+  }
+
+  function descargarDirecto() {
+    cerrarModal();
+    window.print();
+    setTimeout(() => {
+      document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
     }, 1000);
   }
 
@@ -1350,19 +1363,23 @@
     }
     input.classList.remove('error');
     try {
-      const res = await fetch('/suscribir', {
+      const res = await fetch('/guardar-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
       const data = await res.json();
-      if (data.ok) {
-        document.getElementById('modalForm').style.display = 'none';
-        document.getElementById('modalSuccess').style.display = 'block';
-        setTimeout(() => cerrarModal(), 3000);
-      }
+      document.getElementById('modalForm').style.display = 'none';
+      document.getElementById('modalSuccess').style.display = 'block';
+      setTimeout(() => {
+        cerrarModal();
+        window.print();
+        setTimeout(() => {
+          document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
+        }, 1000);
+      }, 1500);
     } catch (err) {
-      cerrarModal();
+      descargarDirecto();
     }
   }
 
@@ -1374,15 +1391,13 @@
   <div class="modal">
     <button class="modal-close" onclick="cerrarModal()">×</button>
     <div id="modalForm">
-      <div class="modal-icono">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      </div>
-      <div class="modal-titulo">¡Tu carta está lista!</div>
-      <div class="modal-subtitulo">¿Quieres recibir consejos de neuromarketing para restaurantes? Te los enviamos gratis, sin spam.</div>
+      <div class="modal-badge"><div class="modal-badge-dot"></div> <span id="modalEstiloNombre">Estilo Gourmet</span></div>
+      <div class="modal-titulo">Casi listo.</div>
+      <div class="modal-subtitulo">Tu carta está rediseñada. Déjanos tu email y la descargas ahora mismo. Sin registro, sin contraseña.</div>
       <input class="modal-input" type="email" id="modalEmail" placeholder="tu@email.com">
-      <button class="modal-btn" onclick="enviarSuscripcion()">Quiero los consejos →</button>
-      <button class="modal-skip" onclick="cerrarModal()">No, gracias</button>
-      <div class="modal-legal">Sin spam. Puedes darte de baja cuando quieras.<br>Kartia — Gastrotouch Marketing Solutions S.L.</div>
+      <button class="modal-btn" onclick="enviarSuscripcion()">Descargar ahora →</button>
+      <button class="modal-skip" onclick="descargarDirecto()">No, gracias</button>
+      <div class="modal-legal">Solo usamos tu email para enviarte de vez en cuando consejos de neuromarketing para tu restaurante.</div>
     </div>
     <div class="modal-success" id="modalSuccess">
       <div class="modal-success-check">
