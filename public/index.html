@@ -219,6 +219,30 @@
   .size-btn:hover { border-color: #111; }
   .size-nivel { font-size: 11px; color: #999; min-width: 60px; text-align: center; }
 
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
+  .modal-overlay.on { display: flex; }
+  .modal { background: #fff; border-radius: 16px; padding: 32px 28px; max-width: 360px; width: 100%; position: relative; }
+  .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 20px; color: #ccc; cursor: pointer; line-height: 1; }
+  .modal-close:hover { color: #111; }
+  .modal-icono { width: 48px; height: 48px; background: #f4f4f4; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .modal-icono svg { width: 22px; height: 22px; stroke: #111; fill: none; stroke-width: 1.5; }
+  .modal-titulo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
+  .modal-subtitulo { font-size: 13px; color: #888; line-height: 1.65; margin-bottom: 24px; font-weight: 300; }
+  .modal-input { width: 100%; padding: 12px 14px; border: 0.5px solid #e0e0e0; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 300; color: #111; outline: none; box-sizing: border-box; margin-bottom: 10px; }
+  .modal-input:focus { border-color: #111; }
+  .modal-input::placeholder { color: #ccc; }
+  .modal-input.error { border-color: #E8622A; }
+  .modal-btn { width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; margin-bottom: 10px; }
+  .modal-btn:hover { opacity: 0.85; }
+  .modal-skip { width: 100%; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 11px; color: #bbb; cursor: pointer; padding: 4px; }
+  .modal-skip:hover { color: #888; }
+  .modal-legal { font-size: 10px; color: #ccc; text-align: center; margin-top: 14px; line-height: 1.5; }
+  .modal-success { display: none; text-align: center; padding: 8px 0; }
+  .modal-success-check { width: 48px; height: 48px; background: #f4f4f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .modal-success-check svg { width: 22px; height: 22px; stroke: #111; fill: none; stroke-width: 2; }
+  .modal-success-txt { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #111; margin-bottom: 8px; }
+  .modal-success-sub { font-size: 13px; color: #888; font-weight: 300; line-height: 1.6; }
+
   .nueva-carta-btn { width: 100%; padding: 12px; font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; background: none; color: #999; border: 0.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; display: none; }
   .nueva-carta-btn.on { display: block; }
   .nueva-carta-btn:hover { border-color: #111; color: #111; }
@@ -1291,9 +1315,84 @@
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function descargar() { window.print(); }
+  function descargar() {
+    if (cartaActual && cartaActual.nombre_restaurante) {
+      const nombre = cartaActual.nombre_restaurante
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+        .substring(0, 40);
+      document.title = `carta-${nombre}`;
+    } else {
+      document.title = 'carta-kartia';
+    }
+    window.print();
+    setTimeout(() => {
+      document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
+      document.getElementById('modalForm').style.display = 'block';
+      document.getElementById('modalSuccess').style.display = 'none';
+      document.getElementById('modalEmail').value = '';
+      document.getElementById('modalEmail').classList.remove('error');
+      document.getElementById('modalOverlay').classList.add('on');
+    }, 1000);
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalOverlay').classList.remove('on');
+  }
+
+  async function enviarSuscripcion() {
+    const email = document.getElementById('modalEmail').value.trim();
+    const input = document.getElementById('modalEmail');
+    if (!email || !email.includes('@')) {
+      input.classList.add('error');
+      return;
+    }
+    input.classList.remove('error');
+    try {
+      const res = await fetch('/suscribir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById('modalForm').style.display = 'none';
+        document.getElementById('modalSuccess').style.display = 'block';
+        setTimeout(() => cerrarModal(), 3000);
+      }
+    } catch (err) {
+      cerrarModal();
+    }
+  }
+
   function scroll() {}
 </script>
+
+<!-- MODAL SUSCRIPCIÓN -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="cerrarModal()">×</button>
+    <div id="modalForm">
+      <div class="modal-icono">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      </div>
+      <div class="modal-titulo">¡Tu carta está lista!</div>
+      <div class="modal-subtitulo">¿Quieres recibir consejos de neuromarketing para restaurantes? Te los enviamos gratis, sin spam.</div>
+      <input class="modal-input" type="email" id="modalEmail" placeholder="tu@email.com">
+      <button class="modal-btn" onclick="enviarSuscripcion()">Quiero los consejos →</button>
+      <button class="modal-skip" onclick="cerrarModal()">No, gracias</button>
+      <div class="modal-legal">Sin spam. Puedes darte de baja cuando quieras.<br>Kartia — Gastrotouch Marketing Solutions S.L.</div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="modal-success-check">
+        <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="modal-success-txt">¡Apuntado!</div>
+      <div class="modal-success-sub">Te enviaremos los primeros consejos en breve.</div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

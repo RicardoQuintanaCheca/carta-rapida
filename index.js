@@ -382,3 +382,45 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en puerto ${PORT}`);
 });
+
+app.post('/suscribir', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || !email.includes('@')) {
+      return res.json({ ok: false, error: 'Email no válido' });
+    }
+
+    const response = await fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': process.env.BREVO_API_KEY
+      },
+      body: JSON.stringify({
+        email: email,
+        listIds: [7],
+        updateEnabled: true,
+        attributes: {
+          FUENTE: 'CartaRapida'
+        }
+      })
+    });
+
+    if (response.status === 201 || response.status === 204) {
+      console.log('Suscriptor añadido:', email);
+      return res.json({ ok: true });
+    }
+
+    const data = await response.json();
+    if (data.code === 'duplicate_parameter') {
+      return res.json({ ok: true });
+    }
+
+    console.error('Error Brevo:', data);
+    return res.json({ ok: false, error: 'Error al suscribir' });
+
+  } catch (error) {
+    console.error('ERROR SUSCRIBIR:', error.message);
+    res.json({ ok: false, error: error.message });
+  }
+});
