@@ -390,33 +390,44 @@ app.post('/suscribir', async (req, res) => {
       return res.json({ ok: false, error: 'Email no válido' });
     }
 
-    const response = await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY
-      },
-      body: JSON.stringify({
-        email: email,
-        listIds: [7],
-        updateEnabled: true,
-        attributes: {
-          FUENTE: 'CartaRapida'
-        }
-      })
+    const https = require('https');
+    const payload = JSON.stringify({
+      email: email,
+      listIds: [7],
+      updateEnabled: true,
+      attributes: { FUENTE: 'CartaRapida' }
     });
 
-    if (response.status === 201 || response.status === 204) {
-      console.log('Suscriptor añadido:', email);
+    const result = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.brevo.com',
+        path: '/v3/contacts',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Length': Buffer.byteLength(payload)
+        }
+      };
+      const request = https.request(options, (response) => {
+        let data = '';
+        response.on('data', chunk => data += chunk);
+        response.on('end', () => resolve({ status: response.statusCode, body: data }));
+      });
+      request.on('error', reject);
+      request.write(payload);
+      request.end();
+    });
+
+    console.log('Brevo status:', result.status, result.body);
+
+    if (result.status === 201 || result.status === 204) {
       return res.json({ ok: true });
     }
-
-    const data = await response.json();
+    const data = JSON.parse(result.body || '{}');
     if (data.code === 'duplicate_parameter') {
       return res.json({ ok: true });
     }
-
-    console.error('Error Brevo:', data);
     return res.json({ ok: false, error: 'Error al suscribir' });
 
   } catch (error) {
