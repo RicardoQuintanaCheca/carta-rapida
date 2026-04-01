@@ -14,13 +14,12 @@ const openai = new OpenAI({
 
 // Google Sheets setup
 const SHEET_ID = '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8';
+const CREDENTIALS_FILE = './airy-lodge-291011-4e7a264a0f23.json';
+
 async function guardarEmailEnSheets(email) {
   try {
-    const credentials = process.env.GOOGLE_CREDENTIALS
-      ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
-      : require('./airy-lodge-291011-4e7a264a0f23.json');
     const auth = new google.auth.GoogleAuth({
-      credentials,
+      keyFile: CREDENTIALS_FILE,
       scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
     const sheets = google.sheets({ version: 'v4', auth });
