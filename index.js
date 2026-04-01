@@ -378,12 +378,65 @@ INSTRUCCIONES:
   }
 });
 
+app.post('/suscribir', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || !email.includes('@')) {
+      return res.json({ ok: false, error: 'Email no válido' });
+    }
+
+    console.log('BREVO KEY:', process.env.BREVO_API_KEY ? 'OK' : 'UNDEFINED');
+
+    const https = require('https');
+    const payload = JSON.stringify({
+      email: email,
+      listIds: [7],
+      updateEnabled: true,
+      attributes: { FUENTE: 'CartaRapida' }
+    });
+
+    const result = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.brevo.com',
+        path: '/v3/contacts',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Length': Buffer.byteLength(payload)
+        }
+      };
+      const request = https.request(options, (response) => {
+        let data = '';
+        response.on('data', chunk => data += chunk);
+        response.on('end', () => resolve({ status: response.statusCode, body: data }));
+      });
+      request.on('error', reject);
+      request.write(payload);
+      request.end();
+    });
+
+    console.log('Brevo status:', result.status, result.body);
+
+    if (result.status === 201 || result.status === 204) {
+      return res.json({ ok: true });
+    }
+    const data = JSON.parse(result.body || '{}');
+    if (data.code === 'duplicate_parameter') {
+      return res.json({ ok: true });
+    }
+    return res.json({ ok: false, error: 'Error al suscribir' });
+
+  } catch (error) {
+    console.error('ERROR SUSCRIBIR:', error.message);
+    res.json({ ok: false, error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en puerto ${PORT}`);
-});
-
-app.post('/suscribir', async (req, res) => {
+}); async (req, res) => {
   try {
     const { email } = req.body;
     if (!email || !email.includes('@')) {
