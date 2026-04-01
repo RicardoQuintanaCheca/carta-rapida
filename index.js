@@ -18,11 +18,8 @@ const CREDENTIALS_FILE = './airy-lodge-291011-85ef8427df92.json';
 
 async function guardarEmailEnSheets(email) {
   try {
-    const credentials = process.env.GOOGLE_CREDENTIALS
-      ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
-      : require('./airy-lodge-291011-85ef8427df92.json');
     const auth = new google.auth.GoogleAuth({
-      credentials,
+      keyFile: './airy-lodge-291011-85ef8427df92.json',
       scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
     const sheets = google.sheets({ version: 'v4', auth });
@@ -36,7 +33,7 @@ async function guardarEmailEnSheets(email) {
     console.log('Email guardado en Sheets:', email);
     return true;
   } catch (err) {
-    console.error('Error Sheets:', err.message);
+    console.error('Error Sheets:', err.message, err.code);
     return false;
   }
 }
