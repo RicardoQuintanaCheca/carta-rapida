@@ -14,19 +14,22 @@ const openai = new OpenAI({
 
 // Google Sheets setup
 const SHEET_ID = '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8';
-const CREDENTIALS_FILE = './airy-lodge-291011-4e7a264a0f23.json';
+const CREDENTIALS_FILE = './airy-lodge-291011-85ef8427df92.json';
 
 async function guardarEmailEnSheets(email) {
   try {
+    const credentials = process.env.GOOGLE_CREDENTIALS
+      ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
+      : require('./airy-lodge-291011-85ef8427df92.json');
     const auth = new google.auth.GoogleAuth({
-      keyFile: CREDENTIALS_FILE,
+      credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
     const sheets = google.sheets({ version: 'v4', auth });
     const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: 'Hoja1!A:B',
+      range: 'Hoja 1!A:B',
       valueInputOption: 'RAW',
       resource: { values: [[email, fecha]] }
     });
