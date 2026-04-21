@@ -446,7 +446,7 @@
 
     /* ── CLÁSICO (por defecto) ── */
     .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
-    .sec-block { margin-top: 18px; page-break-inside: avoid !important; break-inside: avoid !important; }
+    .sec-block { margin-top: 18px; }
     .sec-block:first-child { margin-top: 8px; }
     .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; display: block; }
     .item { display: flex; justify-content: space-between; padding: 6px 0; page-break-inside: avoid !important; }
@@ -1328,8 +1328,11 @@
     }
 
     // Si es gourmet o minimalista, pedir email primero
-    if (estiloActual === 'gourmet' || estiloActual === 'minimalista') {
-      const nombreEstilo = estiloActual === 'gourmet' ? 'Estilo Gourmet' : 'Estilo Minimalista';
+    const cartaWrapEl = document.getElementById('cartaResult').closest('.wrap');
+    const esGourmet = cartaWrapEl && cartaWrapEl.classList.contains('carta-gourmet');
+    const esMinimalista = cartaWrapEl && cartaWrapEl.classList.contains('carta-minimalista');
+    if (esGourmet || esMinimalista) {
+      const nombreEstilo = esGourmet ? 'Estilo Gourmet' : 'Estilo Minimalista';
       document.getElementById('modalEstiloNombre').textContent = nombreEstilo;
       document.getElementById('modalForm').style.display = 'block';
       document.getElementById('modalSuccess').style.display = 'none';
