@@ -413,6 +413,34 @@
   .seo-section li::before { content: "→"; color: #FF6B35; font-weight: 700; flex-shrink: 0; }
   .seo-divider { border: none; border-top: 1px solid #F0EDE8; margin: 56px 0; }
 
+  /* ── PUENTE KARTIA ── */
+  .portamenus-section { background: #FFF4EC; padding: 80px 24px; }
+  .portamenus-inner { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .portamenus-section .pm-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #FF6B35; text-transform: uppercase; margin-bottom: 16px; }
+  .portamenus-section h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(28px, 4vw, 46px); line-height: 1; letter-spacing: -0.025em; margin: 0 0 16px; color: #0A0A0A; }
+  .portamenus-section h2 .o { color: #FF6B35; }
+  .portamenus-section .pm-lead { font-size: 16px; line-height: 1.6; color: #333; margin: 0 0 16px; max-width: 460px; }
+  .pm-clients { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #888; text-transform: uppercase; margin-bottom: 28px; }
+  .pm-clients span { color: #FF6B35; }
+  .pm-features { list-style: none; padding: 0; margin: 0 0 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pm-features li { font-size: 14px; display: flex; align-items: center; gap: 8px; color: #333; }
+  .pm-features li .c { width: 18px; height: 18px; border-radius: 50%; background: #FF6B35; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+  .pm-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .pm-btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; background: #FF6B35; color: #fff; border-radius: 999px; font-weight: 700; font-size: 14px; text-decoration: none; box-shadow: 0 6px 0 0 #0A0A0A; transition: transform .15s, box-shadow .15s; }
+  .pm-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 0 0 #0A0A0A; }
+  .pm-btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border: 2px solid #0A0A0A; color: #0A0A0A; border-radius: 999px; font-weight: 600; font-size: 14px; text-decoration: none; transition: all .15s; }
+  .pm-btn-outline:hover { background: #0A0A0A; color: #fff; }
+  .pm-mock { display: flex; justify-content: center; }
+  .pm-case { width: 260px; height: 340px; background: #fff; border-radius: 18px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.2); padding: 24px; transform: rotate(-4deg); transition: transform .3s; border: 2px solid #0A0A0A; }
+  .pm-case:hover { transform: rotate(0) scale(1.03); }
+  .pm-case-inner { border: 1px dashed #E8E4D8; border-radius: 10px; height: 100%; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .pm-case-logo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 16px; color: #FF6B35; }
+  .pm-line { height: 6px; background: #F0EDE8; border-radius: 3px; }
+  .pm-line.w1 { width: 80%; } .pm-line.w2 { width: 60%; } .pm-line.w3 { width: 90%; }
+  .pm-sec { border-top: 1px solid #E8E4D8; padding-top: 10px; margin-top: 4px; }
+  .pm-sec-h { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 12px; color: #0A0A0A; margin-bottom: 6px; }
+  @media (max-width: 768px) { .portamenus-inner { grid-template-columns: 1fr; } .pm-case { display: none; } }
+
   /* ── FAQ ── */
   .faq-section { padding: 80px 24px; background: #f9f9f9; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
   .faq-inner { max-width: 720px; margin: 0 auto; }
@@ -926,7 +954,7 @@
     @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { background: white; padding: 0 !important; }
-    .top-strip, nav.nav, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
+    .top-strip, nav.nav, .hero, .tool-section, .como-section, .seo-section, .portamenus-section, .faq-section, .final-cta, .site-footer { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tfoot { display: table-footer-group; }
@@ -1384,6 +1412,49 @@
   <h2>De la carta rediseñada al portamenú premium</h2>
   <p>Carta Rápida es una herramienta gratuita de Kartia, fabricante español de portamenús artesanales premium para el sector HORECA. Si tras rediseñar tu carta quieres fabricarla en un portamenú de calidad —polipiel, grabado en relieve, acabados artesanales— Kartia puede ayudarte.</p>
   <p>Los portamenús Kartia están disponibles en diferentes formatos y materiales, con producción artesanal en España y entrega a toda Europa. El rediseño con nuestra herramienta es el primer paso para tener una carta que represente realmente el nivel de tu establecimiento.</p>
+  </div>
+</section>
+
+<!-- PUENTE KARTIA -->
+<section class="portamenus-section" id="portamenus">
+  <div class="portamenus-inner">
+    <div>
+      <div class="pm-eyebrow">04 · UPGRADE OPCIONAL</div>
+      <h2>Esta carta merece<br>un portamenú<br><span class="o">a su altura.</span></h2>
+      <p class="pm-lead">Kartia fabrica portamenús artesanales premium para el sector HORECA. Madera, cuero, polipiel — todos personalizables con tu logo y grabado incluido.</p>
+      <p class="pm-clients">Clientes: <span>Meliá · Vincci · Marqués de Riscal · Pacha · NH Hotels</span></p>
+      <ul class="pm-features">
+        <li><span class="c">✓</span>3 materiales premium</li>
+        <li><span class="c">✓</span>Logo grabado gratis</li>
+        <li><span class="c">✓</span>A4 y A3 disponibles</li>
+        <li><span class="c">✓</span>Envío 48h España</li>
+      </ul>
+      <div class="pm-ctas">
+        <a href="https://kartia.es/presupuesto/" class="pm-btn-primary" target="_blank">Quiero un portamenú premium →</a>
+        <a href="mailto:hola@kartia.es?subject=Solicitud%20muestra%20portamen%C3%BA" class="pm-btn-outline">Pedir muestra gratis</a>
+      </div>
+    </div>
+    <div class="pm-mock">
+      <div class="pm-case">
+        <div class="pm-case-inner">
+          <div class="pm-case-logo">Casa Julio</div>
+          <div class="pm-line w1"></div>
+          <div class="pm-line w2"></div>
+          <div class="pm-sec">
+            <div class="pm-sec-h">Entrantes</div>
+            <div class="pm-line w3"></div><div class="pm-line w1"></div><div class="pm-line w2"></div>
+          </div>
+          <div class="pm-sec">
+            <div class="pm-sec-h">Principales</div>
+            <div class="pm-line w2"></div><div class="pm-line w1"></div><div class="pm-line w3"></div>
+          </div>
+          <div class="pm-sec">
+            <div class="pm-sec-h">Postres</div>
+            <div class="pm-line w1"></div><div class="pm-line w2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
