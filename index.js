@@ -263,16 +263,6 @@ DO NOT TRANSLATE: prices, quantities, (V), (VG), SPM, restaurant name.
 IMPORTANT: Every dish name and section name MUST be in ${nombreIdioma}.`;
 }
 
-function validarEstructuraCarta(json) {
-  if (!json || typeof json !== 'object') return false;
-  if (!Array.isArray(json.secciones) || json.secciones.length === 0) return false;
-  for (const sec of json.secciones) {
-    if (typeof sec.nombre !== 'string') return false;
-    if (!Array.isArray(sec.platos)) return false;
-  }
-  return true;
-}
-
 function limpiarYParsearJSON(texto) {
   let limpio = texto
     .replace(/```json\s*/gi, '')
@@ -396,45 +386,19 @@ INSTRUCCIONES:
 - Si pide cambiar el orden, reordena según lo indicado
 - Si pide añadir o cambiar algo concreto, hazlo con precisión
 - NUNCA omitas platos — todos los platos deben aparecer en el resultado
+- Devuelve ÚNICAMENTE el JSON corregido, sin texto adicional, sin comillas de bloque
 
-ESTRUCTURA OBLIGATORIA DEL JSON DE RESPUESTA:
-{
-  "nombre_restaurante": "string",
-  "idioma": "string",
-  "nota_pie": "string",
-  "secciones": [
-    {
-      "nombre": "string",
-      "platos": [
-        { "nombre": "string", "descripcion": "string", "precio": "string", "alergenos": "string" }
-      ]
-    }
-  ]
-}
+{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
-Devuelve ÚNICAMENTE el JSON válido con esta estructura. Sin texto adicional.`;
-
-    const llamarOpenAI = () => openai.chat.completions.create({
+    const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 8000,
-      response_format: { type: 'json_object' },
       messages: [{ role: 'user', content: prompt }]
     });
 
-    let response = await llamarOpenAI();
-    let texto = response.choices[0].message.content;
+    const texto = response.choices[0].message.content;
     console.log('REHACER IA:', texto.substring(0, 300));
-    let json = limpiarYParsearJSON(texto);
-
-    if (!validarEstructuraCarta(json)) {
-      console.warn('[REHACER] Estructura inválida en 1er intento, reintentando…');
-      response = await llamarOpenAI();
-      texto = response.choices[0].message.content;
-      json = limpiarYParsearJSON(texto);
-      if (!validarEstructuraCarta(json)) {
-        return res.json({ ok: false, error: 'No hemos podido aplicar el ajuste correctamente. Por favor, inténtalo de nuevo.' });
-      }
-    }
+    const json = limpiarYParsearJSON(texto);
 
     res.json({ ok: true, carta: json });
 
