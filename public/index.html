@@ -821,32 +821,81 @@
     .t2-main-btn { font-size: 15px; }
   }
 
-  /* Progress bar with mascot */
-  .t2-progress-card {
-    background: #FFF5EE; border: 1.5px solid #FFD8BF; border-radius: 16px;
-    padding: 20px; display: flex; align-items: center; gap: 18px; margin: 16px 0 4px;
+  /* Progress bar V3 — mascota con timeline */
+  .procesado-box {
+    background: #FFF5EE; border-radius: 20px; padding: 32px 28px 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    position: relative; overflow: hidden; margin: 16px 0 4px;
   }
-  .t2-progress-mascot-wrap { position: relative; flex-shrink: 0; width: 48px; padding-top: 36px; }
-  .t2-progress-mascot img { display: block; width: 48px; height: 48px; animation: progressBounce 2s ease-in-out infinite; }
-  @keyframes progressBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-  .t2-progress-bubble {
-    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    background: #fff; border-radius: 10px; padding: 4px 10px;
-    font-size: 11px; font-weight: 600; white-space: nowrap; color: #2A2623;
-    box-shadow: 0 2px 8px rgba(0,0,0,.12); transition: opacity .2s;
+  .mascota-area { position: relative; }
+  .mascota-procesado {
+    width: 104px; height: 104px; display: block;
+    animation: floatGentle 3s ease-in-out infinite; margin-top: 10px;
   }
-  .t2-progress-bubble::after {
-    content: ""; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #fff;
+  @keyframes floatGentle {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-6px) rotate(1.5deg); }
   }
-  .t2-progress-content { flex: 1; min-width: 0; }
-  .t2-progress-texto {
-    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: 15px;
-    color: #2A2623; margin-bottom: 10px; transition: opacity .2s;
+  .bubble {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: white; border: 0.5px solid #E8E4D8; border-radius: 16px;
+    padding: 6px 14px; font-size: 13px; font-weight: 500; color: #2A2623;
+    white-space: nowrap; box-shadow: 0 3px 10px rgba(0,0,0,0.08); z-index: 2; transition: opacity 0.25s;
   }
-  .t2-progress-bar-bg { width: 100%; height: 4px; background: #F1EFE8; border-radius: 2px; overflow: hidden; }
-  .t2-progress-bar-fill { height: 100%; border-radius: 2px; background: #FF6B35; width: 35%; animation: progressSlide 1.8s ease-in-out infinite; }
-  @keyframes progressSlide { 0% { transform: translateX(-150%); } 100% { transform: translateX(400%); } }
+  .bubble::after {
+    content: ""; position: absolute; bottom: -5px; left: 50%;
+    transform: translateX(-50%) rotate(45deg); width: 9px; height: 9px;
+    background: white; border-right: 0.5px solid #E8E4D8; border-bottom: 0.5px solid #E8E4D8;
+  }
+  .bubble-emoji { display: inline-block; margin-right: 4px; }
+  .sparkle {
+    position: absolute; border-radius: 50%; opacity: 0;
+    animation: sparkle 2.4s ease-in-out infinite;
+  }
+  .sparkle-1 { top: 20px; right: -8px; width: 7px; height: 7px; background: #FF6B35; animation-delay: 0s; }
+  .sparkle-2 { bottom: 24px; left: -14px; width: 6px; height: 6px; background: #C9A961; animation-delay: 0.8s; }
+  .sparkle-3 { top: 45px; right: -16px; width: 5px; height: 5px; background: #FF6B35; animation-delay: 1.6s; }
+  .sparkle-4 { top: 10px; left: -10px; width: 5px; height: 5px; background: #C9A961; animation-delay: 0.4s; }
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  .texto-area { text-align: center; min-height: 64px; }
+  .verbo-principal {
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: 28px;
+    color: #2A2623; letter-spacing: -0.02em; margin: 0 0 4px; transition: opacity 0.25s;
+  }
+  .subtitulo { font-size: 13px; color: #888780; margin: 0; transition: opacity 0.25s; }
+  .timeline { display: flex; align-items: center; gap: 6px; width: 100%; max-width: 440px; }
+  .timeline-pill {
+    flex: 1; height: 6px; border-radius: 999px; background: #F1EFE8;
+    transition: background 0.3s; position: relative; overflow: hidden;
+  }
+  .timeline-pill.completed { background: #FF6B35; }
+  .timeline-pill.active { background: #FF6B35; }
+  .timeline-pill.active::after {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shine 1.4s ease-in-out infinite;
+  }
+  @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .indicador {
+    display: flex; align-items: center; gap: 8px; font-size: 11px; color: #888780;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .separador-punto { width: 4px; height: 4px; background: #D3D1C7; border-radius: 50%; }
+  .procesando-label { color: #FF6B35; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .punto-pulsante {
+    width: 6px; height: 6px; background: #FF6B35; border-radius: 50%;
+    animation: pulseDot 1.2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+  }
+  @keyframes emojiBounce {
+    0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); }
+  }
 
   #printTable { display: none; }
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -1189,18 +1238,38 @@
     <div class="t2-microcopy">Gratis · sin registro · listo en 30s</div>
 
     <div id="progressBarWrap" style="display:none;">
-      <div class="t2-progress-card">
-        <div class="t2-progress-mascot-wrap">
-          <div class="t2-progress-bubble" id="progressBubble">👀 Mirando...</div>
-          <div class="t2-progress-mascot">
-            <img src="/avocado-mascot.webp" alt="" onerror="this.style.display='none'" draggable="false">
+      <div class="procesado-box">
+        <div class="mascota-area">
+          <div class="bubble" id="progressBubble">
+            <span class="bubble-emoji" id="progressEmoji">👀</span>
+            <span class="bubble-text" id="progressBubbleText">Mirando...</span>
+          </div>
+          <img src="/avocado-mascot.webp" alt="" class="mascota-procesado" onerror="this.style.display='none'" draggable="false">
+          <div class="sparkles">
+            <div class="sparkle sparkle-1"></div>
+            <div class="sparkle sparkle-2"></div>
+            <div class="sparkle sparkle-3"></div>
+            <div class="sparkle sparkle-4"></div>
           </div>
         </div>
-        <div class="t2-progress-content">
-          <div class="t2-progress-texto" id="progressTexto">Identificando platos y precios</div>
-          <div class="t2-progress-bar-bg">
-            <div class="t2-progress-bar-fill" id="progressFill"></div>
-          </div>
+        <div class="texto-area">
+          <h3 class="verbo-principal" id="progressVerb">Mirando</h3>
+          <p class="subtitulo" id="progressTexto">Identificando platos, precios y secciones</p>
+        </div>
+        <div class="timeline" id="progressTimeline">
+          <div class="timeline-pill active" data-step="0"></div>
+          <div class="timeline-pill" data-step="1"></div>
+          <div class="timeline-pill" data-step="2"></div>
+          <div class="timeline-pill" data-step="3"></div>
+          <div class="timeline-pill" data-step="4"></div>
+          <div class="timeline-pill" data-step="5"></div>
+        </div>
+        <div class="indicador">
+          <span class="paso-counter" id="progressCounter">Paso 1 de 6</span>
+          <span class="separador-punto"></span>
+          <span class="procesando-label">
+            <span class="punto-pulsante"></span> Procesando
+          </span>
         </div>
       </div>
     </div>
@@ -1578,37 +1647,42 @@
     checkReady();
   }
 
-  const PROGRESS_MSGS = [
-    { bubble: '👀 Mirando...', texto: 'Identificando platos y precios' },
-    { bubble: '💰 Contando...', texto: 'Detectando el orden actual' },
-    { bubble: '🧠 Pensando...', texto: 'Aplicando neuromarketing' },
-    { bubble: '📊 Ordenando...', texto: 'Reorganizando por rentabilidad' },
-    { bubble: '✍️ Escribiendo...', texto: 'Creando descripciones apetecibles' },
-    { bubble: '🎉 ¡Casi!', texto: 'Dando los últimos retoques' },
+  const stepsProcesado = [
+    { emoji: '👀', bubble: 'Mirando...', verb: 'Mirando', subtitle: 'Identificando platos, precios y secciones' },
+    { emoji: '💰', bubble: 'Contando...', verb: 'Contando', subtitle: 'Detectando el orden actual de precios' },
+    { emoji: '🧠', bubble: 'Pensando...', verb: 'Pensando', subtitle: 'Qué platos van primero, cuáles llaman la atención' },
+    { emoji: '📊', bubble: 'Ordenando...', verb: 'Ordenando', subtitle: 'Los más rentables al principio de cada sección' },
+    { emoji: '✍️', bubble: 'Escribiendo...', verb: 'Escribiendo', subtitle: 'Descripciones apetecibles para cada plato' },
+    { emoji: '🎉', bubble: '¡Casi!', verb: 'Rematando', subtitle: 'Dando los últimos retoques a tu carta' },
   ];
-  let progressMsgInterval = null;
+  let progressStepInterval = null;
+  let currentStep = 0;
 
-  function startProgressMsgs() {
-    var bubble = document.getElementById('progressBubble');
-    var texto = document.getElementById('progressTexto');
-    var idx = 0;
-    if (bubble) bubble.textContent = PROGRESS_MSGS[0].bubble;
-    if (texto) texto.textContent = PROGRESS_MSGS[0].texto;
-    clearInterval(progressMsgInterval);
-    progressMsgInterval = setInterval(function() {
-      if (idx >= PROGRESS_MSGS.length - 1) { clearInterval(progressMsgInterval); return; }
-      idx++;
-      var msg = PROGRESS_MSGS[idx];
-      if (bubble) bubble.style.opacity = '0';
-      if (texto) texto.style.opacity = '0';
-      setTimeout(function() {
-        if (bubble) { bubble.textContent = msg.bubble; bubble.style.opacity = '1'; }
-        if (texto) { texto.textContent = msg.texto; texto.style.opacity = '1'; }
-      }, 200);
-    }, 3500);
+  function goStep(i) {
+    const emoji = document.getElementById('progressEmoji');
+    const bubbleText = document.getElementById('progressBubbleText');
+    const verb = document.getElementById('progressVerb');
+    const texto = document.getElementById('progressTexto');
+    const counter = document.getElementById('progressCounter');
+    const pills = document.querySelectorAll('.timeline-pill');
+    if (!verb) return;
+    verb.style.opacity = '0'; texto.style.opacity = '0';
+    if (bubbleText) { document.getElementById('progressBubble').style.opacity = '0'; }
+    setTimeout(function() {
+      const s = stepsProcesado[i];
+      if (emoji) { emoji.textContent = s.emoji; emoji.style.animation = 'none'; void emoji.offsetWidth; emoji.style.animation = 'emojiBounce 0.5s ease-out'; }
+      if (bubbleText) bubbleText.textContent = s.bubble;
+      verb.textContent = s.verb; texto.textContent = s.subtitle;
+      if (counter) counter.textContent = 'Paso ' + (i + 1) + ' de 6';
+      pills.forEach(function(p, idx) {
+        p.classList.remove('active', 'completed');
+        if (idx < i) p.classList.add('completed');
+        else if (idx === i) p.classList.add('active');
+      });
+      verb.style.opacity = '1'; texto.style.opacity = '1';
+      if (bubbleText) { document.getElementById('progressBubble').style.opacity = '1'; }
+    }, 250);
   }
-
-  function stopProgressMsgs() { clearInterval(progressMsgInterval); }
 
   let progressInterval = null;
 
@@ -1616,13 +1690,19 @@
     const barWrap = document.getElementById('progressBarWrap');
     if (!barWrap) return;
     barWrap.style.display = 'block';
-    clearInterval(progressInterval);
-    startProgressMsgs();
+    currentStep = 0;
+    goStep(0);
+    clearInterval(progressStepInterval);
+    progressStepInterval = setInterval(function() {
+      if (currentStep >= stepsProcesado.length - 1) { clearInterval(progressStepInterval); return; }
+      currentStep++;
+      goStep(currentStep);
+    }, 3500);
   }
 
   function stopCountdown() {
     clearInterval(progressInterval);
-    stopProgressMsgs();
+    clearInterval(progressStepInterval);
     const barWrap = document.getElementById('progressBarWrap');
     setTimeout(() => {
       if (barWrap) barWrap.style.display = 'none';
