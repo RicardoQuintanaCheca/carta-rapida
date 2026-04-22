@@ -814,6 +814,33 @@
     .t2-main-btn { font-size: 15px; }
   }
 
+  /* Progress bar with mascot */
+  .t2-progress-card {
+    background: #FFF5EE; border: 1.5px solid #FFD8BF; border-radius: 16px;
+    padding: 20px; display: flex; align-items: center; gap: 18px; margin: 16px 0 4px;
+  }
+  .t2-progress-mascot-wrap { position: relative; flex-shrink: 0; width: 48px; padding-top: 36px; }
+  .t2-progress-mascot img { display: block; width: 48px; height: 48px; animation: progressBounce 2s ease-in-out infinite; }
+  @keyframes progressBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .t2-progress-bubble {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    background: #fff; border-radius: 10px; padding: 4px 10px;
+    font-size: 11px; font-weight: 600; white-space: nowrap; color: #2A2623;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12); transition: opacity .2s;
+  }
+  .t2-progress-bubble::after {
+    content: ""; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #fff;
+  }
+  .t2-progress-content { flex: 1; min-width: 0; }
+  .t2-progress-texto {
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: 15px;
+    color: #2A2623; margin-bottom: 10px; transition: opacity .2s;
+  }
+  .t2-progress-bar-bg { width: 100%; height: 4px; background: #F1EFE8; border-radius: 2px; overflow: hidden; }
+  .t2-progress-bar-fill { height: 100%; border-radius: 2px; background: #FF6B35; width: 35%; animation: progressSlide 1.8s ease-in-out infinite; }
+  @keyframes progressSlide { 0% { transform: translateX(-150%); } 100% { transform: translateX(400%); } }
+
   #printTable { display: none; }
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -1154,10 +1181,20 @@
     </button>
     <div class="t2-microcopy">Gratis · sin registro · listo en 30s</div>
 
-    <div id="progressBarWrap" style="display:none; padding: 14px 0 4px;">
-      <div class="progress-texto" id="progressTexto">Analizando tu carta…</div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progressFill"></div>
+    <div id="progressBarWrap" style="display:none;">
+      <div class="t2-progress-card">
+        <div class="t2-progress-mascot-wrap">
+          <div class="t2-progress-bubble" id="progressBubble">👀 Mirando...</div>
+          <div class="t2-progress-mascot">
+            <img src="/avocado-mascot.webp" alt="" onerror="this.style.display='none'" draggable="false">
+          </div>
+        </div>
+        <div class="t2-progress-content">
+          <div class="t2-progress-texto" id="progressTexto">Identificando platos y precios</div>
+          <div class="t2-progress-bar-bg">
+            <div class="t2-progress-bar-fill" id="progressFill"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1534,46 +1571,52 @@
     checkReady();
   }
 
-  const FASES = [
-    { hasta: 25, txt: 'Analizando tu carta…' },
-    { hasta: 55, txt: 'Identificando platos y precios…' },
-    { hasta: 80, txt: 'Aplicando neuromarketing…' },
-    { hasta: 95, txt: 'Diseñando tu carta…' },
-    { hasta: 100, txt: 'Finalizando…' }
+  const PROGRESS_MSGS = [
+    { bubble: '👀 Mirando...', texto: 'Identificando platos y precios' },
+    { bubble: '💰 Contando...', texto: 'Detectando el orden actual' },
+    { bubble: '🧠 Pensando...', texto: 'Aplicando neuromarketing' },
+    { bubble: '📊 Ordenando...', texto: 'Reorganizando por rentabilidad' },
+    { bubble: '✍️ Escribiendo...', texto: 'Creando descripciones apetecibles' },
+    { bubble: '🎉 ¡Casi!', texto: 'Dando los últimos retoques' },
   ];
+  let progressMsgInterval = null;
+
+  function startProgressMsgs() {
+    var bubble = document.getElementById('progressBubble');
+    var texto = document.getElementById('progressTexto');
+    var idx = 0;
+    if (bubble) bubble.textContent = PROGRESS_MSGS[0].bubble;
+    if (texto) texto.textContent = PROGRESS_MSGS[0].texto;
+    clearInterval(progressMsgInterval);
+    progressMsgInterval = setInterval(function() {
+      if (idx >= PROGRESS_MSGS.length - 1) { clearInterval(progressMsgInterval); return; }
+      idx++;
+      var msg = PROGRESS_MSGS[idx];
+      if (bubble) bubble.style.opacity = '0';
+      if (texto) texto.style.opacity = '0';
+      setTimeout(function() {
+        if (bubble) { bubble.textContent = msg.bubble; bubble.style.opacity = '1'; }
+        if (texto) { texto.textContent = msg.texto; texto.style.opacity = '1'; }
+      }, 200);
+    }, 3500);
+  }
+
+  function stopProgressMsgs() { clearInterval(progressMsgInterval); }
+
   let progressInterval = null;
-  let progressPct = 0;
 
   function startCountdown(s) {
-    progressPct = 0;
-    const fill = document.getElementById('progressFill');
-    const texto = document.getElementById('progressTexto');
     const barWrap = document.getElementById('progressBarWrap');
-    if (!fill || !texto || !barWrap) return;
+    if (!barWrap) return;
     barWrap.style.display = 'block';
-    fill.style.transition = 'none';
-    fill.style.width = '0%';
     clearInterval(progressInterval);
-    setTimeout(() => {
-      fill.style.transition = 'width 0.5s ease';
-      progressInterval = setInterval(() => {
-        const incremento = progressPct < 60 ? (Math.random() * 3 + 1.5) : (Math.random() * 1 + 0.3);
-        progressPct += incremento;
-        if (progressPct > 95) progressPct = 95;
-        fill.style.width = progressPct + '%';
-        const fase = FASES.find(f => progressPct <= f.hasta) || FASES[FASES.length - 1];
-        texto.textContent = fase.txt;
-      }, 400);
-    }, 50);
+    startProgressMsgs();
   }
 
   function stopCountdown() {
     clearInterval(progressInterval);
-    const fill = document.getElementById('progressFill');
-    const texto = document.getElementById('progressTexto');
+    stopProgressMsgs();
     const barWrap = document.getElementById('progressBarWrap');
-    if (fill) fill.style.width = '100%';
-    if (texto) texto.textContent = 'Listo.';
     setTimeout(() => {
       if (barWrap) barWrap.style.display = 'none';
       document.getElementById('msgTyping').style.display = 'none';
