@@ -1162,10 +1162,7 @@
       if (!data.ok) throw new Error(data.error);
       if (data.logo) logoDataUrl = data.logo;
       status('Aplicando diseño…');
-      setTimeout(() => {
-        try { mostrarCarta(data.carta); }
-        catch (e) { console.error('[mostrarCarta run]', e); status('Ha habido un problema al mostrar la carta. Inténtalo de nuevo.'); }
-      }, 600);
+      setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
       stopCountdown();
       let mensajeError = err.message;
@@ -1206,10 +1203,7 @@
       document.getElementById('ajusteTxt').value = '';
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
       status('Aplicando ajuste…');
-      setTimeout(() => {
-        try { mostrarCarta(data.carta); }
-        catch (e) { console.error('[mostrarCarta rehacer]', e); status('Ha habido un problema al mostrar el ajuste. Inténtalo de nuevo.'); }
-      }, 600);
+      setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
       stopCountdown();
       let mensajeError = err.message;
@@ -1225,9 +1219,6 @@
   }
 
   function mostrarCarta(carta) {
-    if (!carta || !Array.isArray(carta.secciones) || carta.secciones.length === 0) {
-      throw new Error('La IA devolvió una carta sin secciones.');
-    }
     cartaActual = carta;
     document.getElementById('msgStatus').style.display = 'none';
     const tienelogo = !!logoDataUrl;
@@ -1244,11 +1235,11 @@
 
     carta.secciones.forEach(sec => {
       if (estiloActual === 'gourmet') {
-        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre || ''}</div><div class="gourmet-sec-linea"></div>`;
+        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
       } else {
-        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre || ''}</div>`;
+        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
       }
-      (sec.platos || []).forEach(p => {
+      sec.platos.forEach(p => {
         if (estiloActual === 'gourmet') {
           bodyHtml += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`;
         } else {
@@ -1282,14 +1273,14 @@
     html += `<div class="card-body">`;
     carta.secciones.forEach(sec => {
       if (estiloActual === 'gourmet') {
-        html += `<div class="sec-block"><div class="sec-label">${sec.nombre || ''}</div><div class="gourmet-sec-linea"></div>`;
+        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
       } else {
-        html += `<div class="sec-block"><div class="sec-label">${sec.nombre || ''}</div>`;
+        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
       }
       if (estiloActual === 'gourmet') {
-        (sec.platos || []).forEach(p => { html += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`; });
+        sec.platos.forEach(p => { html += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`; });
       } else {
-        (sec.platos || []).forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
+        sec.platos.forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
       }
       html += `</div>`;
     });
