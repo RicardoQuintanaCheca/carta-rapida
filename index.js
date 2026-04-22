@@ -16,8 +16,8 @@ app.use(express.static('public'));
 
 // === RATE LIMITING ===
 const limites = new Map();
-const LIMITE_HORA = 5;
-const LIMITE_DIA = 20;
+const LIMITE_HORA = 30;
+const LIMITE_DIA = 100;
 
 function checkRateLimit(req, res, next) {
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
