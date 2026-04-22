@@ -776,21 +776,35 @@
   .t2-toggles-card .texto-drop { padding: 4px 0 18px; }
   .t2-toggles-card .texto-drop textarea { background: #FAFAF8; border-color: #E8E6E0; border-radius: 10px; }
 
-  /* Dark "PDF ready" hint block */
-  .t2-pdf-block {
-    background: #0A0A0A; border-radius: 16px; padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    margin-top: 16px;
+  /* Estado dinámico del bloque inferior */
+  .estado-block {
+    border-radius: 14px; padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    margin-top: 16px; transition: background 0.35s, border-color 0.35s;
+    border: 0.5px solid #E8DFC8;
   }
-  .t2-pdf-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15px; color: #fff; letter-spacing: -0.01em; }
-  .t2-pdf-sub { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #888; letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
-  .t2-pdf-btn {
+  .estado-block[data-estado="inicial"] { background: #FBF7ED; border-color: #E8DFC8; }
+  .estado-block[data-estado="subida"]  { background: #FFE8DC; border-color: #F5C4B3; }
+  .estado-block[data-estado="listo"]   { background: #0A0A0A; border-color: #0A0A0A; }
+  .estado-eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #888780; margin-bottom: 4px;
+  }
+  .estado-block[data-estado="subida"] .estado-eyebrow { color: #993C1D; }
+  .estado-block[data-estado="listo"]  .estado-eyebrow { color: #888780; }
+  .estado-titulo {
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15px;
+    color: #2A2623; letter-spacing: -0.01em;
+  }
+  .estado-block[data-estado="listo"] .estado-titulo { color: #fff; }
+  .estado-btn {
     display: inline-flex; align-items: center; gap: 7px;
-    padding: 10px 16px; background: #FF6B35; color: #fff;
-    border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap;
+    padding: 12px 20px; background: #FF6B35; color: #fff;
+    border-radius: 10px; font-size: 13px; font-weight: 500; white-space: nowrap;
     border: none; cursor: pointer; font-family: inherit; flex-shrink: 0;
-    opacity: .4; pointer-events: none;
   }
+  .estado-btn:hover { background: #E55A2B; }
+  .estado-btn:disabled { background: #D3D1C7; cursor: default; }
 
   /* Main submit button */
   .t2-main-btn {
@@ -1221,13 +1235,13 @@
         <div class="texto-drop" id="textoDrop">
           <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
         </div>
-        <!-- Dark PDF hint block -->
-        <div class="t2-pdf-block">
-          <div><div class="t2-pdf-title">Tu PDF está listo.</div><div class="t2-pdf-sub">A4 · logo incluido · 4 idiomas</div></div>
-          <button class="t2-pdf-btn" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Descargar PDF
-          </button>
+        <!-- Bloque dinámico de estado -->
+        <div class="estado-block" id="estadoBlock" data-estado="inicial">
+          <div>
+            <div class="estado-eyebrow" id="estadoEyebrow">PASO 1 · FOTO O TEXTO</div>
+            <div class="estado-titulo" id="estadoTitulo">Sube tu carta para empezar</div>
+          </div>
+          <button class="estado-btn" id="estadoBtn" onclick="estadoBtnClick()">Empezar →</button>
         </div>
       </div>
     </div>
@@ -1632,9 +1646,49 @@
     if (logoActivo) document.getElementById('logoDrop').classList.add('on');
   }
 
+  function setEstado(estado) {
+    const block = document.getElementById('estadoBlock');
+    const eyebrow = document.getElementById('estadoEyebrow');
+    const titulo = document.getElementById('estadoTitulo');
+    const btn = document.getElementById('estadoBtn');
+    if (!block) return;
+    if (estado === 'procesando') { block.style.display = 'none'; return; }
+    block.style.display = 'flex';
+    block.dataset.estado = estado;
+    if (estado === 'inicial') {
+      eyebrow.textContent = 'PASO 1 · FOTO O TEXTO';
+      titulo.textContent = 'Sube tu carta para empezar';
+      btn.innerHTML = 'Empezar →';
+      btn.disabled = false;
+    } else if (estado === 'subida') {
+      eyebrow.textContent = 'PASO 2 · PULSA PROCESAR';
+      titulo.textContent = 'Carta subida · lista para procesar';
+      btn.innerHTML = 'Rehacer mi carta →';
+      btn.disabled = false;
+    } else if (estado === 'listo') {
+      const idiomas = tradActivo ? '4' : '1';
+      eyebrow.textContent = 'A4 · LOGO INCLUIDO · ' + idiomas + ' IDIOMA' + (idiomas === '1' ? '' : 'S');
+      titulo.textContent = 'Tu PDF está listo.';
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar PDF';
+      btn.disabled = false;
+    }
+  }
+
+  function estadoBtnClick() {
+    const estado = document.getElementById('estadoBlock').dataset.estado;
+    if (estado === 'inicial') {
+      document.getElementById('uploadGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (estado === 'subida') {
+      run();
+    } else if (estado === 'listo') {
+      descargar();
+    }
+  }
+
   function checkReady() {
     const hay = filesList.length > 0 || document.getElementById('txt').value.trim();
     document.getElementById('mainBtn').disabled = !hay;
+    setEstado(hay ? 'subida' : 'inicial');
   }
 
   function checkAjuste(el) {
@@ -1689,6 +1743,7 @@
   function startCountdown(s) {
     const barWrap = document.getElementById('progressBarWrap');
     if (!barWrap) return;
+    setEstado('procesando');
     barWrap.style.display = 'block';
     currentStep = 0;
     goStep(0);
@@ -1768,6 +1823,7 @@
       document.getElementById('mainBtn').style.opacity = '1';
       document.getElementById('mainBtn').style.pointerEvents = 'auto';
       document.getElementById('mainBtn').disabled = false;
+      setEstado(filesList.length > 0 || document.getElementById('txt').value.trim() ? 'subida' : 'inicial');
       status(mensajeError);
     }
   }
@@ -1798,6 +1854,7 @@
       } else {
         mensajeError = 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.';
       }
+      setEstado('listo');
       status(mensajeError);
       btn.classList.add('activo');
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
@@ -1883,6 +1940,7 @@
     nivelTamano = 1;
     document.getElementById('sizeNivel').textContent = 'Normal';
     document.getElementById('sizeControl').classList.add('on');
+    setEstado('listo');
     setTimeout(() => { document.getElementById('toolCta').classList.add('on'); document.getElementById('nuevaCartaBtn').classList.add('on'); scroll(); }, 500);
     scroll();
   }
@@ -1923,6 +1981,7 @@
     document.getElementById('mainBtn').style.opacity = '1';
     document.getElementById('mainBtn').style.pointerEvents = 'auto';
     document.getElementById('mainBtn').disabled = true;
+    setEstado('inicial');
 
     // Reset fotos
     document.getElementById('uploadGrid').style.display = 'grid';
