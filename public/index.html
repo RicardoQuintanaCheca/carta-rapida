@@ -442,16 +442,20 @@
   @media (max-width: 768px) { .portamenus-inner { grid-template-columns: 1fr; } .pm-case { display: none; } }
 
   /* ── FAQ ── */
-  .faq-section { padding: 80px 24px; background: #f9f9f9; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
-  .faq-inner { max-width: 720px; margin: 0 auto; }
-  .faq-item { border-bottom: 0.5px solid var(--border); padding: 20px 0; cursor: pointer; }
-  .faq-item:first-child { border-top: 0.5px solid var(--border); }
+  .faq-section { padding: 80px 24px; background: #fff; }
+  .faq-inner { max-width: 900px; margin: 0 auto; }
+  .faq-head { margin-bottom: 40px; }
+  .faq-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #FF6B35; text-transform: uppercase; margin-bottom: 12px; }
+  .faq-h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(28px, 4vw, 44px); line-height: 1; letter-spacing: -0.025em; margin: 0; color: #0A0A0A; }
+  .faq-item { background: #fff; border: 1px solid #EDEDEA; border-radius: 14px; padding: 22px 26px; margin-bottom: 12px; cursor: pointer; transition: all .2s; }
+  .faq-item:hover { border-color: #FF6B35; }
+  .faq-item.open { border-color: #FF6B35; background: #FFF4EC; }
   .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-  .faq-question h3 { font-size: 15px; font-weight: 400; color: var(--black); line-height: 1.5; margin: 0; }
-  .faq-arrow { flex-shrink: 0; transition: transform 0.2s; color: #bbb; }
-  .faq-arrow.open { transform: rotate(180deg); }
-  .faq-answer { display: none; font-size: 13.5px; color: var(--gray); line-height: 1.8; padding-top: 12px; }
-  .faq-answer.on { display: block; }
+  .faq-question h3 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px; margin: 0; letter-spacing: -0.01em; color: #0A0A0A; }
+  .faq-plus { width: 28px; height: 28px; border-radius: 50%; background: #0A0A0A; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; transition: transform .25s, background .25s; flex-shrink: 0; line-height: 1; }
+  .faq-item.open .faq-plus { background: #FF6B35; transform: rotate(45deg); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height .3s, padding .3s; padding-top: 0; font-size: 14.5px; line-height: 1.6; color: #555; }
+  .faq-item.open .faq-answer { max-height: 300px; padding-top: 14px; }
 
   /* ── CTA FINAL ── */
   .final-cta { padding: 96px 24px; text-align: center; max-width: 640px; margin: 0 auto; }
@@ -1459,29 +1463,35 @@
 </section>
 
 <!-- FAQ -->
-<section class="faq-section">
+<section class="faq-section" id="faq">
   <div class="faq-inner">
-    <div class="section-eyebrow">Preguntas frecuentes</div>
-    <h2 class="section-title" style="margin-bottom:32px;">Todo lo que necesitas saber</h2>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Cómo funciona Carta Rápida?</h3><svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg></div>
-      <div class="faq-answer">Sube una foto de tu carta actual o pega el texto directamente. Analizamos todos los platos, precios y secciones, los reorganizamos aplicando técnicas de neuromarketing y generamos un PDF profesional listo para descargar. Todo el proceso tarda menos de 30 segundos.</div>
+    <div class="faq-head">
+      <div class="faq-eyebrow">05 · DUDAS FRECUENTES</div>
+      <h2 class="faq-h2">Preguntas que nos<br>hacéis a diario.</h2>
+    </div>
+    <div class="faq-item open" onclick="toggleFaq(this)">
+      <div class="faq-question"><h3>¿Es realmente gratis? ¿Dónde está la trampa?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Es realmente gratis. Kartia es una empresa de neuromarketing para hostelería — Carta Rápida es nuestra carta de presentación. Queremos que pruebes lo que hacemos. Si te gusta, quizá compres un portamenú o nos contrates para un rediseño más profundo. Si no, te quedas con tu PDF gratis y listo.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Es realmente gratuita? ¿Sin registro?</h3><svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg></div>
-      <div class="faq-answer">Sí, completamente gratuita y sin registro de ningún tipo. Sin tarjeta de crédito, sin límite de usos y sin coste ahora ni en el futuro. Kartia ofrece esta herramienta como servicio gratuito permanente para el sector HORECA.</div>
+      <div class="faq-question"><h3>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Aceptamos JPG, PNG y WEBP. Nuestra IA está entrenada para leer cartas con reflejos, fotos de baja resolución, incluso hojas fotocopiadas — sin problema. Para mejores resultados, una foto bien iluminada con buena nitidez.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Qué es el neuromarketing aplicado a cartas de restaurante?</h3><svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg></div>
-      <div class="faq-answer">El neuromarketing aplicado a cartas consiste en reorganizar los platos estratégicamente para maximizar las ventas. Los platos más rentables se colocan en primer lugar dentro de cada sección, ya que los clientes tienden a pedir los primeros que leen. Estudios de Cornell University demuestran que esta técnica puede aumentar el ticket medio hasta un 18%.</div>
+      <div class="faq-question"><h3>¿Cuánto tarda en generar el PDF?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Entre 20 y 40 segundos, según el tamaño de la carta. La mayoría de cartas están listas en menos de 30 segundos.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Puedo traducir mi carta a otros idiomas?</h3><svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg></div>
+      <div class="faq-question"><h3>¿Puedo traducir mi carta a otros idiomas?</h3><span class="faq-plus">+</span></div>
       <div class="faq-answer">Sí. Carta Rápida traduce automáticamente toda la carta — platos, secciones y descripciones — a inglés, francés, alemán, italiano, portugués y chino, con terminología profesional de hostelería.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Los datos de mi carta están seguros?</h3><svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg></div>
-      <div class="faq-answer">Sí. Las imágenes y textos que subes se procesan en el momento y se eliminan de inmediato. Nunca almacenamos el contenido de tu carta ni lo compartimos con terceros. Cada sesión es completamente independiente y privada.</div>
+      <div class="faq-question"><h3>¿Qué es exactamente el "neuromarketing"?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Es la ciencia de cómo el cerebro toma decisiones de compra. En hostelería se traduce en: colocar platos rentables en zonas visuales clave, eliminar el símbolo €, usar descripciones sensoriales, agrupar por emoción y no por categoría. Todo eso lo aplicamos automáticamente.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question"><h3>¿Dónde se guardan mis cartas?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">En ningún sitio. Procesamos tu carta y te devolvemos el PDF — después borramos todo. No guardamos tus datos ni los compartimos con terceros. Cada sesión es completamente independiente y privada.</div>
     </div>
   </div>
 </section>
@@ -2035,12 +2045,9 @@
   }
 
   function toggleFaq(el) {
-    const answer = el.querySelector('.faq-answer');
-    const arrow = el.querySelector('.faq-arrow');
-    const isOpen = answer.classList.contains('on');
-    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('on'));
-    document.querySelectorAll('.faq-arrow').forEach(a => a.classList.remove('open'));
-    if (!isOpen) { answer.classList.add('on'); arrow.classList.add('open'); }
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
   }
 
   function nuevaCarta() {
