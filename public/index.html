@@ -600,7 +600,7 @@
   }
 
   /* ══════════════════════════════════════════
-     FASE 2: TOOL REDESIGN  (t2- prefix)
+     FASE 2: TOOL REDESIGN  (t2- prefix) — v2
   ══════════════════════════════════════════ */
 
   .tool-section { background: #F1EFE8; padding: 48px 24px 80px; }
@@ -627,123 +627,176 @@
 
   /* Card */
   .t2-card {
-    background: #FAF7F2; border: 1.5px solid #D3D1C7;
-    border-radius: 16px; padding: 20px; margin-bottom: 12px;
+    background: #fff; border: 2px solid #0E0E0E;
+    border-radius: 20px; padding: 24px; margin-bottom: 14px;
+    box-shadow: 0 8px 0 #0E0E0E; position: relative;
   }
 
   /* Eyebrow */
   .t2-eyebrow {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
-    letter-spacing: .12em; text-transform: uppercase; color: #888780; margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: #FF6B35; margin-bottom: 6px;
   }
-  .t2-eyebrow--preview { margin-top: 20px; }
+  .t2-panel-hint { font-size: 13px; color: #666; margin: 0 0 16px; line-height: 1.45; }
 
-  /* Style selector cards */
-  .t2-scard-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  /* Corner sticker on card */
+  .t2-sticker {
+    position: absolute; top: -14px; right: -10px;
+    background: #FF6B35; color: #fff;
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 11px;
+    padding: 6px 12px; border-radius: 999px; transform: rotate(6deg);
+    box-shadow: 0 4px 0 #0E0E0E; letter-spacing: -0.01em; white-space: nowrap; z-index: 2;
+  }
+
+  /* ── Style selector cards ──────────────── */
+  .t2-scard-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
   .t2-scard {
-    position: relative; border: 2px solid #D3D1C7; border-radius: 12px;
-    padding: 10px 8px; background: #fff; cursor: pointer;
-    transition: all .22s; opacity: .6; text-align: left;
-    font-family: inherit; display: flex; flex-direction: column; gap: 6px;
-    /* kill old .seg-btn look */
-    flex: unset; border-radius: 12px; text-align: center; color: #2C2C2A;
-    box-shadow: none;
+    position: relative; border: 2px solid #E8E6E0; border-radius: 14px;
+    padding: 10px; background: #fff; cursor: pointer;
+    transition: all .22s; font-family: inherit; display: flex; flex-direction: column;
+    box-shadow: none; color: #0E0E0E; flex: unset; text-align: left;
   }
-  .t2-scard.on { border-color: #D85A30; opacity: 1; box-shadow: 0 4px 0 #D85A30; background: #FFF9F7; }
+  .t2-scard:hover { border-color: #FF6B35; transform: translateY(-2px); box-shadow: 0 8px 18px -8px rgba(255,107,53,.3); }
+  .t2-scard.on { border-color: #FF6B35; background: #FFF4EC; box-shadow: 0 6px 0 #E2561A; }
   .t2-scard-check {
-    position: absolute; top: 7px; right: 7px; width: 18px; height: 18px;
-    border-radius: 50%; background: #E8E6E0; color: transparent;
+    position: absolute; top: 8px; right: 8px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff; border: 2px solid #E8E6E0;
+    display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 2;
+    color: transparent;
+  }
+  .t2-scard.on .t2-scard-check { background: #FF6B35; border-color: #FF6B35; color: #fff; }
+
+  /* Full-height style previews */
+  .t2-style-preview {
+    background: #fff; border: 1px solid #E8E6E0; border-radius: 10px;
+    padding: 10px 9px 9px; height: 190px; overflow: hidden; margin-bottom: 8px; position: relative;
+  }
+  .t2-scard.on .t2-style-preview { border-color: rgba(255,107,53,.35); }
+  .t2-sp-head { text-align: center; padding-bottom: 5px; border-bottom: 1px solid #E8E6E0; margin-bottom: 6px; }
+  .t2-sp-logo { font-size: 10px; font-weight: 600; color: #555; }
+  .t2-sp-section { font-size: 7.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; text-align: center; margin-bottom: 7px; color: #999; }
+  .t2-sp-dish { display: flex; justify-content: space-between; align-items: baseline; gap: 5px; margin-bottom: 5px; }
+  .t2-sp-name { font-size: 8.5px; font-weight: 600; color: #0E0E0E; line-height: 1.15; flex: 1; }
+  .t2-sp-price { font-size: 8.5px; font-weight: 700; color: #0E0E0E; flex-shrink: 0; }
+  .t2-sp-desc { display: block; font-size: 7px; color: #888; margin-top: 1px; line-height: 1.2; }
+  /* Clásico */
+  .t2-scard.clasico .t2-style-preview { background: #FEFDF8; }
+  .t2-scard.clasico .t2-sp-head { border-bottom-color: #8B5A2B; }
+  .t2-scard.clasico .t2-sp-logo { font-family: Georgia, serif; font-style: italic; color: #8B5A2B; font-weight: 400; }
+  .t2-scard.clasico .t2-sp-section { font-family: Georgia, serif; font-style: italic; color: #8B5A2B; letter-spacing: .2em; font-weight: 400; text-transform: lowercase; }
+  .t2-scard.clasico .t2-sp-name, .t2-scard.clasico .t2-sp-price { font-family: Georgia, serif; color: #2A1A0A; }
+  .t2-scard.clasico .t2-sp-desc { font-family: Georgia, serif; color: #8B5A2B; }
+  /* Minimalista */
+  .t2-scard.minimalista .t2-style-preview { background: #fff; }
+  .t2-scard.minimalista .t2-sp-head { border-bottom-color: #000; }
+  .t2-scard.minimalista .t2-sp-logo { font-family: 'Inter', sans-serif; font-weight: 300; letter-spacing: .28em; text-transform: uppercase; color: #000; }
+  .t2-scard.minimalista .t2-sp-section { font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: .32em; color: #000; }
+  .t2-scard.minimalista .t2-sp-name, .t2-scard.minimalista .t2-sp-price { font-family: 'Inter', sans-serif; font-weight: 500; }
+  .t2-scard.minimalista .t2-sp-desc { font-family: 'Inter', sans-serif; color: #aaa; }
+  /* Gourmet */
+  .t2-scard.gourmet .t2-style-preview { background: #1A1511; border-color: #2A2420; }
+  .t2-scard.gourmet .t2-sp-head { border-bottom-color: rgba(232,213,176,.25); }
+  .t2-scard.gourmet .t2-sp-logo { font-family: Georgia, serif; font-style: italic; color: #D4AF7A; }
+  .t2-scard.gourmet .t2-sp-section { font-family: Georgia, serif; font-style: italic; color: #D4AF7A; letter-spacing: .12em; font-weight: 400; text-transform: lowercase; }
+  .t2-scard.gourmet .t2-sp-name { font-family: Georgia, serif; font-style: italic; color: #F5E6C8; font-weight: 400; }
+  .t2-scard.gourmet .t2-sp-price { font-family: Georgia, serif; color: #D4AF7A; font-weight: 400; }
+  .t2-scard.gourmet .t2-sp-desc { font-family: Georgia, serif; color: rgba(232,213,176,.5); }
+
+  .t2-scard-label { display: flex; align-items: center; justify-content: space-between; padding: 2px 2px 0; }
+  .t2-scard-name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 13px; color: #0E0E0E; }
+  .t2-scard-mood { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #aaa; letter-spacing: .08em; text-transform: uppercase; }
+  .t2-scard.on .t2-scard-mood { color: #E2561A; font-weight: 600; }
+
+  /* ── Big coral CTA upload ──────────────── */
+  #uploadGrid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .t2-cta-big {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8F50 100%);
+    border-radius: 20px; padding: 26px 20px; color: #fff; text-align: center;
+    box-shadow: 0 8px 0 #0E0E0E; cursor: pointer; transition: all .25s;
+    position: relative; overflow: hidden;
+  }
+  .t2-cta-big input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .t2-cta-big::before { content: ""; position: absolute; top: -40%; right: -20%; width: 80%; height: 180%; background: radial-gradient(circle, rgba(255,255,255,.22), transparent 60%); pointer-events: none; }
+  .t2-cam-ring {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.35);
     display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 800; transition: all .2s;
+    margin: 0 auto 12px; position: relative; z-index: 2;
+    animation: camPulse 2.4s ease-in-out infinite;
   }
-  .t2-scard.on .t2-scard-check { background: #1D9E75; color: #fff; }
-  .t2-mini {
-    background: #FAFAF8; border: 1px solid #E8E6E0; border-radius: 7px;
-    padding: 7px 6px; height: 76px; overflow: hidden; margin-bottom: 2px;
+  @keyframes camPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,.5); } 50% { box-shadow: 0 0 0 12px rgba(255,255,255,0); } }
+  .t2-cta-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.015em; margin-bottom: 4px; position: relative; z-index: 2; }
+  .t2-cta-sub { font-size: 13px; opacity: .9; position: relative; z-index: 2; }
+  .t2-alt-row { display: flex; gap: 10px; }
+  .t2-alt {
+    flex: 1; background: #fff; border: 2px solid #E8E6E0; border-radius: 14px;
+    padding: 14px 10px; text-align: center; cursor: pointer; transition: all .2s; position: relative;
   }
-  /* mini preview inherits existing prev-clasico/prev-minimalista/prev-gourmet styles */
-  .t2-mini.prev-clasico .ps { font-family: 'Playfair Display', serif; font-size: 7px; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 2px; margin-bottom: 3px; }
-  .t2-mini.prev-clasico .pp { display: flex; justify-content: space-between; gap: 2px; margin-bottom: 2px; }
-  .t2-mini.prev-clasico .pn { font-family: 'Playfair Display', serif; font-size: 7px; color: #111; }
-  .t2-mini.prev-clasico .ppr { font-family: 'Playfair Display', serif; font-size: 7px; color: #444; white-space: nowrap; }
-  .t2-mini.prev-minimalista .ps { font-family: 'Josefin Sans', sans-serif; font-size: 5px; font-weight: 400; letter-spacing: .28em; text-transform: uppercase; color: #aaa; margin-bottom: 5px; text-align: center; }
-  .t2-mini.prev-minimalista .pp { display: flex; justify-content: space-between; gap: 2px; margin-bottom: 3px; }
-  .t2-mini.prev-minimalista .pn { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #111; }
-  .t2-mini.prev-minimalista .ppr { font-family: 'Josefin Sans', sans-serif; font-size: 6px; color: #999; white-space: nowrap; }
-  .t2-mini.prev-gourmet .ps { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: #111; text-align: center; margin-bottom: 2px; }
-  .t2-mini.prev-gourmet .pl { width: 16px; height: .5px; background: #ccc; margin: 0 auto 4px; }
-  .t2-mini.prev-gourmet .pp { text-align: center; margin-bottom: 4px; }
-  .t2-mini.prev-gourmet .pn { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 400; color: #111; display: block; }
-  .t2-mini.prev-gourmet .ppr { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; display: block; }
-  .t2-scard-label { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 12px; color: #2C2C2A; text-align: center; }
+  .t2-alt input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .t2-alt:hover { border-color: #FF6B35; transform: translateY(-2px); }
+  .t2-alt-icn { width: 32px; height: 32px; border-radius: 10px; background: #FFF4EC; color: #FF6B35; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
+  .t2-alt-label { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 12px; color: #0E0E0E; }
 
-  /* Expanded preview */
-  .t2-card .estilo-preview-box { border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.08); }
-  .t2-card .estilo-preview-inner { background: #fff; }
-
-  /* Upload */
-  .t2-upload-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .t2-upload-card {
-    position: relative; border: 2px solid #D3D1C7; border-radius: 14px;
-    padding: 22px 14px; background: #fff; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    transition: border-color .18s, transform .18s; text-align: center;
-  }
-  .t2-upload-card:hover { border-color: #D85A30; transform: translateY(-2px); }
-  .t2-upload-card input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
-  .t2-upload-icon {
-    width: 52px; height: 52px; border-radius: 50%; background: #FAECE7;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .t2-upload-label { font-weight: 600; font-size: 14px; color: #2C2C2A; }
-  .t2-upload-sub { font-size: 11.5px; color: #888780; }
-
-  /* Toggles panel */
+  /* ── Feature toggles (check-circle style) ── */
   .t2-toggles-card { padding: 0; overflow: hidden; }
-  .t2-toggle-row {
-    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
-    cursor: pointer; transition: background .18s;
+  .t2-toggles-card .t2-eyebrow { padding: 18px 18px 0; }
+  .t2-feat-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 18px; cursor: pointer; transition: all .2s;
+    border-top: 1px solid #F0EDE8; background: #fff;
   }
-  .t2-toggle-row:hover { background: rgba(0,0,0,.02); }
-  .t2-sep { height: 1px; background: #E8E6E0; }
-  .t2-toggle-icon {
-    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  .t2-feat-row:hover { background: rgba(255,107,53,.04); }
+  .t2-pf-check {
+    width: 24px; height: 24px; border-radius: 50%; background: #EBEBEB; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; transition: all .2s; color: transparent;
   }
-  .t2-toggle-icon--blue  { background: #E0EAFA; color: #185FA5; }
-  .t2-toggle-icon--amber { background: #FDF0D5; color: #BA7517; }
-  .t2-toggle-icon--green { background: #D5F2E5; color: #1D9E75; }
-  .t2-toggle-icon--rose  { background: #F9E0EC; color: #993556; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; }
-  .t2-toggle-icon--gray  { background: #F0EDE8; color: #888780; }
-  .t2-toggle-text { flex: 1; }
-  .t2-toggle-title { font-size: 13.5px; font-weight: 500; color: #2C2C2A; line-height: 1.2; }
-  .t2-toggle-sub { font-size: 11.5px; color: #888780; margin-top: 2px; transition: color .18s; }
-  /* Override old toggle-wrap styles inside t2 rows */
-  .t2-toggle-row .toggle-wrap { width: 40px; height: 22px; border-radius: 11px; background: #D3D1C7; flex-shrink: 0; }
-  .t2-toggle-row .toggle-wrap.on { background: #D85A30; }
-  .t2-toggle-row .toggle-dot { width: 16px; height: 16px; top: 3px; left: 3px; }
-  .t2-toggle-row .toggle-wrap.on .toggle-dot { left: 21px; }
-  /* Active row — :has() for modern browsers */
-  .t2-toggle-row:has(.toggle-wrap.on) { background: #FAECE7; }
-  .t2-toggle-row:has(.toggle-wrap.on) .t2-toggle-sub { color: #D85A30; font-weight: 500; }
-  /* idioma/logo drop inside toggles card */
-  .t2-toggles-card .idioma-zone { padding: 0 18px 14px; border-bottom: none; }
-  .t2-toggles-card .idioma-zone .idioma-btn.on { background: #D85A30; border-color: #D85A30; }
-  .t2-toggles-card .logo-drop { padding: 0 18px 12px; border-bottom: none; }
-  .t2-toggles-card .logo-preview-row { padding: 0 18px 12px; border-bottom: none; }
-  .t2-toggles-card .texto-drop { padding: 0 18px 16px; }
-  .t2-toggles-card .texto-drop textarea { background: #fff; }
+  .t2-feat-row:has(.toggle-wrap.on) .t2-pf-check { background: #3B6D11; color: #fff; box-shadow: 0 2px 6px -1px rgba(59,109,17,.5); }
+  .t2-feat-row:has(.toggle-wrap.on) { background: rgba(59,109,17,.06); border-top-color: rgba(59,109,17,.15); }
+  .t2-pf-label { flex: 1; font-size: 13.5px; font-weight: 600; color: #0E0E0E; line-height: 1.2; }
+  .t2-pf-sub { font-size: 11px; color: #888; font-weight: 400; margin-top: 2px; }
+  .t2-pf-chev { color: #bbb; flex-shrink: 0; transition: transform .2s; }
+  .opcion-arrow.open { transform: rotate(180deg); color: #FF6B35; }
+  .t2-feat-row .toggle-wrap { display: none; }
+  /* idioma/logo drop inside feat card */
+  .t2-toggles-card .idioma-zone { padding: 4px 18px 16px; }
+  .t2-toggles-card .idioma-zone .idioma-label { display: none; }
+  .t2-toggles-card .idioma-zone .idioma-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+  .t2-toggles-card .idioma-zone .idioma-btn { display: flex; align-items: center; gap: 5px; padding: 8px 10px; background: #fff; border: 1.5px solid #E8E6E0; border-radius: 10px; font-size: 11.5px; font-weight: 600; color: #0E0E0E; cursor: pointer; transition: all .15s; }
+  .t2-toggles-card .idioma-zone .idioma-btn:hover { border-color: #FF6B35; }
+  .t2-toggles-card .idioma-zone .idioma-btn.on { background: #FF6B35; color: #fff; border-color: #FF6B35; }
+  .t2-toggles-card .logo-drop { padding: 4px 18px 14px; }
+  .t2-toggles-card .logo-drop .logo-drop-zone { border: 2px dashed rgba(255,107,53,.4); border-radius: 12px; background: rgba(255,107,53,.04); }
+  .t2-toggles-card .logo-preview-row { padding: 0 18px 12px; }
+  .t2-toggles-card .texto-drop { padding: 4px 18px 18px; }
+  .t2-toggles-card .texto-drop textarea { background: #FAFAF8; border-color: #E8E6E0; border-radius: 10px; }
 
-  /* Main button */
-  .t2-main-btn {
-    width: 100%; height: 52px; background: #D85A30; color: #fff;
-    border: none; border-radius: 14px; font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 16px; font-weight: 700; letter-spacing: -.01em;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-    transition: background .18s, transform .15s; margin-top: 12px;
+  /* Dark "PDF ready" hint block */
+  .t2-pdf-block {
+    background: #0A0A0A; border-radius: 16px; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin-top: 16px;
   }
-  .t2-main-btn:hover:not(:disabled) { background: #993C1D; transform: translateY(-1px); }
-  .t2-main-btn:disabled { background: #D3D1C7; color: #888780; cursor: default; }
+  .t2-pdf-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15px; color: #fff; letter-spacing: -0.01em; }
+  .t2-pdf-sub { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #888; letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+  .t2-pdf-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 16px; background: #FF6B35; color: #fff;
+    border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap;
+    border: none; cursor: pointer; font-family: inherit; flex-shrink: 0;
+    opacity: .4; pointer-events: none;
+  }
+
+  /* Main submit button */
+  .t2-main-btn {
+    width: 100%; padding: 16px 28px; background: #FF6B35; color: #fff;
+    border: none; border-radius: 999px;
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -.01em;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 6px 0 0 #0E0E0E; transition: transform .15s, box-shadow .15s; margin-top: 16px;
+  }
+  .t2-main-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 0 0 #0E0E0E; }
+  .t2-main-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 0 #0E0E0E; }
+  .t2-main-btn:disabled { background: #D3D1C7; color: #888780; cursor: default; box-shadow: 0 4px 0 0 #B5B3AC; }
   .t2-microcopy {
     text-align: center; font-size: 11.5px; color: #888780;
     font-family: 'JetBrains Mono', monospace; letter-spacing: .06em; margin-top: 10px;
@@ -753,9 +806,12 @@
   #msgs > .msg:first-of-type:not(#msgTyping):not(#msgStatus):not(#msgResult) { display: none; }
 
   @media (max-width: 640px) {
-    .t2-scard-grid { gap: 6px; }
-    .t2-upload-card { padding: 16px 10px; }
-    .t2-main-btn { font-size: 14px; }
+    .t2-card { padding: 18px; border-radius: 16px; box-shadow: 0 5px 0 #0E0E0E; }
+    .t2-sticker { font-size: 10px; top: -12px; }
+    .t2-scard-grid { gap: 8px; }
+    .t2-style-preview { height: 160px; }
+    .t2-cta-title { font-size: 17px; }
+    .t2-main-btn { font-size: 15px; }
   }
 
   #printTable { display: none; }
@@ -943,101 +999,72 @@
 
     <div class="input-wrap" id="inputWrap">
       <div class="t2-card t2-style-section">
-        <div class="t2-eyebrow">ESTILO DE CARTA</div>
+        <div class="t2-sticker">3 estilos · 0 €</div>
+        <div class="t2-eyebrow">02 · ESTILO DE CARTA</div>
+        <div class="t2-panel-hint">Tres diseños profesionales. Elige el tuyo — puedes cambiarlo las veces que quieras.</div>
         <div class="t2-scard-grid">
           <!-- Clásico -->
-          <button class="seg-btn t2-scard on" onclick="selEstilo(this,'clasico')" type="button">
-            <span class="t2-scard-check">✓</span>
-            <div class="t2-mini prev-clasico">
-              <div class="ps">Entrantes</div>
-              <div class="pp"><div class="pn">Jamón Ibérico</div><div class="ppr">36</div></div>
-              <div class="pp"><div class="pn">Burrata</div><div class="ppr">14</div></div>
+          <button class="seg-btn t2-scard clasico on" onclick="selEstilo(this,'clasico')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview">
+              <div class="t2-sp-head"><div class="t2-sp-logo">Casa Paco</div></div>
+              <div class="t2-sp-section">— Entrantes —</div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
             </div>
-            <div class="t2-scard-label">Clásico</div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Clásico</span><span class="t2-scard-mood">Elegante</span></div>
           </button>
           <!-- Minimalista -->
-          <button class="seg-btn t2-scard" onclick="selEstilo(this,'minimalista')" type="button">
-            <span class="t2-scard-check">✓</span>
-            <div class="t2-mini prev-minimalista">
-              <div class="ps">ENTRANTES</div>
-              <div class="pp"><div class="pn">Jamón Ibérico</div><div class="ppr">36</div></div>
-              <div class="pp"><div class="pn">Burrata</div><div class="ppr">14</div></div>
+          <button class="seg-btn t2-scard minimalista" onclick="selEstilo(this,'minimalista')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview">
+              <div class="t2-sp-head"><div class="t2-sp-logo">CASA PACO</div></div>
+              <div class="t2-sp-section">ENTRANTES</div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
             </div>
-            <div class="t2-scard-label">Minimalista</div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Minimal</span><span class="t2-scard-mood">Limpio</span></div>
           </button>
           <!-- Gourmet -->
-          <button class="seg-btn t2-scard" onclick="selEstilo(this,'gourmet')" type="button">
-            <span class="t2-scard-check">✓</span>
-            <div class="t2-mini prev-gourmet">
-              <div class="ps">Entrantes</div>
-              <div class="pl"></div>
-              <div class="pp"><div class="pn">Jamón Ibérico</div><div class="ppr">36</div></div>
-              <div class="pp"><div class="pn">Burrata</div><div class="ppr">14</div></div>
+          <button class="seg-btn t2-scard gourmet" onclick="selEstilo(this,'gourmet')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview">
+              <div class="t2-sp-head"><div class="t2-sp-logo">Casa Paco</div></div>
+              <div class="t2-sp-section">entrantes</div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
+              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
             </div>
-            <div class="t2-scard-label">Gourmet</div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Gourmet</span><span class="t2-scard-mood">Premium</span></div>
           </button>
         </div>
-
-        <div class="t2-eyebrow t2-eyebrow--preview">VISTA PREVIA</div>
-
-        <div class="estilo-preview-box visible" id="prev-clasico">
-          <div class="estilo-preview-inner prev-clasico">
-            <div class="estilo-preview-titulo">Vista previa — Clásico</div>
-            <div class="estilo-preview-cols">
-              <div class="estilo-preview-col">
-                <div class="ps">Entrantes</div>
-                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div></div><div class="ppr">36</div></div>
-                <div class="pp"><div><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div></div><div class="ppr">14</div></div>
-                <div class="pp"><div><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div></div><div class="ppr">9</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="estilo-preview-box" id="prev-minimalista">
-          <div class="estilo-preview-inner prev-minimalista">
-            <div class="estilo-preview-titulo">Vista previa — Minimalista</div>
-            <div class="estilo-preview-cols">
-              <div class="estilo-preview-col">
-                <div class="ps">Entrantes</div>
-                <div class="pp"><div><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div></div><div class="ppr">36</div></div>
-                <div class="pp"><div><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div></div><div class="ppr">14</div></div>
-                <div class="pp"><div><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div></div><div class="ppr">9</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="estilo-preview-box" id="prev-gourmet">
-          <div class="estilo-preview-inner prev-gourmet">
-            <div class="estilo-preview-titulo">Vista previa — Gourmet</div>
-            <div class="estilo-preview-cols">
-              <div class="estilo-preview-col">
-                <div class="ps">Entrantes</div>
-                <div class="pl"></div>
-                <div class="pp"><div class="pn">Jamón Ibérico</div><div class="pd">Con tostas de pan con tomate</div><div class="ppr">36</div></div>
-                <div class="pp"><div class="pn">Burrata de temporada</div><div class="pd">Tomate de rama, albahaca</div><div class="ppr">14</div></div>
-                <div class="pp"><div class="pn">Croquetas caseras</div><div class="pd">Jamón ibérico, receta del día</div><div class="ppr">9</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Hidden proxy boxes required by selEstilo() JS -->
+        <div class="estilo-preview-box" id="prev-clasico" style="display:none"></div>
+        <div class="estilo-preview-box" id="prev-minimalista" style="display:none"></div>
+        <div class="estilo-preview-box" id="prev-gourmet" style="display:none"></div>
       </div>
 
-      <div class="t2-upload-wrap" id="uploadGrid">
-        <div class="t2-upload-card">
+      <div id="uploadGrid">
+        <div class="t2-cta-big">
           <input type="file" accept="image/*" capture="environment" onchange="handleFiles(this)">
-          <div class="t2-upload-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          <div class="t2-cam-ring">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
-          <div class="t2-upload-label">Usar cámara</div>
-          <div class="t2-upload-sub">Fotografía ahora</div>
+          <div class="t2-cta-title">Hacer foto ahora</div>
+          <div class="t2-cta-sub">Fotografía tu carta · o sube desde galería</div>
         </div>
-        <div class="t2-upload-card">
-          <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
-          <div class="t2-upload-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        <div class="t2-alt-row">
+          <div class="t2-alt">
+            <input type="file" accept="image/*" multiple onchange="handleFiles(this)">
+            <div class="t2-alt-icn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+            <div class="t2-alt-label">Subir imágenes</div>
           </div>
-          <div class="t2-upload-label">Subir fotos</div>
-          <div class="t2-upload-sub">Desde tu galería</div>
+          <div class="t2-alt" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
+            <div class="t2-alt-icn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg></div>
+            <div class="t2-alt-label">Pegar texto</div>
+          </div>
         </div>
       </div>
 
@@ -1054,15 +1081,11 @@
       <div id="uploadError"></div>
 
       <div class="t2-card t2-toggles-card">
+        <div class="t2-eyebrow">03 · OPCIONES</div>
         <!-- Logo -->
-        <div class="t2-toggle-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
-          <div class="t2-toggle-icon t2-toggle-icon--blue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          </div>
-          <div style="flex:1">
-            <div class="t2-toggle-title">Añadir logotipo</div>
-            <div class="t2-toggle-sub">Aparecerá en la cabecera de cada página</div>
-          </div>
+        <div class="t2-feat-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
+          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Añadir logotipo<div class="t2-pf-sub">Aparecerá en la cabecera de cada página</div></span>
           <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
         </div>
         <div class="logo-drop" id="logoDrop">
@@ -1077,44 +1100,26 @@
           <span class="logo-preview-name" id="logoName"></span>
           <button class="logo-remove-btn" onclick="removeLogo()">×</button>
         </div>
-        <div class="t2-sep"></div>
         <!-- Descripciones -->
-        <div class="t2-toggle-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Generaré descripciones deliciosas 🍽️' : 'Sin descripciones, ¡de acuerdo!')">
-          <div class="t2-toggle-icon t2-toggle-icon--green">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div style="flex:1">
-            <div class="t2-toggle-title">Crear descripciones de los platos</div>
-            <div class="t2-toggle-sub">Textos apetecibles para cada plato</div>
-          </div>
+        <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Generaré descripciones deliciosas 🍽️' : 'Sin descripciones, ¡de acuerdo!')">
+          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Crear descripciones<div class="t2-pf-sub">Textos apetecibles para cada plato</div></span>
           <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
         </div>
-        <div class="t2-sep"></div>
         <!-- Rentabilidad -->
-        <div class="t2-toggle-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Ordenaré por rentabilidad ✨' : 'Mantendré el orden original.')">
-          <div class="t2-toggle-icon t2-toggle-icon--amber">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
-          </div>
-          <div style="flex:1">
-            <div class="t2-toggle-title">Ordenar platos por rentabilidad</div>
-            <div class="t2-toggle-sub">Los platos más rentables primero</div>
-          </div>
+        <div class="t2-feat-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Ordenaré por rentabilidad ✨' : 'Mantendré el orden original.')">
+          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Ordenar por rentabilidad<div class="t2-pf-sub">Los platos más rentables primero</div></span>
           <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
         </div>
-        <div class="t2-sep"></div>
         <!-- Traducir -->
-        <div class="t2-toggle-row" onclick="toggleTraducir(); updateToolBubble(tradActivo ? '¿A qué idioma? Elige abajo ↓' : 'Solo en español, ¡perfecto!')">
-          <div class="t2-toggle-icon t2-toggle-icon--rose">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-          </div>
-          <div style="flex:1">
-            <div class="t2-toggle-title">Traducir la carta</div>
-            <div class="t2-toggle-sub">La herramienta traduce todos los platos y secciones</div>
-          </div>
+        <div class="t2-feat-row" onclick="toggleTraducir(); updateToolBubble(tradActivo ? '¿A qué idioma? Elige abajo ↓' : 'Solo en español, ¡perfecto!')">
+          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Traducir la carta<div class="t2-pf-sub">Todos los platos y secciones</div></span>
+          <svg class="t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
         </div>
-        <div class="idioma-zone" id="idiomaZone">
-          <div class="idioma-label">Selecciona el idioma:</div>
+        <div class="idioma-zone t2-idioma-zone" id="idiomaZone">
           <div class="idioma-grid">
             <button class="idioma-btn" onclick="selIdioma(this,'en')"><span class="flag">🇬🇧</span> Inglés</button>
             <button class="idioma-btn" onclick="selIdioma(this,'fr')"><span class="flag">🇫🇷</span> Francés</button>
@@ -1124,20 +1129,22 @@
             <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
           </div>
         </div>
-        <div class="t2-sep"></div>
         <!-- Texto accordion -->
-        <div class="t2-toggle-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')" style="border-bottom:none;">
-          <div class="t2-toggle-icon t2-toggle-icon--gray">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
-          </div>
-          <div style="flex:1">
-            <div class="t2-toggle-title">Pegar texto de la carta</div>
-            <div class="t2-toggle-sub">Si tienes el texto en digital</div>
-          </div>
-          <svg class="opcion-arrow" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
+          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <span class="t2-pf-label">Pegar texto de la carta<div class="t2-pf-sub">Si ya tienes el texto en digital</div></span>
+          <svg class="opcion-arrow t2-pf-chev" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="texto-drop" id="textoDrop">
           <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
+        </div>
+        <!-- Dark PDF hint block -->
+        <div class="t2-pdf-block">
+          <div><div class="t2-pdf-title">Tu PDF está listo.</div><div class="t2-pdf-sub">A4 · logo incluido · 4 idiomas</div></div>
+          <button class="t2-pdf-btn" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF
+          </button>
         </div>
       </div>
     </div>
