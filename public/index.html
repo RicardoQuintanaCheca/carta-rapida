@@ -680,28 +680,33 @@
   .t2-sp-name { font-size: 8.5px; font-weight: 600; color: #0E0E0E; line-height: 1.15; flex: 1; }
   .t2-sp-price { font-size: 8.5px; font-weight: 700; color: #0E0E0E; flex-shrink: 0; }
   .t2-sp-desc { display: block; font-size: 7px; color: #888; margin-top: 1px; line-height: 1.2; }
-  /* Clásico */
-  .t2-scard.clasico .t2-style-preview { background: #FEFDF8; }
-  .t2-scard.clasico .t2-sp-head { border-bottom-color: #8B5A2B; }
-  .t2-scard.clasico .t2-sp-logo { font-family: Georgia, serif; font-style: italic; color: #8B5A2B; font-weight: 400; }
-  .t2-scard.clasico .t2-sp-section { font-family: Georgia, serif; font-style: italic; color: #8B5A2B; letter-spacing: .2em; font-weight: 400; text-transform: lowercase; }
-  .t2-scard.clasico .t2-sp-name, .t2-scard.clasico .t2-sp-price { font-family: Georgia, serif; color: #2A1A0A; }
-  .t2-scard.clasico .t2-sp-desc { font-family: Georgia, serif; color: #8B5A2B; }
-  /* Minimalista */
+  /* ── Clásico: Playfair Display, left-aligned, borde negro bajo sección ── */
+  .t2-scard.clasico .t2-style-preview { background: #fff; }
+  .t2-scard.clasico .t2-sp-head { border-bottom-color: #f0f0f0; }
+  .t2-scard.clasico .t2-sp-logo { font-family: 'Playfair Display', serif; font-weight: 600; color: #111; font-size: 10px; }
+  .t2-scard.clasico .t2-sp-section { font-family: 'Playfair Display', serif; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 3px; letter-spacing: 0; text-transform: none; font-size: 8px; margin-bottom: 5px; }
+  .t2-scard.clasico .t2-sp-name { font-family: 'Playfair Display', serif; font-weight: 400; color: #111; }
+  .t2-scard.clasico .t2-sp-price { font-family: 'Playfair Display', serif; font-weight: 400; color: #444; }
+  .t2-scard.clasico .t2-sp-desc { font-family: 'Playfair Display', serif; font-style: italic; color: #888; }
+  /* ── Minimalista: Josefin Sans, 300 weight, uppercase spaced, centered ── */
   .t2-scard.minimalista .t2-style-preview { background: #fff; }
-  .t2-scard.minimalista .t2-sp-head { border-bottom-color: #000; }
-  .t2-scard.minimalista .t2-sp-logo { font-family: 'Inter', sans-serif; font-weight: 300; letter-spacing: .28em; text-transform: uppercase; color: #000; }
-  .t2-scard.minimalista .t2-sp-section { font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: .32em; color: #000; }
-  .t2-scard.minimalista .t2-sp-name, .t2-scard.minimalista .t2-sp-price { font-family: 'Inter', sans-serif; font-weight: 500; }
-  .t2-scard.minimalista .t2-sp-desc { font-family: 'Inter', sans-serif; color: #aaa; }
-  /* Gourmet */
-  .t2-scard.gourmet .t2-style-preview { background: #1A1511; border-color: #2A2420; }
-  .t2-scard.gourmet .t2-sp-head { border-bottom-color: rgba(232,213,176,.25); }
-  .t2-scard.gourmet .t2-sp-logo { font-family: Georgia, serif; font-style: italic; color: #D4AF7A; }
-  .t2-scard.gourmet .t2-sp-section { font-family: Georgia, serif; font-style: italic; color: #D4AF7A; letter-spacing: .12em; font-weight: 400; text-transform: lowercase; }
-  .t2-scard.gourmet .t2-sp-name { font-family: Georgia, serif; font-style: italic; color: #F5E6C8; font-weight: 400; }
-  .t2-scard.gourmet .t2-sp-price { font-family: Georgia, serif; color: #D4AF7A; font-weight: 400; }
-  .t2-scard.gourmet .t2-sp-desc { font-family: Georgia, serif; color: rgba(232,213,176,.5); }
+  .t2-scard.minimalista .t2-sp-head { border-bottom-color: #e0e0e0; text-align: center; }
+  .t2-scard.minimalista .t2-sp-logo { font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: .45em; text-transform: uppercase; color: #111; font-size: 7.5px; }
+  .t2-scard.minimalista .t2-sp-section { font-family: 'Josefin Sans', sans-serif; font-weight: 400; letter-spacing: .42em; text-transform: uppercase; color: #aaa; border-bottom: none; text-align: center; font-size: 7px; }
+  .t2-scard.minimalista .t2-sp-name { font-family: 'Josefin Sans', sans-serif; font-weight: 300; color: #111; letter-spacing: .06em; }
+  .t2-scard.minimalista .t2-sp-price { font-family: 'Josefin Sans', sans-serif; font-weight: 300; color: #999; }
+  .t2-scard.minimalista .t2-sp-desc { font-family: 'Josefin Sans', sans-serif; font-weight: 200; color: #bbb; font-style: normal; }
+  /* ── Gourmet: Raleway, centrado, sección uppercase con línea decorativa ── */
+  .t2-scard.gourmet .t2-style-preview { background: #fff; border-color: #e0e0e0; }
+  .t2-scard.gourmet .t2-sp-head { border-bottom-color: #e0e0e0; text-align: center; }
+  .t2-scard.gourmet .t2-sp-logo { font-family: 'Raleway', sans-serif; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #111; font-size: 8px; }
+  .t2-scard.gourmet .t2-sp-section { font-family: 'Raleway', sans-serif; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: #111; border-bottom: none; font-style: normal; text-align: center; font-size: 6.5px; display: block; }
+  .t2-scard.gourmet .t2-sp-section::after { content: ""; display: block; width: 18px; height: 0.5px; background: #ccc; margin: 3px auto 5px; }
+  .t2-scard.gourmet .t2-sp-dish { display: block; text-align: center; }
+  .t2-scard.gourmet .t2-sp-dish > div:first-child { display: block; }
+  .t2-scard.gourmet .t2-sp-name { font-family: 'Raleway', sans-serif; font-weight: 400; color: #111; letter-spacing: .03em; text-align: center; }
+  .t2-scard.gourmet .t2-sp-price { font-family: 'Raleway', sans-serif; font-weight: 200; color: #bbb; letter-spacing: .08em; display: block; text-align: center; }
+  .t2-scard.gourmet .t2-sp-desc { font-family: 'Raleway', sans-serif; font-weight: 300; color: #999; font-style: italic; text-align: center; }
 
   .t2-scard-label { display: flex; align-items: center; justify-content: space-between; padding: 2px 2px 0; }
   .t2-scard-name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 13px; color: #0E0E0E; }
