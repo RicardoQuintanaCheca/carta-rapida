@@ -100,12 +100,14 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@200;300;400&family=Raleway:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&family=Josefin+Sans:wght@200;300;400&family=Raleway:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
+    /* ── legacy tool vars (keep) ── */
     --black: #111;
     --gray: #666;
     --light-gray: #999;
@@ -114,6 +116,16 @@
     --blue: #3b6fd4;
     --blue-light: #e8f0fe;
     --orange: #E8622A;
+    /* ── new landing palette ── */
+    --cream: #FAF7F2;
+    --ink-new: #2A2623;
+    --coral: #FF6B35;
+    --coral-dark: #E2561A;
+    --coral-soft: #FFE8D6;
+    --coral-tint: #FFF4EC;
+    --olive: #7A8B5C;
+    --muted: #6E6E6E;
+    --line: #EDEDEA;
   }
 
   body { background: #fff; color: var(--black); font-family: 'Inter', sans-serif; font-weight: 300; }
@@ -428,6 +440,165 @@
     .site-nav { display: none; }
   }
 
+  /* ══════════════════════════════════════════
+     LANDING NUEVA — top strip · nav · hero
+  ══════════════════════════════════════════ */
+
+  /* top strip */
+  .top-strip {
+    background: var(--ink-new); color: #fff;
+    padding: 10px 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: .1em; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .top-strip .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--coral); display: inline-block;
+    margin-right: 10px; animation: tspulse 1.4s ease-in-out infinite;
+  }
+  @keyframes tspulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.6);opacity:.5;} }
+  .top-strip b { color: var(--coral); font-weight: 600; }
+
+  /* nav */
+  nav.nav {
+    max-width: 1240px; margin: 0 auto; padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff;
+  }
+  nav.nav .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+    font-size: 22px; letter-spacing: -0.02em;
+    color: var(--ink-new); text-decoration: none;
+  }
+  nav.nav .logo .dot {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--coral); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px;
+  }
+  nav.nav .nav-links {
+    display: flex; gap: 28px; font-size: 14px; font-weight: 500;
+  }
+  nav.nav .nav-links a { color: #3a3a3a; text-decoration: none; transition: color .15s; }
+  nav.nav .nav-links a:hover { color: var(--coral); }
+  nav.nav .cta-nav {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; background: var(--ink-new); color: #fff;
+    border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: background .15s;
+  }
+  nav.nav .cta-nav:hover { background: var(--coral); }
+
+  /* hero */
+  section.hero {
+    max-width: 1240px; margin: 0 auto; padding: 48px 24px 80px;
+    display: grid; grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px; align-items: center; position: relative;
+    /* override old hero styles */
+    text-align: left; background: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--coral-soft); color: var(--coral-dark);
+    padding: 8px 16px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: .1em; font-weight: 600; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow .b { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); }
+  section.hero h1 {
+    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+    font-size: clamp(44px, 6.2vw, 84px); line-height: 0.95;
+    letter-spacing: -0.03em; margin: 0 0 24px; color: var(--ink-new);
+    font-style: normal;
+  }
+  section.hero h1 .o { color: var(--coral); font-style: normal; }
+  section.hero h1 .under { display: inline-block; position: relative; }
+  section.hero h1 .under::after {
+    content: ""; position: absolute; left: -4px; right: -4px; bottom: 4px;
+    height: 14px; background: var(--coral); opacity: .25; z-index: -1; border-radius: 4px;
+  }
+  .hero-lead { font-size: 18px; line-height: 1.55; color: #333; max-width: 520px; margin: 0 0 28px; }
+  .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px; background: var(--coral); color: #fff;
+    border-radius: 999px; font-weight: 700; font-size: 15px;
+    box-shadow: 0 6px 0 0 var(--ink-new);
+    transition: transform .15s, box-shadow .15s;
+    text-decoration: none; border: none; cursor: pointer; font-family: inherit;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 0 0 var(--ink-new); }
+  .btn-primary:active { transform: translateY(3px); box-shadow: 0 3px 0 0 var(--ink-new); }
+  .btn-primary .arr { transition: transform .2s; display: inline-block; }
+  .btn-primary:hover .arr { transform: translateX(4px); }
+  .cta-note {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: .08em; text-transform: uppercase;
+  }
+  .hero-ticks { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero-tick {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink-new); color: #fff;
+    padding: 7px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 500;
+  }
+  .hero-tick .c {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--coral); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; flex-shrink: 0;
+  }
+
+  /* hero right — mascota */
+  .hero-right {
+    position: relative; display: flex;
+    justify-content: center; align-items: center; min-height: 420px;
+  }
+  .mascot-wrap { position: relative; z-index: 2; animation: mfloat 4s ease-in-out infinite; }
+  @keyframes mfloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+  .speech {
+    position: absolute; top: 20px; right: 0;
+    background: var(--ink-new); color: #fff;
+    padding: 12px 18px; border-radius: 20px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 4px 0 rgba(255,107,53,.3);
+    z-index: 3; animation: swobble 5s ease-in-out infinite;
+    white-space: nowrap;
+  }
+  .speech::after {
+    content: ""; position: absolute; left: 30px; bottom: -8px; width: 0; height: 0;
+    border-top: 10px solid var(--ink-new);
+    border-left: 8px solid transparent; border-right: 8px solid transparent;
+  }
+  @keyframes swobble { 0%,100%{transform:rotate(-2deg);} 50%{transform:rotate(2deg);} }
+  .floaty {
+    position: absolute; font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700; color: var(--coral); opacity: .9;
+  }
+  .floaty.one  { top:10%; left:5%;   font-size:28px; animation:floatA 6s ease-in-out infinite; }
+  .floaty.two  { bottom:15%; right:8%; font-size:22px; animation:floatB 7s ease-in-out infinite; }
+  .floaty.three{ top:35%; right:3%;  font-size:18px; animation:floatC 5s ease-in-out infinite; }
+  @keyframes floatA { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-10px) rotate(5deg);} }
+  @keyframes floatB { 0%,100%{transform:translateY(0) rotate(3deg);}  50%{transform:translateY(-14px) rotate(-3deg);} }
+  @keyframes floatC { 0%,100%{transform:translateY(0);}               50%{transform:translateY(-8px);} }
+  .dots-bg {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background-image: radial-gradient(var(--coral) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    opacity: .2;
+  }
+
+  @media (max-width: 900px) {
+    section.hero { grid-template-columns: 1fr; gap: 32px; }
+    nav.nav .nav-links { display: none; }
+    .hero-right { min-height: 280px; }
+    .mascot-wrap > div { width: 220px !important; height: 220px !important; }
+  }
+
   #printTable { display: none; }
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -435,7 +606,7 @@
     @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { background: white; padding: 0 !important; }
-    .site-header, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
+    .top-strip, nav.nav, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
     #printTable tfoot { display: table-footer-group; }
@@ -491,39 +662,76 @@
   <tbody><tr><td class="print-tbody-cell"><div id="printBodyContent"></div></td></tr></tbody>
 </table>
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="site-header-inner">
-    <a href="https://kartia.es" class="site-logo">
-      <img src="/logo-kartia.png" alt="Kartia — Portamenús premium para restaurantes" onerror="this.style.display='none'">
-    </a>
-    <nav class="site-nav">
-      <a href="#herramienta">La herramienta</a>
-      <a href="#como-funciona">Cómo funciona</a>
-      <a href="https://kartia.es" class="nav-cta">Ver portamenús →</a>
-    </nav>
+<!-- TOP STRIP -->
+<div class="top-strip">
+  <span><span class="pulse"></span>Herramienta <b>gratis</b> · 0 € · sin registro</span>
+  <span>Kartia · Neuromarketing para hostelería</span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="logo">
+    <span class="dot">K</span>
+    <span>kartia</span>
+  </a>
+  <div class="nav-links">
+    <a href="#herramienta">La herramienta</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="https://kartia.es">Portamenús</a>
+    <a href="#faq-section">FAQ</a>
   </div>
-</header>
+  <a href="#herramienta" class="cta-nav">Probar gratis →</a>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">
-    <div class="hero-badge-dot"></div>
-    Neuromarketing para restaurantes
+  <div class="dots-bg"></div>
+
+  <!-- Columna izquierda: copy -->
+  <div style="position:relative;z-index:2;">
+    <span class="hero-eyebrow"><span class="b"></span>Carta Rápida · Beta gratis</span>
+    <h1>Tu carta,<br><span class="under">rediseñada</span><br>en <span class="o">30 segundos</span>.</h1>
+    <p class="hero-lead">Sube una foto de tu carta. La IA aplica <b>neuromarketing profesional</b>, añade descripciones apetecibles y te la devuelve en PDF — traducible a 6 idiomas.</p>
+    <div class="cta-row">
+      <a href="#herramienta" class="btn-primary">Dame tu carta <span class="arr">→</span></a>
+      <span class="cta-note">0€ · sin tarjeta · sin registro</span>
+    </div>
+    <div class="hero-ticks">
+      <span class="hero-tick"><span class="c">✓</span>Gratis sin límite</span>
+      <span class="hero-tick"><span class="c">✓</span>PDF para imprimir</span>
+      <span class="hero-tick"><span class="c">✓</span>Neuromarketing</span>
+      <span class="hero-tick"><span class="c">✓</span>6 idiomas</span>
+    </div>
   </div>
-  <h1>Haz que tu carta<br>venda más.<br><em>En segundos.</em></h1>
-  <p class="hero-sub">Sube una foto de tu carta. Aplicamos neuromarketing profesional para reorganizarla, añadimos descripciones apetecibles y la traducimos a 6 idiomas. Sin registro, sin coste.</p>
-  <div class="hero-pills">
-    <span class="hero-pill">✓ Gratis y sin registro</span>
-    <span class="hero-pill">✓ Neuromarketing automático</span>
-    <span class="hero-pill">✓ PDF listo para imprimir</span>
-    <span class="hero-pill">✓ Traduce a 6 idiomas</span>
+
+  <!-- Columna derecha: mascota -->
+  <div class="hero-right">
+    <span class="floaty one">GRATIS</span>
+    <span class="floaty two">30s ⚡</span>
+    <span class="floaty three">🍽️</span>
+    <div class="speech" id="speechBubble">¡Hola! ¿Empezamos? 🥑</div>
+    <div class="mascot-wrap">
+      <div style="position:relative;width:300px;height:300px;display:inline-block;">
+        <img src="/avocado-mascot.webp" alt="Mascota Carta Rápida"
+             style="width:100%;height:100%;display:block;user-select:none;pointer-events:none;"
+             draggable="false">
+        <svg viewBox="0 0 512 512"
+             style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"
+             xmlns="http://www.w3.org/2000/svg">
+          <text x="285" y="378" text-anchor="middle"
+                font-family="'Bricolage Grotesque','Inter',sans-serif"
+                font-weight="900" font-size="110"
+                fill="none" stroke="#3A1808" stroke-width="6" stroke-opacity="0.55">K</text>
+          <text x="285" y="378" text-anchor="middle"
+                font-family="'Bricolage Grotesque','Inter',sans-serif"
+                font-weight="900" font-size="110" fill="#2A1208">K</text>
+          <text x="284" y="377" text-anchor="middle"
+                font-family="'Bricolage Grotesque','Inter',sans-serif"
+                font-weight="900" font-size="110" fill="#6A3418" fill-opacity="0.55">K</text>
+        </svg>
+      </div>
+    </div>
   </div>
-  <a href="#herramienta" class="hero-cta">
-    Rediseñar mi carta — gratis
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-  </a>
-  <p class="hero-meta">Sin tarjeta de crédito · Sin instalación · Sin límite de usos</p>
 </section>
 
 <!-- HERRAMIENTA -->
@@ -1463,6 +1671,20 @@
   }
 
   function scroll() {}
+
+  // Speech bubble en hero — cycling
+  (function() {
+    var el = document.getElementById('speechBubble');
+    if (!el) return;
+    var msgs = ['¡Hola! ¿Empezamos? 🥑', '¡Lánzame tu carta! 📷', 'Cocinando magia… ✨', '¡30 segundos! ⏱️'];
+    var idx = 0;
+    setInterval(function() {
+      idx = (idx + 1) % msgs.length;
+      el.style.opacity = '0';
+      setTimeout(function() { el.textContent = msgs[idx]; el.style.opacity = '1'; }, 200);
+    }, 4000);
+    el.style.transition = 'opacity 0.2s';
+  })();
 </script>
 
 <!-- MODAL SUSCRIPCIÓN -->
