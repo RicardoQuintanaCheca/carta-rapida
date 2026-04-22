@@ -53,7 +53,9 @@ const IDIOMAS = {
   zh: 'Chinese'
 };
 
-const INSTRUCCION_NO_OMITIR = `INSTRUCCIÓN MÁS IMPORTANTE — OBLIGATORIO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Si omites aunque sea un solo plato, el resultado es inválido. Revisa CADA sección y CADA plato de la imagen antes de responder. Cuenta las secciones del original y verifica que el JSON tiene exactamente el mismo número de secciones. Es preferible tardar más que saltarse cualquier contenido.`;
+const INSTRUCCION_NO_OMITIR = `INSTRUCCIÓN MÁS IMPORTANTE — OBLIGATORIO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Si omites aunque sea un solo plato, el resultado es inválido. Revisa CADA sección y CADA plato de la imagen antes de responder. Cuenta las secciones del original y verifica que el JSON tiene exactamente el mismo número de secciones. Es preferible tardar más que saltarse cualquier contenido.
+
+DUPLICADOS — CRÍTICO: Cada plato debe aparecer UNA SOLA VEZ en todo el JSON. Si un plato podría encajar en varias secciones, elige la más apropiada y no lo incluyas en ninguna otra sección.`;
 
 const PROMPT_BASE = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante.
 
