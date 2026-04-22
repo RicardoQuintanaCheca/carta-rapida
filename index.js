@@ -14,6 +14,36 @@ const openai = new OpenAI({
 app.use(express.json());
 app.use(express.static('public'));
 
+// === RATE LIMITING ===
+const limites = new Map();
+const LIMITE_HORA = 5;
+const LIMITE_DIA = 20;
+
+function checkRateLimit(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
+  const ahora = Date.now();
+  const HORA_MS = 60 * 60 * 1000;
+  const DIA_MS = 24 * 60 * 60 * 1000;
+
+  if (!limites.has(ip)) limites.set(ip, []);
+  const stamps = limites.get(ip).filter(t => ahora - t < DIA_MS);
+  limites.set(ip, stamps);
+
+  const enHora = stamps.filter(t => ahora - t < HORA_MS).length;
+
+  if (enHora >= LIMITE_HORA) {
+    console.warn(`[RATE LIMIT] IP ${ip} — ${enHora} peticiones en la última hora`);
+    return res.status(429).json({ ok: false, error: 'Has procesado demasiadas cartas en la última hora. Espera unos minutos e inténtalo de nuevo.' });
+  }
+  if (stamps.length >= LIMITE_DIA) {
+    console.warn(`[RATE LIMIT] IP ${ip} — ${stamps.length} peticiones en el último día`);
+    return res.status(429).json({ ok: false, error: 'Has alcanzado el límite diario de cartas procesadas. Vuelve mañana.' });
+  }
+
+  stamps.push(ahora);
+  next();
+}
+
 const IDIOMAS = {
   en: 'English',
   fr: 'French',
@@ -261,7 +291,7 @@ function limpiarYParsearJSON(texto) {
   }
 }
 
-app.post('/procesar', upload.any(), async (req, res) => {
+app.post('/procesar', checkRateLimit, upload.any(), async (req, res) => {
   try {
     const textoManual = req.body.texto || '';
     const conDescripciones = req.body.descripciones === 'si';

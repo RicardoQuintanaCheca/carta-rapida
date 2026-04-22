@@ -280,6 +280,7 @@
   .prev-gourmet .pd { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 6px; font-weight: 300; color: #999; display: block; }
   .prev-gourmet .ppr { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; display: block; }
 
+  #uploadError { display: none; font-size: 12px; color: #E8622A; margin-top: 8px; font-weight: 400; line-height: 1.5; }
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
   .upload-btn { position: relative; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
   .upload-btn:hover { background: #fafafa; }
@@ -642,6 +643,7 @@
         <div class="fotos-add"><input type="file" accept="image/*" multiple onchange="addMoreFiles(this)">+</div>
         <span class="fotos-count" id="fotosCount"></span>
       </div>
+      <div id="uploadError"></div>
 
       <div class="opciones-section">
         <div class="opcion-fila" onclick="toggleLogo()">
@@ -853,6 +855,46 @@
   let estiloActual = 'clasico';
   let nivelTamano = 1;
 
+  const MAX_FOTOS = 5;
+  const MAX_MB = 5;
+  const TIPOS_VALIDOS = ['image/jpeg', 'image/png', 'image/webp'];
+  const MAX_DIM = 1600;
+  const CALIDAD_FOTO = 0.85;
+
+  function mostrarErrorUpload(msg) {
+    const el = document.getElementById('uploadError');
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
+
+  function comprimirImagen(file) {
+    return new Promise(resolve => {
+      const r = new FileReader();
+      r.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > MAX_DIM || h > MAX_DIM) {
+            if (w >= h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+            else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+          }
+          const cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          cv.getContext('2d').drawImage(img, 0, 0, w, h);
+          const dataUrl = cv.toDataURL('image/jpeg', CALIDAD_FOTO);
+          cv.toBlob(blob => {
+            const nombre = file.name.replace(/\.[^.]+$/, '.jpg');
+            resolve({ file: new File([blob], nombre, { type: 'image/jpeg' }), dataUrl });
+          }, 'image/jpeg', CALIDAD_FOTO);
+        };
+        img.src = e.target.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+
   const NIVELES_TAMANO = [
     { label: 'Pequeño',    nombre: 15, sec: 12, plato: 11, desc: 9,  precio: 10 },
     { label: 'Normal',     nombre: 20, sec: 15, plato: 13, desc: 11, precio: 13 },
@@ -897,19 +939,34 @@
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
 
   function addFiles(newFiles) {
-    let pendientes = newFiles.length;
-    newFiles.forEach(file => {
-      const r = new FileReader();
-      r.onload = e => {
-        filesList.push({ file, dataUrl: e.target.result });
-        renderThumbs(); pendientes--;
-        if (pendientes === 0) checkReady();
-      };
-      r.readAsDataURL(file);
-    });
+    const invalidos = newFiles.filter(f => !TIPOS_VALIDOS.includes(f.type));
+    if (invalidos.length) {
+      mostrarErrorUpload('Solo se aceptan imágenes JPG, PNG o WEBP.');
+      return;
+    }
+    const grandes = newFiles.filter(f => f.size > MAX_MB * 1024 * 1024);
+    if (grandes.length) {
+      mostrarErrorUpload(`Imagen demasiado grande. El máximo es ${MAX_MB} MB por foto.`);
+      return;
+    }
+    if (filesList.length + newFiles.length > MAX_FOTOS) {
+      mostrarErrorUpload(`Máximo ${MAX_FOTOS} fotos por carta. Ya tienes ${filesList.length}.`);
+      return;
+    }
+
     document.getElementById('uploadGrid').style.display = 'none';
     document.getElementById('fotosPreview').classList.add('on');
     document.getElementById('addCamaraBtn').classList.add('on');
+
+    let pendientes = newFiles.length;
+    newFiles.forEach(file => {
+      comprimirImagen(file).then(({ file: comprimido, dataUrl }) => {
+        filesList.push({ file: comprimido, dataUrl });
+        renderThumbs();
+        pendientes--;
+        if (pendientes === 0) checkReady();
+      });
+    });
   }
 
   function removePhoto(index) {
