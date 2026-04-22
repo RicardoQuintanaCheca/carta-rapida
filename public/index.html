@@ -863,6 +863,22 @@
   const MAX_DIM = 1600;
   const CALIDAD_FOTO = 0.85;
 
+  function eliminarDuplicados(carta) {
+    const vistos = new Set();
+    const avisos = [];
+    (carta.secciones || []).forEach(sec => {
+      sec.platos = (sec.platos || []).filter(p => {
+        const clave = (p.nombre || '').trim().toLowerCase();
+        if (!clave) return true;
+        if (vistos.has(clave)) { avisos.push(`"${p.nombre}" en "${sec.nombre}"`); return false; }
+        vistos.add(clave);
+        return true;
+      });
+    });
+    if (avisos.length) console.warn('[DUPLICADOS eliminados]', avisos.join(' | '));
+    return carta;
+  }
+
   function mostrarErrorUpload(msg) {
     const el = document.getElementById('uploadError');
     el.textContent = msg;
@@ -1221,6 +1237,7 @@
   }
 
   function mostrarCarta(carta) {
+    carta = eliminarDuplicados(carta);
     cartaActual = carta;
     document.getElementById('msgStatus').style.display = 'none';
     const tienelogo = !!logoDataUrl;
