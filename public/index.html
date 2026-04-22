@@ -438,6 +438,7 @@
     .site-header, .hero, .tool-section, .como-section, .seo-section, .faq-section, .final-cta, .site-footer { display: none !important; }
     #printTable { display: table !important; width: 100%; border-collapse: collapse; }
     #printTable thead { display: table-header-group; }
+    #printTable tfoot { display: table-footer-group; }
     #printTable tbody { display: table-row-group; }
 
     /* ── CABECERA ── */
@@ -447,7 +448,7 @@
 
     /* ── CLÁSICO (por defecto) ── */
     .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
-    .sec-block { margin-top: 18px; }
+    .sec-block { margin-top: 18px; page-break-inside: avoid; }
     .sec-block:first-child { margin-top: 8px; }
     .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; display: block; }
     .item { display: flex; justify-content: space-between; padding: 6px 0; page-break-inside: avoid !important; }
@@ -455,7 +456,7 @@
     .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
     .item-price { font-size: 12.5px; color: #111; white-space: nowrap; }
     .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
-    .print-kartia { display: block; text-align: center; font-family: 'Inter', sans-serif; font-size: 8px; color: #ccc; letter-spacing: 0.1em; margin-top: 14px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+    .print-tfoot-cell { text-align: center; font-family: 'Inter', sans-serif; font-size: 7px; color: #ccc; letter-spacing: 0.1em; text-transform: uppercase; padding-top: 6px; border-top: 0.5px solid #f0f0f0; }
 
     /* ── GOURMET ── */
     .print-gourmet-wrap { text-align: center; }
@@ -486,7 +487,8 @@
 <!-- PRINT TABLE -->
 <table id="printTable">
   <thead><tr><td><div class="print-thead-cell" id="printTheadContent"></div></td></tr></thead>
-  <tbody><tr><td class="print-tbody-cell"><div id="printBodyContent"></div><span class="print-kartia">kartia.es</span></td></tr></tbody>
+  <tfoot><tr><td><div class="print-tfoot-cell" id="printFooterContent">kartia.es</div></td></tr></tfoot>
+  <tbody><tr><td class="print-tbody-cell"><div id="printBodyContent"></div></td></tr></tbody>
 </table>
 
 <!-- HEADER -->
