@@ -1880,15 +1880,16 @@
   }
 
   const stepsProcesado = [
-    { emoji: '👀', bubble: 'Leyendo tu carta...', verb: 'Leyendo', subtitle: 'Leyendo tu carta...' },
-    { emoji: '💰', bubble: 'Detectando precios...', verb: 'Detectando', subtitle: 'Detectando precios...' },
-    { emoji: '🧠', bubble: 'Aplicando neuromarketing...', verb: 'Aplicando', subtitle: 'Aplicando neuromarketing...' },
-    { emoji: '📊', bubble: 'Ordenando por rentabilidad...', verb: 'Ordenando', subtitle: 'Ordenando por rentabilidad...' },
-    { emoji: '✍️', bubble: 'Redactando descripciones...', verb: 'Redactando', subtitle: 'Redactando descripciones...' },
-    { emoji: '🎉', bubble: 'Últimos retoques...', verb: 'Rematando', subtitle: 'Últimos retoques...' },
+    { emoji: '👀', bubble: 'Leyendo tu carta...', verb: 'Leyendo', subtitle: 'Leyendo tu carta...', pose: 'pensando' },
+    { emoji: '💰', bubble: 'Detectando precios...', verb: 'Detectando', subtitle: 'Detectando precios...', pose: 'pensando' },
+    { emoji: '🧠', bubble: 'Aplicando neuromarketing...', verb: 'Aplicando', subtitle: 'Aplicando neuromarketing...', pose: 'trabajando' },
+    { emoji: '📊', bubble: 'Ordenando por rentabilidad...', verb: 'Ordenando', subtitle: 'Ordenando por rentabilidad...', pose: 'trabajando' },
+    { emoji: '✍️', bubble: 'Redactando descripciones...', verb: 'Redactando', subtitle: 'Redactando descripciones...', pose: 'sudando' },
+    { emoji: '🎉', bubble: 'Últimos retoques...', verb: 'Rematando', subtitle: 'Últimos retoques...', pose: 'sudando' },
   ];
   let progressStepInterval = null;
   let currentStep = 0;
+  let isProcessing = false;
 
   function goStep(i) {
     const emoji = document.getElementById('progressEmoji');
@@ -1902,6 +1903,7 @@
     if (bubbleText) { document.getElementById('progressBubble').style.opacity = '0'; }
     setTimeout(function() {
       const s = stepsProcesado[i];
+      if (s.pose) setPose(s.pose);
       if (emoji) { emoji.textContent = s.emoji; emoji.style.animation = 'none'; void emoji.offsetWidth; emoji.style.animation = 'emojiBounce 0.5s ease-out'; }
       if (bubbleText) bubbleText.textContent = s.bubble;
       verb.textContent = s.verb; texto.textContent = s.subtitle;
@@ -1959,6 +1961,7 @@
   async function run() {
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
+    isProcessing = true;
     document.getElementById('inputWrap').style.opacity = '0.4';
     document.getElementById('inputWrap').style.pointerEvents = 'none';
     document.getElementById('mainBtn').style.opacity = '0.4';
