@@ -1548,6 +1548,15 @@
     });
   }
 
+  function setPoseInstant(nombre) {
+    if (!MASCOTA_POSES[nombre]) return;
+    document.querySelectorAll('.mascota-kart').forEach(img => {
+      img.style.transition = 'none';
+      img.src = MASCOTA_POSES[nombre];
+      img.style.opacity = '1';
+    });
+  }
+
   window.addEventListener('load', () => {
     Object.values(MASCOTA_POSES).forEach(src => {
       const img = new Image();
@@ -1557,8 +1566,14 @@
     if (window.matchMedia('(hover: hover)').matches) {
       const heroCta = document.querySelector('.btn-primary');
       if (heroCta) {
-        heroCta.addEventListener('mouseenter', () => setPose('asombrado'));
-        heroCta.addEventListener('mouseleave', () => setPose('feliz'));
+        let ctaLeaveTimer = null;
+        heroCta.addEventListener('mouseenter', () => {
+          clearTimeout(ctaLeaveTimer);
+          setPose('asombrado');
+        });
+        heroCta.addEventListener('mouseleave', () => {
+          ctaLeaveTimer = setTimeout(() => setPose('feliz'), 400);
+        });
       }
     }
   });
@@ -2303,19 +2318,14 @@
   let idleSleeping = false;
   function resetIdleTimer() {
     if (isProcessing) return;
+    if (idleSleeping) { idleSleeping = false; setPoseInstant('feliz'); }
     clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
       if (!isProcessing) { idleSleeping = true; setPose('durmiendo'); }
     }, 60000);
   }
   ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(ev => {
-    document.addEventListener(ev, () => {
-      if (!isProcessing && idleSleeping) {
-        idleSleeping = false;
-        setPose('feliz');
-      }
-      resetIdleTimer();
-    }, { passive: true });
+    document.addEventListener(ev, resetIdleTimer, { passive: true });
   });
   resetIdleTimer();
 </script>
