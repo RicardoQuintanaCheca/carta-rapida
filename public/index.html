@@ -869,6 +869,10 @@
   /* Hide initial static .msg (replaced by mascot greeting) */
   #msgs > .msg:first-of-type:not(#msgTyping):not(#msgStatus):not(#msgResult) { display: none; }
 
+  @media (max-width: 767px) {
+    .top-strip { display: none; }
+  }
+
   @media (max-width: 640px) {
     .tool-section .wrap { padding: 20px; border-radius: 20px; }
     .t2-card { padding: 20px 0; }
