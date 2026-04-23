@@ -106,6 +106,9 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { overflow-x: hidden; }
+  body { overflow-x: hidden; max-width: 100%; }
+
   :root {
     /* ── legacy tool vars (keep) ── */
     --black: #111;
@@ -637,9 +640,10 @@
   }
 
   @media (max-width: 900px) {
-    section.hero { grid-template-columns: 1fr; gap: 32px; }
+    section.hero { grid-template-columns: 1fr; gap: 32px; overflow-x: clip; }
     nav.nav .nav-links { display: none; }
-    .hero-right { min-height: 280px; }
+    .hero-right { min-height: 280px; overflow: hidden; }
+    .speech { white-space: normal; max-width: 220px; }
     .mascot-wrap > div { width: 220px !important; height: 220px !important; }
   }
 
