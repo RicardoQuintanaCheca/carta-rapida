@@ -1734,20 +1734,35 @@
   }
 
   function toggleLogo() {
+    const wasOff = !logoActivo;
     logoActivo = !logoActivo;
     document.getElementById('logoToggle').classList.toggle('on', logoActivo);
     document.getElementById('logoDrop').classList.toggle('on', logoActivo);
     if (!logoActivo) removeLogo();
+    if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
   }
 
-  function toggleDesc() { descActivo = !descActivo; document.getElementById('descToggle').classList.toggle('on', descActivo); }
-  function toggleNeuro() { neuroActivo = !neuroActivo; document.getElementById('neuroToggle').classList.toggle('on', neuroActivo); }
+  function toggleDesc() {
+    const wasOff = !descActivo;
+    descActivo = !descActivo;
+    document.getElementById('descToggle').classList.toggle('on', descActivo);
+    if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
+  }
+
+  function toggleNeuro() {
+    const wasOff = !neuroActivo;
+    neuroActivo = !neuroActivo;
+    document.getElementById('neuroToggle').classList.toggle('on', neuroActivo);
+    if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
+  }
 
   function toggleTraducir() {
+    const wasOff = !tradActivo;
     tradActivo = !tradActivo;
     document.getElementById('tradToggle').classList.toggle('on', tradActivo);
     document.getElementById('idiomaZone').classList.toggle('on', tradActivo);
     if (!tradActivo) { idiomaSeleccionado = null; document.querySelectorAll('.idioma-btn').forEach(b => b.classList.remove('on')); }
+    if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
   }
 
   function selIdioma(el, codigo) {
