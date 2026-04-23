@@ -146,7 +146,39 @@ NUNCA inventes nada. CRÍTICO: devuelve ÚNICAMENTE JSON válido.
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
+const INSTRUCCION_DESCRIPCIONES = `
+INSTRUCCIÓN OBLIGATORIA — DESCRIPCIONES DE PLATOS:
+Para CADA plato del menú SIEMPRE debes generar una descripción breve y apetecible.
+NO respetes el original si no tiene descripción. Tu trabajo es GENERAR descripciones.
+NUNCA devuelvas descripcion: "" vacío en platos de comida. Siempre llena el campo.
+
+REGLAS DE LA DESCRIPCIÓN:
+- Máximo 12 palabras
+- Tono profesional de hostelería, no marketero
+- Menciona ingredientes principales, técnica de cocina o procedencia
+- Evita adjetivos vacíos: NUNCA uses "delicioso", "exquisito", "sabroso", "magnífico", "espectacular"
+- Sé concreto y evocador, como escribiría un chef real en una carta seria
+- Bebidas, pan, extras y suplementos: descripción vacía ""
+
+SI NO TIENES INFORMACIÓN suficiente: usa una descripción estándar del tipo de plato.
+NUNCA inventes ingredientes específicos que el restaurante pueda no tener.
+
+EJEMPLOS BUENOS:
+- "Jamón ibérico de bellota con tostas de pan tomate"
+- "Croquetas caseras de jamón ibérico con bechamel"
+- "Burrata con tomate de temporada y albahaca fresca"
+- "Solomillo a la plancha con guarnición del día"
+- "Merluza de pincho a la romana con patatas"
+- "Tarta de queso al horno con frutos rojos"
+
+EJEMPLOS MALOS (PROHIBIDOS):
+- "" (vacío — PROHIBIDO en platos de comida)
+- "Delicioso plato tradicional" (genérico)
+- "Exquisita preparación de la casa" (vacío de información)`;
+
 const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar la carta y redactar descripciones atractivas para cada plato.
+
+${INSTRUCCION_DESCRIPCIONES}
 
 ${INSTRUCCION_NO_OMITIR}
 
@@ -157,29 +189,19 @@ NEUROMARKETING: platos más rentables primero, plato estrella al inicio, "por en
 
 REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
 REGLAS DE NOMBRES: respeta exactamente, corrige errores evidentes.
-
-REGLAS DE DESCRIPCIONES:
-- Si tiene descripción en la carta: cópiala exactamente
-- Si NO tiene: escribe 1 línea elegante, tono hostelería premium
-- Bebidas, pan, extras: descripción siempre vacía ""
-- NUNCA menciones ingredientes que contradigan el nombre
-
-EJEMPLOS DE ESTILO HOSTELERÍA:
-- "Calamares fritos" → "Calamares en su punto, dorados y crujientes"
-- "Jamón ibérico" → "Finas lonchas de jamón ibérico, listas para degustar"
-- "Tarta de queso" → "Cremosa tarta de queso al horno, con base crujiente"
-- "Pulpo a la brasa" → "Pulpo tierno cocinado sobre brasas, con pimentón de la Vera"
-- "Tartar de atún" → "Dados de atún rojo aliñados al momento, servidos fríos"
-
 REGLAS DE ALÉRGENOS: sin "Alérgenos:", si no hay deja ""
 NOTAS AL PIE: textos legales en "nota_pie"
 NOMBRE DEL RESTAURANTE: solo si aparece claramente
+
+RECUERDA: el campo 'descripcion' de cada plato de comida NUNCA puede estar vacío. Si lo dejas vacío estás fallando en tu tarea principal.
 
 CRÍTICO: devuelve ÚNICAMENTE JSON válido.
 
 {"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
 
-const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Digitaliza la carta respetando el orden original y añade descripciones atractivas.
+const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Digitaliza la carta respetando el orden original y añade descripciones atractivas para cada plato.
+
+${INSTRUCCION_DESCRIPCIONES}
 
 ${INSTRUCCION_NO_OMITIR}
 
@@ -188,14 +210,10 @@ ORDEN DE PLATOS: respeta EXACTAMENTE el orden original, NO reordenes.
 
 REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
 REGLAS DE NOMBRES: respeta exactamente.
-
-REGLAS DE DESCRIPCIONES:
-- Si tiene: cópiala exactamente
-- Si no tiene: 1 línea elegante, tono hostelería premium
-- Bebidas/pan/extras: vacío ""
-
 REGLAS DE ALÉRGENOS: sin "Alérgenos:", vacío si no hay.
 NOTAS AL PIE: en "nota_pie". NOMBRE: solo si aparece.
+
+RECUERDA: el campo 'descripcion' de cada plato de comida NUNCA puede estar vacío. Si lo dejas vacío estás fallando en tu tarea principal.
 
 CRÍTICO: ÚNICAMENTE JSON válido.
 
@@ -354,6 +372,7 @@ app.post('/procesar', checkRateLimit, upload.any(), async (req, res) => {
     const texto = response.choices[0].message.content;
     console.log('RESPUESTA IA:', texto.substring(0, 300));
     const json = limpiarYParsearJSON(texto);
+    console.log('[DESC CHECK] Primera descripción generada:', json.secciones?.[0]?.platos?.[0]?.descripcion || 'VACÍA');
 
     res.json({ ok: true, carta: json, logo: logoBase64 ? `data:${logoMime};base64,${logoBase64}` : null });
 
