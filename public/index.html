@@ -1301,6 +1301,7 @@
     <button class="t2-main-btn" id="mainBtn" onclick="run()" disabled>
       📸 Súbeme una foto primero
     </button>
+
     <div class="t2-microcopy">Gratis · sin registro · listo en 30s</div>
 
     <div id="progressBarWrap" style="display:none;">
@@ -1818,7 +1819,7 @@
     const hay = filesList.length > 0 || document.getElementById('txt').value.trim();
     const btn = document.getElementById('mainBtn');
     btn.disabled = !hay;
-    btn.textContent = hay ? 'Rehacer mi carta →' : '📸 Súbeme una foto primero';
+    btn.textContent = hay ? 'Crear mi carta →' : '📸 Súbeme una foto primero';
     setEstado(hay ? 'subida' : 'inicial');
   }
 
