@@ -1032,6 +1032,12 @@
     .print-mini-wrap .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; border-top: none; text-align: center; }
   }
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
 </head>
 <body>
 
@@ -1233,14 +1239,14 @@
         <!-- Logo -->
         <div class="t2-feat-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Añadir logotipo<div class="t2-pf-sub">Aparecerá en la cabecera de cada página</div></span>
+          <span class="t2-pf-label">Añadir logotipo<div class="t2-pf-sub">Aparecerá en la cabecera de cada página · Acepta PNG, JPG y PDF</div></span>
           <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
         </div>
         <div class="logo-drop" id="logoDrop">
           <div class="logo-drop-zone">
-            <input type="file" accept="image/*" onchange="handleLogo(this)">
+            <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf" onchange="handleLogo(this)">
             <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
-            <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG o PNG</div></div>
+            <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG, PNG o PDF</div></div>
           </div>
         </div>
         <div class="logo-preview-row" id="logoPreview">
@@ -1789,9 +1795,44 @@
     updateToolBubble('¡Pega el texto de tu carta abajo! 📋');
   }
 
-  function handleLogo(input) {
+  async function convertirPdfAPng(pdfFile) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const typedArray = new Uint8Array(e.target.result);
+          const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+          const page = await pdf.getPage(1);
+          const viewport = page.getViewport({ scale: 3.0 });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+          canvas.toBlob((blob) => {
+            if (!blob) { reject(new Error('No se pudo convertir el PDF')); return; }
+            resolve(new File([blob], 'logo.png', { type: 'image/png' }));
+          }, 'image/png', 1.0);
+        } catch (err) { reject(err); }
+      };
+      reader.onerror = () => reject(new Error('Error leyendo el archivo'));
+      reader.readAsArrayBuffer(pdfFile);
+    });
+  }
+
+  async function handleLogo(input) {
     if (!input.files[0]) return;
-    logoFile = input.files[0];
+    let file = input.files[0];
+    if (file.type === 'application/pdf') {
+      try {
+        file = await convertirPdfAPng(file);
+      } catch (err) {
+        alert('No se pudo procesar el PDF. Intenta subir una imagen (PNG o JPG).');
+        console.error('Error conversión PDF:', err);
+        input.value = '';
+        return;
+      }
+    }
+    logoFile = file;
     const r = new FileReader();
     r.onload = e => {
       const img = new Image();
