@@ -2121,6 +2121,9 @@
     nivelTamano = 1;
     document.getElementById('sizeNivel').textContent = 'Normal';
     document.getElementById('sizeControl').classList.add('on');
+    isProcessing = false;
+    setPose('riendo');
+    setTimeout(() => setPose('feliz'), 3000);
     setEstado('listo');
     setTimeout(() => { document.getElementById('toolCta').classList.add('on'); document.getElementById('nuevaCartaBtn').classList.add('on'); scroll(); }, 500);
     scroll();
