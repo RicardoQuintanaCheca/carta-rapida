@@ -864,7 +864,7 @@
   }
   .t2-main-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 0 0 #0E0E0E; }
   .t2-main-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 0 #0E0E0E; }
-  .t2-main-btn:disabled { background: #D3D1C7; color: #888780; cursor: default; box-shadow: 0 4px 0 0 #B5B3AC; }
+  .t2-main-btn:disabled { background: #F1EFE8; color: #888780; cursor: not-allowed; box-shadow: none; border: 1px solid #D3D1C7; pointer-events: auto; }
   .t2-microcopy {
     text-align: center; font-size: 11.5px; color: #888780;
     font-family: 'JetBrains Mono', monospace; letter-spacing: .06em; margin-top: 10px;
@@ -1299,7 +1299,7 @@
     </div>
 
     <button class="t2-main-btn" id="mainBtn" onclick="run()" disabled>
-      Rehacer mi carta →
+      📸 Súbeme una foto primero
     </button>
     <div class="t2-microcopy">Gratis · sin registro · listo en 30s</div>
 
@@ -1803,7 +1803,9 @@
 
   function checkReady() {
     const hay = filesList.length > 0 || document.getElementById('txt').value.trim();
-    document.getElementById('mainBtn').disabled = !hay;
+    const btn = document.getElementById('mainBtn');
+    btn.disabled = !hay;
+    btn.textContent = hay ? 'Rehacer mi carta →' : '📸 Súbeme una foto primero';
     setEstado(hay ? 'subida' : 'inicial');
   }
 
