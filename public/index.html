@@ -1987,6 +1987,9 @@
       setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
       stopCountdown();
+      isProcessing = false;
+      setPose('asustado');
+      setTimeout(() => setPose('feliz'), 4000);
       let mensajeError = err.message;
       if (mensajeError.includes('unsupported image') || mensajeError.includes('image_parse_error')) {
         mensajeError = 'La imagen no es compatible. Usa JPG, PNG o WEBP e inténtalo de nuevo.';
@@ -2029,6 +2032,9 @@
       setTimeout(() => mostrarCarta(data.carta), 600);
     } catch (err) {
       stopCountdown();
+      isProcessing = false;
+      setPose('asustado');
+      setTimeout(() => setPose('feliz'), 4000);
       let mensajeError = err.message;
       if (mensajeError.includes('fetch') || mensajeError.includes('network') || mensajeError.includes('Failed to fetch')) {
         mensajeError = 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
@@ -2293,6 +2299,24 @@
     }, 4000);
     el.style.transition = 'opacity 0.2s';
   })();
+
+  let idleTimer = null;
+  function resetIdleTimer() {
+    if (isProcessing) return;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      if (!isProcessing) setPose('durmiendo');
+    }, 60000);
+  }
+  ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(ev => {
+    document.addEventListener(ev, () => {
+      if (!isProcessing) {
+        setPose('feliz');
+        resetIdleTimer();
+      }
+    }, { passive: true });
+  });
+  resetIdleTimer();
 </script>
 
 <!-- MODAL SUSCRIPCIÓN -->
