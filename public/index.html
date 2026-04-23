@@ -1038,6 +1038,14 @@
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
   </script>
+  <script type="module">
+    window.cargarBgRemoval = async () => {
+      if (window.bgRemovalLib) return window.bgRemovalLib;
+      const module = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser.js');
+      window.bgRemovalLib = module;
+      return module;
+    };
+  </script>
 </head>
 <body>
 
@@ -1239,14 +1247,14 @@
         <!-- Logo -->
         <div class="t2-feat-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Añadir logotipo<div class="t2-pf-sub">Aparecerá en la cabecera de cada página · Acepta PNG, JPG y PDF</div></span>
+          <span class="t2-pf-label">Añadir logotipo<div class="t2-pf-sub">Limpiamos el fondo automáticamente · PNG, JPG o PDF</div></span>
           <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
         </div>
         <div class="logo-drop" id="logoDrop">
           <div class="logo-drop-zone">
             <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf" onchange="handleLogo(this)">
             <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
-            <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG, PNG o PDF</div></div>
+            <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG, PNG o PDF · fondo limpio automático</div></div>
           </div>
         </div>
         <div class="logo-preview-row" id="logoPreview">
@@ -1744,7 +1752,12 @@
     document.getElementById('logoToggle').classList.toggle('on', logoActivo);
     document.getElementById('logoDrop').classList.toggle('on', logoActivo);
     if (!logoActivo) removeLogo();
-    if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
+    if (wasOff) {
+      setPose('asombrado'); setTimeout(() => setPose('feliz'), 800);
+      if (window.cargarBgRemoval) {
+        window.cargarBgRemoval().catch(err => console.warn('Precarga bg-removal falló:', err));
+      }
+    }
   }
 
   function toggleDesc() {
@@ -1831,6 +1844,20 @@
         input.value = '';
         return;
       }
+    }
+    try {
+      updateToolBubble('Limpiando tu logotipo... ✨');
+      const bgRemoval = await window.cargarBgRemoval();
+      const blob = await bgRemoval.removeBackground(file, {
+        output: { format: 'image/png', quality: 1.0 },
+        model: 'medium',
+        debug: false
+      });
+      file = new File([blob], 'logo-limpio.png', { type: 'image/png' });
+      updateToolBubble('¡Logo listo! ✨');
+    } catch (err) {
+      console.warn('Eliminación de fondo falló, usando logo original:', err);
+      updateToolBubble('Logo cargado');
     }
     logoFile = file;
     const r = new FileReader();
