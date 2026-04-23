@@ -874,11 +874,19 @@
   }
 
   @media (max-width: 640px) {
-    .tool-section .wrap { padding: 20px; border-radius: 20px; }
+    .tool-section .wrap { padding: 20px; border-radius: 20px; overflow-x: hidden; }
     .t2-card { padding: 20px 0; }
     .t2-sticker { font-size: 10px; top: -12px; }
-    .t2-scard-grid { gap: 8px; }
-    .t2-style-preview { height: 160px; }
+
+    /* Style selector: 3 cards → 1 columna */
+    .t2-scard-grid { grid-template-columns: 1fr; gap: 12px; }
+    .t2-scard { padding: 10px 14px; }
+    .t2-style-preview { height: 130px; }
+    .t2-scard-check { width: 20px; height: 20px; }
+
+    /* Sticker del selector */
+    .t2-sticker { font-size: 10px; top: -10px; padding: 5px 10px; }
+
     .t2-cta-title { font-size: 17px; }
     .t2-main-btn { font-size: 15px; }
   }
