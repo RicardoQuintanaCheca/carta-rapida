@@ -1569,6 +1569,14 @@
       const img = new Image();
       img.src = src;
     });
+
+    if (window.matchMedia('(hover: hover)').matches) {
+      const heroCta = document.querySelector('.btn-primary');
+      if (heroCta) {
+        heroCta.addEventListener('mouseenter', () => setPose('asombrado'));
+        heroCta.addEventListener('mouseleave', () => setPose('feliz'));
+      }
+    }
   });
 
   let filesList = [], logoFile = null, logoDataUrl = null;
