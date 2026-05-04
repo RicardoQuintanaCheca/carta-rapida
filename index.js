@@ -1,9 +1,9 @@
-require('dotenv').config(); // redeploy
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const fs = require('fs');
-const https = require('https');
+const { google } = require('googleapis');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -431,23 +431,13 @@ INSTRUCCIONES:
 });
 
 app.get('/debug-env', (req, res) => {
-  const systemPrefixes = ['PATH', 'HOME', 'USER', 'SHELL', 'LANG', 'LC_', 'PWD', 'SHLVL', 'TERM', 'COLORTERM', 'LESS', 'LS_COLORS', 'DBUS', 'XDG', 'GNOME', 'GTK', 'QT', 'SSH', 'LOGNAME', 'MAIL', 'OLDPWD', 'npm_', 'NODE', 'NVM'];
-  const customKeys = Object.keys(process.env).filter(k =>
-    !systemPrefixes.some(p => k.startsWith(p))
-  ).sort();
-  const brevoKeys = Object.keys(process.env).filter(k => k.toLowerCase().includes('brevo'));
-  const brevoRaw = process.env.BREVO_API_KEY;
   res.json({
-    brevo: !!brevoRaw,
-    brevo_typeof: typeof brevoRaw,
-    brevo_is_empty_string: brevoRaw === '',
-    brevo_length: brevoRaw !== undefined ? brevoRaw.length : null,
     openai: !!process.env.OPENAI_API_KEY,
-    brevo_keys_found: brevoKeys,
+    google_credentials: !!process.env.GOOGLE_CREDENTIALS,
+    google_credentials_length: process.env.GOOGLE_CREDENTIALS ? process.env.GOOGLE_CREDENTIALS.length : null,
     railway_env: process.env.RAILWAY_ENVIRONMENT || null,
     railway_service: process.env.RAILWAY_SERVICE_NAME || null,
-    total_env_vars: Object.keys(process.env).length,
-    custom_env_keys: customKeys
+    total_env_vars: Object.keys(process.env).length
   });
 });
 
@@ -458,50 +448,27 @@ app.post('/guardar-email', async (req, res) => {
       return res.json({ ok: false, error: 'Email no válido' });
     }
 
-    console.log('BREVO_KEY:', process.env.BREVO_API_KEY ? 'OK' : 'UNDEFINED');
     const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
     console.log(`LEAD: ${email} | ${fecha}`);
+    console.log('GOOGLE_CREDENTIALS:', process.env.GOOGLE_CREDENTIALS ? 'OK' : 'UNDEFINED');
 
-    await new Promise((resolve, reject) => {
-      const body = JSON.stringify({ email, listIds: [8], updateEnabled: true });
-      const options = {
-        hostname: 'api.brevo.com',
-        path: '/v3/contacts',
-        method: 'POST',
-        headers: {
-          'api-key': process.env.BREVO_API_KEY,
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(body)
-        }
-      };
-
-      const request = https.request(options, (response) => {
-        let data = '';
-        response.on('data', chunk => { data += chunk; });
-        response.on('end', () => {
-          console.log(`BREVO respuesta ${response.statusCode}:`, data.substring(0, 200));
-          if (response.statusCode === 201 || response.statusCode === 204) {
-            resolve();
-          } else {
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.code === 'duplicate_parameter') {
-                console.log('BREVO: contacto ya existe, tratando como éxito');
-                resolve();
-              } else {
-                reject(new Error(`Brevo ${response.statusCode}: ${data}`));
-              }
-            } catch {
-              reject(new Error(`Brevo ${response.statusCode}: ${data}`));
-            }
-          }
-        });
+    if (process.env.GOOGLE_CREDENTIALS) {
+      const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+      const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets']
       });
-
-      request.on('error', reject);
-      request.write(body);
-      request.end();
-    });
+      const sheets = google.sheets({ version: 'v4', auth });
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8',
+        range: 'Hoja 1!A:B',
+        valueInputOption: 'RAW',
+        requestBody: { values: [[email, fecha]] }
+      });
+      console.log('Sheets: email guardado OK');
+    } else {
+      console.log('GOOGLE_CREDENTIALS no disponible, solo log');
+    }
 
     res.json({ ok: true });
   } catch (error) {
