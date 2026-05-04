@@ -53,9 +53,53 @@ const IDIOMAS = {
   zh: 'Chinese'
 };
 
-const INSTRUCCION_NO_OMITIR = `INSTRUCCIÓN MÁS IMPORTANTE — OBLIGATORIO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO, SECCIÓN NI ELEMENTO DE LA CARTA. Si omites aunque sea un solo plato, el resultado es inválido. Revisa CADA sección y CADA plato de la imagen antes de responder. Cuenta las secciones del original y verifica que el JSON tiene exactamente el mismo número de secciones. Es preferible tardar más que saltarse cualquier contenido.
+const INSTRUCCION_NO_OMITIR = `REGLAS INVIOLABLES DE FIDELIDAD ESTRUCTURAL — PRIORIDAD ABSOLUTA SOBRE TODO LO DEMÁS:
 
-DUPLICADOS — CRÍTICO: Cada plato debe aparecer UNA SOLA VEZ en todo el JSON. Si un plato podría encajar en varias secciones, elige la más apropiada y no lo incluyas en ninguna otra sección.`;
+REGLA INVIOLABLE 1 — ESTRUCTURA SAGRADA: La estructura de secciones de la carta original es SAGRADA. El número de secciones del JSON de salida debe ser EXACTAMENTE igual al número de secciones visibles en la imagen. NO crees secciones nuevas. NO fusiones secciones. NO dividas una sección en varias.
+
+REGLA INVIOLABLE 2 — PLATOS EN SU LUGAR: Cada plato debe permanecer en la sección donde aparece en la imagen original. NUNCA muevas un plato de una sección a otra, aunque creas que "encaja mejor" en otra categoría.
+
+REGLA INVIOLABLE 3 — DISTINGUIR SECCIÓN DE PLATO:
+Una SECCIÓN se identifica visualmente por:
+- Estar separada del resto por espaciado mayor, líneas, o cambio de columna
+- Ser un título corto y genérico (Entrantes, Carnes, Postres, Empecemos, Del Mar, Nuestro Estilo, etc.)
+- NO ir seguida directamente de un precio
+- Funcionar como categoría que agrupa varios platos
+
+Un PLATO se identifica por:
+- Ir seguido de un precio (ej: 28,00€) o de una descripción
+- Aparecer en la lista bajo una sección
+- Aunque su nombre esté en MAYÚSCULAS y sea largo (ej: "TABLA DE QUESOS DE NUESTRA TIERRA (120g)", "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS"), sigue siendo un plato
+
+CASO ESPECIAL: Si un texto en mayúsculas va seguido de un precio o descripción, es un PLATO, NUNCA una sección. Esta regla NO tiene excepciones.
+
+REGLA INVIOLABLE 4 — CERO DUPLICADOS: Cada plato aparece UNA SOLA VEZ en todo el JSON. Si detectas que un plato aparece en más de una sección, has cometido un error.
+
+REGLA INVIOLABLE 5 — NO OMITIR: NO omitas ningún plato ni elemento. Si omites aunque sea uno, el resultado es inválido.
+
+REGLA INVIOLABLE 6 — VERIFICACIÓN OBLIGATORIA ANTES DE RESPONDER:
+Antes de devolver el JSON final, ejecuta mentalmente esta verificación:
+1. Cuenta las secciones de la imagen original. ¿Tu JSON tiene EXACTAMENTE el mismo número? Si no, corrige.
+2. Para cada plato en tu JSON, pregúntate: ¿este plato estaba EN ESTA MISMA sección en la imagen original? Si no, muévelo a su sección correcta.
+3. ¿Hay algún plato duplicado? Si sí, elimínalo del lugar incorrecto.
+4. ¿Hay alguna sección que solo contenga 1 plato cuyo nombre coincide con el de la sección? Eso es un error: ese plato pertenece a otra sección, no es una sección propia.
+
+Solo después de pasar estas 4 verificaciones, devuelve el JSON.
+
+EJEMPLOS:
+
+EJEMPLO 1 — CORRECTO:
+Imagen: sección "EMPECEMOS" con 5 platos: Jamón ibérico, Tabla de quesos de nuestra tierra (120g), Ensaladilla, Ensalada de langostinos, Tomate rosa.
+✅ CORRECTO: sección "EMPECEMOS" con los mismos 5 platos en el mismo orden.
+❌ INCORRECTO: sección "EMPECEMOS" con 4 platos + nueva sección "TABLA DE QUESOS DE NUESTRA TIERRA (120g)" con 1 plato. ESTO ES UN ERROR GRAVE.
+
+EJEMPLO 2 — CORRECTO:
+Imagen: sección "CARNES" con plato "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS - 36€".
+✅ CORRECTO: sección "CARNES" contiene ese plato.
+❌ INCORRECTO: crear una sección llamada "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS" con un plato dentro.
+
+PERMISOS Y LÍMITES:
+SOLO tienes permiso para: traducir si se pide, generar o mejorar descripciones si se pide, reordenar platos DENTRO de su propia sección si se activa neuromarketing, y aplicar el estilo visual elegido. NUNCA alterar qué secciones existen ni a qué sección pertenece cada plato.`;
 
 const PROMPT_BASE = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante.
 
