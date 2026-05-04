@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // redeploy
 const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
