@@ -431,9 +431,11 @@ INSTRUCCIONES:
 });
 
 app.get('/debug-env', (req, res) => {
+  const brevoKeys = Object.keys(process.env).filter(k => k.toLowerCase().includes('brevo'));
   res.json({
     brevo: !!process.env.BREVO_API_KEY,
-    openai: !!process.env.OPENAI_API_KEY
+    openai: !!process.env.OPENAI_API_KEY,
+    brevo_keys_found: brevoKeys
   });
 });
 
