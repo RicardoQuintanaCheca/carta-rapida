@@ -430,6 +430,13 @@ INSTRUCCIONES:
   }
 });
 
+app.get('/debug-env', (req, res) => {
+  res.json({
+    brevo: !!process.env.BREVO_API_KEY,
+    openai: !!process.env.OPENAI_API_KEY
+  });
+});
+
 app.post('/guardar-email', async (req, res) => {
   try {
     const { email } = req.body;
