@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const fs = require('fs');
+const https = require('https');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -435,8 +436,52 @@ app.post('/guardar-email', async (req, res) => {
     if (!email || !email.includes('@')) {
       return res.json({ ok: false, error: 'Email no válido' });
     }
+
+    console.log('BREVO_KEY:', process.env.BREVO_API_KEY ? 'OK' : 'UNDEFINED');
     const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
     console.log(`LEAD: ${email} | ${fecha}`);
+
+    await new Promise((resolve, reject) => {
+      const body = JSON.stringify({ email, listIds: [7], updateEnabled: true });
+      const options = {
+        hostname: 'api.brevo.com',
+        path: '/v3/contacts',
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      };
+
+      const request = https.request(options, (response) => {
+        let data = '';
+        response.on('data', chunk => { data += chunk; });
+        response.on('end', () => {
+          console.log(`BREVO respuesta ${response.statusCode}:`, data.substring(0, 200));
+          if (response.statusCode === 201 || response.statusCode === 204) {
+            resolve();
+          } else {
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.code === 'duplicate_parameter') {
+                console.log('BREVO: contacto ya existe, tratando como éxito');
+                resolve();
+              } else {
+                reject(new Error(`Brevo ${response.statusCode}: ${data}`));
+              }
+            } catch {
+              reject(new Error(`Brevo ${response.statusCode}: ${data}`));
+            }
+          }
+        });
+      });
+
+      request.on('error', reject);
+      request.write(body);
+      request.end();
+    });
+
     res.json({ ok: true });
   } catch (error) {
     console.error('ERROR EMAIL:', error.message);
