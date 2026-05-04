@@ -436,12 +436,17 @@ app.get('/debug-env', (req, res) => {
     !systemPrefixes.some(p => k.startsWith(p))
   ).sort();
   const brevoKeys = Object.keys(process.env).filter(k => k.toLowerCase().includes('brevo'));
+  const brevoRaw = process.env.BREVO_API_KEY;
   res.json({
-    brevo: !!process.env.BREVO_API_KEY,
+    brevo: !!brevoRaw,
+    brevo_typeof: typeof brevoRaw,
+    brevo_is_empty_string: brevoRaw === '',
+    brevo_length: brevoRaw !== undefined ? brevoRaw.length : null,
     openai: !!process.env.OPENAI_API_KEY,
     brevo_keys_found: brevoKeys,
     railway_env: process.env.RAILWAY_ENVIRONMENT || null,
     railway_service: process.env.RAILWAY_SERVICE_NAME || null,
+    total_env_vars: Object.keys(process.env).length,
     custom_env_keys: customKeys
   });
 });
