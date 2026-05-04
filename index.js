@@ -431,11 +431,18 @@ INSTRUCCIONES:
 });
 
 app.get('/debug-env', (req, res) => {
+  const systemPrefixes = ['PATH', 'HOME', 'USER', 'SHELL', 'LANG', 'LC_', 'PWD', 'SHLVL', 'TERM', 'COLORTERM', 'LESS', 'LS_COLORS', 'DBUS', 'XDG', 'GNOME', 'GTK', 'QT', 'SSH', 'LOGNAME', 'MAIL', 'OLDPWD', 'npm_', 'NODE', 'NVM'];
+  const customKeys = Object.keys(process.env).filter(k =>
+    !systemPrefixes.some(p => k.startsWith(p))
+  ).sort();
   const brevoKeys = Object.keys(process.env).filter(k => k.toLowerCase().includes('brevo'));
   res.json({
     brevo: !!process.env.BREVO_API_KEY,
     openai: !!process.env.OPENAI_API_KEY,
-    brevo_keys_found: brevoKeys
+    brevo_keys_found: brevoKeys,
+    railway_env: process.env.RAILWAY_ENVIRONMENT || null,
+    railway_service: process.env.RAILWAY_SERVICE_NAME || null,
+    custom_env_keys: customKeys
   });
 });
 
