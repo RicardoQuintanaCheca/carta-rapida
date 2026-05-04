@@ -2338,8 +2338,121 @@
     }
   }
 
+  function encontrarCortes(alturas, alturaMax, numPaginas) {
+    const n = alturas.length;
+    const total = alturas.reduce((a, b) => a + b, 0);
+
+    if (numPaginas <= 1 || n <= numPaginas) return [];
+
+    // 2 páginas: búsqueda exhaustiva — minimiza diferencia entre páginas
+    if (numPaginas === 2) {
+      let mejorCorte = 1;
+      let mejorDiff = Infinity;
+      let acum = 0;
+      for (let i = 1; i < n; i++) {
+        acum += alturas[i - 1];
+        const diff = Math.abs(acum - (total - acum));
+        if (diff < mejorDiff) {
+          mejorDiff = diff;
+          mejorCorte = i;
+        }
+      }
+      return [mejorCorte];
+    }
+
+    // TODO: Para cartas de 3+ páginas, este algoritmo greedy puede generar desbalance.
+    // Si aparece en producción, sustituir por programación dinámica para optimizar el reparto global.
+    const cortes = [];
+    let acum = 0;
+    for (let i = 0; i < n; i++) {
+      if (acum + alturas[i] > alturaMax && cortes.length < numPaginas - 1) {
+        cortes.push(i);
+        acum = 0;
+      }
+      acum += alturas[i];
+    }
+    return cortes;
+  }
+
+  function balancearPaginas() {
+    const printTable  = document.getElementById('printTable');
+    const bodyContent = document.getElementById('printBodyContent');
+    const bloques     = Array.from(bodyContent.querySelectorAll('.sec-block'));
+
+    if (bloques.length < 2) return;
+
+    // Hacer visible off-screen para medir alturas reales.
+    // Los tres wrappers (clásico, gourmet, minimalista) no tienen padding/margin horizontal,
+    // así que 680px (~180mm A4 menos márgenes) es correcto para los tres estilos.
+    const savedStyle = printTable.style.cssText;
+    printTable.style.cssText =
+      'display:table;position:fixed;top:-99999px;left:0;' +
+      'width:680px;visibility:hidden;pointer-events:none;';
+
+    const alturas   = bloques.map(b => b.getBoundingClientRect().height);
+    const theadCell = document.getElementById('printTheadContent');
+    const theadH    = theadCell ? theadCell.getBoundingClientRect().height + 18 : 88;
+
+    printTable.style.cssText = savedStyle;
+
+    // Limpiar saltos previos
+    bloques.forEach(b => {
+      b.style.pageBreakBefore = '';
+      b.style.breakBefore     = '';
+      b.style.pageBreakInside = '';
+      b.style.orphans         = '';
+      b.style.widows          = '';
+    });
+
+    const totalAltura = alturas.reduce((a, b) => a + b, 0);
+
+    // Altura útil de contenido por página en CSS px:
+    // A4 (297mm) - márgenes (24mm) = 273mm × 3.779 ≈ 1032px, menos thead y tfoot (~28px)
+    const PAGINA_H = Math.round(273 * 3.779) - theadH - 28;
+
+    // Secciones más altas que una página completa: permitir corte interno
+    bloques.forEach((b, i) => {
+      if (alturas[i] > PAGINA_H) {
+        b.style.pageBreakInside = 'auto';
+        b.style.orphans         = '3';
+        b.style.widows          = '3';
+      }
+    });
+
+    // Cabe en 1 página: no hacer nada
+    if (totalAltura <= PAGINA_H) {
+      console.log('[balancearPaginas]', {
+        bloques: bloques.length,
+        alturas: alturas.map(h => Math.round(h)),
+        totalAltura: Math.round(totalAltura),
+        PAGINA_H,
+        numPaginas: 1,
+        cortes: []
+      });
+      return;
+    }
+
+    const numPaginas = Math.ceil(totalAltura / PAGINA_H);
+    const cortes     = encontrarCortes(alturas, PAGINA_H, numPaginas);
+
+    cortes.forEach(i => {
+      bloques[i].style.pageBreakBefore = 'always';
+      bloques[i].style.breakBefore     = 'page';
+    });
+
+    console.log('[balancearPaginas]', {
+      bloques: bloques.length,
+      alturas: alturas.map(h => Math.round(h)),
+      totalAltura: Math.round(totalAltura),
+      PAGINA_H,
+      numPaginas,
+      cortes
+    });
+  }
+
   function descargarDirecto() {
     cerrarModal();
+    balancearPaginas();
     window.print();
     setTimeout(() => {
       document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
@@ -2369,6 +2482,7 @@
       document.getElementById('modalSuccess').style.display = 'block';
       setTimeout(() => {
         cerrarModal();
+        balancearPaginas();
         window.print();
         setTimeout(() => {
           document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
