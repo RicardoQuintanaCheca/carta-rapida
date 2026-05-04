@@ -442,7 +442,7 @@ app.post('/guardar-email', async (req, res) => {
     console.log(`LEAD: ${email} | ${fecha}`);
 
     await new Promise((resolve, reject) => {
-      const body = JSON.stringify({ email, listIds: [7], updateEnabled: true });
+      const body = JSON.stringify({ email, listIds: [8], updateEnabled: true });
       const options = {
         hostname: 'api.brevo.com',
         path: '/v3/contacts',
