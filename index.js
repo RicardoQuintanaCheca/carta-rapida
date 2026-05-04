@@ -3,7 +3,6 @@ const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const fs = require('fs');
-const { google } = require('googleapis');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -430,56 +429,14 @@ INSTRUCCIONES:
   }
 });
 
-app.get('/debug-env', (req, res) => {
-  res.json({
-    openai: !!process.env.OPENAI_API_KEY,
-    google_client_email: !!process.env.GOOGLE_CLIENT_EMAIL,
-    google_private_key: !!process.env.GOOGLE_PRIVATE_KEY,
-    google_private_key_length: process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.length : null,
-    railway_env: process.env.RAILWAY_ENVIRONMENT || null,
-    total_env_vars: Object.keys(process.env).length
-  });
-});
-
-app.post('/guardar-email', async (req, res) => {
-  try {
-    const { email } = req.body;
-    if (!email || !email.includes('@')) {
-      return res.json({ ok: false, error: 'Email no válido' });
-    }
-
-    const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-    console.log(`LEAD: ${email} | ${fecha}`);
-    console.log('GOOGLE_CREDENTIALS:', process.env.GOOGLE_CREDENTIALS ? 'OK' : 'UNDEFINED');
-
-    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY;
-    console.log('GOOGLE_CLIENT_EMAIL:', clientEmail ? 'OK' : 'UNDEFINED');
-    console.log('GOOGLE_PRIVATE_KEY:', privateKey ? 'OK' : 'UNDEFINED');
-
-    if (clientEmail && privateKey) {
-      const auth = new google.auth.JWT({
-        email: clientEmail,
-        key: privateKey.replace(/\\n/g, '\n'),
-        scopes: ['https://www.googleapis.com/auth/spreadsheets']
-      });
-      const sheets = google.sheets({ version: 'v4', auth });
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: '1kyksNgcVDHNJMLor0ltddEPWENwvqMXL6KB7Y10m5g8',
-        range: 'Hoja 1!A:B',
-        valueInputOption: 'RAW',
-        requestBody: { values: [[email, fecha]] }
-      });
-      console.log('Sheets: email guardado OK');
-    } else {
-      console.log('GOOGLE_CLIENT_EMAIL o GOOGLE_PRIVATE_KEY no disponibles, solo log');
-    }
-
-    res.json({ ok: true });
-  } catch (error) {
-    console.error('ERROR EMAIL:', error.message);
-    res.json({ ok: false, error: error.message });
+app.post('/guardar-email', (req, res) => {
+  const { email } = req.body;
+  if (!email || !email.includes('@')) {
+    return res.json({ ok: false, error: 'Email no válido' });
   }
+  const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+  console.log(`LEAD: ${email} | ${fecha}`);
+  res.json({ ok: true });
 });
 
 const PORT = process.env.PORT || 3000;
