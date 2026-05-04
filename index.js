@@ -433,10 +433,10 @@ INSTRUCCIONES:
 app.get('/debug-env', (req, res) => {
   res.json({
     openai: !!process.env.OPENAI_API_KEY,
-    google_credentials: !!process.env.GOOGLE_CREDENTIALS,
-    google_credentials_length: process.env.GOOGLE_CREDENTIALS ? process.env.GOOGLE_CREDENTIALS.length : null,
+    google_client_email: !!process.env.GOOGLE_CLIENT_EMAIL,
+    google_private_key: !!process.env.GOOGLE_PRIVATE_KEY,
+    google_private_key_length: process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.length : null,
     railway_env: process.env.RAILWAY_ENVIRONMENT || null,
-    railway_service: process.env.RAILWAY_SERVICE_NAME || null,
     total_env_vars: Object.keys(process.env).length
   });
 });
@@ -452,10 +452,15 @@ app.post('/guardar-email', async (req, res) => {
     console.log(`LEAD: ${email} | ${fecha}`);
     console.log('GOOGLE_CREDENTIALS:', process.env.GOOGLE_CREDENTIALS ? 'OK' : 'UNDEFINED');
 
-    if (process.env.GOOGLE_CREDENTIALS) {
-      const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-      const auth = new google.auth.GoogleAuth({
-        credentials,
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY;
+    console.log('GOOGLE_CLIENT_EMAIL:', clientEmail ? 'OK' : 'UNDEFINED');
+    console.log('GOOGLE_PRIVATE_KEY:', privateKey ? 'OK' : 'UNDEFINED');
+
+    if (clientEmail && privateKey) {
+      const auth = new google.auth.JWT({
+        email: clientEmail,
+        key: privateKey.replace(/\\n/g, '\n'),
         scopes: ['https://www.googleapis.com/auth/spreadsheets']
       });
       const sheets = google.sheets({ version: 'v4', auth });
@@ -467,7 +472,7 @@ app.post('/guardar-email', async (req, res) => {
       });
       console.log('Sheets: email guardado OK');
     } else {
-      console.log('GOOGLE_CREDENTIALS no disponible, solo log');
+      console.log('GOOGLE_CLIENT_EMAIL o GOOGLE_PRIVATE_KEY no disponibles, solo log');
     }
 
     res.json({ ok: true });
