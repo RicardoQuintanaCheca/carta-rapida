@@ -1,0 +1,155 @@
+/* ============================================================
+   ESTILOS DE CARTA — Carta Rápida (Kartia)
+   Todas las medidas en pt/mm reales de imprenta.
+   --k  = escala que calcula el motor para llenar la página
+   --aire = espacio extra entre secciones cuando sobra hueco
+   ============================================================ */
+
+.carta { --k: 1; --aire: 0px; --aire-pl: 0px; }
+
+.pagina {
+  --k: 1; --aire: 0px; --aire-pl: 0px;
+  width: 210mm; height: 297mm;
+  padding: 17mm 17mm 12mm;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  color: var(--tinta);
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  -webkit-font-smoothing: antialiased;
+}
+.pagina * { box-sizing: border-box; margin: 0; padding: 0; }
+.cuerpo {
+  flex: 1 1 auto; min-height: 0;
+  display: grid; align-content: center; align-items: start;
+}
+.cols-1 .cuerpo { grid-template-columns: minmax(0, 118mm); justify-content: center; }
+.cols-2 .cuerpo { grid-template-columns: 1fr 1fr; column-gap: 12mm; }
+.col { min-width: 0; }
+.sec { break-inside: avoid; margin-bottom: calc(15pt * var(--k)); }
+.col .sec + .sec { margin-top: var(--aire); }
+.sec .pl + .pl { padding-top: var(--aire-pl); }
+.pl { break-inside: avoid; }
+.pl-n, .pl-d, .pie-nota { text-wrap: pretty; }
+.pie { flex: 0 0 auto; }
+.pagina .pie:empty { display: none !important; }
+.cab-corta { font-size: 7.4pt; letter-spacing: .3em; text-transform: uppercase; text-align: center; opacity: .6; margin-bottom: 8mm; }
+.pie-credito { font-family: 'Instrument Sans', 'Inter', sans-serif; font-size: 5.6pt; letter-spacing: .14em; text-transform: uppercase; opacity: .45; margin-top: 2.2mm; }
+
+/* ============================================================
+   1 · MANTEL — casa de comidas clásica, serif editorial
+   ============================================================ */
+.est-mantel { --tinta: #221d19; --acento: #7b2d26; --suave: #5e554c; --linea: #d8cfc2; }
+.est-mantel .pagina { font-family: 'EB Garamond', Garamond, serif; }
+.est-mantel .cab { text-align: center; margin-bottom: calc(9mm * min(var(--k), 1.1)); }
+.est-mantel .cab-nombre {
+  font-family: 'Libre Caslon Display', 'EB Garamond', serif;
+  font-size: calc(44pt * min(var(--k), 1.12)); line-height: 1; letter-spacing: -.005em; font-weight: 400;
+}
+.est-mantel .cab-logo { max-height: 24mm; max-width: 80mm; object-fit: contain; }
+.est-mantel .cab-sub {
+  margin-top: 3.2mm; font-size: 8pt; letter-spacing: .34em; text-transform: uppercase; color: var(--acento); font-weight: 500;
+  padding-left: .34em;
+}
+.est-mantel .cab-orla { display: flex; align-items: center; justify-content: center; gap: 2.2mm; margin-top: 4.2mm; }
+.est-mantel .cab-orla span { width: 13mm; height: 0; border-top: .5pt solid var(--acento); opacity: .7; }
+.est-mantel .cab-orla i { width: 1.5mm; height: 1.5mm; background: var(--acento); transform: rotate(45deg); }
+.est-mantel .cols-2 .cuerpo { background: linear-gradient(var(--linea), var(--linea)) center / .5pt 100% no-repeat; }
+.est-mantel .sec-t {
+  display: flex; align-items: center; gap: 3mm;
+  font-size: calc(8.6pt * var(--k)); font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--acento); margin-bottom: calc(6pt * var(--k));
+}
+.est-mantel .sec-t::after { content: ''; flex: 1; border-top: .5pt solid var(--linea); transform: translateY(-.5pt); }
+.est-mantel .pl { margin-top: calc(5.4pt * var(--k)); }
+.est-mantel .pl-n { font-size: calc(11.3pt * var(--k)); line-height: 1.2; font-weight: 500; }
+.est-mantel .pl-d { font-size: calc(9.9pt * var(--k)); line-height: 1.24; font-style: italic; color: var(--suave); margin-top: .6pt; }
+.est-mantel .pl-p { font-style: normal; font-weight: 500; color: var(--tinta); margin-left: .55em; font-variant-numeric: oldstyle-nums proportional-nums; white-space: nowrap; }
+.est-mantel .pl-n .pl-p { font-size: 1em; }
+.est-mantel .pl-d .pl-p { font-size: calc(11.3 / 9.9 * 1em); }
+.est-mantel .pl-a { font-size: calc(7.6pt * var(--k)); color: var(--suave); letter-spacing: .04em; margin-top: 1pt; }
+.est-mantel .pie { text-align: center; padding-top: 5mm; }
+.est-mantel .pie-serv { font-style: italic; font-size: 10pt; color: var(--tinta); margin-bottom: 2.2mm; }
+.est-mantel .pie-serv span + span::before { content: '·'; margin: 0 .8em; color: var(--acento); }
+.est-mantel .pie-serv b { font-weight: 500; font-style: normal; margin-left: .5em; font-variant-numeric: oldstyle-nums; }
+.est-mantel .pie-nota { font-size: 7.6pt; line-height: 1.35; color: var(--suave); max-width: 125mm; margin: 0 auto; }
+.est-mantel .pie-credito { color: var(--suave); }
+
+/* ============================================================
+   2 · BARRA — taberna contemporánea, grotesca + serif de titular
+   ============================================================ */
+.est-barra { --tinta: #161513; --acento: #b3432a; --suave: #56524b; --linea: #161513; }
+.est-barra .pagina { font-family: 'Instrument Sans', 'Inter', sans-serif; padding-top: 14mm; }
+.est-barra .cab {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 8mm;
+  border-bottom: 1.6pt solid var(--linea); padding-bottom: 3.6mm; margin-bottom: calc(8mm * min(var(--k), 1.1));
+}
+.est-barra .cab-nombre {
+  font-family: 'Instrument Serif', serif; font-size: calc(62pt * min(var(--k), 1.1)); line-height: .86; letter-spacing: -.012em;
+}
+.est-barra .cab-logo { max-height: 22mm; max-width: 90mm; object-fit: contain; }
+.est-barra .cab-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 1.4mm; padding-bottom: 1.2mm; text-align: right; }
+.est-barra .cab-meta span { font-size: 7.4pt; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--suave); }
+.est-barra .cab-meta .cab-carta { color: var(--acento); font-weight: 600; }
+.est-barra .cols-2 .cuerpo { column-gap: 13mm; }
+.est-barra .sec-t { display: flex; align-items: baseline; gap: 2.6mm; margin-bottom: calc(4pt * var(--k)); padding-bottom: calc(3pt * var(--k)); border-bottom: .5pt solid #d9d5ce; }
+.est-barra .sec-num { font-size: calc(7.6pt * var(--k)); font-weight: 600; color: var(--acento); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+.est-barra .sec-nom { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: calc(18.5pt * var(--k)); line-height: 1; letter-spacing: -.005em; }
+.est-barra .pl { margin-top: calc(6.4pt * var(--k)); }
+.est-barra .pl-n { font-size: calc(10.2pt * var(--k)); line-height: 1.24; font-weight: 500; }
+.est-barra .pl-p { font-weight: 600; color: var(--acento); font-variant-numeric: tabular-nums; margin-left: .55em; white-space: nowrap; }
+.est-barra .pl-d { font-size: calc(8.8pt * var(--k)); line-height: 1.34; color: var(--suave); margin-top: 1pt; }
+.est-barra .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; margin-top: 1.4pt; }
+.est-barra .pie { border-top: .5pt solid var(--linea); padding-top: 3mm; margin-top: 3mm; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 8mm; row-gap: 1.6mm; }
+.est-barra .pie-serv { font-size: 8.6pt; font-weight: 500; }
+.est-barra .pie-serv span + span { margin-left: 5mm; }
+.est-barra .pie-serv b { color: var(--acento); font-weight: 600; margin-left: 2mm; }
+.est-barra .pie-nota { font-size: 7.2pt; line-height: 1.35; color: var(--suave); max-width: 118mm; text-align: right; }
+.est-barra .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ============================================================
+   3 · AUTOR — gastronómico, centrado, mucho aire pero legible
+   ============================================================ */
+.est-autor { --tinta: #1d211e; --acento: #3d5a46; --suave: #5b5e58; --linea: #c9cfc6; }
+.est-autor .pagina { font-family: 'Newsreader', Georgia, serif; text-align: center; padding-top: 19mm; }
+.est-autor .cab { margin-bottom: calc(10mm * min(var(--k), 1.1)); }
+.est-autor .cab-nombre {
+  font-family: 'Bodoni Moda', 'Newsreader', serif; font-weight: 500; text-transform: uppercase;
+  font-size: calc(25pt * min(var(--k), 1.15)); letter-spacing: .24em; padding-left: .24em; line-height: 1;
+}
+.est-autor .cab-logo { max-height: 22mm; max-width: 70mm; object-fit: contain; }
+.est-autor .cab-sub { margin-top: 3.4mm; font-style: italic; font-size: 11pt; color: var(--acento); }
+.est-autor .cols-2 .cuerpo { column-gap: 14mm; }
+.est-autor .sec-t {
+  font-style: italic; font-weight: 400; font-size: calc(15.5pt * var(--k)); color: var(--acento); line-height: 1.1;
+  margin-bottom: calc(4pt * var(--k));
+}
+.est-autor .sec-t::after { content: ''; display: block; width: 8mm; margin: calc(4pt * var(--k)) auto 0; border-top: .5pt solid var(--linea); }
+.est-autor .pl { margin-top: calc(7pt * var(--k)); }
+.est-autor .pl-n { font-size: calc(10.6pt * var(--k)); line-height: 1.22; font-weight: 500; letter-spacing: .005em; }
+.est-autor .pl-d { font-size: calc(9.4pt * var(--k)); line-height: 1.28; font-style: italic; color: var(--suave); margin-top: .8pt; }
+.est-autor .pl-p { font-style: normal; font-weight: 500; color: var(--tinta); margin-left: .6em; font-variant-numeric: oldstyle-nums; white-space: nowrap; }
+.est-autor .pl-d .pl-p { font-size: calc(10.6 / 9.4 * 1em); }
+.est-autor .pl-a { font-size: calc(7.4pt * var(--k)); color: var(--suave); margin-top: 1pt; letter-spacing: .05em; }
+.est-autor .pie { padding-top: 5mm; }
+.est-autor .pie-serv { font-size: 9.6pt; font-style: italic; margin-bottom: 2mm; }
+.est-autor .pie-serv b { font-weight: 400; font-style: normal; margin-left: .5em; font-variant-numeric: oldstyle-nums; }
+.est-autor .pie-nota { font-size: 7.4pt; line-height: 1.38; color: var(--suave); max-width: 120mm; margin: 0 auto; }
+
+/* ---------- Pantalla vs. impresión ---------- */
+@media screen {
+  .carta { display: flex; flex-direction: column; align-items: center; gap: 10mm; }
+  .pagina { box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.10); }
+}
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  .carta { display: block; }
+  .pagina { box-shadow: none; break-after: page; height: 296.6mm; }
+  .pagina .sec, .pagina .pl { break-inside: auto; }
+  .pagina { contain: strict; }
+  .pagina:last-child { break-after: auto; }
+}

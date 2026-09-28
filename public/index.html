@@ -101,7 +101,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&family=Josefin+Sans:wght@200;300;400&family=Raleway:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,900&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -171,92 +171,31 @@
   .bubble { font-size: 13px; line-height: 1.7; color: #444; max-width: 480px; }
   .countdown { font-size: 13px; color: #111; font-weight: 400; font-variant-numeric: tabular-nums; }
 
-  /* ── CARD (estilo clásico por defecto) ── */
-  .card { border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-top: 4px; width: 100%; }
-  .card-head { padding: 20px 18px 16px; border-bottom: 0.5px solid #e0e0e0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .card-logo { height: auto; width: 140px; max-width: 100%; object-fit: contain; display: none; }
-  .card-logo.visible { display: block; }
-  .card-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #111; text-align: center; }
-  .card-tag { font-size: 10px; color: #bbb; letter-spacing: 0.08em; text-transform: uppercase; }
-  .card-body { padding: 8px 18px 18px; }
-  .sec-block { margin-top: 28px; }
-  .sec-block:first-child { margin-top: 10px; }
-  .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 8px; border-bottom: 1px solid #111; margin-bottom: 4px; }
-  .item { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 0; }
-  .item-name { font-size: 13px; font-weight: 400; color: #111; }
-  .item-desc { font-size: 11px; color: #666; font-style: italic; margin-top: 2px; line-height: 1.5; }
-  .item-alergenos { font-size: 10px; color: #ccc; margin-top: 2px; font-style: italic; }
-  .item-price { font-size: 13px; color: #444; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
-  .nota-pie { font-size: 10px; color: #ccc; text-align: right; padding: 14px 0 0; border-top: 0.5px solid #f0f0f0; margin-top: 14px; }
-
-  /* ── ESTILO GOURMET ── */
-  .carta-gourmet .card { border: 0.5px solid #e0e0e0; border-radius: 0; background: #fff; }
-  .carta-gourmet .card-head { border-bottom: none; padding: 36px 32px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0; }
-  .carta-gourmet .card-name { font-family: 'Raleway', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #111; }
-  .carta-gourmet .card-tag { display: none; }
-  .carta-gourmet .card-logo { max-height: 48px; width: auto; }
-  .carta-gourmet .card-body { padding: 0 32px 36px; text-align: center; }
-  .carta-gourmet .sec-block { margin-top: 28px; }
-  .carta-gourmet .sec-label { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: #111; border-bottom: none; padding-bottom: 0; margin-bottom: 0; display: block; text-align: center; }
-  .carta-gourmet .gourmet-sec-linea { width: 36px; height: 0.5px; background: #ccc; margin: 8px auto 14px; }
-  .carta-gourmet .item { padding: 0 0 12px; border-bottom: none; display: block; text-align: center; }
-  .carta-gourmet .item-name { font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 400; color: #111; letter-spacing: 0.03em; line-height: 1.4; }
-  .carta-gourmet .item-desc { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 11px; font-weight: 300; color: #999; line-height: 1.5; margin-top: 2px; }
-  .carta-gourmet .item-price { font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 200; color: #bbb; margin-top: 3px; letter-spacing: 0.08em; display: block; }
-  .carta-gourmet .item-alergenos { font-family: 'Raleway', sans-serif; font-size: 9px; color: #ccc; margin-top: 1px; }
-  .carta-gourmet .nota-pie { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 9px; font-weight: 300; color: #ccc; text-align: center; border-top: 0.5px solid #eee; padding-top: 14px; margin-top: 20px; letter-spacing: 0.04em; }
-
-  /* ── ESTILO MINIMALISTA ── */
-  .carta-minimalista .card { border: 0.5px solid #e0e0e0; border-radius: 0; background: #fff; }
-  .carta-minimalista .card-head { border-bottom: none; padding: 32px 36px 28px; text-align: center; }
-  .carta-minimalista .card-name { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase; color: #111; }
-  .carta-minimalista .card-tag { display: none; }
-  .carta-minimalista .card-logo { max-height: 36px; }
-  .carta-minimalista .card-body { padding: 0 36px 36px; }
-  .carta-minimalista .sec-block { margin-top: 32px; }
-  .carta-minimalista .sec-label { font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 7px; letter-spacing: 0.42em; text-transform: uppercase; color: #aaa; border-bottom: none; padding-bottom: 0; margin-bottom: 18px; text-align: center; }
-  .carta-minimalista .item { padding: 7px 0; border-bottom: none; }
-  .carta-minimalista .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 11px; font-weight: 300; color: #111; letter-spacing: 0.06em; line-height: 1.3; }
-  .carta-minimalista .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 200; color: #bbb; letter-spacing: 0.04em; line-height: 1.3; margin-top: 0; font-style: normal; }
-  .carta-minimalista .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #999; }
-  .carta-minimalista .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; text-align: center; border-top: none; }
+  /* ── RESULTADO: vista previa real de la carta (mismo motor que el PDF) ── */
+  .res-barra { display: flex; align-items: center; justify-content: space-between; gap: 10px 14px; flex-wrap: wrap; margin-bottom: 12px; }
+  .res-estilos { display: inline-flex; background: #F1EFE8; border-radius: 999px; padding: 3px; gap: 2px; }
+  .res-estilo { border: none; background: none; padding: 7px 15px; border-radius: 999px; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600; color: #6E6E6E; cursor: pointer; transition: all .15s; }
+  .res-estilo:hover { color: #0E0E0E; }
+  .res-estilo.on { background: #fff; color: #0E0E0E; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .res-info { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #888780; }
+  .vista-marco { position: relative; background: #ECE8E0; border-radius: 16px; padding: 18px; overflow: hidden; }
+  .vista-marco.ampliada { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .vista-escala { position: relative; margin: 0 auto; overflow: hidden; min-height: 120px; }
+  .vista-escala iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: transparent; display: block; }
+  .vista-cargando { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(236,232,224,.75); font-size: 12px; font-weight: 500; color: #6E6E6E; opacity: 0; pointer-events: none; transition: opacity .2s; border-radius: 16px; }
+  .vista-marco.cargando .vista-cargando { opacity: 1; }
+  .vista-ampliar { margin-left: auto; border: 1px solid #D3D1C7; background: #fff; color: #0E0E0E; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+  .vista-ampliar:hover { border-color: #0E0E0E; }
+  .dl-principal { width: 100%; margin-top: 14px; padding: 16px 24px; background: #FF6B35; color: #fff; border: none; border-radius: 999px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -.01em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 0 0 #0E0E0E; transition: transform .15s, box-shadow .15s, opacity .15s; }
+  .dl-principal:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 0 0 #0E0E0E; }
+  .dl-principal:disabled { opacity: .6; cursor: wait; }
+  .dl-principal svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .dl-nota { text-align: center; font-size: 11.5px; color: #888780; margin-top: 12px; line-height: 1.5; }
 
   .progress-wrap { margin-top: 2px; }
   .progress-texto { font-size: 12px; color: #999; margin-bottom: 8px; font-weight: 300; }
   .progress-bar-bg { width: 100%; height: 3px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
   .progress-bar-fill { height: 100%; background: #111; border-radius: 2px; width: 0%; transition: width 0.5s ease; }
-
-  .size-control { display: none; align-items: center; gap: 12px; padding: 10px 14px; border: 0.5px solid #e0e0e0; border-radius: 10px; margin-bottom: 8px; width: 100%; box-sizing: border-box; }
-  .size-control.on { display: flex; }
-  .size-control-label { font-size: 11px; color: #999; white-space: nowrap; }
-  .size-btns { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-  .size-btn { width: 28px; height: 28px; border: 0.5px solid #e0e0e0; border-radius: 6px; background: none; font-size: 16px; color: #111; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; transition: all 0.15s; line-height: 1; }
-  .size-btn:hover { border-color: #111; }
-  .size-nivel { font-size: 11px; color: #999; min-width: 60px; text-align: center; }
-
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
-  .modal-overlay.on { display: flex; }
-  .modal { background: #fff; border-radius: 16px; padding: 32px 28px; max-width: 360px; width: 100%; position: relative; }
-  .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 20px; color: #ccc; cursor: pointer; line-height: 1; }
-  .modal-close:hover { color: #111; }
-  .modal-icono { width: 48px; height: 48px; background: #f4f4f4; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-  .modal-icono svg { width: 22px; height: 22px; stroke: #111; fill: none; stroke-width: 1.5; }
-  .modal-titulo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
-  .modal-subtitulo { font-size: 13px; color: #888; line-height: 1.65; margin-bottom: 24px; font-weight: 300; }
-  .modal-input { width: 100%; padding: 12px 14px; border: 0.5px solid #e0e0e0; border-radius: 10px; font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 300; color: #111; outline: none; box-sizing: border-box; margin-bottom: 10px; }
-  .modal-input:focus { border-color: #111; }
-  .modal-input::placeholder { color: #ccc; }
-  .modal-input.error { border-color: #E8622A; }
-  .modal-btn { width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; margin-bottom: 10px; }
-  .modal-btn:hover { opacity: 0.85; }
-  .modal-skip { width: 100%; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 11px; color: #bbb; cursor: pointer; padding: 4px; }
-  .modal-skip:hover { color: #888; }
-  .modal-legal { font-size: 10px; color: #ccc; text-align: center; margin-top: 14px; line-height: 1.5; }
-  .modal-success { display: none; text-align: center; padding: 8px 0; }
-  .modal-success-check { width: 48px; height: 48px; background: #f4f4f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-  .modal-success-check svg { width: 22px; height: 22px; stroke: #111; fill: none; stroke-width: 2; }
-  .modal-success-txt { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #111; margin-bottom: 8px; }
-  .modal-success-sub { font-size: 13px; color: #888; font-weight: 300; line-height: 1.6; }
 
   .nueva-carta-btn { width: 100%; padding: 12px; font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; background: none; color: #999; border: 0.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; display: none; }
   .nueva-carta-btn.on { display: block; }
@@ -268,32 +207,6 @@
   .segmented { background: #f4f4f4; border-radius: 8px; padding: 3px; display: flex; gap: 2px; }
   .seg-btn { flex: 1; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; color: #999; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 400; border: none; background: none; transition: all 0.15s; }
   .seg-btn.on { background: white; color: #111; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-
-  .estilo-preview-box { overflow: hidden; max-height: 0; transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
-  .estilo-preview-box.visible { max-height: 200px; opacity: 1; margin-top: 10px; }
-  .estilo-preview-inner { border: 0.5px solid #e8e8e8; border-radius: 8px; padding: 10px 12px; background: #fafafa; }
-  .estilo-preview-titulo { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
-  .estilo-preview-cols { display: flex; flex-direction: column; gap: 4px; }
-  .estilo-preview-col { width: 100%; }
-  /* Clásico preview */
-  .prev-clasico .ps { font-family: 'Playfair Display', serif; font-size: 7.5px; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 2px; margin-bottom: 4px; }
-  .prev-clasico .pp { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 3px; }
-  .prev-clasico .pn { font-family: 'Playfair Display', serif; font-size: 7px; color: #111; }
-  .prev-clasico .pd { font-family: 'Playfair Display', serif; font-style: italic; font-size: 6px; color: #888; }
-  .prev-clasico .ppr { font-family: 'Playfair Display', serif; font-size: 7px; color: #444; white-space: nowrap; }
-  /* Minimalista preview */
-  .prev-minimalista .ps { font-family: 'Josefin Sans', sans-serif; font-size: 6px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
-  .prev-minimalista .pp { display: flex; justify-content: space-between; gap: 4px; margin-bottom: 4px; }
-  .prev-minimalista .pn { font-family: 'Josefin Sans', sans-serif; font-size: 7px; font-weight: 300; color: #111; }
-  .prev-minimalista .pd { font-family: 'Josefin Sans', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; }
-  .prev-minimalista .ppr { font-family: 'Josefin Sans', sans-serif; font-size: 6.5px; font-weight: 300; color: #999; white-space: nowrap; }
-  /* Gourmet preview */
-  .prev-gourmet .ps { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #111; text-align: center; margin-bottom: 2px; }
-  .prev-gourmet .pl { width: 16px; height: 0.5px; background: #ccc; margin: 0 auto 5px; }
-  .prev-gourmet .pp { text-align: center; margin-bottom: 5px; }
-  .prev-gourmet .pn { font-family: 'Raleway', sans-serif; font-size: 7px; font-weight: 400; color: #111; display: block; }
-  .prev-gourmet .pd { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 6px; font-weight: 300; color: #999; display: block; }
-  .prev-gourmet .ppr { font-family: 'Raleway', sans-serif; font-size: 6px; font-weight: 200; color: #bbb; display: block; }
 
   #uploadError { display: none; font-size: 12px; color: #E8622A; margin-top: 8px; font-weight: 400; line-height: 1.5; }
   .upload-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid #f0f0f0; }
@@ -390,11 +303,6 @@
   .rehacer-btn.activo:hover { opacity: 0.85; }
   .rehacer-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-  .tool-cta { margin-top: 10px; padding: 16px; border: 0.5px solid #e0e0e0; border-radius: 10px; display: none; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
-  .tool-cta.on { display: flex; }
-  .tool-cta p { font-size: 13px; color: #666; line-height: 1.65; }
-  .tool-cta-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #111; background: none; border: 0.5px solid #111; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; transition: all 0.15s; }
-  .tool-cta-btn:hover { background: #111; color: #fff; }
 
   /* ── CÓMO FUNCIONA ── */
   .como-section { background: #0A0A0A; color: #fff; padding: 80px 24px; }
@@ -723,46 +631,15 @@
   }
   .t2-scard.on .t2-scard-check { background: #FF6B35; border-color: #FF6B35; color: #fff; }
 
-  /* Full-height style previews */
+  /* Miniaturas reales de cada estilo (generadas con el motor) */
   .t2-style-preview {
-    background: #fff; border: 1px solid #E8E6E0; border-radius: 10px;
-    padding: 10px 9px 9px; height: 190px; overflow: hidden; margin-bottom: 8px; position: relative;
+    background: #fff center top / 100% auto no-repeat; border: 1px solid #E8E6E0; border-radius: 8px;
+    aspect-ratio: 210 / 190; overflow: hidden; margin-bottom: 8px;
   }
   .t2-scard.on .t2-style-preview { border-color: rgba(255,107,53,.35); }
-  .t2-sp-head { text-align: center; padding-bottom: 5px; border-bottom: 1px solid #E8E6E0; margin-bottom: 6px; }
-  .t2-sp-logo { font-size: 10px; font-weight: 600; color: #555; }
-  .t2-sp-section { font-size: 7.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; text-align: center; margin-bottom: 7px; color: #999; }
-  .t2-sp-dish { display: flex; justify-content: space-between; align-items: baseline; gap: 5px; margin-bottom: 5px; }
-  .t2-sp-name { font-size: 8.5px; font-weight: 600; color: #0E0E0E; line-height: 1.15; flex: 1; }
-  .t2-sp-price { font-size: 8.5px; font-weight: 700; color: #0E0E0E; flex-shrink: 0; }
-  .t2-sp-desc { display: block; font-size: 7px; color: #888; margin-top: 1px; line-height: 1.2; }
-  /* ── Clásico: Playfair Display, left-aligned, borde negro bajo sección ── */
-  .t2-scard.clasico .t2-style-preview { background: #fff; }
-  .t2-scard.clasico .t2-sp-head { border-bottom-color: #f0f0f0; }
-  .t2-scard.clasico .t2-sp-logo { font-family: 'Playfair Display', serif; font-weight: 600; color: #111; font-size: 10px; }
-  .t2-scard.clasico .t2-sp-section { font-family: 'Playfair Display', serif; font-weight: 600; color: #111; border-bottom: 1px solid #111; padding-bottom: 3px; letter-spacing: 0; text-transform: none; font-size: 8px; margin-bottom: 5px; }
-  .t2-scard.clasico .t2-sp-name { font-family: 'Playfair Display', serif; font-weight: 400; color: #111; }
-  .t2-scard.clasico .t2-sp-price { font-family: 'Playfair Display', serif; font-weight: 400; color: #444; }
-  .t2-scard.clasico .t2-sp-desc { font-family: 'Playfair Display', serif; font-style: italic; color: #888; }
-  /* ── Minimalista: Josefin Sans, 300 weight, uppercase spaced, centered ── */
-  .t2-scard.minimalista .t2-style-preview { background: #fff; }
-  .t2-scard.minimalista .t2-sp-head { border-bottom-color: #e0e0e0; text-align: center; }
-  .t2-scard.minimalista .t2-sp-logo { font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: .45em; text-transform: uppercase; color: #111; font-size: 7.5px; }
-  .t2-scard.minimalista .t2-sp-section { font-family: 'Josefin Sans', sans-serif; font-weight: 400; letter-spacing: .42em; text-transform: uppercase; color: #aaa; border-bottom: none; text-align: center; font-size: 7px; }
-  .t2-scard.minimalista .t2-sp-name { font-family: 'Josefin Sans', sans-serif; font-weight: 300; color: #111; letter-spacing: .06em; }
-  .t2-scard.minimalista .t2-sp-price { font-family: 'Josefin Sans', sans-serif; font-weight: 300; color: #999; }
-  .t2-scard.minimalista .t2-sp-desc { font-family: 'Josefin Sans', sans-serif; font-weight: 200; color: #bbb; font-style: normal; }
-  /* ── Gourmet: Raleway, centrado, sección uppercase con línea decorativa ── */
-  .t2-scard.gourmet .t2-style-preview { background: #fff; border-color: #e0e0e0; }
-  .t2-scard.gourmet .t2-sp-head { border-bottom-color: #e0e0e0; text-align: center; }
-  .t2-scard.gourmet .t2-sp-logo { font-family: 'Raleway', sans-serif; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #111; font-size: 8px; }
-  .t2-scard.gourmet .t2-sp-section { font-family: 'Raleway', sans-serif; font-weight: 700; letter-spacing: .35em; text-transform: uppercase; color: #111; border-bottom: none; font-style: normal; text-align: center; font-size: 6.5px; display: block; }
-  .t2-scard.gourmet .t2-sp-section::after { content: ""; display: block; width: 18px; height: 0.5px; background: #ccc; margin: 3px auto 5px; }
-  .t2-scard.gourmet .t2-sp-dish { display: block; text-align: center; }
-  .t2-scard.gourmet .t2-sp-dish > div:first-child { display: block; }
-  .t2-scard.gourmet .t2-sp-name { font-family: 'Raleway', sans-serif; font-weight: 400; color: #111; letter-spacing: .03em; text-align: center; }
-  .t2-scard.gourmet .t2-sp-price { font-family: 'Raleway', sans-serif; font-weight: 200; color: #bbb; letter-spacing: .08em; display: block; text-align: center; }
-  .t2-scard.gourmet .t2-sp-desc { font-family: 'Raleway', sans-serif; font-weight: 300; color: #999; font-style: italic; text-align: center; }
+  .t2-scard.mantel .t2-style-preview { background-image: url('/carta/muestra-mantel.webp'); }
+  .t2-scard.barra .t2-style-preview { background-image: url('/carta/muestra-barra.webp'); }
+  .t2-scard.autor .t2-style-preview { background-image: url('/carta/muestra-autor.webp'); }
 
   .t2-scard-label { display: flex; align-items: center; justify-content: space-between; padding: 2px 2px 0; }
   .t2-scard-name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 13px; color: #0E0E0E; }
@@ -890,10 +767,12 @@
     .t2-card { padding: 20px 0; }
     .t2-sticker { font-size: 10px; top: -12px; }
 
-    /* Style selector: 3 cards → 1 columna */
-    .t2-scard-grid { grid-template-columns: 1fr; gap: 12px; }
-    .t2-scard { padding: 10px 14px; }
-    .t2-style-preview { height: 130px; }
+    .t2-scard-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .t2-scard { padding: 6px; border-radius: 12px; }
+    .t2-scard-label { flex-direction: column; align-items: flex-start; gap: 1px; }
+    .t2-scard-name { font-size: 12px; }
+    .vista-marco { padding: 10px; border-radius: 12px; }
+    .res-estilo { padding: 7px 11px; }
     .t2-scard-check { width: 20px; height: 20px; }
 
     /* Sticker del selector */
@@ -979,58 +858,24 @@
     0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); }
   }
 
-  #printTable { display: none; }
   @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  @media print {
-    @page { size: A4; margin: 12mm 15mm 12mm 15mm; }
-    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body { background: white; padding: 0 !important; }
-    .top-strip, nav.nav, .hero, .tool-section, .como-section, .seo-section, .portamenus-section, .faq-section, .final-cta, .site-footer { display: none !important; }
-    #printTable { display: table !important; width: 100%; border-collapse: collapse; }
-    #printTable thead { display: table-header-group; }
-    #printTable tfoot { display: table-footer-group; }
-    #printTable tbody { display: table-row-group; }
-
-    /* ── CABECERA ── */
-    .print-thead-cell { padding: 10px 0 8px; text-align: center; }
-    .print-thead-cell img { height: 70px; width: auto; max-width: 240px; display: block; margin: 0 auto; object-fit: contain; }
-    .print-tbody-cell { padding: 0; vertical-align: top; }
-
-    /* ── CLÁSICO (por defecto) ── */
-    .print-nombre { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #111; }
-    .sec-block { margin-top: 18px; page-break-inside: avoid; }
-    .sec-block:first-child { margin-top: 8px; }
-    .sec-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #111; padding-bottom: 6px; border-bottom: 1.5px solid #111; margin-bottom: 4px; page-break-after: avoid !important; display: block; }
-    .item { display: flex; justify-content: space-between; padding: 6px 0; page-break-inside: avoid !important; }
-    .item-name { font-size: 12.5px; color: #111; }
-    .item-desc { font-size: 10.5px; color: #aaa; margin-top: 2px; }
-    .item-price { font-size: 12.5px; color: #111; white-space: nowrap; }
-    .nota-pie { font-size: 9px; color: #999; text-align: center; margin-top: 16px; border-top: 1px solid #eee; padding-top: 6px; }
-    .print-tfoot-cell { text-align: center; font-family: 'Inter', sans-serif; font-size: 7px; color: #ccc; letter-spacing: 0.1em; text-transform: uppercase; padding-top: 6px; border-top: 0.5px solid #f0f0f0; }
-
-    /* ── GOURMET ── */
-    .print-gourmet-wrap { text-align: center; }
-    .print-gourmet-wrap .print-nombre { font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #111; display: block; text-align: center; margin: 8px 0; }
-    .print-gourmet-wrap .sec-label { font-family: 'Raleway', sans-serif; font-size: 8px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: #111; display: block; text-align: center; border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-    .print-gourmet-wrap .gourmet-sec-linea { width: 30px; height: 0.5px; background: #ccc; margin: 6px auto 10px; }
-    .print-gourmet-wrap .sec-block { margin-top: 20px; }
-    .print-gourmet-wrap .item { border-bottom: none; padding: 5px 0; display: block; text-align: center; }
-    .print-gourmet-wrap .item-name { font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 400; color: #111; letter-spacing: 0.03em; display: block; }
-    .print-gourmet-wrap .item-desc { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 9px; font-weight: 300; color: #999; display: block; margin-top: 1px; }
-    .print-gourmet-wrap .item-price { font-family: 'Raleway', sans-serif; font-size: 9px; font-weight: 200; color: #bbb; display: block; margin-top: 2px; }
-    .print-gourmet-wrap .nota-pie { font-family: 'Raleway', sans-serif; font-style: italic; font-size: 8px; font-weight: 300; color: #ccc; text-align: center; border-top: 0.5px solid #eee; padding-top: 10px; margin-top: 16px; }
-
-    /* ── MINIMALISTA ── */
-    .print-mini-wrap .print-nombre { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.45em; text-transform: uppercase; color: #111; display: block; text-align: center; margin: 8px 0; }
-    .print-mini-wrap .sec-label { font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 7px; letter-spacing: 0.42em; text-transform: uppercase; color: #aaa; border-bottom: none; padding-bottom: 0; margin-bottom: 14px; text-align: center; display: block; }
-    .print-mini-wrap .sec-block { margin-top: 24px; }
-    .print-mini-wrap .item { border-bottom: none; padding: 6px 0; }
-    .print-mini-wrap .item-name { font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 300; color: #111; letter-spacing: 0.06em; }
-    .print-mini-wrap .item-desc { font-family: 'Josefin Sans', sans-serif; font-size: 8px; font-weight: 200; color: #bbb; font-style: normal; margin-top: 0; }
-    .print-mini-wrap .item-price { font-family: 'Josefin Sans', sans-serif; font-size: 9px; font-weight: 300; color: #999; }
-    .print-mini-wrap .nota-pie { font-family: 'Josefin Sans', sans-serif; font-size: 7px; color: #ddd; letter-spacing: 0.25em; text-transform: uppercase; border-top: none; text-align: center; }
-  }
+  /* ── Montaje en portamenú (lead) ── */
+  .tool-cta { display: none; margin-top: 18px; background: #16130F; color: #F4EFE6; border-radius: 18px; padding: 26px 24px 22px; text-align: left; }
+  .tool-cta.on { display: block; }
+  .lead-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #C9A961; margin-bottom: 10px; }
+  .lead-titulo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.2; letter-spacing: -.015em; margin-bottom: 8px; color: #fff; }
+  .lead-texto { font-size: 13.5px; line-height: 1.6; color: #CFC7B8; margin-bottom: 16px; }
+  .lead-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .lead-input { flex: 1 1 200px; min-width: 0; padding: 13px 14px; border-radius: 10px; border: 1px solid #3A342C; background: #211D18; color: #fff; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; }
+  .lead-input:focus { border-color: #C9A961; }
+  .lead-input.error { border-color: #FF6B35; }
+  .lead-btn { flex: 0 0 auto; padding: 13px 18px; border-radius: 10px; border: none; background: #F4EFE6; color: #16130F; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+  .lead-btn:hover { background: #fff; }
+  .lead-legal { font-size: 11px; color: #8C8476; margin-top: 10px; line-height: 1.5; }
+  .lead-ok { display: none; font-size: 14px; line-height: 1.6; color: #F4EFE6; background: #211D18; border-radius: 10px; padding: 14px 16px; }
+  .lead-link { display: inline-block; margin-top: 14px; font-size: 12.5px; color: #C9A961; text-decoration: none; font-weight: 600; }
+  .lead-link:hover { color: #fff; }
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
@@ -1049,13 +894,6 @@
 </head>
 <body>
 
-<!-- PRINT TABLE -->
-<table id="printTable">
-  <thead><tr><td><div class="print-thead-cell" id="printTheadContent"></div></td></tr></thead>
-  <tfoot><tr><td><div class="print-tfoot-cell" id="printFooterContent">kartia.es</div></td></tr></tfoot>
-  <tbody><tr><td class="print-tbody-cell"><div id="printBodyContent"></div></td></tr></tbody>
-</table>
-
 <!-- TOP STRIP -->
 <div class="top-strip">
   <span><span class="pulse"></span>Herramienta <b>gratis</b> · 0 € · sin registro</span>
@@ -1072,7 +910,7 @@
     <a href="#herramienta">La herramienta</a>
     <a href="#como-funciona">Cómo funciona</a>
     <a href="https://kartia.es">Portamenús</a>
-    <a href="#faq-section">FAQ</a>
+    <a href="#faq">FAQ</a>
   </div>
   <a href="#herramienta" class="cta-nav">Probar gratis →</a>
 </nav>
@@ -1085,7 +923,7 @@
   <div style="position:relative;z-index:2;">
     <span class="hero-eyebrow"><span class="b"></span>Carta Rápida · Beta gratis</span>
     <h1>Tu carta,<br><span class="under">rediseñada</span><br>en <span class="o">30 segundos</span>.</h1>
-    <p class="hero-lead">Sube una foto de tu carta. La IA aplica <b>neuromarketing profesional</b>, añade descripciones apetecibles y te la devuelve en PDF — traducible a 6 idiomas.</p>
+    <p class="hero-lead">Sube una foto de tu carta y te la devolvemos <b>maquetada como en una imprenta</b>: tipografía cuidada, el orden que más vende y el precio donde debe ir. En PDF, listo para imprimir — y en 6 idiomas si lo necesitas.</p>
     <div class="cta-row">
       <a href="#herramienta" class="btn-primary">Dame tu carta <span class="arr">→</span></a>
       <span class="cta-note">0€ · sin tarjeta · sin registro</span>
@@ -1139,21 +977,26 @@
         <div class="bubble" id="statusText"></div>
       </div>
       <div class="msg" id="msgResult" style="display:none">
-        <div style="flex:1">
-          <div class="size-control" id="sizeControl">
-            <span class="size-control-label">Tamaño de texto</span>
-            <div class="size-btns">
-              <button class="size-btn" onclick="cambiarTamano(-1)">−</button>
-              <span class="size-nivel" id="sizeNivel">Normal</span>
-              <button class="size-btn" onclick="cambiarTamano(1)">+</button>
+        <div style="flex:1;min-width:0">
+          <div class="res-barra">
+            <div class="res-estilos" role="tablist" aria-label="Estilo de carta">
+              <button class="res-estilo on" data-estilo="mantel" onclick="cambiarEstiloResultado('mantel')" type="button">Mantel</button>
+              <button class="res-estilo" data-estilo="barra" onclick="cambiarEstiloResultado('barra')" type="button">Barra</button>
+              <button class="res-estilo" data-estilo="autor" onclick="cambiarEstiloResultado('autor')" type="button">Autor</button>
             </div>
+            <span class="res-info" id="resInfo"></span>
+            <button class="vista-ampliar" id="vistaAmpliar" onclick="alternarAmpliar()" type="button">Ampliar</button>
           </div>
-          <div class="card" id="cartaResult"></div>
+          <div class="vista-marco" id="vistaMarco">
+            <div class="vista-escala" id="vistaEscala"></div>
+            <div class="vista-cargando">Componiendo tu carta…</div>
+          </div>
           <div class="actions" id="actions">
-            <button class="dl-btn" onclick="descargar()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              DESCARGAR PDF
+            <button class="dl-principal" id="dlBtn" onclick="descargar()" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Descargar PDF
             </button>
+            <div class="dl-nota">A4 listo para imprimir · sin registro · puedes cambiar de estilo y volver a descargar</div>
           </div>
         </div>
       </div>
@@ -1163,49 +1006,24 @@
       <div class="t2-card t2-style-section">
         <div class="t2-sticker">3 estilos · 0 €</div>
         <div class="t2-eyebrow">02 · ESTILO DE CARTA</div>
-        <div class="t2-panel-hint">Tres diseños profesionales. Elige el tuyo — puedes cambiarlo las veces que quieras.</div>
+        <div class="t2-panel-hint">Tres diseños de imprenta. Elige uno — al ver tu carta podrás cambiarlo con un toque.</div>
         <div class="t2-scard-grid">
-          <!-- Clásico -->
-          <button class="seg-btn t2-scard clasico on" onclick="selEstilo(this,'clasico')" type="button">
+          <button class="seg-btn t2-scard mantel on" onclick="selEstilo(this,'mantel')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview">
-              <div class="t2-sp-head"><div class="t2-sp-logo">Casa Paco</div></div>
-              <div class="t2-sp-section">— Entrantes —</div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
-            </div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Clásico</span><span class="t2-scard-mood">Elegante</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Mantel"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Mantel</span><span class="t2-scard-mood">Clásico</span></div>
           </button>
-          <!-- Minimalista -->
-          <button class="seg-btn t2-scard minimalista" onclick="selEstilo(this,'minimalista')" type="button">
+          <button class="seg-btn t2-scard barra" onclick="selEstilo(this,'barra')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview">
-              <div class="t2-sp-head"><div class="t2-sp-logo">CASA PACO</div></div>
-              <div class="t2-sp-section">ENTRANTES</div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
-            </div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Minimalista</span><span class="t2-scard-mood">Limpio</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Barra"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Barra</span><span class="t2-scard-mood">Taberna</span></div>
           </button>
-          <!-- Gourmet -->
-          <button class="seg-btn t2-scard gourmet" onclick="selEstilo(this,'gourmet')" type="button">
+          <button class="seg-btn t2-scard autor" onclick="selEstilo(this,'autor')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview">
-              <div class="t2-sp-head"><div class="t2-sp-logo">Casa Paco</div></div>
-              <div class="t2-sp-section">entrantes</div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Jamón Ibérico</div><span class="t2-sp-desc">Con tostas de pan</span></div><div class="t2-sp-price">36</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Burrata</div><span class="t2-sp-desc">Tomate, albahaca</span></div><div class="t2-sp-price">14</div></div>
-              <div class="t2-sp-dish"><div><div class="t2-sp-name">Croquetas</div><span class="t2-sp-desc">Jamón ibérico</span></div><div class="t2-sp-price">9</div></div>
-            </div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Gourmet</span><span class="t2-scard-mood">Premium</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Autor"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Autor</span><span class="t2-scard-mood">Gastronómico</span></div>
           </button>
         </div>
-        <!-- Hidden proxy boxes required by selEstilo() JS -->
-        <div class="estilo-preview-box" id="prev-clasico" style="display:none"></div>
-        <div class="estilo-preview-box" id="prev-minimalista" style="display:none"></div>
-        <div class="estilo-preview-box" id="prev-gourmet" style="display:none"></div>
       </div>
 
       <div id="uploadGrid">
@@ -1263,15 +1081,15 @@
           <button class="logo-remove-btn" onclick="removeLogo()">×</button>
         </div>
         <!-- Descripciones -->
-        <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Generaré descripciones deliciosas 🍽️' : 'Sin descripciones, ¡de acuerdo!')">
+        <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Escribiré una descripción para cada plato ✍️' : 'Sin descripciones, ¡de acuerdo!')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Crear descripciones<div class="t2-pf-sub">Textos apetecibles para cada plato</div></span>
+          <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Breves y concretas, para cada plato</div></span>
           <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Rentabilidad -->
-        <div class="t2-feat-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Ordenaré por rentabilidad ✨' : 'Mantendré el orden original.')">
+        <div class="t2-feat-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Pondré primero lo que más te interesa vender ✨' : 'Mantendré el orden de tus platos.')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Ordenar por rentabilidad<div class="t2-pf-sub">Los platos más rentables primero</div></span>
+          <span class="t2-pf-label">Ordenar para vender más<div class="t2-pf-sub">La especialidad y los platos de más valor, primero</div></span>
           <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Traducir -->
@@ -1360,8 +1178,16 @@
     </div>
 
     <div class="tool-cta" id="toolCta">
-      <p>Así podría verse tu carta con un diseño profesional.<br>Si quieres fabricarla en un portamenú premium, Kartia puede ayudarte.</p>
-      <a href="https://kartia.es" class="tool-cta-btn" target="_blank">Ver portamenús →</a>
+      <div class="lead-eyebrow">Kartia · Portamenús hechos a mano</div>
+      <div class="lead-titulo">¿Cómo quedaría esta carta en tus mesas?</div>
+      <p class="lead-texto">Te enviamos por email un montaje de tu carta dentro de un portamenú Kartia, en el material que mejor encaje con tu local. Gratis y sin compromiso.</p>
+      <form class="lead-form" id="leadForm" onsubmit="pedirMontaje(event)" novalidate>
+        <input class="lead-input" type="email" id="leadEmail" placeholder="tu@restaurante.com" autocomplete="email" required>
+        <button class="lead-btn" type="submit" id="leadBtn">Quiero verla</button>
+      </form>
+      <div class="lead-ok" id="leadOk">Hecho. Te enviamos el montaje en 1–2 días laborables. Si quieres adelantarlo, escríbenos a <a href="mailto:hola@kartia.es" style="color:#C9A961">hola@kartia.es</a>.</div>
+      <div class="lead-legal" id="leadLegal">Usaremos tu email solo para enviarte el montaje y, si lo pides, un presupuesto.</div>
+      <a class="lead-link" href="https://kartia.es" target="_blank" rel="noopener">O mira ya los portamenús →</a>
     </div>
 
     <button class="nueva-carta-btn" id="nuevaCartaBtn" onclick="nuevaCarta()">
@@ -1420,11 +1246,11 @@
   <p>Carta Rápida elimina todas esas barreras. En menos de un minuto, cualquier restaurante, hotel o cafetería puede tener una carta con diseño profesional y neuromarketing aplicado, sin conocimientos técnicos, sin presupuesto y sin esperas.</p>
   <h3>Qué incluye el rediseño</h3>
   <ul>
-    <li><strong>Reorganización por neuromarketing</strong> — los platos más rentables aparecen primero en cada sección.</li>
+    <li><strong>Orden que vende</strong> — la especialidad y los platos de más valor aparecen primero en cada sección.</li>
     <li><strong>Descripción de platos</strong> — textos elegantes y apetecibles con terminología profesional de hostelería.</li>
     <li><strong>Traducción a 6 idiomas</strong> — inglés, francés, alemán, italiano, portugués y chino.</li>
     <li><strong>Ajustes libres</strong> — indica cualquier cambio en texto normal y se aplica sin resubir la carta.</li>
-    <li><strong>PDF listo para imprimir</strong> — formato A4 con tu logotipo en la cabecera de cada página.</li>
+    <li><strong>PDF listo para imprimir</strong> — formato A4, tipografía de imprenta y tu logotipo en la cabecera.</li>
   </ul>
   <hr class="seo-divider">
   <h2>La carta en inglés: una oportunidad que muchos restaurantes ignoran</h2>
@@ -1489,15 +1315,15 @@
     </div>
     <div class="faq-item open" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Es realmente gratis? ¿Dónde está la trampa?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Es realmente gratis. Kartia es una empresa de neuromarketing para hostelería — Carta Rápida es nuestra carta de presentación. Queremos que pruebes lo que hacemos. Si te gusta, quizá compres un portamenú o nos contrates para un rediseño más profundo. Si no, te quedas con tu PDF gratis y listo.</div>
+      <div class="faq-answer">Es realmente gratis. Kartia es un taller español de portamenús artesanales para hostelería, y Carta Rápida es nuestra forma de ayudarte antes de venderte nada. Si te gusta el resultado, quizá quieras ver tu carta en uno de nuestros portamenús. Si no, te quedas con tu PDF y listo.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Aceptamos JPG, PNG y WEBP. Nuestra IA está entrenada para leer cartas con reflejos, fotos de baja resolución, incluso hojas fotocopiadas — sin problema. Para mejores resultados, una foto bien iluminada con buena nitidez.</div>
+      <div class="faq-answer">Aceptamos JPG, PNG y WEBP, y hasta 5 fotos si tu carta tiene varias páginas. Leemos cartas con reflejos, fotos hechas con prisa e incluso hojas fotocopiadas. Para el mejor resultado: foto de frente, con buena luz y sin cortar los bordes.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Cuánto tarda en generar el PDF?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Entre 20 y 40 segundos, según el tamaño de la carta. La mayoría de cartas están listas en menos de 30 segundos.</div>
+      <div class="faq-answer">Entre 20 y 40 segundos, según el tamaño de la carta. Después puedes cambiar de estilo y descargar el PDF al momento, sin esperar otra vez.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Puedo traducir mi carta a otros idiomas?</h3><span class="faq-plus">+</span></div>
@@ -1505,7 +1331,7 @@
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Qué es exactamente el "neuromarketing"?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Es la ciencia de cómo el cerebro toma decisiones de compra. En hostelería se traduce en: colocar platos rentables en zonas visuales clave, eliminar el símbolo €, usar descripciones sensoriales, agrupar por emoción y no por categoría. Todo eso lo aplicamos automáticamente.</div>
+      <div class="faq-answer">Es el estudio de cómo decidimos lo que compramos. En una carta se traduce en cosas muy concretas: la especialidad y los platos de más valor al principio de cada sección, el precio detrás del plato y no en columna (así nadie elige mirando solo precios), sin el símbolo €, y descripciones breves que dan ganas sin exagerar. Todo eso lo aplicamos al maquetar tu carta.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Dónde se guardan mis cartas?</h3><span class="faq-plus">+</span></div>
@@ -1533,7 +1359,7 @@
       <a href="https://escandallo.kartia.es">Escandallos</a>
       <a href="mailto:hola@kartia.es">Contacto</a>
     </div>
-    <span class="footer-copy">© 2025 Kartia — Gastrotouch Marketing Solutions S.L.</span>
+    <span class="footer-copy">© 2026 Kartia — Gastrotouch Marketing Solutions S.L.</span>
   </div>
 </footer>
 
@@ -1616,8 +1442,8 @@
   let filesList = [], logoFile = null, logoDataUrl = null;
   let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
-  let estiloActual = 'clasico';
-  let nivelTamano = 1;
+  let estiloActual = 'mantel';
+  const ESTILOS_VALIDOS = ['mantel', 'barra', 'autor'];
 
   const MAX_FOTOS = 5;
   const MAX_MB = 5;
@@ -1675,45 +1501,89 @@
     });
   }
 
-  const NIVELES_TAMANO = [
-    { label: 'Pequeño',    nombre: 15, sec: 12, plato: 11, desc: 9,  precio: 10 },
-    { label: 'Normal',     nombre: 20, sec: 15, plato: 13, desc: 11, precio: 13 },
-    { label: 'Grande',     nombre: 24, sec: 18, plato: 15, desc: 12, precio: 14 },
-    { label: 'Muy grande', nombre: 28, sec: 21, plato: 17, desc: 13, precio: 15 }
-  ];
-
-  function cambiarTamano(dir) {
-    nivelTamano = Math.max(0, Math.min(NIVELES_TAMANO.length - 1, nivelTamano + dir));
-    aplicarTamano();
-  }
-
-  function aplicarTamano() {
-    const n = NIVELES_TAMANO[nivelTamano];
-    document.getElementById('sizeNivel').textContent = n.label;
-    const carta = document.getElementById('cartaResult');
-    if (!carta) return;
-    carta.querySelectorAll('.card-name').forEach(el => el.style.fontSize = n.nombre + 'px');
-    carta.querySelectorAll('.sec-label').forEach(el => el.style.fontSize = n.sec + 'px');
-    carta.querySelectorAll('.item-name').forEach(el => el.style.fontSize = n.plato + 'px');
-    carta.querySelectorAll('.item-desc').forEach(el => el.style.fontSize = n.desc + 'px');
-    carta.querySelectorAll('.item-price').forEach(el => el.style.fontSize = n.precio + 'px');
-    // También aplicar al printBodyContent para el PDF
-    const print = document.getElementById('printBodyContent');
-    if (!print) return;
-    print.querySelectorAll('.print-nombre').forEach(el => el.style.fontSize = n.nombre + 'px');
-    print.querySelectorAll('.sec-label').forEach(el => el.style.fontSize = n.sec + 'px');
-    print.querySelectorAll('.item-name').forEach(el => el.style.fontSize = n.plato + 'px');
-    print.querySelectorAll('.item-desc').forEach(el => el.style.fontSize = n.desc + 'px');
-    print.querySelectorAll('.item-price').forEach(el => el.style.fontSize = n.precio + 'px');
-  }
-
   function selEstilo(el, estilo) {
+    if (!ESTILOS_VALIDOS.includes(estilo)) return;
     estiloActual = estilo;
-    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
-    el.classList.add('on');
-    document.querySelectorAll('.estilo-preview-box').forEach(p => p.classList.remove('visible'));
-    document.getElementById('prev-' + estilo).classList.add('visible');
+    document.querySelectorAll('.t2-scard').forEach(b => b.classList.toggle('on', b.classList.contains(estilo)));
+    document.querySelectorAll('.res-estilo').forEach(b => b.classList.toggle('on', b.dataset.estilo === estilo));
+    if (cartaActual) renderVista();
   }
+
+  function cambiarEstiloResultado(estilo) {
+    const tarjeta = document.querySelector('.t2-scard.' + estilo);
+    selEstilo(tarjeta, estilo);
+  }
+
+  /* ── Vista previa: un iframe con el mismo motor y estilos que el PDF ── */
+  const vista = { iframe: null, lista: false, pendiente: false, id: 0, ancho: 794, alto: 1123, ampliada: false };
+
+  function prepararVista() {
+    if (vista.iframe) return;
+    const f = document.createElement('iframe');
+    f.title = 'Vista previa de tu carta';
+    f.src = '/carta/vista.html';
+    f.setAttribute('scrolling', 'no');
+    f.tabIndex = -1;
+    f.style.width = vista.ancho + 'px';
+    f.style.height = vista.alto + 'px';
+    document.getElementById('vistaEscala').appendChild(f);
+    vista.iframe = f;
+    ajustarVista();
+  }
+
+  function renderVista() {
+    prepararVista();
+    document.getElementById('vistaMarco').classList.add('cargando');
+    vista.pendiente = true;
+    if (vista.lista) enviarVista();
+  }
+
+  function enviarVista() {
+    vista.pendiente = false;
+    vista.id++;
+    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: cartaActual, estilo: estiloActual, logo: logoDataUrl }, location.origin);
+  }
+
+  function ajustarVista() {
+    if (!vista.iframe) return;
+    const marco = document.getElementById('vistaMarco');
+    const cs = getComputedStyle(marco);
+    const disponible = marco.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const ajuste = Math.min(1, disponible / vista.ancho);
+    const esc = vista.ampliada ? Math.min(1, ajuste * 2) : ajuste;
+    const escala = document.getElementById('vistaEscala');
+    vista.iframe.style.width = vista.ancho + 'px';
+    vista.iframe.style.height = vista.alto + 'px';
+    vista.iframe.style.transform = 'scale(' + esc + ')';
+    escala.style.width = Math.floor(vista.ancho * esc) + 'px';
+    escala.style.height = Math.ceil(vista.alto * esc) + 'px';
+  }
+
+  function alternarAmpliar() {
+    vista.ampliada = !vista.ampliada;
+    document.getElementById('vistaMarco').classList.toggle('ampliada', vista.ampliada);
+    document.getElementById('vistaAmpliar').textContent = vista.ampliada ? 'Reducir' : 'Ampliar';
+    ajustarVista();
+    const marco = document.getElementById('vistaMarco');
+    marco.scrollLeft = (marco.scrollWidth - marco.clientWidth) / 2;
+  }
+
+  window.addEventListener('message', (e) => {
+    if (e.origin !== location.origin || !e.data) return;
+    if (e.data.tipo === 'vista-lista') {
+      vista.lista = true;
+      if (vista.pendiente) enviarVista();
+    } else if (e.data.tipo === 'compuesta' && e.data.id === vista.id) {
+      document.getElementById('vistaMarco').classList.remove('cargando');
+      if (e.data.error || !e.data.info) { console.error('[vista]', e.data.error); return; }
+      vista.ancho = Math.ceil(e.data.ancho) || 794;
+      vista.alto = Math.ceil(e.data.alto) || 1123;
+      ajustarVista();
+      const i = e.data.info;
+      document.getElementById('resInfo').textContent = 'A4 · ' + i.paginas + (i.paginas > 1 ? ' páginas' : ' página') + ' · ' + i.platos + ' platos';
+    }
+  });
+  window.addEventListener('resize', ajustarVista);
 
   function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
   function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
@@ -1901,12 +1771,19 @@
             }
           }
         }
-        if (top > bottom || left > right) { logoDataUrl = e.target.result; }
+        if (top > bottom || left > right) {
+          const red = Math.min(1, 1200 / Math.max(canvas.width, canvas.height));
+          const out = document.createElement('canvas'); out.width = Math.round(canvas.width * red); out.height = Math.round(canvas.height * red);
+          out.getContext('2d').drawImage(canvas, 0, 0, out.width, out.height);
+          logoDataUrl = out.toDataURL('image/png');
+        }
         else {
           const pad = 4, cx = Math.max(0,left-pad), cy = Math.max(0,top-pad);
           const cw = Math.min(canvas.width-cx,right-left+pad*2+1), ch = Math.min(canvas.height-cy,bottom-top+pad*2+1);
-          const out = document.createElement('canvas'); out.width = cw; out.height = ch;
-          out.getContext('2d').drawImage(canvas, cx, cy, cw, ch, 0, 0, cw, ch);
+          const red = Math.min(1, 1200 / Math.max(cw, ch));
+          const out = document.createElement('canvas'); out.width = Math.round(cw * red); out.height = Math.round(ch * red);
+          const octx = out.getContext('2d'); octx.imageSmoothingQuality = 'high';
+          octx.drawImage(canvas, cx, cy, cw, ch, 0, 0, out.width, out.height);
           logoDataUrl = out.toDataURL('image/png');
         }
         document.getElementById('logoThumb').src = logoDataUrl;
@@ -1945,8 +1822,7 @@
       btn.innerHTML = 'Rehacer mi carta →';
       btn.disabled = false;
     } else if (estado === 'listo') {
-      const idiomas = tradActivo ? '4' : '1';
-      eyebrow.textContent = 'A4 · LOGO INCLUIDO · ' + idiomas + ' IDIOMA' + (idiomas === '1' ? '' : 'S');
+      eyebrow.textContent = 'A4 · LISTO PARA IMPRIMIR' + (logoDataUrl ? ' · CON TU LOGO' : '');
       titulo.textContent = 'Tu PDF está listo.';
       btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar PDF';
       btn.disabled = false;
@@ -1982,14 +1858,16 @@
     checkReady();
   }
 
-  const stepsProcesado = [
-    { emoji: '👀', bubble: 'Leyendo tu carta...', verb: 'Leyendo', subtitle: 'Leyendo tu carta...', pose: 'pensando' },
-    { emoji: '💰', bubble: 'Detectando precios...', verb: 'Detectando', subtitle: 'Detectando precios...', pose: 'pensando' },
-    { emoji: '🧠', bubble: 'Aplicando neuromarketing...', verb: 'Aplicando', subtitle: 'Aplicando neuromarketing...', pose: 'trabajando' },
-    { emoji: '📊', bubble: 'Ordenando por rentabilidad...', verb: 'Ordenando', subtitle: 'Ordenando por rentabilidad...', pose: 'trabajando' },
-    { emoji: '✍️', bubble: 'Redactando descripciones...', verb: 'Redactando', subtitle: 'Redactando descripciones...', pose: 'sudando' },
-    { emoji: '🎉', bubble: 'Últimos retoques...', verb: 'Rematando', subtitle: 'Últimos retoques...', pose: 'sudando' },
+  const PASOS_BASE = [
+    { emoji: '👀', bubble: 'Leyendo tu carta...', verb: 'Leyendo', subtitle: 'Platos, precios y secciones', pose: 'pensando' },
+    { emoji: '💰', bubble: 'Revisando precios...', verb: 'Revisando', subtitle: 'Precios a la española, sin símbolo €', pose: 'pensando' },
+    { emoji: '📐', bubble: 'Ordenando secciones...', verb: 'Ordenando', subtitle: 'En el orden natural de una comida', pose: 'trabajando' },
+    { emoji: '⭐', bubble: 'Destacando lo que más vende...', verb: 'Destacando', subtitle: 'Especialidad y platos de más valor, primero', pose: 'trabajando', si: () => neuroActivo },
+    { emoji: '✍️', bubble: 'Escribiendo descripciones...', verb: 'Escribiendo', subtitle: 'Breves, concretas y sin adornos', pose: 'sudando', si: () => descActivo },
+    { emoji: '🌍', bubble: 'Traduciendo...', verb: 'Traduciendo', subtitle: 'Con vocabulario de hostelería', pose: 'sudando', si: () => tradActivo && idiomaSeleccionado },
+    { emoji: '🖋️', bubble: 'Maquetando...', verb: 'Maquetando', subtitle: 'Tipografía, columnas y aire', pose: 'sudando' },
   ];
+  let stepsProcesado = PASOS_BASE;
   let progressStepInterval = null;
   let currentStep = 0;
   let isProcessing = false;
@@ -2010,7 +1888,7 @@
       if (emoji) { emoji.textContent = s.emoji; emoji.style.animation = 'none'; void emoji.offsetWidth; emoji.style.animation = 'emojiBounce 0.5s ease-out'; }
       if (bubbleText) bubbleText.textContent = s.bubble;
       verb.textContent = s.verb; texto.textContent = s.subtitle;
-      if (counter) counter.textContent = 'Paso ' + (i + 1) + ' de 6';
+      if (counter) counter.textContent = 'Paso ' + (i + 1) + ' de ' + stepsProcesado.length;
       pills.forEach(function(p, idx) {
         p.classList.remove('active', 'completed');
         if (idx < i) p.classList.add('completed');
@@ -2028,6 +1906,9 @@
     if (!barWrap) return;
     setEstado('procesando');
     barWrap.style.display = 'block';
+    stepsProcesado = PASOS_BASE.filter(p => !p.si || p.si());
+    const tl = document.getElementById('progressTimeline');
+    if (tl) tl.innerHTML = stepsProcesado.map((_, i) => `<div class="timeline-pill${i === 0 ? ' active' : ''}" data-step="${i}"></div>`).join('');
     currentStep = 0;
     goStep(0);
     clearInterval(progressStepInterval);
@@ -2055,12 +1936,6 @@
     scroll();
   }
 
-  function formatPrice(precio) {
-    if (!precio) return '';
-    const s = precio.toString();
-    return s.includes('.') ? s.replace(/\.?0+$/, '') : s;
-  }
-
   async function run() {
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
@@ -2075,7 +1950,6 @@
     try {
       const formData = new FormData();
       filesList.forEach((f, i) => formData.append(`foto_${i}`, f.file));
-      if (logoFile) formData.append('logo', logoFile);
       if (textoManual) formData.append('texto', textoManual);
       formData.append('descripciones', descActivo ? 'si' : 'no');
       formData.append('neuromarketing', neuroActivo ? 'si' : 'no');
@@ -2084,27 +1958,14 @@
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
       stopCountdown();
-      if (!data.ok) throw new Error(data.error);
-      if (data.logo) logoDataUrl = data.logo;
-      status('Aplicando diseño…');
-      setTimeout(() => mostrarCarta(data.carta), 600);
+      if (!data.ok) throw new Error(data.error || 'Ha habido un problema. Inténtalo de nuevo.');
+      mostrarCarta(data.carta);
     } catch (err) {
       stopCountdown();
       isProcessing = false;
       setPose('asustado');
       setTimeout(() => setPose('feliz'), 4000);
-      let mensajeError = err.message;
-      if (mensajeError.includes('unsupported image') || mensajeError.includes('image_parse_error')) {
-        mensajeError = 'La imagen no es compatible. Usa JPG, PNG o WEBP e inténtalo de nuevo.';
-      } else if (mensajeError.includes('fetch') || mensajeError.includes('network') || mensajeError.includes('Failed to fetch')) {
-        mensajeError = 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
-      } else if (mensajeError.includes('formato inesperado') || mensajeError.includes('JSON')) {
-        mensajeError = 'Ha habido un problema al procesar tu carta. Inténtalo de nuevo.';
-      } else if (mensajeError.includes('timeout') || mensajeError.includes('504') || mensajeError.includes('503')) {
-        mensajeError = 'El servidor ha tardado demasiado. Inténtalo de nuevo en unos segundos.';
-      } else {
-        mensajeError = 'Ha habido un problema. Inténtalo de nuevo.';
-      }
+      const mensajeError = mensajeAmable(err);
       document.getElementById('inputWrap').style.opacity = '1';
       document.getElementById('inputWrap').style.pointerEvents = 'auto';
       document.getElementById('mainBtn').style.opacity = '1';
@@ -2128,22 +1989,16 @@
       const res = await fetch('/rehacer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carta: cartaActual, ajuste }) });
       const data = await res.json();
       stopCountdown();
-      if (!data.ok) throw new Error(data.error);
+      if (!data.ok) throw new Error(data.error || 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.');
       document.getElementById('ajusteTxt').value = '';
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
-      status('Aplicando ajuste…');
-      setTimeout(() => mostrarCarta(data.carta), 600);
+      mostrarCarta(data.carta);
     } catch (err) {
       stopCountdown();
       isProcessing = false;
       setPose('asustado');
       setTimeout(() => setPose('feliz'), 4000);
-      let mensajeError = err.message;
-      if (mensajeError.includes('fetch') || mensajeError.includes('network') || mensajeError.includes('Failed to fetch')) {
-        mensajeError = 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
-      } else {
-        mensajeError = 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.';
-      }
+      const mensajeError = mensajeAmable(err);
       setEstado('listo');
       status(mensajeError);
       btn.classList.add('activo');
@@ -2151,91 +2006,30 @@
     }
   }
 
+  // Los mensajes del servidor ya vienen en castellano claro; los de red se traducen aquí
+  function mensajeAmable(err) {
+    const m = String(err && err.message || '');
+    if (/Failed to fetch|NetworkError|network|Load failed/i.test(m)) return 'Sin conexión. Comprueba tu internet e inténtalo de nuevo.';
+    if (/Unexpected token|JSON/i.test(m)) return 'El servidor ha tardado demasiado. Inténtalo de nuevo en unos segundos.';
+    return m || 'Ha habido un problema. Inténtalo de nuevo.';
+  }
+
   function mostrarCarta(carta) {
-    carta = eliminarDuplicados(carta);
-    cartaActual = carta;
+    cartaActual = eliminarDuplicados(carta);
     document.getElementById('msgStatus').style.display = 'none';
-    const tienelogo = !!logoDataUrl;
-
-    // Print table — construir según estilo
-    const thead = document.getElementById('printTheadContent');
-    if (tienelogo) thead.innerHTML = `<img src="${logoDataUrl}" alt="Logo">`;
-    else if (carta.nombre_restaurante) thead.innerHTML = `<div class="print-nombre">${carta.nombre_restaurante}</div>`;
-    else thead.innerHTML = '';
-
-    // Construir body según estilo
-    const wrapClass = estiloActual === 'gourmet' ? 'print-gourmet-wrap' : estiloActual === 'minimalista' ? 'print-mini-wrap' : '';
-    let bodyHtml = wrapClass ? `<div class="${wrapClass}">` : '';
-
-    carta.secciones.forEach(sec => {
-      if (estiloActual === 'gourmet') {
-        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
-      } else {
-        bodyHtml += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
-      }
-      sec.platos.forEach(p => {
-        if (estiloActual === 'gourmet') {
-          bodyHtml += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`;
-        } else {
-          bodyHtml += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`;
-        }
-      });
-      bodyHtml += `</div>`;
-    });
-
-    if (carta.nota_pie) bodyHtml += `<div class="nota-pie">${carta.nota_pie}</div>`;
-    if (wrapClass) bodyHtml += `</div>`;
-    document.getElementById('printBodyContent').innerHTML = bodyHtml;
-
-    const container = document.getElementById('cartaResult');
-
-    // Aplicar clase de estilo al wrap
-    const cartaWrap = container.closest('.wrap');
-    cartaWrap.classList.remove('carta-gourmet', 'carta-minimalista');
-    if (estiloActual === 'gourmet') cartaWrap.classList.add('carta-gourmet');
-    if (estiloActual === 'minimalista') cartaWrap.classList.add('carta-minimalista');
-
-    const logoHtml = tienelogo ? `<img class="card-logo visible" src="${logoDataUrl}" alt="Logo">` : '';
-    const nombreHtml = !tienelogo && carta.nombre_restaurante ? `<span class="card-name">${carta.nombre_restaurante}</span>` : '';
-    const mostrarHead = tienelogo || carta.nombre_restaurante;
-
-    let html = '';
-    if (mostrarHead) {
-      html = `<div class="card-head">${logoHtml}${nombreHtml}${estiloActual === 'clasico' ? '<span class="card-tag">Vista previa</span>' : ''}</div>`;
-    }
-
-    html += `<div class="card-body">`;
-    carta.secciones.forEach(sec => {
-      if (estiloActual === 'gourmet') {
-        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div><div class="gourmet-sec-linea"></div>`;
-      } else {
-        html += `<div class="sec-block"><div class="sec-label">${sec.nombre}</div>`;
-      }
-      if (estiloActual === 'gourmet') {
-        sec.platos.forEach(p => { html += `<div class="item"><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}<div class="item-price">${formatPrice(p.precio)}</div></div>`; });
-      } else {
-        sec.platos.forEach(p => { html += `<div class="item"><div><div class="item-name">${p.nombre}</div>${p.descripcion ? `<div class="item-desc">${p.descripcion}</div>` : ''}${p.alergenos ? `<div class="item-alergenos">${p.alergenos}</div>` : ''}</div><div class="item-price">${formatPrice(p.precio)}</div></div>`; });
-      }
-      html += `</div>`;
-    });
-    if (carta.nota_pie) html += `<div class="nota-pie">${carta.nota_pie}</div>`;
-    html += '</div>';
-
-    container.innerHTML = html;
     document.getElementById('msgResult').style.display = 'flex';
     document.getElementById('actions').classList.add('on');
     document.getElementById('ajusteWrap').classList.add('on');
     document.getElementById('inputWrap').style.display = 'none';
     document.getElementById('mainBtn').style.display = 'none';
-    nivelTamano = 1;
-    document.getElementById('sizeNivel').textContent = 'Normal';
-    document.getElementById('sizeControl').classList.add('on');
+    document.querySelectorAll('.res-estilo').forEach(b => b.classList.toggle('on', b.dataset.estilo === estiloActual));
+    renderVista();
     isProcessing = false;
     setPose('riendo');
     setTimeout(() => setPose('feliz'), 3000);
     setEstado('listo');
-    setTimeout(() => { document.getElementById('toolCta').classList.add('on'); document.getElementById('nuevaCartaBtn').classList.add('on'); scroll(); }, 500);
-    scroll();
+    setTimeout(() => { document.getElementById('toolCta').classList.add('on'); document.getElementById('nuevaCartaBtn').classList.add('on'); }, 500);
+    document.getElementById('msgResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function toggleFaq(el) {
@@ -2249,19 +2043,19 @@
     filesList = []; logoFile = null; logoDataUrl = null;
     descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
     idiomaSeleccionado = null; textoActivo = false; cartaActual = null;
-    estiloActual = 'clasico';
+    estiloActual = 'mantel';
 
     // Reset UI — mensajes y resultado
     document.getElementById('msgResult').style.display = 'none';
     document.getElementById('msgStatus').style.display = 'none';
     document.getElementById('msgTyping').style.display = 'none';
-    document.getElementById('cartaResult').innerHTML = '';
+    document.getElementById('resInfo').textContent = '';
     document.getElementById('actions').classList.remove('on');
     document.getElementById('ajusteWrap').classList.remove('on');
     document.getElementById('ajusteTxt').value = '';
     document.getElementById('toolCta').classList.remove('on');
     document.getElementById('nuevaCartaBtn').classList.remove('on');
-    document.getElementById('sizeControl').classList.remove('on');
+    if (vista.ampliada) alternarAmpliar();
 
     // Reset input
     document.getElementById('inputWrap').style.display = 'block';
@@ -2296,200 +2090,88 @@
     document.getElementById('textoDrop').classList.remove('on');
     document.getElementById('textoArrow').classList.remove('open');
 
-    // Reset estilo segmented
-    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('on'));
-    document.querySelector('.seg-btn').classList.add('on');
+    // Reset estilo
+    selEstilo(document.querySelector('.t2-scard.mantel'), 'mantel');
 
-    // Reset clases estilo en wrap
-    const wrapEl = document.getElementById('cartaResult').closest('.wrap');
-    wrapEl.classList.remove('carta-gourmet', 'carta-minimalista');
+    // Reset montaje
+    document.getElementById('leadForm').style.display = '';
+    document.getElementById('leadLegal').style.display = '';
+    document.getElementById('leadOk').style.display = 'none';
+    document.getElementById('leadBtn').disabled = false;
+    document.getElementById('leadBtn').textContent = 'Quiero verla';
 
     // Scroll arriba
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function descargar() {
-    if (cartaActual && cartaActual.nombre_restaurante) {
-      const nombre = cartaActual.nombre_restaurante
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '')
-        .substring(0, 40);
-      document.title = `carta-${nombre}`;
-    } else {
-      document.title = 'carta-kartia';
-    }
-
-    // Si es gourmet o minimalista, pedir email primero
-    const cartaWrapEl = document.getElementById('cartaResult').closest('.wrap');
-    const esGourmet = cartaWrapEl && cartaWrapEl.classList.contains('carta-gourmet');
-    const esMinimalista = cartaWrapEl && cartaWrapEl.classList.contains('carta-minimalista');
-    if (esGourmet || esMinimalista) {
-      const nombreEstilo = esGourmet ? 'Estilo Gourmet' : 'Estilo Minimalista';
-      document.getElementById('modalEstiloNombre').textContent = nombreEstilo;
-      document.getElementById('modalForm').style.display = 'block';
-      document.getElementById('modalSuccess').style.display = 'none';
-      document.getElementById('modalEmail').value = '';
-      document.getElementById('modalEmail').classList.remove('error');
-      document.getElementById('modalOverlay').classList.add('on');
-    } else {
-      // Clásico — descarga directa
-      descargarDirecto();
-    }
-  }
-
-  function encontrarCortes(alturas, alturaMax, numPaginas) {
-    const n = alturas.length;
-    const total = alturas.reduce((a, b) => a + b, 0);
-
-    if (numPaginas <= 1 || n <= numPaginas) return [];
-
-    // 2 páginas: búsqueda exhaustiva — minimiza diferencia entre páginas
-    if (numPaginas === 2) {
-      let mejorCorte = 1;
-      let mejorDiff = Infinity;
-      let acum = 0;
-      for (let i = 1; i < n; i++) {
-        acum += alturas[i - 1];
-        const diff = Math.abs(acum - (total - acum));
-        if (diff < mejorDiff) {
-          mejorDiff = diff;
-          mejorCorte = i;
-        }
-      }
-      return [mejorCorte];
-    }
-
-    // TODO: Para cartas de 3+ páginas, este algoritmo greedy puede generar desbalance.
-    // Si aparece en producción, sustituir por programación dinámica para optimizar el reparto global.
-    const cortes = [];
-    let acum = 0;
-    for (let i = 0; i < n; i++) {
-      if (acum + alturas[i] > alturaMax && cortes.length < numPaginas - 1) {
-        cortes.push(i);
-        acum = 0;
-      }
-      acum += alturas[i];
-    }
-    return cortes;
-  }
-
-  function balancearPaginas() {
-    const printTable  = document.getElementById('printTable');
-    const bodyContent = document.getElementById('printBodyContent');
-    const bloques     = Array.from(bodyContent.querySelectorAll('.sec-block'));
-
-    if (bloques.length < 2) return;
-
-    // Hacer visible off-screen para medir alturas reales.
-    // Los tres wrappers (clásico, gourmet, minimalista) no tienen padding/margin horizontal,
-    // así que 680px (~180mm A4 menos márgenes) es correcto para los tres estilos.
-    const savedStyle = printTable.style.cssText;
-    printTable.style.cssText =
-      'display:table;position:fixed;top:-99999px;left:0;' +
-      'width:680px;visibility:hidden;pointer-events:none;';
-
-    const alturas   = bloques.map(b => b.getBoundingClientRect().height);
-    const theadCell = document.getElementById('printTheadContent');
-    const theadH    = theadCell ? theadCell.getBoundingClientRect().height + 18 : 88;
-
-    printTable.style.cssText = savedStyle;
-
-    // Limpiar saltos previos
-    bloques.forEach(b => {
-      b.style.pageBreakBefore = '';
-      b.style.breakBefore     = '';
-      b.style.pageBreakInside = '';
-      b.style.orphans         = '';
-      b.style.widows          = '';
-    });
-
-    const totalAltura = alturas.reduce((a, b) => a + b, 0);
-
-    // Altura útil de contenido por página en CSS px:
-    // A4 (297mm) - márgenes (24mm) = 273mm × 3.779 ≈ 1032px, menos thead y tfoot (~28px)
-    const PAGINA_H = Math.round(273 * 3.779) - theadH - 28;
-
-    // Secciones más altas que una página completa: permitir corte interno
-    bloques.forEach((b, i) => {
-      if (alturas[i] > PAGINA_H) {
-        b.style.pageBreakInside = 'auto';
-        b.style.orphans         = '3';
-        b.style.widows          = '3';
-      }
-    });
-
-    // Cabe en 1 página: no hacer nada
-    if (totalAltura <= PAGINA_H) {
-      console.log('[balancearPaginas]', {
-        bloques: bloques.length,
-        alturas: alturas.map(h => Math.round(h)),
-        totalAltura: Math.round(totalAltura),
-        PAGINA_H,
-        numPaginas: 1,
-        cortes: []
+  let descargando = false;
+  async function descargar() {
+    if (!cartaActual || descargando) return;
+    descargando = true;
+    const btn = document.getElementById('dlBtn');
+    const htmlBtn = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = 'Preparando tu PDF…';
+    try {
+      const res = await fetch('/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoDataUrl })
       });
-      return;
+      if (!res.ok) {
+        let msg = 'No hemos podido generar el PDF. Inténtalo de nuevo.';
+        try { const d = await res.json(); if (d.error) msg = d.error; } catch (e) {}
+        throw new Error(msg);
+      }
+      const blob = await res.blob();
+      const nombre = (res.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre ? nombre[1] : 'carta.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
+      updateToolBubble('¡Tu carta está descargada! 🎉');
+    } catch (err) {
+      status(mensajeAmable(err));
+    } finally {
+      descargando = false;
+      btn.disabled = false;
+      btn.innerHTML = htmlBtn;
     }
-
-    const numPaginas = Math.ceil(totalAltura / PAGINA_H);
-    const cortes     = encontrarCortes(alturas, PAGINA_H, numPaginas);
-
-    cortes.forEach(i => {
-      bloques[i].style.pageBreakBefore = 'always';
-      bloques[i].style.breakBefore     = 'page';
-    });
-
-    console.log('[balancearPaginas]', {
-      bloques: bloques.length,
-      alturas: alturas.map(h => Math.round(h)),
-      totalAltura: Math.round(totalAltura),
-      PAGINA_H,
-      numPaginas,
-      cortes
-    });
   }
 
-  function descargarDirecto() {
-    cerrarModal();
-    balancearPaginas();
-    window.print();
-    setTimeout(() => {
-      document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
-    }, 1000);
-  }
-
-  function cerrarModal() {
-    document.getElementById('modalOverlay').classList.remove('on');
-  }
-
-  async function enviarSuscripcion() {
-    const email = document.getElementById('modalEmail').value.trim();
-    const input = document.getElementById('modalEmail');
-    if (!email || !email.includes('@')) {
-      input.classList.add('error');
-      return;
-    }
+  async function pedirMontaje(ev) {
+    ev.preventDefault();
+    const input = document.getElementById('leadEmail');
+    const email = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { input.classList.add('error'); input.focus(); return; }
     input.classList.remove('error');
+    const btn = document.getElementById('leadBtn');
+    btn.disabled = true; btn.textContent = 'Enviando…';
     try {
       const res = await fetch('/guardar-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({
+          email,
+          origen: 'carta-rapida-montaje',
+          restaurante: cartaActual ? cartaActual.nombre_restaurante : '',
+          estilo: estiloActual,
+          platos: cartaActual ? cartaActual.secciones.reduce((n, s) => n + s.platos.length, 0) : 0
+        })
       });
       const data = await res.json();
-      document.getElementById('modalForm').style.display = 'none';
-      document.getElementById('modalSuccess').style.display = 'block';
-      setTimeout(() => {
-        cerrarModal();
-        balancearPaginas();
-        window.print();
-        setTimeout(() => {
-          document.title = 'Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia';
-        }, 1000);
-      }, 1500);
+      if (!data.ok) throw new Error(data.error || 'Email no válido');
+      document.getElementById('leadForm').style.display = 'none';
+      document.getElementById('leadLegal').style.display = 'none';
+      document.getElementById('leadOk').style.display = 'block';
     } catch (err) {
-      descargarDirecto();
+      btn.disabled = false; btn.textContent = 'Quiero verla';
+      input.classList.add('error');
     }
   }
 
@@ -2532,29 +2214,6 @@
   });
   resetIdleTimer();
 </script>
-
-<!-- MODAL SUSCRIPCIÓN -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="cerrarModal()">×</button>
-    <div id="modalForm">
-      <div class="modal-badge"><div class="modal-badge-dot"></div> <span id="modalEstiloNombre">Estilo Gourmet</span></div>
-      <div class="modal-titulo">Casi listo.</div>
-      <div class="modal-subtitulo">Tu carta está rediseñada. Déjanos tu email y la descargas ahora mismo. Sin registro, sin contraseña.</div>
-      <input class="modal-input" type="email" id="modalEmail" placeholder="tu@email.com">
-      <button class="modal-btn" onclick="enviarSuscripcion()">Descargar ahora →</button>
-      <button class="modal-skip" onclick="descargarDirecto()">No, gracias</button>
-      <div class="modal-legal">Solo usamos tu email para enviarte de vez en cuando consejos de neuromarketing para tu restaurante.</div>
-    </div>
-    <div class="modal-success" id="modalSuccess">
-      <div class="modal-success-check">
-        <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-      </div>
-      <div class="modal-success-txt">¡Apuntado!</div>
-      <div class="modal-success-sub">Te enviaremos los primeros consejos en breve.</div>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>

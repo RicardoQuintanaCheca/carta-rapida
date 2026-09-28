@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Vista previa de la carta</title>
+<link rel="stylesheet" href="/carta/fuentes.css">
+<link rel="stylesheet" href="/carta/estilos.css">
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  #d { width: 210mm; }
+  @media screen {
+    .carta { gap: 8mm !important; }
+    .pagina { box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.09) !important; }
+  }
+</style>
+</head>
+<body>
+<div id="d"></div>
+<script src="/carta/motor.js"></script>
+<script>
+  // Esta página solo compone la carta que le manda la web (mismo origen) y devuelve su tamaño
+  const CARAS = ['16px "EB Garamond"', 'italic 16px "EB Garamond"', '500 16px "EB Garamond"', '600 16px "EB Garamond"',
+    '16px "Libre Caslon Display"', '16px "Instrument Sans"', '500 16px "Instrument Sans"', '600 16px "Instrument Sans"',
+    '16px "Instrument Serif"', 'italic 16px "Instrument Serif"', '500 16px "Bodoni Moda"',
+    '16px "Newsreader"', '500 16px "Newsreader"', 'italic 16px "Newsreader"'];
+  const fuentesListas = Promise.all(CARAS.map(c => document.fonts.load(c, 'Áéñ').catch(() => {}))).then(() => document.fonts.ready);
+
+  const precargadas = [];
+  function precargar(src) {
+    return new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = src; precargadas.push(i); });
+  }
+
+  window.addEventListener('message', async (e) => {
+    if (e.origin !== location.origin || !e.data || e.data.tipo !== 'componer') return;
+    await fuentesListas;
+    const d = document.getElementById('d');
+    let info = null, error = null;
+    // El logo se decodifica antes de medir; si no, la cabecera mediría 0 y el texto se saldría
+    if (e.data.logo) await precargar(e.data.logo);
+    try {
+      info = MotorCarta.componer(d, e.data.carta, { estilo: e.data.estilo, logo: e.data.logo, credito: true });
+    } catch (err) { error = String(err && err.message || err); }
+    const r = d.getBoundingClientRect();
+    parent.postMessage({ tipo: 'compuesta', id: e.data.id, info, error, ancho: r.width, alto: r.height }, location.origin);
+  });
+  parent.postMessage({ tipo: 'vista-lista' }, location.origin);
+</script>
+</body>
+</html>

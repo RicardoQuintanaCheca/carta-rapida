@@ -42,7 +42,7 @@
 
 - Pago: **50% upfront + 50% a la entrega**
 - Lead time: **20-25 días hábiles** (NO 48h, eso es falso)
-- Pedido mínimo: **15 unidades**
+- Pedido mínimo: **10 unidades**
 
 ---
 

@@ -2,488 +2,402 @@ require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
-const fs = require('fs');
+const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+app.set('trust proxy', true);
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+// Las fotos se leen en memoria: no se guarda nada en disco
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 12 * 1024 * 1024, files: 9 }
 });
 
-app.use(express.json());
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const MODELO = process.env.OPENAI_MODEL || 'gpt-4o';
+
+app.use(express.json({ limit: '6mb' }));
 app.use(express.static('public'));
 
+// Tipografías de las cartas para la vista previa (las mismas del PDF)
+app.get('/carta/fuentes.css', (req, res) => {
+  res.type('text/css').set('Cache-Control', 'public, max-age=86400').send(CSS_FUENTES_WEB);
+});
+app.get('/carta/f/:archivo', (req, res) => {
+  const ruta = ARCHIVOS_FUENTE.get(req.params.archivo);
+  if (!ruta) return res.status(404).end();
+  res.type('font/woff2').set('Cache-Control', 'public, max-age=31536000, immutable').sendFile(ruta);
+});
+
 // === RATE LIMITING ===
-const limites = new Map();
-const LIMITE_HORA = 30;
-const LIMITE_DIA = 100;
+function crearLimite(porHora, porDia, mensajeHora, mensajeDia) {
+  const registro = new Map();
+  const HORA = 60 * 60 * 1000, DIA = 24 * HORA;
+  setInterval(() => {
+    const ahora = Date.now();
+    for (const [ip, marcas] of registro) {
+      const vivas = marcas.filter(t => ahora - t < DIA);
+      vivas.length ? registro.set(ip, vivas) : registro.delete(ip);
+    }
+  }, HORA).unref();
 
-function checkRateLimit(req, res, next) {
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
-  const ahora = Date.now();
-  const HORA_MS = 60 * 60 * 1000;
-  const DIA_MS = 24 * 60 * 60 * 1000;
-
-  if (!limites.has(ip)) limites.set(ip, []);
-  const stamps = limites.get(ip).filter(t => ahora - t < DIA_MS);
-  limites.set(ip, stamps);
-
-  const enHora = stamps.filter(t => ahora - t < HORA_MS).length;
-
-  if (enHora >= LIMITE_HORA) {
-    console.warn(`[RATE LIMIT] IP ${ip} — ${enHora} peticiones en la última hora`);
-    return res.status(429).json({ ok: false, error: 'Has procesado demasiadas cartas en la última hora. Espera unos minutos e inténtalo de nuevo.' });
-  }
-  if (stamps.length >= LIMITE_DIA) {
-    console.warn(`[RATE LIMIT] IP ${ip} — ${stamps.length} peticiones en el último día`);
-    return res.status(429).json({ ok: false, error: 'Has alcanzado el límite diario de cartas procesadas. Vuelve mañana.' });
-  }
-
-  stamps.push(ahora);
-  next();
+  return (req, res, next) => {
+    const ip = req.ip || 'desconocida';
+    const ahora = Date.now();
+    const marcas = (registro.get(ip) || []).filter(t => ahora - t < DIA);
+    if (marcas.filter(t => ahora - t < HORA).length >= porHora) {
+      console.warn(`[LIMITE] ${req.path} ${ip} — tope por hora`);
+      return res.status(429).json({ ok: false, error: mensajeHora });
+    }
+    if (marcas.length >= porDia) {
+      console.warn(`[LIMITE] ${req.path} ${ip} — tope diario`);
+      return res.status(429).json({ ok: false, error: mensajeDia });
+    }
+    marcas.push(ahora);
+    registro.set(ip, marcas);
+    next();
+  };
 }
 
-const IDIOMAS = {
-  en: 'English',
-  fr: 'French',
-  de: 'German',
-  it: 'Italian',
-  pt: 'Portuguese',
-  zh: 'Chinese'
+const limiteProcesar = crearLimite(30, 100,
+  'Has procesado demasiadas cartas en la última hora. Espera unos minutos e inténtalo de nuevo.',
+  'Has alcanzado el límite diario de cartas procesadas. Vuelve mañana.');
+const limiteRehacer = crearLimite(40, 150,
+  'Demasiados ajustes seguidos. Espera unos minutos.',
+  'Has alcanzado el límite diario de ajustes. Vuelve mañana.');
+const limitePDF = crearLimite(60, 200,
+  'Demasiadas descargas seguidas. Espera unos minutos.',
+  'Has alcanzado el límite diario de descargas. Vuelve mañana.');
+
+// === ESQUEMA DE LA CARTA ===
+// El modelo está obligado a devolver exactamente esta forma (sin parseos a mano)
+const ESQUEMA_CARTA = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['nombre_restaurante', 'subtitulo', 'idioma', 'nota_pie', 'servicios', 'secciones'],
+  properties: {
+    nombre_restaurante: { type: 'string' },
+    subtitulo: { type: 'string' },
+    idioma: { type: 'string' },
+    nota_pie: { type: 'string' },
+    servicios: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['nombre', 'precio'],
+        properties: { nombre: { type: 'string' }, precio: { type: 'string' } }
+      }
+    },
+    secciones: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['nombre', 'platos'],
+        properties: {
+          nombre: { type: 'string' },
+          platos: {
+            type: 'array',
+            items: {
+              type: 'object',
+              additionalProperties: false,
+              required: ['nombre', 'descripcion', 'precio', 'alergenos'],
+              properties: {
+                nombre: { type: 'string' },
+                descripcion: { type: 'string' },
+                precio: { type: 'string' },
+                alergenos: { type: 'string' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 };
+
+const IDIOMAS = { en: 'English', fr: 'French', de: 'German', it: 'Italian', pt: 'Portuguese', zh: 'Chinese' };
+const ESTILOS = ['mantel', 'barra', 'autor'];
 
 const INSTRUCCION_NO_OMITIR = `REGLAS INVIOLABLES DE FIDELIDAD ESTRUCTURAL — PRIORIDAD ABSOLUTA SOBRE TODO LO DEMÁS:
 
-REGLA INVIOLABLE 1 — ESTRUCTURA SAGRADA: La estructura de secciones de la carta original es SAGRADA. El número de secciones del JSON de salida debe ser EXACTAMENTE igual al número de secciones visibles en la imagen. NO crees secciones nuevas. NO fusiones secciones. NO dividas una sección en varias.
+REGLA 1 — ESTRUCTURA SAGRADA: el número de secciones de salida debe ser EXACTAMENTE el número de secciones visibles en la carta original. NO crees secciones nuevas, NO fusiones, NO dividas.
 
-REGLA INVIOLABLE 2 — PLATOS EN SU LUGAR: Cada plato debe permanecer en la sección donde aparece en la imagen original. NUNCA muevas un plato de una sección a otra, aunque creas que "encaja mejor" en otra categoría.
+REGLA 2 — PLATOS EN SU LUGAR: cada plato permanece en la sección donde aparece en el original. NUNCA lo muevas a otra sección.
 
-REGLA INVIOLABLE 3 — DISTINGUIR SECCIÓN DE PLATO:
-Una SECCIÓN se identifica visualmente por:
-- Estar separada del resto por espaciado mayor, líneas, o cambio de columna
-- Ser un título corto y genérico (Entrantes, Carnes, Postres, Empecemos, Del Mar, Nuestro Estilo, etc.)
-- NO ir seguida directamente de un precio
-- Funcionar como categoría que agrupa varios platos
+REGLA 3 — DISTINGUIR SECCIÓN DE PLATO:
+Una SECCIÓN es un título corto y genérico (Entrantes, Carnes, Postres, Empecemos, Del Mar…), separado visualmente, que agrupa varios platos y NO va seguido de un precio.
+Un PLATO va seguido de un precio o de una descripción y aparece bajo una sección. Aunque esté en MAYÚSCULAS y sea largo ("TABLA DE QUESOS DE NUESTRA TIERRA (120g)", "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS"), sigue siendo un plato. Sin excepciones.
 
-Un PLATO se identifica por:
-- Ir seguido de un precio (ej: 28,00€) o de una descripción
-- Aparecer en la lista bajo una sección
-- Aunque su nombre esté en MAYÚSCULAS y sea largo (ej: "TABLA DE QUESOS DE NUESTRA TIERRA (120g)", "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS"), sigue siendo un plato
+REGLA 4 — CERO DUPLICADOS: cada plato aparece UNA SOLA VEZ.
 
-CASO ESPECIAL: Si un texto en mayúsculas va seguido de un precio o descripción, es un PLATO, NUNCA una sección. Esta regla NO tiene excepciones.
+REGLA 5 — NO OMITIR: ni un solo plato ni elemento puede faltar.
 
-REGLA INVIOLABLE 4 — CERO DUPLICADOS: Cada plato aparece UNA SOLA VEZ en todo el JSON. Si detectas que un plato aparece en más de una sección, has cometido un error.
+REGLA 6 — VERIFICACIÓN ANTES DE RESPONDER:
+1. ¿Mismo número de secciones que el original?
+2. ¿Cada plato está en su misma sección del original?
+3. ¿Algún duplicado?
+4. ¿Alguna sección con un único plato que se llama igual que la sección? Es un error: ese plato pertenece a otra sección.
 
-REGLA INVIOLABLE 5 — NO OMITIR: NO omitas ningún plato ni elemento. Si omites aunque sea uno, el resultado es inválido.
+EJEMPLO CORRECTO: sección "EMPECEMOS" con Jamón ibérico, Tabla de quesos de nuestra tierra (120g), Ensaladilla, Ensalada de langostinos, Tomate rosa → la misma sección con los mismos 5 platos.
+EJEMPLO INCORRECTO: "EMPECEMOS" con 4 platos + una sección nueva "TABLA DE QUESOS DE NUESTRA TIERRA (120g)". ERROR GRAVE.
 
-REGLA INVIOLABLE 6 — VERIFICACIÓN OBLIGATORIA ANTES DE RESPONDER:
-Antes de devolver el JSON final, ejecuta mentalmente esta verificación:
-1. Cuenta las secciones de la imagen original. ¿Tu JSON tiene EXACTAMENTE el mismo número? Si no, corrige.
-2. Para cada plato en tu JSON, pregúntate: ¿este plato estaba EN ESTA MISMA sección en la imagen original? Si no, muévelo a su sección correcta.
-3. ¿Hay algún plato duplicado? Si sí, elimínalo del lugar incorrecto.
-4. ¿Hay alguna sección que solo contenga 1 plato cuyo nombre coincide con el de la sección? Eso es un error: ese plato pertenece a otra sección, no es una sección propia.
+SOLO puedes: traducir si se pide, redactar descripciones si se pide y reordenar platos DENTRO de su sección si se pide. NUNCA alterar qué secciones existen ni a qué sección pertenece cada plato.`;
 
-Solo después de pasar estas 4 verificaciones, devuelve el JSON.
+const ORDEN_SECCIONES = `ORDEN DE SECCIONES (aplícalo siempre; si una sección no existe, no la incluyas):
+1. Menús del día o especiales · 2. Entrantes, tapas, para compartir · 3. Ensaladas · 4. Sopas, cremas y cuchara · 5. Arroces y pastas · 6. Pescados · 7. Carnes · 8. Postres · 9. Quesos · 10. Café e infusiones · 11. Vinos y bebidas · 12. Otros (pan, extras, suplementos)`;
 
-EJEMPLOS:
+const REGLAS_CAMPOS = `REGLAS DE CAMPOS:
+- precio: solo el número, SIN símbolo €. Decimales con punto ("16.5", no "16,50"); sin ceros finales ("16", no "16.00"). Conserva formatos especiales: "5/u", "84/k", "9 | 16", "SPM". Sin precio → "".
+- nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Conserva indicadores: (V), (VG), (80g), (6 uds), (por encargo), (2 pax). Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y respetando nombres propios ("LOMO BAJO DE VACA GALLEGA" → "Lomo bajo de vaca gallega").
+- nombre (sección): igual que en el original, también en minúsculas con mayúscula inicial si venía todo en mayúsculas.
+- alergenos: sin la palabra "Alérgenos:". Formato "Gluten, lácteos, huevo". Si no hay → "".
+- nombre_restaurante: solo si aparece claramente en la carta; si no → "".
+- subtitulo: frase corta que acompañe al nombre si aparece en la carta (tipo de cocina, lema, ciudad: "Cocina de mercado · Valencia"). Si no aparece → "". No lo inventes.
+- servicios: conceptos que se cobran aparte y no son platos: pan, servicio de mesa, cubierto, suplemento de terraza. Cada uno con su nombre y precio. Si un "Pan" aparece como línea suelta con precio, va aquí y NO como plato. Si no hay → [].
+- nota_pie: textos legales o comerciales (IVA incluido, alérgenos a disposición, horarios…). Si no hay → "".
+- idioma: código del idioma de salida ("es" por defecto).
+NUNCA inventes platos, precios ni descripciones que no se pidan.`;
 
-EJEMPLO 1 — CORRECTO:
-Imagen: sección "EMPECEMOS" con 5 platos: Jamón ibérico, Tabla de quesos de nuestra tierra (120g), Ensaladilla, Ensalada de langostinos, Tomate rosa.
-✅ CORRECTO: sección "EMPECEMOS" con los mismos 5 platos en el mismo orden.
-❌ INCORRECTO: sección "EMPECEMOS" con 4 platos + nueva sección "TABLA DE QUESOS DE NUESTRA TIERRA (120g)" con 1 plato. ESTO ES UN ERROR GRAVE.
+const REGLAS_ORDEN_VALOR = `ORDEN DENTRO DE CADA SECCIÓN (orden estratégico):
+- El plato estrella o especialidad de la casa, si lo hay, el primero.
+- Después, los platos de precio medio-alto: son los que más se ven.
+- Los platos "por encargo" o de disponibilidad limitada, al final de su sección.`;
 
-EJEMPLO 2 — CORRECTO:
-Imagen: sección "CARNES" con plato "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS - 36€".
-✅ CORRECTO: sección "CARNES" contiene ese plato.
-❌ INCORRECTO: crear una sección llamada "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS" con un plato dentro.
+const REGLAS_ORDEN_ORIGINAL = `ORDEN DENTRO DE CADA SECCIÓN: respeta EXACTAMENTE el orden original. NO reordenes platos.`;
 
-PERMISOS Y LÍMITES:
-SOLO tienes permiso para: traducir si se pide, generar o mejorar descripciones si se pide, reordenar platos DENTRO de su propia sección si se activa neuromarketing, y aplicar el estilo visual elegido. NUNCA alterar qué secciones existen ni a qué sección pertenece cada plato.`;
+const INSTRUCCION_DESCRIPCIONES = `DESCRIPCIONES DE PLATOS — OBLIGATORIO:
+Cada plato de comida DEBE llevar una descripción breve. Si el original trae descripción, respétala (puedes pulirla). Si no la trae, escríbela tú.
+- Máximo 12 palabras. Tono de carta seria de restaurante, no publicitario.
+- Menciona ingrediente principal, técnica o procedencia.
+- PROHIBIDO: "delicioso", "exquisito", "sabroso", "magnífico", "espectacular", "irresistible", "una explosión de sabor".
+- Si no hay información, usa la descripción estándar del tipo de plato. NUNCA inventes ingredientes concretos que el restaurante podría no tener.
+- Bebidas, pan, extras y suplementos: descripción "".
+BUENAS: "Jamón ibérico de bellota con tostas y tomate" · "Merluza de pincho a la romana con patatas" · "Tarta de queso al horno con frutos rojos".`;
 
-const PROMPT_BASE = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar y mejorar la carta para maximizar las ventas del restaurante.
+const INSTRUCCION_SIN_DESCRIPCIONES = `DESCRIPCIONES: copia literalmente el texto descriptivo que aparezca bajo cada plato en el original. Si no hay, deja "". No escribas descripciones nuevas.`;
 
-${INSTRUCCION_NO_OMITIR}
-
-ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
-1. Menús del día o menús especiales (si existen)
-2. Entrantes, tapas, para compartir
-3. Ensaladas
-4. Sopas, cremas y especialidades de cuchara
-5. Arroces y pastas
-6. Pescados
-7. Carnes
-8. Postres
-9. Quesos
-10. Café e infusiones
-11. Vinos y bebidas
-12. Otros (pan, extras, bolsa, tupper, etc.)
-
-Si una sección no existe en la carta, no la incluyas.
-
-NEUROMARKETING — APLICA ESTAS TÉCNICAS:
-- Coloca los platos más rentables (precio medio-alto) en las primeras posiciones de cada sección
-- Si hay un plato estrella o especial de la casa, ponlo el primero de su sección
-- Platos con "por encargo" o disponibilidad limitada van al final de su sección
-
-REGLAS DE PRECIOS:
-- Elimina siempre el símbolo €. Solo el número: "16" no "16€"
-- Conserva decimales reales con punto: "16.5" no "16,50"
-- Elimina ceros finales innecesarios: "16" no "16.00"
-- Conserva precios especiales: "5/u", "84/k", "9 | 16", "SPM"
-- Si no hay precio, deja el campo vacío ""
-
-REGLAS DE NOMBRES:
-- Respeta el nombre original exactamente
-- Corrige errores ortográficos evidentes
-- Conserva indicadores: (V), (VG), (80g), (6 uds), (por encargo), (2 pax)
-
-REGLAS DE DESCRIPCIONES:
-- SOLO puedes usar texto que aparezca literalmente en la carta original
-- Si hay texto descriptivo bajo el nombre del plato, cópialo exactamente
-- Si no hay descripción, deja vacío ""
-
-REGLAS DE ALÉRGENOS:
-- Si aparecen, consérvelos sin la palabra "Alérgenos:"
-- Formato: "Gluten, lácteos, huevo"
-- Si no hay, deja vacío ""
-
-NOTAS AL PIE: textos legales o comerciales van en "nota_pie"
-NOMBRE DEL RESTAURANTE: solo si aparece claramente, si no deja vacío ""
-
-NUNCA: no inventes platos, precios ni descripciones. No añadas €.
-
-CRÍTICO — FORMATO:
-- Devuelve ÚNICAMENTE el JSON válido
-- Sin texto antes ni después, sin comillas de bloque
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-const PROMPT_BASE_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Tu misión es digitalizar y mejorar el formato de la carta respetando el orden original.
-
-${INSTRUCCION_NO_OMITIR}
-
-ORDEN LÓGICO DE SECCIONES (aplica siempre este orden):
-1. Menús del día o menús especiales
-2. Entrantes, tapas, para compartir
-3. Ensaladas
-4. Sopas, cremas y especialidades de cuchara
-5. Arroces y pastas
-6. Pescados
-7. Carnes
-8. Postres
-9. Quesos
-10. Café e infusiones
-11. Vinos y bebidas
-12. Otros
-
-ORDEN DE PLATOS: respeta EXACTAMENTE el orden original. NO reordenes.
-
-REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales, sin precio = ""
-REGLAS DE NOMBRES: respeta exactamente, corrige errores evidentes
-REGLAS DE DESCRIPCIONES: copia literal si existe, si no deja ""
-REGLAS DE ALÉRGENOS: sin "Alérgenos:", si no hay deja ""
-NOTAS AL PIE: textos legales en "nota_pie"
-NOMBRE DEL RESTAURANTE: solo si aparece claramente
-
-NUNCA inventes nada. CRÍTICO: devuelve ÚNICAMENTE JSON válido.
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-const INSTRUCCION_DESCRIPCIONES = `
-INSTRUCCIÓN OBLIGATORIA — DESCRIPCIONES DE PLATOS:
-Para CADA plato del menú SIEMPRE debes generar una descripción breve y apetecible.
-NO respetes el original si no tiene descripción. Tu trabajo es GENERAR descripciones.
-NUNCA devuelvas descripcion: "" vacío en platos de comida. Siempre llena el campo.
-
-REGLAS DE LA DESCRIPCIÓN:
-- Máximo 12 palabras
-- Tono profesional de hostelería, no marketero
-- Menciona ingredientes principales, técnica de cocina o procedencia
-- Evita adjetivos vacíos: NUNCA uses "delicioso", "exquisito", "sabroso", "magnífico", "espectacular"
-- Sé concreto y evocador, como escribiría un chef real en una carta seria
-- Bebidas, pan, extras y suplementos: descripción vacía ""
-
-SI NO TIENES INFORMACIÓN suficiente: usa una descripción estándar del tipo de plato.
-NUNCA inventes ingredientes específicos que el restaurante pueda no tener.
-
-EJEMPLOS BUENOS:
-- "Jamón ibérico de bellota con tostas de pan tomate"
-- "Croquetas caseras de jamón ibérico con bechamel"
-- "Burrata con tomate de temporada y albahaca fresca"
-- "Solomillo a la plancha con guarnición del día"
-- "Merluza de pincho a la romana con patatas"
-- "Tarta de queso al horno con frutos rojos"
-
-EJEMPLOS MALOS (PROHIBIDOS):
-- "" (vacío — PROHIBIDO en platos de comida)
-- "Delicioso plato tradicional" (genérico)
-- "Exquisita preparación de la casa" (vacío de información)`;
-
-const PROMPT_DESCRIPCIONES = `Eres un experto en diseño de cartas de restaurante, psicología del consumidor y neuromarketing gastronómico. Tu misión es reorganizar la carta y redactar descripciones atractivas para cada plato.
-
-${INSTRUCCION_DESCRIPCIONES}
-
-${INSTRUCCION_NO_OMITIR}
-
-ORDEN LÓGICO DE SECCIONES:
-1. Menús especiales, 2. Entrantes/tapas, 3. Ensaladas, 4. Sopas/cuchara, 5. Arroces/pastas, 6. Pescados, 7. Carnes, 8. Postres, 9. Quesos, 10. Café, 11. Bebidas, 12. Otros
-
-NEUROMARKETING: platos más rentables primero, plato estrella al inicio, "por encargo" al final.
-
-REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
-REGLAS DE NOMBRES: respeta exactamente, corrige errores evidentes.
-REGLAS DE ALÉRGENOS: sin "Alérgenos:", si no hay deja ""
-NOTAS AL PIE: textos legales en "nota_pie"
-NOMBRE DEL RESTAURANTE: solo si aparece claramente
-
-RECUERDA: el campo 'descripcion' de cada plato de comida NUNCA puede estar vacío. Si lo dejas vacío estás fallando en tu tarea principal.
-
-CRÍTICO: devuelve ÚNICAMENTE JSON válido.
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-const PROMPT_DESCRIPCIONES_SIN_NEURO = `Eres un experto en diseño de cartas de restaurante. Digitaliza la carta respetando el orden original y añade descripciones atractivas para cada plato.
-
-${INSTRUCCION_DESCRIPCIONES}
-
-${INSTRUCCION_NO_OMITIR}
-
-ORDEN DE SECCIONES: menús especiales, entrantes, ensaladas, sopas, arroces/pastas, pescados, carnes, postres, quesos, café, bebidas, otros.
-ORDEN DE PLATOS: respeta EXACTAMENTE el orden original, NO reordenes.
-
-REGLAS DE PRECIOS: elimina €, decimales con punto, sin ceros finales.
-REGLAS DE NOMBRES: respeta exactamente.
-REGLAS DE ALÉRGENOS: sin "Alérgenos:", vacío si no hay.
-NOTAS AL PIE: en "nota_pie". NOMBRE: solo si aparece.
-
-RECUERDA: el campo 'descripcion' de cada plato de comida NUNCA puede estar vacío. Si lo dejas vacío estás fallando en tu tarea principal.
-
-CRÍTICO: ÚNICAMENTE JSON válido.
-
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
-
-function getPrompt(conDescripciones, conNeuro) {
-  if (conDescripciones && conNeuro) return PROMPT_DESCRIPCIONES;
-  if (conDescripciones && !conNeuro) return PROMPT_DESCRIPCIONES_SIN_NEURO;
-  if (!conDescripciones && conNeuro) return PROMPT_BASE;
-  return PROMPT_BASE_SIN_NEURO;
+function instruccionEstilo(estilo) {
+  if (estilo === 'barra') return `TONO (estilo Barra, taberna contemporánea): directo y concreto. Si redactas descripciones, cortas: 4 a 8 palabras, sin florituras.`;
+  if (estilo === 'autor') return `TONO (estilo Autor, cocina gastronómica): preciso y evocador, sin adornos. Si redactas descripciones, enumera producto y técnica con sobriedad ("Pichón, remolacha asada, jugo de sus huesos").`;
+  return `TONO (estilo Mantel, casa de comidas clásica): elegante y cercano, vocabulario de hostelería tradicional. Si redactas descripciones, frases completas y breves.`;
 }
 
-function getInstruccionEstilo(estilo) {
-  if (estilo === 'gourmet') return `
-
-ESTILO DE CARTA: GOURMET
-- Tono elegante, refinado y gastronómico. Alta cocina española.
-- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies ni los traduzcas bajo ningún concepto.
-- CRÍTICO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado sin excepción.
-- Descripciones elegantes y precisas que transmitan calidad
-- Tono sofisticado pero accesible, evocador sin ser recargado
-- Nota al pie discreta si corresponde`;
-
-  if (estilo === 'minimalista') return `
-
-ESTILO DE CARTA: MINIMALISTA
-- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies ni los traduzcas bajo ningún concepto.
-- CRÍTICO: NO OMITAS ABSOLUTAMENTE NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado sin excepción.
-- Descripciones de máximo 5 palabras o vacías — solo si aportan información esencial
-- Sin notas al pie salvo obligación legal
-- Sin adjetivos innecesarios. Tono seco, preciso y contemporáneo.
-- El nombre del plato debe bastarse solo siempre que sea posible.`;
-
-  return `
-
-ESTILO DE CARTA: CLÁSICO
-- Tono elegante, formal y profesional. Alta hostelería española.
-- CRÍTICO: Respeta EXACTAMENTE los nombres de secciones que aparecen en la carta original. NO los cambies.
-- CRÍTICO: NO OMITAS NINGÚN PLATO NI SECCIÓN. Cada sección y cada plato del original debe aparecer en el resultado.
-- Descripciones elegantes con terminología de hostelería tradicional
-- Transmite calidad, tradición y cuidado en cada detalle
-- Nota al pie formal y discreta si corresponde`;
+function instruccionTraduccion(codigo) {
+  const idioma = IDIOMAS[codigo] || codigo;
+  return `TRANSLATION — MANDATORY:
+Translate the ENTIRE menu into ${idioma}: every dish name, every description, every section name, the subtitle, the service names and "nota_pie". Set "idioma" to "${codigo}".
+Use professional hospitality terminology in ${idioma}, with the tone of a premium restaurant. For well-known Spanish dishes with no direct translation, keep the Spanish name and make the description explain it in ${idioma}.
+DO NOT translate: prices, quantities, (V), (VG), SPM, the restaurant name.`;
 }
 
-function getInstruccionTraduccion(codigoIdioma) {
-  const nombreIdioma = IDIOMAS[codigoIdioma] || codigoIdioma;
-  return `
-
-TRANSLATION INSTRUCTION — CRITICAL:
-You must translate the ENTIRE menu into ${nombreIdioma}. This is mandatory.
-
-TRANSLATE EVERYTHING:
-- ALL dish names (every single one, no exceptions)
-- ALL descriptions
-- ALL section names
-- The "nota_pie" field
-- Set the "idioma" field to "${codigoIdioma}"
-
-TRANSLATION STYLE — HOSPITALITY PROFESSIONAL:
-- Use professional hospitality terminology in ${nombreIdioma}
-- Maintain the elegant and appetizing tone of a premium restaurant
-- For well-known Spanish dishes with no direct translation, keep the Spanish name but add a brief description in ${nombreIdioma}
-- For dishes that have a standard translation, use the correct culinary term
-
-DO NOT TRANSLATE: prices, quantities, (V), (VG), SPM, restaurant name.
-
-IMPORTANT: Every dish name and section name MUST be in ${nombreIdioma}.`;
+function construirPrompt({ conDescripciones, conOrden, estilo, idioma }) {
+  return [
+    'Eres un maquetador experto en cartas de restaurante. Tu trabajo es leer la carta y devolverla estructurada, limpia y lista para imprimir.',
+    INSTRUCCION_NO_OMITIR,
+    ORDEN_SECCIONES,
+    conOrden ? REGLAS_ORDEN_VALOR : REGLAS_ORDEN_ORIGINAL,
+    REGLAS_CAMPOS,
+    conDescripciones ? INSTRUCCION_DESCRIPCIONES : INSTRUCCION_SIN_DESCRIPCIONES,
+    instruccionEstilo(estilo),
+    idioma !== 'es' ? instruccionTraduccion(idioma) : ''
+  ].filter(Boolean).join('\n\n');
 }
 
-function limpiarYParsearJSON(texto) {
-  let limpio = texto
-    .replace(/```json\s*/gi, '')
-    .replace(/```\s*/gi, '')
-    .trim();
+async function pedirCarta(messages) {
+  const r = await openai.chat.completions.create({
+    model: MODELO,
+    max_completion_tokens: 16000,
+    messages,
+    response_format: { type: 'json_schema', json_schema: { name: 'carta', strict: true, schema: ESQUEMA_CARTA } }
+  });
+  const m = r.choices[0].message;
+  if (m.refusal) throw new Error('No hemos podido leer esta carta. Prueba con otra foto.');
+  if (r.choices[0].finish_reason === 'length') throw new Error('La carta es demasiado larga para procesarla de una vez. Prueba a subirla en dos partes.');
+  return JSON.parse(m.content);
+}
 
-  const inicio = limpio.indexOf('{');
-  const fin = limpio.lastIndexOf('}');
-  if (inicio !== -1 && fin !== -1 && fin > inicio) {
-    limpio = limpio.substring(inicio, fin + 1);
-  }
+// Limpieza final: quita secciones vacías y espacios sobrantes
+function normalizarCarta(c) {
+  const t = s => (typeof s === 'string' ? s.trim() : '');
+  return {
+    nombre_restaurante: t(c.nombre_restaurante),
+    subtitulo: t(c.subtitulo),
+    idioma: t(c.idioma) || 'es',
+    nota_pie: t(c.nota_pie),
+    servicios: (c.servicios || []).map(s => ({ nombre: t(s.nombre), precio: t(s.precio) })).filter(s => s.nombre),
+    secciones: (c.secciones || []).map(s => ({
+      nombre: t(s.nombre),
+      platos: (s.platos || []).map(p => ({
+        nombre: t(p.nombre), descripcion: t(p.descripcion), precio: t(p.precio).replace(/€/g, '').trim(), alergenos: t(p.alergenos)
+      })).filter(p => p.nombre)
+    })).filter(s => s.platos.length)
+  };
+}
 
+function mensajeError(error) {
+  const m = String(error && error.message || '');
+  if (/unsupported image|image_parse_error|invalid_image/i.test(m)) return 'Formato de imagen no compatible. Usa JPG, PNG o WEBP.';
+  if (/rate limit|quota|429/i.test(m)) return 'Ahora mismo hay mucha demanda. Inténtalo de nuevo en un minuto.';
+  if (/^(No hemos|La carta es)/.test(m)) return m;
+  return 'No hemos podido procesar la carta. Inténtalo de nuevo.';
+}
+
+const TIPOS_IMAGEN = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+
+app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
   try {
-    return JSON.parse(limpio);
-  } catch (e1) {
-    try {
-      limpio = limpio
-        .replace(/[\u201C\u201D]/g, '"')
-        .replace(/[\u2018\u2019]/g, "'");
-      return JSON.parse(limpio);
-    } catch (e2) {
-      console.error('JSON inválido recibido de la IA:');
-      console.error(limpio.substring(0, 500));
-      throw new Error('La IA devolvió un formato inesperado. Inténtalo de nuevo.');
-    }
-  }
-}
-
-app.post('/procesar', checkRateLimit, upload.any(), async (req, res) => {
-  try {
-    const textoManual = req.body.texto || '';
+    const textoManual = String(req.body.texto || '').slice(0, 20000);
     const conDescripciones = req.body.descripciones === 'si';
-    const conNeuro = req.body.neuromarketing !== 'no';
-    const idioma = req.body.idioma || 'es';
-    const conTraduccion = idioma !== 'es';
-    const estilo = req.body.estilo || 'clasico';
+    const conOrden = req.body.neuromarketing !== 'no';
+    const idioma = IDIOMAS[req.body.idioma] ? req.body.idioma : 'es';
+    const estilo = ESTILOS.includes(req.body.estilo) ? req.body.estilo : 'mantel';
 
-    let PROMPT = getPrompt(conDescripciones, conNeuro);
-    PROMPT += getInstruccionEstilo(estilo);
-    if (conTraduccion) PROMPT += getInstruccionTraduccion(idioma);
+    const archivos = req.files || [];
+    const fotos = archivos.filter(f => f.fieldname.startsWith('foto'));
+    const logoFile = archivos.find(f => f.fieldname === 'logo');
 
-    console.log(`Modo: desc=${conDescripciones} neuro=${conNeuro} idioma=${idioma} estilo=${estilo}`);
-
-    const todosLosArchivos = (req.files || []);
-    const fotos = todosLosArchivos.filter(f => f.fieldname.startsWith('foto'));
-    const logoFile = todosLosArchivos.find(f => f.fieldname === 'logo');
-
-    let logoBase64 = null;
-    let logoMime = null;
+    let logo = null;
     if (logoFile) {
-      if (logoFile.mimetype === 'application/pdf') {
-        fs.unlinkSync(logoFile.path);
-        return res.json({ ok: false, error: 'El logotipo debe ser una imagen JPG o PNG.' });
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(logoFile.mimetype)) {
+        return res.json({ ok: false, error: 'El logotipo debe ser una imagen JPG, PNG o WEBP.' });
       }
-      const logoBuffer = fs.readFileSync(logoFile.path);
-      fs.unlinkSync(logoFile.path);
-      logoBase64 = logoBuffer.toString('base64');
-      logoMime = logoFile.mimetype;
+      logo = `data:${logoFile.mimetype};base64,${logoFile.buffer.toString('base64')}`;
     }
+
+    const prompt = construirPrompt({ conDescripciones, conOrden, estilo, idioma });
+    console.log(`[PROCESAR] modelo=${MODELO} fotos=${fotos.length} desc=${conDescripciones} orden=${conOrden} idioma=${idioma} estilo=${estilo}`);
 
     let messages;
-
-    if (fotos.length > 0) {
-      const content = [];
-      fotos.forEach(foto => {
-        const imageData = fs.readFileSync(foto.path);
-        const base64 = imageData.toString('base64');
-        const mimeType = foto.mimetype;
-        fs.unlinkSync(foto.path);
-        content.push({ type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } });
-      });
-
-      const textoPrompt = fotos.length > 1
-        ? `${PROMPT}\n\nEsta carta tiene ${fotos.length} páginas. Analiza TODAS las imágenes. No omitas ningún plato. Unifica todo en un único JSON.`
-        : PROMPT;
-
-      content.push({ type: 'text', text: textoPrompt });
-      messages = [{ role: 'user', content }];
-
-    } else if (textoManual) {
-      messages = [{ role: 'user', content: PROMPT + '\n\nCarta:\n' + textoManual }];
+    if (fotos.length) {
+      if (fotos.some(f => !TIPOS_IMAGEN.has(f.mimetype))) {
+        return res.json({ ok: false, error: 'Formato de imagen no compatible. Usa JPG, PNG o WEBP.' });
+      }
+      const content = fotos.map(f => ({ type: 'image_url', image_url: { url: `data:${f.mimetype};base64,${f.buffer.toString('base64')}`, detail: 'high' } }));
+      content.push({ type: 'text', text: fotos.length > 1
+        ? `Esta carta tiene ${fotos.length} páginas. Léelas TODAS y únelas en una sola carta, sin omitir ningún plato.`
+        : 'Lee esta carta.' });
+      messages = [{ role: 'system', content: prompt }, { role: 'user', content }];
+    } else if (textoManual.trim()) {
+      messages = [{ role: 'system', content: prompt }, { role: 'user', content: 'Carta:\n' + textoManual }];
     } else {
-      return res.json({ ok: false, error: 'No se recibió imagen ni texto' });
+      return res.json({ ok: false, error: 'No se recibió imagen ni texto.' });
     }
 
-    const response = await openai.chat.completions.create({ model: 'gpt-4o', max_tokens: 8000, messages });
-    const texto = response.choices[0].message.content;
-    console.log('RESPUESTA IA:', texto.substring(0, 300));
-    const json = limpiarYParsearJSON(texto);
-    console.log('[DESC CHECK] Primera descripción generada:', json.secciones?.[0]?.platos?.[0]?.descripcion || 'VACÍA');
+    const carta = normalizarCarta(await pedirCarta(messages));
+    const platos = carta.secciones.reduce((n, s) => n + s.platos.length, 0);
+    console.log(`[PROCESAR] ok · ${carta.secciones.length} secciones · ${platos} platos · "${carta.nombre_restaurante}"`);
+    if (!platos) return res.json({ ok: false, error: 'No hemos encontrado platos en la imagen. Prueba con una foto más nítida y de frente.' });
 
-    res.json({ ok: true, carta: json, logo: logoBase64 ? `data:${logoMime};base64,${logoBase64}` : null });
-
+    res.json({ ok: true, carta, logo });
   } catch (error) {
-    console.error('ERROR:', error.message);
-    let mensajeError = error.message;
-    if (mensajeError.includes('unsupported image') || mensajeError.includes('image_parse_error')) {
-      mensajeError = 'Formato de imagen no compatible. Por favor, usa JPG, PNG o WEBP.';
-    }
-    res.json({ ok: false, error: mensajeError });
+    console.error('[PROCESAR] error:', error.message);
+    res.json({ ok: false, error: mensajeError(error) });
   }
 });
 
-app.post('/rehacer', async (req, res) => {
+app.post('/rehacer', limiteRehacer, async (req, res) => {
   try {
-    const { carta, ajuste } = req.body;
-    if (!carta || !ajuste) return res.json({ ok: false, error: 'Faltan datos' });
+    const { carta } = req.body || {};
+    const ajuste = String((req.body || {}).ajuste || '').trim().slice(0, 600);
+    if (!carta || !Array.isArray(carta.secciones) || !ajuste) return res.json({ ok: false, error: 'Faltan datos.' });
 
-    const prompt = `Eres un experto en diseño de cartas de restaurante. Tienes una carta ya procesada en formato JSON y el cliente quiere hacer un ajuste específico.
-
-CARTA ACTUAL EN JSON:
-${JSON.stringify(carta, null, 2)}
-
-AJUSTE SOLICITADO POR EL CLIENTE:
-"${ajuste}"
+    const prompt = `Eres un maquetador experto en cartas de restaurante. Recibes una carta ya estructurada y un ajuste que pide el cliente.
 
 INSTRUCCIONES:
-- Aplica EXACTAMENTE el ajuste solicitado
-- No cambies nada que no haya pedido el cliente
-- Conserva todos los platos, precios y descripciones tal como están, salvo lo que el ajuste indique
-- Si pide traducir, traduce todo con terminología profesional de hostelería
-- Si pide cambiar el orden, reordena según lo indicado
-- Si pide añadir o cambiar algo concreto, hazlo con precisión
-- NUNCA omitas platos — todos los platos deben aparecer en el resultado
-- Devuelve ÚNICAMENTE el JSON corregido, sin texto adicional, sin comillas de bloque
+- Aplica EXACTAMENTE el ajuste solicitado y no cambies nada más.
+- Conserva todos los platos, precios y descripciones salvo lo que el ajuste indique.
+- Si pide traducir, traduce todo con terminología profesional de hostelería y actualiza "idioma".
+- Si pide cambiar el orden, reordena según lo indicado.
+- NUNCA omitas platos.
+- Si el ajuste no tiene que ver con la carta, devuélvela sin cambios.
 
-{"nombre_restaurante":"","idioma":"es","nota_pie":"","secciones":[{"nombre":"","platos":[{"nombre":"","descripcion":"","precio":"","alergenos":""}]}]}`;
+${REGLAS_CAMPOS}`;
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 8000,
-      messages: [{ role: 'user', content: prompt }]
-    });
-
-    const texto = response.choices[0].message.content;
-    console.log('REHACER IA:', texto.substring(0, 300));
-    const json = limpiarYParsearJSON(texto);
-
-    res.json({ ok: true, carta: json });
-
+    const resultado = await pedirCarta([
+      { role: 'system', content: prompt },
+      { role: 'user', content: `CARTA ACTUAL:\n${JSON.stringify(carta)}\n\nAJUSTE DEL CLIENTE:\n${ajuste}` }
+    ]);
+    console.log(`[REHACER] ok · "${ajuste.slice(0, 80)}"`);
+    res.json({ ok: true, carta: normalizarCarta(resultado) });
   } catch (error) {
-    console.error('ERROR REHACER:', error.message);
-    res.json({ ok: false, error: error.message });
+    console.error('[REHACER] error:', error.message);
+    res.json({ ok: false, error: mensajeError(error) });
   }
 });
 
-app.post('/guardar-email', (req, res) => {
-  const { email } = req.body;
-  if (!email || !email.includes('@')) {
-    return res.json({ ok: false, error: 'Email no válido' });
+function slug(s) {
+  return String(s || 'carta').normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'carta';
+}
+
+app.post('/pdf', limitePDF, async (req, res) => {
+  try {
+    const { carta, estilo, logo } = req.body || {};
+    if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
+    const limpia = normalizarCarta(carta);
+    if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
+
+    const t0 = Date.now();
+    const { pdf, info } = await generarPDF(limpia, { estilo: ESTILOS.includes(estilo) ? estilo : 'mantel', logo, credito: true });
+    console.log(`[PDF] ${estilo} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${Date.now() - t0} ms`);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}.pdf"`,
+      'Cache-Control': 'no-store'
+    });
+    res.send(Buffer.from(pdf));
+  } catch (error) {
+    console.error('[PDF] error:', error.message);
+    res.status(500).json({ ok: false, error: 'No hemos podido generar el PDF. Inténtalo de nuevo.' });
   }
-  const fecha = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-  console.log(`LEAD: ${email} | ${fecha}`);
+});
+
+const limiteLeads = crearLimite(10, 30, 'Demasiados envíos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario.');
+
+app.post('/guardar-email', limiteLeads, async (req, res) => {
+  const b = req.body || {};
+  const email = String(b.email || '').trim().toLowerCase().slice(0, 200);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.json({ ok: false, error: 'Email no válido' });
+  const lead = {
+    email,
+    origen: String(b.origen || 'carta-rapida').slice(0, 60),
+    restaurante: String(b.restaurante || '').slice(0, 120),
+    estilo: ESTILOS.includes(b.estilo) ? b.estilo : '',
+    platos: Number.isFinite(+b.platos) ? +b.platos : 0,
+    fecha: new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })
+  };
+  console.log(`LEAD: ${JSON.stringify(lead)}`);
+  // Opcional: reenviar el lead a otra herramienta (Listmonk, Make, Google Sheets…)
+  if (process.env.LEADS_WEBHOOK_URL) {
+    fetch(process.env.LEADS_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
+      .catch(err => console.error('[LEAD] webhook falló:', err.message));
+  }
   res.json({ ok: true });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor funcionando en puerto ${PORT}`);
+app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO }));
+
+// Errores de subida (archivo demasiado grande, etc.)
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    const msg = err.code === 'LIMIT_FILE_SIZE' ? 'Cada foto puede pesar como máximo 12 MB.' : 'No hemos podido recibir los archivos.';
+    return res.status(400).json({ ok: false, error: msg });
+  }
+  if (err && err.type === 'entity.too.large') return res.status(413).json({ ok: false, error: 'El archivo es demasiado grande.' });
+  console.error('[SERVIDOR] error:', err && err.message);
+  res.status(500).json({ ok: false, error: 'Error inesperado. Inténtalo de nuevo.' });
 });
+
+const PORT = process.env.PORT || 3000;
+const servidor = app.listen(PORT, () => console.log(`Servidor funcionando en puerto ${PORT} · modelo ${MODELO}`));
+
+async function apagar() {
+  servidor.close();
+  await cerrar();
+  process.exit(0);
+}
+process.on('SIGTERM', apagar);
+process.on('SIGINT', apagar);

@@ -1,0 +1,261 @@
+/* ============================================================
+   MOTOR DE MAQUETACIÓN — Carta Rápida (Kartia)
+   Recibe el JSON de la carta y compone páginas A4 reales:
+   - decide 1 o 2 columnas y 1 o más páginas
+   - reparte las secciones entre columnas sin partirlas
+   - ajusta el cuerpo de letra para llenar la página (con mínimos legibles)
+   Sin dependencias. Se usa igual en pantalla y en el PDF.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  const K_MIN = 0.86;   // por debajo, la letra ya no se lee bien impresa (~9,5 pt el plato)
+  const K_COMODO = 0.95; // si una sola página obliga a bajar de aquí, mejor dos páginas
+  // Tope de tamaño: una carta corta puede ir grande; una larga, contenida (más premium)
+  const kMaxPara = platos => platos <= 8 ? 1.38 : platos <= 14 ? 1.24 : platos <= 24 ? 1.14 : 1.06;
+  const HOLGURA = 0.975; // margen de seguridad: pantalla e impresora no miden idéntico
+
+  const esc = s => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // Precios a la española: 2.5 → 2,50 · 16.00 → 16 · "5/u" se respeta
+  function precio(p) {
+    if (p == null) return '';
+    let s = String(p).trim().replace(/€/g, '').trim();
+    if (!s) return '';
+    if (/^\d+([.,]\d+)?$/.test(s)) {
+      const n = parseFloat(s.replace(',', '.'));
+      if (Number.isInteger(n)) return String(n);
+      return n.toFixed(2).replace('.', ',');
+    }
+    return s.replace(/(\d)\.(\d)/g, '$1,$2');
+  }
+
+  // Tipografía: evita que la última palabra quede sola en una línea
+  function sinViuda(t) {
+    const s = esc(t).trim();
+    const i = s.lastIndexOf(' ');
+    return i > 0 && s.length - i < 14 ? s.slice(0, i) + '&nbsp;' + s.slice(i + 1) : s;
+  }
+
+  /* ---------- Plantillas por estilo ---------- */
+  const ESTILOS = {
+    mantel: {
+      nombre: 'Mantel',
+      cabecera(c, logo) {
+        return `<header class="cab">
+          ${logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`}
+          ${c.subtitulo ? `<div class="cab-sub">${esc(c.subtitulo)}</div>` : ''}
+          <div class="cab-orla"><span></span><i></i><span></span></div>
+        </header>`;
+      },
+      seccion(s) {
+        return `<section class="sec"><h2 class="sec-t"><span>${esc(s.nombre)}</span></h2>${s.platos.map(this.plato).join('')}</section>`;
+      },
+      plato(p) {
+        const pr = precio(p.precio);
+        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${!p.descripcion && pr ? `<span class="pl-p">${pr}</span>` : ''}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
+      }
+    },
+
+    barra: {
+      nombre: 'Barra',
+      cabecera(c, logo) {
+        return `<header class="cab">
+          ${logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`}
+          <div class="cab-meta">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}<span class="cab-carta">Carta</span></div>
+        </header>`;
+      },
+      seccion(s, i) {
+        return `<section class="sec"><h2 class="sec-t"><span class="sec-num">${String(i + 1).padStart(2, '0')}</span><span class="sec-nom">${esc(s.nombre)}</span></h2>${s.platos.map(this.plato).join('')}</section>`;
+      },
+      plato(p) {
+        const pr = precio(p.precio);
+        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
+      }
+    },
+
+    autor: {
+      nombre: 'Autor',
+      cabecera(c, logo) {
+        return `<header class="cab">
+          ${logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`}
+          ${c.subtitulo ? `<div class="cab-sub">${esc(c.subtitulo)}</div>` : ''}
+        </header>`;
+      },
+      seccion(s) {
+        return `<section class="sec"><h2 class="sec-t">${esc(s.nombre)}</h2>${s.platos.map(this.plato).join('')}</section>`;
+      },
+      plato(p) {
+        const pr = precio(p.precio);
+        const pp = pr ? `<span class="pl-p">${pr}</span>` : '';
+        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${p.descripcion ? '' : pp}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}${pp}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
+      }
+    }
+  };
+
+  function pie(c, esUltima, credito) {
+    if (!esUltima) return `<footer class="pie"></footer>`;
+    const serv = (c.servicios || []).map(s => `<span>${esc(s.nombre)}${precio(s.precio) ? `<b>${precio(s.precio)}</b>` : ''}</span>`).join('');
+    return `<footer class="pie">
+      ${serv ? `<div class="pie-serv">${serv}</div>` : ''}
+      ${c.nota_pie ? `<div class="pie-nota">${esc(c.nota_pie)}</div>` : ''}
+      ${credito ? `<div class="pie-credito">Carta compuesta con Carta Rápida · kartia.es</div>` : ''}
+    </footer>`;
+  }
+
+  /* ---------- Reparto de secciones en columnas ----------
+     Partición lineal óptima: conserva el orden de lectura y
+     minimiza la columna más alta relativa a su capacidad. */
+  function repartir(alturas, capacidades) {
+    const n = alturas.length, m = capacidades.length;
+    const pref = [0];
+    alturas.forEach(h => pref.push(pref[pref.length - 1] + h));
+    const suma = (a, b) => pref[b] - pref[a];
+    // dp[j][i] = mejor ratio máximo usando j columnas para las primeras i secciones
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(Infinity));
+    const corte = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    dp[0][0] = 0;
+    for (let j = 1; j <= m; j++) {
+      for (let i = 0; i <= n; i++) {
+        for (let k = 0; k <= i; k++) {
+          const r = Math.max(dp[j - 1][k], suma(k, i) / capacidades[j - 1]);
+          // desempate: preferir columnas vacías al final, no en medio
+          if (r < dp[j][i] - 1e-9) { dp[j][i] = r; corte[j][i] = k; }
+        }
+      }
+    }
+    const grupos = [];
+    let i = n;
+    for (let j = m; j >= 1; j--) { const k = corte[j][i]; grupos.unshift([k, i]); i = k; }
+    return { ratio: dp[m][n], grupos };
+  }
+
+  /* ---------- Composición ---------- */
+  function componer(destino, carta, opts) {
+    opts = opts || {};
+    const estilo = ESTILOS[opts.estilo] || ESTILOS.mantel;
+    const claveEstilo = ESTILOS[opts.estilo] ? opts.estilo : 'mantel';
+    // Solo se acepta un logo en data URL de imagen (evita inyectar HTML o cargar URLs externas)
+    const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
+    const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
+    const htmlSec = secciones.map((s, i) => estilo.seccion(s, i));
+    const totalPlatos = secciones.reduce((a, s) => a + s.platos.length, 0);
+
+    destino.innerHTML = '';
+    const pliego = document.createElement('div');
+    pliego.className = `carta est-${claveEstilo}`;
+    destino.appendChild(pliego);
+
+    // Crea una página vacía con N columnas y devuelve sus piezas
+    function pagina(cols, conCabecera, esUltima, k) {
+      const p = document.createElement('div');
+      p.className = `pagina cols-${cols}`;
+      p.style.setProperty('--k', k);
+      p.innerHTML = `${conCabecera ? estilo.cabecera(carta, logo) : `<header class="cab-corta">${esc(carta.nombre_restaurante || '')}</header>`}
+        <main class="cuerpo">${Array.from({ length: cols }, () => '<div class="col"></div>').join('')}</main>
+        ${pie(carta, esUltima, opts.credito !== false)}`;
+      pliego.appendChild(p);
+      return p;
+    }
+
+    // Mide una configuración: ¿cabe con este k? Devuelve el reparto
+    function probar(cols, numPag, k) {
+      pliego.innerHTML = '';
+      const paginas = [];
+      for (let i = 0; i < numPag; i++) paginas.push(pagina(cols, i === 0, i === numPag - 1, k));
+      // Alturas de cada sección, medidas en una columna real
+      const colRef = paginas[0].querySelector('.col');
+      const alturas = htmlSec.map(h => {
+        colRef.insertAdjacentHTML('beforeend', h);
+        const el = colRef.lastElementChild;
+        const cs = getComputedStyle(el);
+        const alto = el.getBoundingClientRect().height + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+        el.remove();
+        return alto;
+      });
+      const caps = [];
+      paginas.forEach(p => {
+        const cuerpo = p.querySelector('.cuerpo');
+        const h = cuerpo.getBoundingClientRect().height;
+        for (let c = 0; c < cols; c++) caps.push(h);
+      });
+      const r = repartir(alturas, caps);
+      return { cols, numPag, k, paginas, alturas, caps, ...r };
+    }
+
+    function mejorK(cols, numPag) {
+      const K_MAX = kMaxPara(totalPlatos / numPag);
+      let lo = K_MIN, hi = K_MAX, mejor = null;
+      const alMax = probar(cols, numPag, hi);
+      if (alMax.ratio <= HOLGURA) return alMax;
+      const alMin = probar(cols, numPag, lo);
+      if (alMin.ratio > HOLGURA) return { ...alMin, noCabe: true };
+      mejor = alMin;
+      for (let it = 0; it < 12; it++) {
+        const mid = (lo + hi) / 2;
+        const t = probar(cols, numPag, mid);
+        if (t.ratio <= HOLGURA) { mejor = t; lo = mid; } else hi = mid;
+      }
+      return mejor;
+    }
+
+    // Candidatas: 1 columna solo tiene sentido en cartas cortas
+    const candidatas = [];
+    if (totalPlatos <= 14) candidatas.push([1, 1]);
+    candidatas.push([2, 1]);
+    let elegida = null;
+    for (const [c, p] of candidatas) {
+      const r = mejorK(c, p);
+      if (r.noCabe) continue;
+      // 1 columna solo si no obliga a una letra claramente menor que a 2 columnas
+      if (!elegida || r.k > elegida.k * 1.08) elegida = r;
+    }
+    if (elegida && elegida.cols === 2 && elegida.k < K_COMODO) {
+      const dos = mejorK(2, 2);
+      if (!dos.noCabe && dos.k >= K_COMODO) elegida = dos;
+    }
+    let paginasNecesarias = 2;
+    while (!elegida) {
+      const r = mejorK(2, paginasNecesarias);
+      if (!r.noCabe || paginasNecesarias >= 6) elegida = r;
+      paginasNecesarias++;
+    }
+
+    // Reconstruye con la configuración elegida y coloca las secciones
+    const final = probar(elegida.cols, elegida.numPag, elegida.k);
+    const columnas = [];
+    final.paginas.forEach(p => p.querySelectorAll('.col').forEach(c => columnas.push(c)));
+    final.grupos.forEach(([a, b], idx) => {
+      for (let i = a; i < b; i++) columnas[idx].insertAdjacentHTML('beforeend', htmlSec[i]);
+    });
+
+    // Aire sobrante: se reparte entre secciones y, en menor medida, entre platos.
+    // Mismo valor en todas las columnas de una página (si no, se ve descuadrado).
+    // Cada página calcula el suyo: así la primera (con cabecera) no queda con un
+    // bloque flotando en medio. Lo que aún sobre, centra el bloque verticalmente.
+    const PESO_PLATO = 0.3;
+    const MM = 3.78;
+    final.paginas.forEach(p => {
+      const disponible = p.querySelector('.cuerpo').getBoundingClientRect().height * HOLGURA;
+      let aire = Infinity;
+      p.querySelectorAll('.col').forEach(c => {
+        if (!c.children.length) return;
+        const secs = c.querySelectorAll('.sec').length;
+        const pls = c.querySelectorAll('.pl').length;
+        const unidades = Math.max(1, secs - 1) + PESO_PLATO * Math.max(0, pls - secs);
+        aire = Math.min(aire, (disponible - c.getBoundingClientRect().height) / unidades);
+      });
+      if (!isFinite(aire) || aire < 0) aire = 0;
+      aire = Math.min(aire, 16 * MM);                         // máx. ≈16 mm entre secciones
+      const airePl = Math.min(aire * PESO_PLATO, 3.2 * MM);   // máx. ≈3 mm extra entre platos
+      p.style.setProperty('--aire', aire.toFixed(1) + 'px');
+      p.style.setProperty('--aire-pl', airePl.toFixed(1) + 'px');
+    });
+
+    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: elegida.numPag, escala: +elegida.k.toFixed(3), platos: totalPlatos });
+    return JSON.parse(pliego.dataset.info);
+  }
+
+  global.MotorCarta = { componer, ESTILOS, precio };
+})(typeof window !== 'undefined' ? window : globalThis);
