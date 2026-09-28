@@ -329,5 +329,5 @@
     return JSON.parse(pliego.dataset.info);
   }
 
-  global.MotorCarta = { componer, ESTILOS, precio };
+  global.MotorCarta = { componer, ESTILOS, precio, platoComun, sinGritos, esc, t };
 })(typeof window !== 'undefined' ? window : globalThis);
