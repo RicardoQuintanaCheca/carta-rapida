@@ -24,6 +24,7 @@
     '16px "Libre Caslon Display"', '16px "Instrument Sans"', '500 16px "Instrument Sans"', '600 16px "Instrument Sans"',
     '16px "Instrument Serif"', 'italic 16px "Instrument Serif"', '500 16px "Bodoni Moda"',
     '16px "Newsreader"', '500 16px "Newsreader"', 'italic 16px "Newsreader"'];
+  // Estilos clásicos: se precargan; los de la colección nueva cargan sus fuentes al elegirlos
   const fuentesListas = Promise.all(CARAS.map(c => document.fonts.load(c, 'Áéñ').catch(() => {}))).then(() => document.fonts.ready);
 
   const precargadas = [];
@@ -33,7 +34,9 @@
 
   window.addEventListener('message', async (e) => {
     if (e.origin !== location.origin || !e.data || e.data.tipo !== 'componer') return;
-    await fuentesListas;
+    const propias = (MotorCarta.ESTILOS[e.data.estilo] || {}).fuentes;
+    if (propias) await Promise.all(propias.map(f => document.fonts.load(f.replace('1em', '16px'), 'Áéñ1').catch(() => {})));
+    else await fuentesListas;
     const d = document.getElementById('d');
     let info = null, error = null;
     // El logo se decodifica antes de medir; si no, la cabecera mediría 0 y el texto se saldría

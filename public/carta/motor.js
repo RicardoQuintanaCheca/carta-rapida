@@ -12,7 +12,7 @@
   const K_MIN = 0.86;   // por debajo, la letra ya no se lee bien impresa (~9,5 pt el plato)
   const K_COMODO = 0.87; // una sola página mientras la letra siga siendo cómoda (≈9,8 pt el plato); si no, dos
   // Tope de tamaño: una carta corta puede ir grande; una larga, contenida (más premium)
-  const kMaxPara = platos => platos <= 8 ? 1.55 : platos <= 14 ? 1.24 : platos <= 24 ? 1.14 : 1.06;
+  const kMaxPara = platos => platos <= 8 ? 1.85 : platos <= 14 ? 1.45 : platos <= 24 ? 1.28 : 1.12;
   const HOLGURA = 0.975; // margen de seguridad: pantalla e impresora no miden idéntico
 
   const esc = s => String(s == null ? '' : s)
@@ -79,7 +79,7 @@
     const pr = precio(p.precio);
     return `<div class="pl${p.destacado ? ' pl-dest' : ''}">`
       + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
-      + `<div class="pl-l"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>`
+      + `<div class="pl-l"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
       + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}</div>` : '')
       + (d.alergenos ? `<div class="pl-a">${esc(d.alergenos)}</div>` : '')
       + `</div>`;
@@ -128,8 +128,70 @@
         return `<section class="sec"><h2 class="sec-t">${esc(sinGritos(s.nombre))}</h2>${s.platos.map(platoComun).join('')}</section>`;
       },
       plato: platoComun
+    },
+
+    /* ----- Colección nueva ----- */
+    noche: {
+      nombre: 'Medianoche',
+      fuentes: ['300 1em "Cormorant Garamond"', '500 1em "Cormorant Garamond"', 'italic 500 1em "Cormorant Garamond"', 'italic 400 1em "Cormorant Garamond"', '400 1em "Cormorant Garamond"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="cab-over">${esc(t('carta'))}</div>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    sobremesa: {
+      nombre: 'Sobremesa',
+      fuentes: ['italic 400 1em "Cormorant Garamond"', 'italic 500 1em "Cormorant Garamond"', '600 1em "Cormorant Garamond"', '400 1em "Jost"', '500 1em "Jost"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}<div class="cab-regla"></div>${subtit(c)}</header>`,
+      seccion: (s, i) => `<section class="sec"><h2 class="sec-t"><span class="sec-num">${romano(i + 1)}</span><span class="sec-nom">${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    brasserie: {
+      nombre: 'Brasserie',
+      fuentes: ['400 1em "DM Serif Display"', 'italic 400 1em "DM Serif Display"', '600 1em "Libre Franklin"', '500 1em "Libre Franklin"', 'italic 400 1em "Playfair Display"', '400 1em "Playfair Display"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="cab-filete"></div>${nombreOLogo(c, logo)}${subtit(c)}<div class="cab-filete"></div></header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    editorial: {
+      nombre: 'Editorial',
+      fuentes: ['italic 300 1em "Fraunces"', '300 1em "Fraunces"', '500 1em "Manrope"', '600 1em "Manrope"', '700 1em "Manrope"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}<div class="cab-lado">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}<span class="cab-carta">${esc(t('carta'))}</span></div></header>`,
+      seccion: (s, i) => `<section class="sec"><h2 class="sec-t"><span class="sec-num">${i + 1}</span><span class="sec-nom">${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    sumi: {
+      nombre: 'Sumi',
+      fuentes: ['500 1em "Shippori Mincho"', '600 1em "Shippori Mincho"', '400 1em "Zen Kaku Gothic New"', '500 1em "Zen Kaku Gothic New"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="sumi-sello"></div>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    deco: {
+      nombre: 'Déco',
+      fuentes: ['400 1em "Italiana"', '400 1em "Cinzel"', '500 1em "Cinzel"', '600 1em "Cormorant Garamond"', 'italic 400 1em "Cormorant Garamond"', 'italic 500 1em "Cormorant Garamond"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="deco-orn"><i></i><b></b><i></i></div>${nombreOLogo(c, logo)}${subtit(c)}<div class="deco-orn"><i></i><b></b><i></i></div></header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    riviera: {
+      nombre: 'Riviera',
+      fuentes: ['700 1em "Syne"', '600 1em "Syne"', '300 1em "Space Grotesk"', '400 1em "Space Grotesk"', '500 1em "Space Grotesk"', '600 1em "Space Grotesk"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}<div class="cab-lado">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}</div></header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
     }
   };
+
+  function nombreOLogo(c, logo) {
+    return logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`;
+  }
+  function subtit(c) { return c.subtitulo ? `<div class="cab-sub">${esc(c.subtitulo)}</div>` : ''; }
+  function romano(n) {
+    const t = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+    let r = '';
+    for (const [v, l] of t) while (n >= v) { r += l; n -= v; }
+    return r;
+  }
 
   function pie(c, esUltima, credito) {
     if (!esUltima) return `<footer class="pie"></footer>`;
@@ -206,7 +268,20 @@
     const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
     IDIOMA = String(carta.idioma || 'es').slice(0, 2);
     const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
-    const htmlSec = secciones.map((s, i) => estilo.seccion(s, i));
+    // Secciones largas (8 platos o más) se trocean en bloques de ~4 platos para que
+    // puedan continuar en la columna siguiente; el título va solo en el primer bloque.
+    const htmlSec = [];
+    secciones.forEach((s, i) => {
+      if (s.platos.length < 8) { htmlSec.push(estilo.seccion(s, i)); return; }
+      const trozos = [];
+      for (let j = 0; j < s.platos.length; j += 4) trozos.push(s.platos.slice(j, j + 4));
+      if (trozos.length > 1 && trozos[trozos.length - 1].length < 2) trozos[trozos.length - 2].push(...trozos.pop());
+      trozos.forEach((platos, j) => {
+        const sigue = j < trozos.length - 1 ? ' sec-sigue' : '';
+        if (j === 0) htmlSec.push(estilo.seccion({ ...s, platos }, i).replace('<section class="sec"', `<section class="sec${sigue}"`));
+        else htmlSec.push(`<section class="sec sec-cont${sigue}">${platos.map(platoComun).join('')}</section>`);
+      });
+    });
     const totalPlatos = secciones.reduce((a, s) => a + s.platos.length, 0);
 
     destino.innerHTML = '';
@@ -252,7 +327,8 @@
     }
 
     function mejorK(cols, numPag) {
-      const K_MAX = kMaxPara(totalPlatos / numPag);
+      // con varias páginas hay sitio: la letra puede crecer un poco más
+      const K_MAX = numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : kMaxPara(totalPlatos);
       let lo = K_MIN, hi = K_MAX, mejor = null;
       const alMax = probar(cols, numPag, hi);
       if (alMax.ratio <= HOLGURA) return alMax;
@@ -319,8 +395,8 @@
         aire = Math.min(aire, (disponible - c.getBoundingClientRect().height) / unidades);
       });
       if (!isFinite(aire) || aire < 0) aire = 0;
-      aire = Math.min(aire, (p.classList.contains('cols-1') ? 22 : 16) * MM); // máx. entre secciones
-      const airePl = Math.min(aire * PESO_PLATO, 3.2 * MM);   // máx. ≈3 mm extra entre platos
+      aire = Math.min(aire, (p.classList.contains('cols-1') ? 28 : 18) * MM); // máx. entre secciones
+      const airePl = Math.min(aire * PESO_PLATO, 6 * MM);   // máx. ≈6 mm extra entre platos
       p.style.setProperty('--aire', aire.toFixed(1) + 'px');
       p.style.setProperty('--aire-pl', airePl.toFixed(1) + 'px');
     });

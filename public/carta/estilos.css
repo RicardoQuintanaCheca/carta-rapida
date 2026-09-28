@@ -26,14 +26,16 @@
   flex: 1 1 auto; min-height: 0;
   display: grid; align-content: center; align-items: start;
 }
-/* Con varias páginas el texto arranca bajo la cabecera, como en un libro */
-.carta.multi .cuerpo { align-content: start; }
 .cols-1 .cuerpo { grid-template-columns: minmax(0, 118mm); justify-content: center; }
 .cols-2 .cuerpo { grid-template-columns: 1fr 1fr; column-gap: 12mm; }
 .col { min-width: 0; }
 .sec { break-inside: avoid; margin-bottom: calc(15pt * var(--k)); }
 .col .sec + .sec { margin-top: var(--aire); }
 .sec .pl + .pl { padding-top: var(--aire-pl); }
+/* Sección larga partida en bloques: se lee como una sola */
+.pagina .sec.sec-sigue { margin-bottom: 0; }
+.col .sec + .sec.sec-cont { margin-top: 0; }
+.sec-cont .pl:first-child { padding-top: var(--aire-pl); }
 .pl { break-inside: avoid; }
 .pl-n, .pl-d, .pie-nota { text-wrap: pretty; }
 /* Plato: nombre a la izquierda, precio siempre en la misma línea y alineado.
@@ -44,6 +46,11 @@
 .pl-p { flex: 0 0 auto; text-align: right; white-space: nowrap; font-variant-numeric: lining-nums tabular-nums; }
 .pl-d { padding-right: 8mm; }
 .pl-etq { line-height: 1; margin-bottom: calc(2.2pt * var(--k)); }
+.pl-g { display: none; }
+/* Logos con fondo blanco: el blanco se funde con el papel (y con el negro en Medianoche) */
+.cab-logo { mix-blend-mode: multiply; }
+.est-noche .cab-logo { mix-blend-mode: screen; }
+.pagina { background: var(--papel, #fff); }
 .pie { flex: 0 0 auto; }
 .pagina .pie:empty { display: none !important; }
 .cab-corta { font-size: 7.4pt; letter-spacing: .3em; text-transform: uppercase; text-align: center; opacity: .6; margin-bottom: 8mm; }
@@ -150,6 +157,197 @@
 .est-autor .pie-serv { font-size: 9.6pt; font-style: italic; margin-bottom: 2mm; }
 .est-autor .pie-serv b { font-weight: 400; font-style: normal; margin-left: .5em; font-variant-numeric: oldstyle-nums; }
 .est-autor .pie-nota { font-size: 7.4pt; line-height: 1.38; color: var(--suave); max-width: 120mm; margin: 0 auto; }
+
+/* ============================================================
+   COLECCIÓN 2026
+   ============================================================ */
+
+/* ---------- MEDIANOCHE · negro, marfil y oro ---------- */
+.est-noche { --tinta: #EFE8DA; --acento: #C9A45C; --suave: #A39A8A; --linea: #4F4535; --papel: #14120F; }
+.est-noche .pagina { font-family: 'Cormorant Garamond', serif; padding: 23mm 22mm 16mm; }
+.est-noche .pagina::before { content: ''; position: absolute; inset: 8mm; border: .6pt solid var(--acento); opacity: .6; pointer-events: none; }
+.est-noche .pagina::after { content: ''; position: absolute; inset: 9.5mm; border: .3pt solid var(--acento); opacity: .35; pointer-events: none; }
+.est-noche .cab { text-align: center; margin-bottom: calc(10mm * min(var(--k), 1.1)); }
+.est-noche .cab-over { font-size: 7.4pt; letter-spacing: .55em; padding-left: .55em; text-transform: uppercase; color: var(--acento); margin-bottom: 4.5mm; }
+.est-noche .cab-nombre { font-weight: 300; font-size: calc(46pt * min(var(--k), 1.12)); letter-spacing: .12em; padding-left: .12em; text-transform: uppercase; line-height: 1.02; }
+.est-noche .cab-logo { max-height: 24mm; max-width: 80mm; filter: grayscale(1) invert(1) brightness(1.15); }
+.est-noche .cab-sub { margin-top: 3.6mm; font-style: italic; font-size: 13pt; color: var(--acento); }
+.est-noche .cols-2 .cuerpo { column-gap: 15mm; background: linear-gradient(var(--linea), var(--linea)) center / .5pt 100% no-repeat; }
+.est-noche .sec-t { display: flex; align-items: center; gap: 3.5mm; justify-content: center; font-style: italic; font-weight: 500; font-size: calc(17pt * var(--k)); line-height: 1.1; color: var(--acento); margin-bottom: calc(5pt * var(--k)); }
+.est-noche .sec-t::before, .est-noche .sec-t::after { content: ''; flex: 0 0 9mm; border-top: .5pt solid var(--acento); opacity: .6; }
+.est-noche .pl { margin-top: calc(6pt * var(--k)); }
+.est-noche .pl-n { font-size: calc(12.8pt * var(--k)); font-weight: 500; line-height: 1.18; }
+.est-noche .pl-p { font-size: calc(12.8pt * var(--k)); font-weight: 500; color: var(--acento); }
+.est-noche .pl-d { font-size: calc(11pt * var(--k)); font-style: italic; color: var(--suave); line-height: 1.2; }
+.est-noche .pl-a { font-size: calc(8pt * var(--k)); color: var(--suave); letter-spacing: .05em; }
+.est-noche .pl-etq { font-size: calc(6.8pt * var(--k)); letter-spacing: .32em; text-transform: uppercase; color: var(--acento); }
+.est-noche .pie { text-align: center; padding-top: 4mm; }
+.est-noche .pie-serv { font-style: italic; font-size: 11.5pt; margin-bottom: 2mm; }
+.est-noche .pie-serv span + span::before { content: '·'; margin: 0 .8em; color: var(--acento); }
+.est-noche .pie-serv b { font-weight: 500; font-style: normal; color: var(--acento); margin-left: .5em; }
+.est-noche .pie-nota { font-size: 8.4pt; color: var(--suave); max-width: 130mm; margin: 0 auto; line-height: 1.35; }
+.est-noche .pie-credito { color: var(--suave); }
+.est-noche .cab-corta { color: var(--acento); }
+
+/* ---------- SOBREMESA · alta cocina, números romanos ---------- */
+.est-sobremesa { --tinta: #2A2521; --acento: #8A6A45; --suave: #6C645C; --linea: #CFC4B4; --papel: #F7F2E9; }
+.est-sobremesa .pagina { font-family: 'Cormorant Garamond', serif; text-align: center; padding: 25mm 24mm 16mm; }
+.est-sobremesa .cab { margin-bottom: calc(11mm * min(var(--k), 1.1)); }
+.est-sobremesa .cab-nombre { font-style: italic; font-weight: 400; font-size: calc(54pt * min(var(--k), 1.1)); line-height: .95; letter-spacing: -.005em; }
+.est-sobremesa .cab-logo { max-height: 24mm; max-width: 80mm; }
+.est-sobremesa .cab-regla { width: 22mm; margin: 5mm auto 0; border-top: .5pt solid var(--acento); }
+.est-sobremesa .cab-sub { margin-top: 4mm; font-family: 'Jost', sans-serif; font-weight: 400; font-size: 7.2pt; letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; color: var(--acento); }
+.est-sobremesa .cols-2 .cuerpo { column-gap: 16mm; }
+.est-sobremesa .sec-t { display: flex; flex-direction: column; align-items: center; gap: calc(1.6pt * var(--k)); margin-bottom: calc(6pt * var(--k)); font-weight: 400; }
+.est-sobremesa .sec-num { font-style: italic; font-weight: 500; font-size: calc(19pt * var(--k)); line-height: 1; color: var(--acento); }
+.est-sobremesa .sec-nom { font-family: 'Jost', sans-serif; font-size: calc(7.4pt * var(--k)); letter-spacing: .4em; padding-left: .4em; text-transform: uppercase; }
+.est-sobremesa .pl { margin-top: calc(7.5pt * var(--k)); }
+.est-sobremesa .pl-l { display: block; }
+.est-sobremesa .pl-n { font-size: calc(13.4pt * var(--k)); font-weight: 600; line-height: 1.15; }
+.est-sobremesa .pl-r { font-family: 'Jost', sans-serif; font-size: .58em; }
+.est-sobremesa .pl-p { font-style: italic; font-size: calc(13pt * var(--k)); font-weight: 500; color: var(--acento); margin-left: .7em; }
+.est-sobremesa .pl-d { font-family: 'Jost', sans-serif; font-weight: 400; font-size: calc(8.6pt * var(--k)); letter-spacing: .02em; line-height: 1.4; color: var(--suave); padding: 0 4mm; margin-top: 1pt; }
+.est-sobremesa .pl-a { font-family: 'Jost', sans-serif; font-weight: 300; font-size: calc(6.8pt * var(--k)); letter-spacing: .1em; text-transform: uppercase; color: var(--suave); }
+.est-sobremesa .pl-etq { font-family: 'Jost', sans-serif; font-size: calc(6.2pt * var(--k)); letter-spacing: .36em; text-transform: uppercase; color: var(--acento); }
+.est-sobremesa .pie { padding-top: 4mm; }
+.est-sobremesa .pie-serv { font-style: italic; font-size: 11.5pt; margin-bottom: 2mm; }
+.est-sobremesa .pie-serv span + span::before { content: '·'; margin: 0 .8em; color: var(--acento); }
+.est-sobremesa .pie-serv b { font-weight: 500; color: var(--acento); margin-left: .5em; }
+.est-sobremesa .pie-nota { font-family: 'Jost', sans-serif; font-weight: 300; font-size: 7pt; letter-spacing: .02em; color: var(--suave); max-width: 125mm; margin: 0 auto; line-height: 1.45; }
+
+/* ---------- BRASSERIE · gran café parisino ---------- */
+.est-brasserie { --tinta: #1B1714; --acento: #8A1C1C; --suave: #5E554C; --linea: #1B1714; --papel: #F3ECDF; }
+.est-brasserie .pagina { font-family: 'Playfair Display', serif; padding: 19mm 19mm 14mm; }
+.est-brasserie .pagina::before { content: ''; position: absolute; inset: 8mm; border: 2.2pt solid var(--tinta); pointer-events: none; }
+.est-brasserie .pagina::after { content: ''; position: absolute; inset: 9.6mm; border: .5pt solid var(--tinta); pointer-events: none; }
+.est-brasserie .cab { text-align: center; margin-bottom: calc(8mm * min(var(--k), 1.1)); }
+.est-brasserie .cab-filete { height: 1.6mm; border-top: 1.4pt solid var(--tinta); border-bottom: .4pt solid var(--tinta); margin: 0 auto; width: 100%; }
+.est-brasserie .cab-filete:last-child { margin-top: 4mm; border-top-width: .4pt; border-bottom-width: 1.4pt; }
+.est-brasserie .cab-nombre { font-family: 'DM Serif Display', serif; font-size: calc(62pt * min(var(--k), 1.1)); line-height: 1; letter-spacing: -.01em; margin-top: 4mm; }
+.est-brasserie .cab-logo { max-height: 24mm; max-width: 85mm; margin-top: 4mm; }
+.est-brasserie .cab-sub { margin-top: 1.6mm; font-style: italic; font-size: 12pt; color: var(--acento); }
+.est-brasserie .cols-2 .cuerpo { column-gap: 12mm; }
+.est-brasserie .sec-t { text-align: center; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: calc(19pt * var(--k)); line-height: 1.05; color: var(--acento); margin-bottom: calc(4pt * var(--k)); }
+.est-brasserie .sec-t::after { content: '• • •'; display: block; font-style: normal; font-size: .32em; letter-spacing: .6em; padding-left: .6em; color: var(--tinta); margin-top: calc(2pt * var(--k)); }
+.est-brasserie .pl { margin-top: calc(5.4pt * var(--k)); }
+.est-brasserie .pl-l { column-gap: 1.6mm; align-items: flex-end; }
+.est-brasserie .pl-n { flex: 0 1 auto; font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(8.4pt * var(--k)); letter-spacing: .05em; text-transform: uppercase; line-height: 1.35; }
+.est-brasserie .pl-r { text-transform: none; letter-spacing: .02em; font-weight: 500; }
+.est-brasserie .pl-g { display: block; flex: 1 1 6mm; min-width: 6mm; margin-bottom: calc(2.6pt * var(--k)); border-bottom: 1.1pt dotted var(--suave); opacity: .7; }
+.est-brasserie .pl-p { font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(9pt * var(--k)); line-height: 1.35; }
+.est-brasserie .pl-d { font-style: italic; font-size: calc(9.6pt * var(--k)); color: var(--suave); line-height: 1.25; margin-top: .4pt; }
+.est-brasserie .pl-a { font-family: 'Libre Franklin', sans-serif; font-size: calc(6.6pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; }
+.est-brasserie .pl-etq { font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(6.2pt * var(--k)); letter-spacing: .16em; text-transform: uppercase; color: var(--acento); }
+.est-brasserie .pie { text-align: center; padding-top: 4mm; }
+.est-brasserie .pie-serv { font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: 8pt; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2mm; }
+.est-brasserie .pie-serv span + span::before { content: '•'; margin: 0 .9em; color: var(--acento); }
+.est-brasserie .pie-serv b { margin-left: .6em; color: var(--acento); }
+.est-brasserie .pie-nota { font-style: italic; font-size: 8pt; color: var(--suave); max-width: 125mm; margin: 0 auto; line-height: 1.35; }
+
+/* ---------- EDITORIAL · revista gastronómica ---------- */
+.est-editorial { --tinta: #111; --acento: #DE4526; --suave: #6B6B6B; --linea: #111; --papel: #fff; }
+.est-editorial .pagina { font-family: 'Manrope', sans-serif; padding: 13mm 15mm 12mm; }
+.est-editorial .cab { display: flex; align-items: flex-end; justify-content: space-between; gap: 6mm; border-bottom: 2.4pt solid var(--linea); padding-bottom: 3.2mm; margin-bottom: calc(9mm * min(var(--k), 1.1)); }
+.est-editorial .cab-nombre { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: calc(80pt * min(var(--k), 1.08)); line-height: .84; letter-spacing: -.035em; margin-left: -1mm; }
+.est-editorial .cab-logo { max-height: 26mm; max-width: 100mm; }
+.est-editorial .cab-lado { display: flex; flex-direction: column; align-items: flex-end; gap: 1.2mm; padding-bottom: 1.4mm; text-align: right; flex-shrink: 0; }
+.est-editorial .cab-lado span { font-size: 7pt; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.est-editorial .cab-lado .cab-carta { color: var(--acento); }
+.est-editorial .cols-2 .cuerpo { column-gap: 11mm; }
+.est-editorial .sec-t { display: flex; align-items: flex-end; gap: 3mm; margin-bottom: calc(5pt * var(--k)); padding-bottom: calc(3pt * var(--k)); border-bottom: .6pt solid var(--linea); }
+.est-editorial .sec-num { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: calc(34pt * var(--k)); line-height: .78; color: var(--acento); }
+.est-editorial .sec-nom { font-size: calc(8.4pt * var(--k)); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; padding-bottom: 1pt; }
+.est-editorial .pl { margin-top: calc(6.4pt * var(--k)); }
+.est-editorial .pl-n { font-size: calc(10.2pt * var(--k)); font-weight: 600; line-height: 1.25; word-spacing: .06em; }
+.est-editorial .pl-p { font-size: calc(10.2pt * var(--k)); font-weight: 700; }
+.est-editorial .pl-d { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: calc(10.2pt * var(--k)); line-height: 1.22; color: var(--suave); margin-top: .6pt; }
+.est-editorial .pl-a { font-size: calc(6.8pt * var(--k)); color: var(--suave); letter-spacing: .08em; text-transform: uppercase; }
+.est-editorial .pl-etq { font-size: calc(6.4pt * var(--k)); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--acento); }
+.est-editorial .pie { border-top: 2.4pt solid var(--linea); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.5mm; }
+.est-editorial .pie-serv { font-size: 8.6pt; font-weight: 600; }
+.est-editorial .pie-serv span + span { margin-left: 5mm; }
+.est-editorial .pie-serv b { color: var(--acento); margin-left: 2mm; }
+.est-editorial .pie-nota { font-size: 7pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
+.est-editorial .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ---------- SUMI · minimalismo japonés ---------- */
+.est-sumi { --tinta: #211F1C; --acento: #A33A2C; --suave: #6F6A63; --linea: #DCD6CC; --papel: #F7F4EE; }
+.est-sumi .pagina { font-family: 'Shippori Mincho', serif; padding: 25mm 24mm 16mm; }
+.est-sumi .cab { text-align: center; margin-bottom: calc(12mm * min(var(--k), 1.1)); }
+.est-sumi .sumi-sello { width: 7mm; height: 7mm; background: var(--acento); margin: 0 auto 6.5mm; border-radius: .7mm; }
+.est-sumi .cab-nombre { font-weight: 600; font-size: calc(25pt * min(var(--k), 1.15)); letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; line-height: 1.1; }
+.est-sumi .cab-logo { max-height: 20mm; max-width: 70mm; }
+.est-sumi .cab-sub { margin-top: 4mm; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 300; font-size: 8.4pt; letter-spacing: .3em; padding-left: .3em; color: var(--suave); }
+.est-sumi .cols-2 .cuerpo { column-gap: 17mm; }
+.est-sumi .sec-t { font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 500; font-size: calc(7.6pt * var(--k)); letter-spacing: .45em; text-transform: uppercase; color: var(--acento); margin-bottom: calc(7pt * var(--k)); }
+.est-sumi .pl { margin-top: calc(8pt * var(--k)); }
+.est-sumi .pl-n { font-weight: 500; font-size: calc(11pt * var(--k)); letter-spacing: .03em; line-height: 1.3; }
+.est-sumi .pl-p { font-weight: 500; font-size: calc(10.6pt * var(--k)); color: var(--suave); }
+.est-sumi .pl-d { font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 400; font-size: calc(8.6pt * var(--k)); letter-spacing: .03em; color: var(--suave); line-height: 1.45; }
+.est-sumi .pl-r { font-family: 'Zen Kaku Gothic New', sans-serif; }
+.est-sumi .pl-a { font-family: 'Zen Kaku Gothic New', sans-serif; font-size: calc(6.6pt * var(--k)); color: var(--suave); letter-spacing: .1em; text-transform: uppercase; }
+.est-sumi .pl-etq { font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 500; font-size: calc(6.2pt * var(--k)); letter-spacing: .35em; text-transform: uppercase; color: var(--acento); }
+.est-sumi .pie { text-align: center; padding-top: 4mm; }
+.est-sumi .pie-serv { font-size: 9pt; letter-spacing: .08em; margin-bottom: 2mm; }
+.est-sumi .pie-serv span + span { margin-left: 6mm; }
+.est-sumi .pie-serv b { font-weight: 500; margin-left: .8em; color: var(--suave); }
+.est-sumi .pie-nota { font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 300; font-size: 7pt; letter-spacing: .03em; color: var(--suave); max-width: 125mm; margin: 0 auto; line-height: 1.5; }
+
+/* ---------- RIVIERA · riso azul, minúsculas, atrevido ---------- */
+.est-riviera { --tinta: #2340B0; --acento: #2340B0; --suave: #5B6DB8; --linea: #2340B0; --papel: #F4F0E6; }
+.est-riviera .pagina { font-family: 'Space Grotesk', sans-serif; padding: 14mm 15mm 12mm; }
+.est-riviera .cab { display: flex; align-items: flex-end; justify-content: space-between; gap: 6mm; margin-bottom: calc(10mm * min(var(--k), 1.1)); }
+.est-riviera .cab-nombre { font-family: 'Syne', sans-serif; font-weight: 700; font-size: calc(74pt * min(var(--k), 1.08)); line-height: .82; letter-spacing: -.045em; text-transform: lowercase; }
+.est-riviera .cab-logo { max-height: 26mm; max-width: 100mm; }
+.est-riviera .cab-lado { max-width: 45mm; text-align: right; padding-bottom: 1.5mm; }
+.est-riviera .cab-lado span { font-size: 8.4pt; font-weight: 500; line-height: 1.3; text-transform: lowercase; }
+.est-riviera .cols-2 .cuerpo { column-gap: 12mm; }
+.est-riviera .sec-t { margin-bottom: calc(5pt * var(--k)); }
+.est-riviera .sec-t span { display: inline-block; font-family: 'Syne', sans-serif; font-weight: 600; font-size: calc(11pt * var(--k)); line-height: 1; text-transform: lowercase; color: var(--papel); background: var(--acento); border-radius: 99px; padding: calc(3.2pt * var(--k)) calc(8pt * var(--k)) calc(3.8pt * var(--k)); }
+.est-riviera .pl { margin-top: calc(6pt * var(--k)); }
+.est-riviera .pl-n { font-weight: 500; font-size: calc(10.4pt * var(--k)); line-height: 1.22; text-transform: lowercase; }
+.est-riviera .pl-p { font-weight: 600; font-size: calc(10.4pt * var(--k)); }
+.est-riviera .pl-d { font-weight: 300; font-size: calc(9pt * var(--k)); line-height: 1.3; color: var(--suave); text-transform: lowercase; }
+.est-riviera .pl-r { color: var(--suave); }
+.est-riviera .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); text-transform: lowercase; }
+.est-riviera .pl-etq { font-family: 'Syne', sans-serif; font-weight: 600; font-size: calc(7pt * var(--k)); text-transform: lowercase; }
+.est-riviera .pl-etq::before { content: ''; display: inline-block; width: .55em; height: .55em; border-radius: 50%; background: currentColor; margin-right: .4em; vertical-align: .05em; }
+.est-riviera .pie { border-top: 1.4pt solid var(--linea); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.5mm; }
+.est-riviera .pie-serv { font-size: 9pt; font-weight: 600; text-transform: lowercase; }
+.est-riviera .pie-serv span + span { margin-left: 5mm; }
+.est-riviera .pie-serv b { margin-left: 2mm; }
+.est-riviera .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; text-transform: lowercase; }
+.est-riviera .pie-credito { flex-basis: 100%; margin-top: 0; color: var(--suave); }
+.est-riviera .cab-corta { color: var(--acento); }
+
+/* ---------- DÉCO · años 20, latón y verde botella ---------- */
+.est-deco { --tinta: #1C2B26; --acento: #A5804A; --suave: #56605A; --linea: #A5804A; --papel: #F3EEE3; }
+.est-deco .pagina { font-family: 'Cormorant Garamond', serif; text-align: center; padding: 25mm 23mm 17mm; }
+.est-deco .pagina::before { content: ''; position: absolute; inset: 9mm; border: 1.3pt solid var(--acento); pointer-events: none; }
+.est-deco .pagina::after { content: ''; position: absolute; inset: 11mm; border: .4pt solid var(--acento); pointer-events: none; }
+.est-deco .cab { margin-bottom: calc(9mm * min(var(--k), 1.1)); }
+.est-deco .deco-orn { display: flex; align-items: center; justify-content: center; gap: 2.4mm; margin: 0 0 4.5mm; }
+.est-deco .deco-orn:last-child { margin: 4.5mm 0 0; }
+.est-deco .deco-orn i { width: 22mm; height: 2.2mm; border-top: .5pt solid var(--acento); border-bottom: .5pt solid var(--acento); }
+.est-deco .deco-orn b { width: 2.6mm; height: 2.6mm; border: .7pt solid var(--acento); transform: rotate(45deg); }
+.est-deco .cab-nombre { font-family: 'Italiana', serif; font-size: calc(46pt * min(var(--k), 1.12)); letter-spacing: .16em; padding-left: .16em; text-transform: uppercase; line-height: 1.05; }
+.est-deco .cab-logo { max-height: 22mm; max-width: 75mm; }
+.est-deco .cab-sub { margin-top: 3mm; font-family: 'Cinzel', serif; font-size: 7.6pt; letter-spacing: .38em; padding-left: .38em; color: var(--acento); text-transform: uppercase; }
+.est-deco .cols-2 .cuerpo { column-gap: 12mm; }
+.est-deco .sec-t { font-family: 'Cinzel', serif; font-weight: 500; font-size: calc(9pt * var(--k)); letter-spacing: .36em; padding-left: .36em; text-transform: uppercase; color: var(--acento); margin-bottom: calc(6pt * var(--k)); }
+.est-deco .sec-t::after { content: ''; display: block; width: 16mm; height: 1.4mm; margin: calc(3pt * var(--k)) auto 0; border-top: .5pt solid var(--acento); border-bottom: .5pt solid var(--acento); }
+.est-deco .pl { margin-top: calc(6.5pt * var(--k)); }
+.est-deco .pl-l { display: block; }
+.est-deco .pl-n { font-size: calc(12.8pt * var(--k)); font-weight: 600; line-height: 1.2; }
+.est-deco .pl-p { font-family: 'Cinzel', serif; font-size: calc(9.6pt * var(--k)); color: var(--acento); margin-left: .8em; letter-spacing: .06em; }
+.est-deco .pl-d { font-size: calc(11pt * var(--k)); font-style: italic; color: var(--suave); padding: 0 5mm; line-height: 1.22; }
+.est-deco .pl-r { font-style: italic; }
+.est-deco .pl-a { font-size: calc(8pt * var(--k)); color: var(--suave); }
+.est-deco .pl-etq { font-family: 'Cinzel', serif; font-size: calc(6.6pt * var(--k)); letter-spacing: .3em; color: var(--acento); }
+.est-deco .pie { padding-top: 4mm; }
+.est-deco .pie-serv { font-style: italic; font-size: 11pt; margin-bottom: 2mm; }
+.est-deco .pie-serv b { font-family: 'Cinzel', serif; font-weight: 400; font-size: .8em; color: var(--acento); margin-left: .6em; font-style: normal; }
+.est-deco .pie-nota { font-size: 8pt; color: var(--suave); max-width: 125mm; margin: 0 auto; line-height: 1.35; }
 
 /* ---------- Pantalla vs. impresión ---------- */
 @media screen {

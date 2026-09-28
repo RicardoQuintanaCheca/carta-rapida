@@ -17,7 +17,21 @@ const CARAS = [
   ['instrument-sans', 'Instrument Sans', [[400, 'normal'], [500, 'normal'], [600, 'normal']]],
   ['instrument-serif', 'Instrument Serif', [[400, 'normal'], [400, 'italic']]],
   ['bodoni-moda', 'Bodoni Moda', [[500, 'normal']]],
-  ['newsreader', 'Newsreader', [[400, 'normal'], [500, 'normal'], [400, 'italic']]]
+  ['newsreader', 'Newsreader', [[400, 'normal'], [500, 'normal'], [400, 'italic']]],
+  // Colección 2026
+  ['cormorant-garamond', 'Cormorant Garamond', [[300, 'normal'], [400, 'normal'], [500, 'normal'], [600, 'normal'], [400, 'italic'], [500, 'italic']]],
+  ['jost', 'Jost', [[400, 'normal'], [500, 'normal']]],
+  ['dm-serif-display', 'DM Serif Display', [[400, 'normal'], [400, 'italic']]],
+  ['libre-franklin', 'Libre Franklin', [[500, 'normal'], [600, 'normal']]],
+  ['playfair-display', 'Playfair Display', [[400, 'normal'], [400, 'italic']]],
+  ['fraunces', 'Fraunces', [[300, 'normal'], [300, 'italic']]],
+  ['manrope', 'Manrope', [[500, 'normal'], [600, 'normal'], [700, 'normal']]],
+  ['shippori-mincho', 'Shippori Mincho', [[500, 'normal'], [600, 'normal']]],
+  ['zen-kaku-gothic-new', 'Zen Kaku Gothic New', [[400, 'normal'], [500, 'normal']]],
+  ['syne', 'Syne', [[600, 'normal'], [700, 'normal']]],
+  ['space-grotesk', 'Space Grotesk', [[300, 'normal'], [400, 'normal'], [500, 'normal'], [600, 'normal']]],
+  ['italiana', 'Italiana', [[400, 'normal']]],
+  ['cinzel', 'Cinzel', [[400, 'normal'], [500, 'normal']]]
 ];
 const RANGOS = {
   latin: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
@@ -57,7 +71,7 @@ async function obtenerNavegador() {
   return navegador;
 }
 
-const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor']);
+const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco']);
 
 async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
@@ -68,14 +82,16 @@ async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = tru
     // Nada sale a internet desde el renderizado
     await pagina.route('**/*', r => r.request().url().startsWith('data:') ? r.continue() : r.abort());
     await pagina.setContent(PLANTILLA, { waitUntil: 'load' });
-    await pagina.evaluate(async () => {
+    await pagina.evaluate(async (estilo) => {
       await document.fonts.ready;
+      const propias = (MotorCarta.ESTILOS[estilo] || {}).fuentes;
+      if (propias) { await Promise.all(propias.map(f => document.fonts.load(f.replace('1em', '16px'), 'Áéñ1'))); return; }
       const caras = ['16px "EB Garamond"', 'italic 16px "EB Garamond"', '500 16px "EB Garamond"', '600 16px "EB Garamond"',
         '16px "Libre Caslon Display"', '16px "Instrument Sans"', '500 16px "Instrument Sans"', '600 16px "Instrument Sans"',
         '16px "Instrument Serif"', 'italic 16px "Instrument Serif"', '500 16px "Bodoni Moda"',
         '16px "Newsreader"', '500 16px "Newsreader"', 'italic 16px "Newsreader"'];
       await Promise.all(caras.map(c => document.fonts.load(c, 'Áéñ')));
-    });
+    }, estilo);
     const info = await pagina.evaluate(async ({ carta, estilo, logo, credito }) => {
       // El logo se decodifica antes de medir; si no, la cabecera mediría 0 y el texto se saldría
       if (logo) await new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = logo; window.__logo = i; });
