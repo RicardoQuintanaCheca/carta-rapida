@@ -10,9 +10,9 @@
   'use strict';
 
   const K_MIN = 0.86;   // por debajo, la letra ya no se lee bien impresa (~9,5 pt el plato)
-  const K_COMODO = 0.95; // si una sola página obliga a bajar de aquí, mejor dos páginas
+  const K_COMODO = 0.87; // una sola página mientras la letra siga siendo cómoda (≈9,8 pt el plato); si no, dos
   // Tope de tamaño: una carta corta puede ir grande; una larga, contenida (más premium)
-  const kMaxPara = platos => platos <= 8 ? 1.38 : platos <= 14 ? 1.24 : platos <= 24 ? 1.14 : 1.06;
+  const kMaxPara = platos => platos <= 8 ? 1.55 : platos <= 14 ? 1.24 : platos <= 24 ? 1.14 : 1.06;
   const HOLGURA = 0.975; // margen de seguridad: pantalla e impresora no miden idéntico
 
   const esc = s => String(s == null ? '' : s)
@@ -38,6 +38,53 @@
     return i > 0 && s.length - i < 14 ? s.slice(0, i) + '&nbsp;' + s.slice(i + 1) : s;
   }
 
+  /* ---------- Criterio editorial (por si la lectura no lo dejó limpio) ---------- */
+  let IDIOMA = 'es';
+  const TXT = {
+    es: { rec: 'Recomendado', carta: 'Carta' },
+    en: { rec: 'Recommended', carta: 'Menu' },
+    fr: { rec: 'Recommandé', carta: 'Carte' },
+    de: { rec: 'Empfehlung', carta: 'Speisekarte' },
+    it: { rec: 'Consigliato', carta: 'Menù' },
+    pt: { rec: 'Recomendado', carta: 'Ementa' },
+    zh: { rec: '推荐', carta: '菜单' }
+  };
+  const t = k => (TXT[IDIOMA] || TXT.es)[k];
+
+  // "LOMO BAJO DE VACA" → "Lomo bajo de vaca" (un diseñador nunca compone la carta entera en mayúsculas)
+  function sinGritos(texto) {
+    const s = String(texto == null ? '' : texto).trim().replace(/\s+/g, ' ').replace(/\.$/, '');
+    const letras = s.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g, '');
+    if (letras.length < 4) return s;
+    const mayus = letras.replace(/[^A-ZÁÉÍÓÚÜÑ]/g, '').length;
+    if (mayus / letras.length < 0.7) return s;
+    const baja = s.toLocaleLowerCase('es');
+    return baja.charAt(0).toLocaleUpperCase('es') + baja.slice(1);
+  }
+
+  // La ración va aparte y en pequeño: "Jamón ibérico (80 g)" → nombre "Jamón ibérico" + ración "80 g"
+  const RE_RACION = /\s*\(([^()]*(?:\d|\bud|\bunid|\bpax\b|\bpers|\bración|\bmedia\b|\bkg\b|\bg\b|\bml\b|\bcl\b|encargo)[^()]*)\)\s*$/i;
+  function partir(p) {
+    let nombre = sinGritos(p.nombre);
+    let racion = String(p.racion || '').trim();
+    const m = nombre.match(RE_RACION);
+    if (m) { nombre = nombre.slice(0, m.index).trim(); if (!racion) racion = m[1].trim(); }
+    return { nombre, racion, descripcion: sinGritos(p.descripcion), alergenos: String(p.alergenos || '').trim() };
+  }
+
+  // Todos los estilos comparten la misma estructura de plato; cambia la tipografía.
+  // Regla de orden: el precio SIEMPRE en la línea del nombre, en la misma posición.
+  function platoComun(p) {
+    const d = partir(p);
+    const pr = precio(p.precio);
+    return `<div class="pl${p.destacado ? ' pl-dest' : ''}">`
+      + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
+      + `<div class="pl-l"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>`
+      + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}</div>` : '')
+      + (d.alergenos ? `<div class="pl-a">${esc(d.alergenos)}</div>` : '')
+      + `</div>`;
+  }
+
   /* ---------- Plantillas por estilo ---------- */
   const ESTILOS = {
     mantel: {
@@ -50,12 +97,9 @@
         </header>`;
       },
       seccion(s) {
-        return `<section class="sec"><h2 class="sec-t"><span>${esc(s.nombre)}</span></h2>${s.platos.map(this.plato).join('')}</section>`;
+        return `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`;
       },
-      plato(p) {
-        const pr = precio(p.precio);
-        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${!p.descripcion && pr ? `<span class="pl-p">${pr}</span>` : ''}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
-      }
+      plato: platoComun
     },
 
     barra: {
@@ -63,16 +107,13 @@
       cabecera(c, logo) {
         return `<header class="cab">
           ${logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`}
-          <div class="cab-meta">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}<span class="cab-carta">Carta</span></div>
+          <div class="cab-meta">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}<span class="cab-carta">${esc(t('carta'))}</span></div>
         </header>`;
       },
       seccion(s, i) {
-        return `<section class="sec"><h2 class="sec-t"><span class="sec-num">${String(i + 1).padStart(2, '0')}</span><span class="sec-nom">${esc(s.nombre)}</span></h2>${s.platos.map(this.plato).join('')}</section>`;
+        return `<section class="sec"><h2 class="sec-t"><span class="sec-num">${String(i + 1).padStart(2, '0')}</span><span class="sec-nom">${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`;
       },
-      plato(p) {
-        const pr = precio(p.precio);
-        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${pr ? `<span class="pl-p">${pr}</span>` : ''}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
-      }
+      plato: platoComun
     },
 
     autor: {
@@ -84,13 +125,9 @@
         </header>`;
       },
       seccion(s) {
-        return `<section class="sec"><h2 class="sec-t">${esc(s.nombre)}</h2>${s.platos.map(this.plato).join('')}</section>`;
+        return `<section class="sec"><h2 class="sec-t">${esc(sinGritos(s.nombre))}</h2>${s.platos.map(platoComun).join('')}</section>`;
       },
-      plato(p) {
-        const pr = precio(p.precio);
-        const pp = pr ? `<span class="pl-p">${pr}</span>` : '';
-        return `<div class="pl"><div class="pl-n">${sinViuda(p.nombre)}${p.descripcion ? '' : pp}</div>${p.descripcion ? `<div class="pl-d">${sinViuda(p.descripcion)}${pp}</div>` : ''}${p.alergenos ? `<div class="pl-a">${esc(p.alergenos)}</div>` : ''}</div>`;
-      }
+      plato: platoComun
     }
   };
 
@@ -131,6 +168,35 @@
     return { ratio: dp[m][n], grupos };
   }
 
+  /* Varias páginas: todas las columnas con un llenado parecido (sin una página
+     intermedia medio vacía ni otra a reventar). Minimiza la desviación de cada
+     columna respecto al llenado medio, sin pasarse nunca de la capacidad. */
+  function repartirParejo(alturas, caps) {
+    const n = alturas.length, m = caps.length;
+    const pref = [0];
+    alturas.forEach(h => pref.push(pref[pref.length - 1] + h));
+    const media = pref[n] / caps.reduce((a, b) => a + b, 0);
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(Infinity));
+    const corte = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    dp[0][0] = 0;
+    for (let jj = 1; jj <= m; jj++) {
+      for (let ii = 0; ii <= n; ii++) {
+        for (let k = 0; k <= ii; k++) {
+          if (!isFinite(dp[jj - 1][k])) continue;
+          const r = (pref[ii] - pref[k]) / caps[jj - 1];
+          if (r > HOLGURA) continue;
+          const c = dp[jj - 1][k] + (r - media) * (r - media);
+          if (c < dp[jj][ii] - 1e-12) { dp[jj][ii] = c; corte[jj][ii] = k; }
+        }
+      }
+    }
+    if (!isFinite(dp[m][n])) return null;
+    const grupos = [];
+    let ii = n;
+    for (let jj = m; jj >= 1; jj--) { const k = corte[jj][ii]; grupos.unshift([k, ii]); ii = k; }
+    return grupos;
+  }
+
   /* ---------- Composición ---------- */
   function componer(destino, carta, opts) {
     opts = opts || {};
@@ -138,6 +204,7 @@
     const claveEstilo = ESTILOS[opts.estilo] ? opts.estilo : 'mantel';
     // Solo se acepta un logo en data URL de imagen (evita inyectar HTML o cargar URLs externas)
     const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
+    IDIOMA = String(carta.idioma || 'es').slice(0, 2);
     const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
     const htmlSec = secciones.map((s, i) => estilo.seccion(s, i));
     const totalPlatos = secciones.reduce((a, s) => a + s.platos.length, 0);
@@ -224,6 +291,11 @@
 
     // Reconstruye con la configuración elegida y coloca las secciones
     const final = probar(elegida.cols, elegida.numPag, elegida.k);
+    pliego.classList.toggle('multi', elegida.numPag > 1);
+    if (elegida.numPag > 1) {
+      const parejo = repartirParejo(final.alturas, final.caps);
+      if (parejo) final.grupos = parejo;
+    }
     const columnas = [];
     final.paginas.forEach(p => p.querySelectorAll('.col').forEach(c => columnas.push(c)));
     final.grupos.forEach(([a, b], idx) => {
@@ -247,7 +319,7 @@
         aire = Math.min(aire, (disponible - c.getBoundingClientRect().height) / unidades);
       });
       if (!isFinite(aire) || aire < 0) aire = 0;
-      aire = Math.min(aire, 16 * MM);                         // máx. ≈16 mm entre secciones
+      aire = Math.min(aire, (p.classList.contains('cols-1') ? 22 : 16) * MM); // máx. entre secciones
       const airePl = Math.min(aire * PESO_PLATO, 3.2 * MM);   // máx. ≈3 mm extra entre platos
       p.style.setProperty('--aire', aire.toFixed(1) + 'px');
       p.style.setProperty('--aire-pl', airePl.toFixed(1) + 'px');

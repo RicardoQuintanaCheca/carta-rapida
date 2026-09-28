@@ -102,12 +102,14 @@ const ESQUEMA_CARTA = {
             items: {
               type: 'object',
               additionalProperties: false,
-              required: ['nombre', 'descripcion', 'precio', 'alergenos'],
+              required: ['nombre', 'racion', 'descripcion', 'precio', 'alergenos', 'destacado'],
               properties: {
                 nombre: { type: 'string' },
                 descripcion: { type: 'string' },
                 precio: { type: 'string' },
-                alergenos: { type: 'string' }
+                alergenos: { type: 'string' },
+                racion: { type: 'string' },
+                destacado: { type: 'boolean' }
               }
             }
           }
@@ -150,7 +152,9 @@ const ORDEN_SECCIONES = `ORDEN DE SECCIONES (aplícalo siempre; si una sección 
 
 const REGLAS_CAMPOS = `REGLAS DE CAMPOS:
 - precio: solo el número, SIN símbolo €. Decimales con punto ("16.5", no "16,50"); sin ceros finales ("16", no "16.00"). Conserva formatos especiales: "5/u", "84/k", "9 | 16", "SPM". Sin precio → "".
-- nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Conserva indicadores: (V), (VG), (80g), (6 uds), (por encargo), (2 pax). Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y respetando nombres propios ("LOMO BAJO DE VACA GALLEGA" → "Lomo bajo de vaca gallega").
+- nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y respetando nombres propios ("LOMO BAJO DE VACA GALLEGA" → "Lomo bajo de vaca gallega"). Sin punto final.
+- racion: cantidades, unidades o condiciones que acompañan al nombre, SACADAS del nombre: "80 g", "6 uds.", "2 pax", "por encargo", "½ ración", "(V)", "(VG)". Ejemplo: "Jamón ibérico (80g)" → nombre "Jamón ibérico", racion "80 g". Si no hay → "".
+- destacado: true solo si la carta original marca el plato como especialidad, recomendación o plato de la casa (estrella, "de la casa", "recomendado", recuadro…). Si no → false.
 - nombre (sección): igual que en el original, también en minúsculas con mayúscula inicial si venía todo en mayúsculas.
 - alergenos: sin la palabra "Alérgenos:". Formato "Gluten, lácteos, huevo". Si no hay → "".
 - nombre_restaurante: solo si aparece claramente en la carta; si no → "".
@@ -163,13 +167,14 @@ NUNCA inventes platos, precios ni descripciones que no se pidan.`;
 const REGLAS_ORDEN_VALOR = `ORDEN DENTRO DE CADA SECCIÓN (orden estratégico):
 - El plato estrella o especialidad de la casa, si lo hay, el primero.
 - Después, los platos de precio medio-alto: son los que más se ven.
-- Los platos "por encargo" o de disponibilidad limitada, al final de su sección.`;
+- Los platos "por encargo" o de disponibilidad limitada, al final de su sección.
+- destacado: además de lo que marque el original, puedes marcar como destacado COMO MÁXIMO 1 plato por sección y 3 en toda la carta: el más representativo de la casa y de precio medio-alto. Menos es más: si la carta es corta, 1 o ninguno.`;
 
 const REGLAS_ORDEN_ORIGINAL = `ORDEN DENTRO DE CADA SECCIÓN: respeta EXACTAMENTE el orden original. NO reordenes platos.`;
 
 const INSTRUCCION_DESCRIPCIONES = `DESCRIPCIONES DE PLATOS — OBLIGATORIO:
 Cada plato de comida DEBE llevar una descripción breve. Si el original trae descripción, respétala (puedes pulirla). Si no la trae, escríbela tú.
-- Máximo 12 palabras. Tono de carta seria de restaurante, no publicitario.
+- Entre 5 y 11 palabras, todas de longitud parecida: una carta profesional tiene un ritmo uniforme. Sin punto final. Tono de carta seria de restaurante, no publicitario.
 - Menciona ingrediente principal, técnica o procedencia.
 - PROHIBIDO: "delicioso", "exquisito", "sabroso", "magnífico", "espectacular", "irresistible", "una explosión de sabor".
 - Si no hay información, usa la descripción estándar del tipo de plato. NUNCA inventes ingredientes concretos que el restaurante podría no tener.
@@ -221,7 +226,7 @@ async function pedirCarta(messages) {
 // Limpieza final: quita secciones vacías y espacios sobrantes
 function normalizarCarta(c) {
   const t = s => (typeof s === 'string' ? s.trim() : '');
-  return {
+  const out = {
     nombre_restaurante: t(c.nombre_restaurante),
     subtitulo: t(c.subtitulo),
     idioma: t(c.idioma) || 'es',
@@ -230,10 +235,18 @@ function normalizarCarta(c) {
     secciones: (c.secciones || []).map(s => ({
       nombre: t(s.nombre),
       platos: (s.platos || []).map(p => ({
-        nombre: t(p.nombre), descripcion: t(p.descripcion), precio: t(p.precio).replace(/€/g, '').trim(), alergenos: t(p.alergenos)
+        nombre: t(p.nombre), racion: t(p.racion), descripcion: t(p.descripcion),
+        precio: t(p.precio).replace(/€/g, '').trim(), alergenos: t(p.alergenos), destacado: p.destacado === true
       })).filter(p => p.nombre)
     })).filter(s => s.platos.length)
   };
+  // Criterio de diseño: destacar poco para que destaque. Máx. 1 por sección y 3 en total.
+  let quedan = 3;
+  out.secciones.forEach(s => {
+    let enSeccion = 0;
+    s.platos.forEach(p => { if (p.destacado) { if (enSeccion < 1 && quedan > 0) { enSeccion++; quedan--; } else p.destacado = false; } });
+  });
+  return out;
 }
 
 function mensajeError(error) {

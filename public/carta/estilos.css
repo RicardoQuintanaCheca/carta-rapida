@@ -26,6 +26,8 @@
   flex: 1 1 auto; min-height: 0;
   display: grid; align-content: center; align-items: start;
 }
+/* Con varias páginas el texto arranca bajo la cabecera, como en un libro */
+.carta.multi .cuerpo { align-content: start; }
 .cols-1 .cuerpo { grid-template-columns: minmax(0, 118mm); justify-content: center; }
 .cols-2 .cuerpo { grid-template-columns: 1fr 1fr; column-gap: 12mm; }
 .col { min-width: 0; }
@@ -34,6 +36,14 @@
 .sec .pl + .pl { padding-top: var(--aire-pl); }
 .pl { break-inside: avoid; }
 .pl-n, .pl-d, .pie-nota { text-wrap: pretty; }
+/* Plato: nombre a la izquierda, precio siempre en la misma línea y alineado.
+   La descripción no invade la columna del precio: así la carta se lee ordenada. */
+.pl-l { display: flex; align-items: baseline; justify-content: space-between; column-gap: 5mm; }
+.pl-n { flex: 1 1 auto; min-width: 0; }
+.pl-r { margin-left: .5em; white-space: nowrap; font-size: .76em; letter-spacing: .03em; color: var(--suave); font-weight: 400; font-style: normal; }
+.pl-p { flex: 0 0 auto; text-align: right; white-space: nowrap; font-variant-numeric: lining-nums tabular-nums; }
+.pl-d { padding-right: 8mm; }
+.pl-etq { line-height: 1; margin-bottom: calc(2.2pt * var(--k)); }
 .pie { flex: 0 0 auto; }
 .pagina .pie:empty { display: none !important; }
 .cab-corta { font-size: 7.4pt; letter-spacing: .3em; text-transform: uppercase; text-align: center; opacity: .6; margin-bottom: 8mm; }
@@ -67,9 +77,8 @@
 .est-mantel .pl { margin-top: calc(5.4pt * var(--k)); }
 .est-mantel .pl-n { font-size: calc(11.3pt * var(--k)); line-height: 1.2; font-weight: 500; }
 .est-mantel .pl-d { font-size: calc(9.9pt * var(--k)); line-height: 1.24; font-style: italic; color: var(--suave); margin-top: .6pt; }
-.est-mantel .pl-p { font-style: normal; font-weight: 500; color: var(--tinta); margin-left: .55em; font-variant-numeric: oldstyle-nums proportional-nums; white-space: nowrap; }
-.est-mantel .pl-n .pl-p { font-size: 1em; }
-.est-mantel .pl-d .pl-p { font-size: calc(11.3 / 9.9 * 1em); }
+.est-mantel .pl-p { font-size: calc(11.3pt * var(--k)); font-weight: 500; color: var(--tinta); }
+.est-mantel .pl-etq { font-size: calc(6.6pt * var(--k)); font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--acento); }
 .est-mantel .pl-a { font-size: calc(7.6pt * var(--k)); color: var(--suave); letter-spacing: .04em; margin-top: 1pt; }
 .est-mantel .pie { text-align: center; padding-top: 5mm; }
 .est-mantel .pie-serv { font-style: italic; font-size: 10pt; color: var(--tinta); margin-bottom: 2.2mm; }
@@ -100,7 +109,8 @@
 .est-barra .sec-nom { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: calc(18.5pt * var(--k)); line-height: 1; letter-spacing: -.005em; }
 .est-barra .pl { margin-top: calc(6.4pt * var(--k)); }
 .est-barra .pl-n { font-size: calc(10.2pt * var(--k)); line-height: 1.24; font-weight: 500; }
-.est-barra .pl-p { font-weight: 600; color: var(--acento); font-variant-numeric: tabular-nums; margin-left: .55em; white-space: nowrap; }
+.est-barra .pl-p { font-size: calc(10.2pt * var(--k)); font-weight: 600; color: var(--acento); }
+.est-barra .pl-etq { font-size: calc(6.4pt * var(--k)); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--acento); }
 .est-barra .pl-d { font-size: calc(8.8pt * var(--k)); line-height: 1.34; color: var(--suave); margin-top: 1pt; }
 .est-barra .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; margin-top: 1.4pt; }
 .est-barra .pie { border-top: .5pt solid var(--linea); padding-top: 3mm; margin-top: 3mm; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 8mm; row-gap: 1.6mm; }
@@ -131,8 +141,10 @@
 .est-autor .pl { margin-top: calc(7pt * var(--k)); }
 .est-autor .pl-n { font-size: calc(10.6pt * var(--k)); line-height: 1.22; font-weight: 500; letter-spacing: .005em; }
 .est-autor .pl-d { font-size: calc(9.4pt * var(--k)); line-height: 1.28; font-style: italic; color: var(--suave); margin-top: .8pt; }
-.est-autor .pl-p { font-style: normal; font-weight: 500; color: var(--tinta); margin-left: .6em; font-variant-numeric: oldstyle-nums; white-space: nowrap; }
-.est-autor .pl-d .pl-p { font-size: calc(10.6 / 9.4 * 1em); }
+.est-autor .pl-l { display: block; }
+.est-autor .pl-p { font-size: calc(10.6pt * var(--k)); font-weight: 400; color: var(--acento); margin-left: .8em; }
+.est-autor .pl-d { padding: 0 6mm; }
+.est-autor .pl-etq { font-size: calc(8.6pt * var(--k)); font-style: italic; color: var(--acento); }
 .est-autor .pl-a { font-size: calc(7.4pt * var(--k)); color: var(--suave); margin-top: 1pt; letter-spacing: .05em; }
 .est-autor .pie { padding-top: 5mm; }
 .est-autor .pie-serv { font-size: 9.6pt; font-style: italic; margin-bottom: 2mm; }
