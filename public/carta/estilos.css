@@ -230,11 +230,12 @@
 .est-brasserie .sec-t { text-align: center; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: calc(19pt * var(--k)); line-height: 1.05; color: var(--acento); margin-bottom: calc(4pt * var(--k)); }
 .est-brasserie .sec-t::after { content: '• • •'; display: block; font-style: normal; font-size: .32em; letter-spacing: .6em; padding-left: .6em; color: var(--tinta); margin-top: calc(2pt * var(--k)); }
 .est-brasserie .pl { margin-top: calc(5.4pt * var(--k)); }
-.est-brasserie .pl-l { column-gap: 1.6mm; align-items: flex-end; }
-.est-brasserie .pl-n { flex: 0 1 auto; font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(8.4pt * var(--k)); letter-spacing: .05em; text-transform: uppercase; line-height: 1.35; }
+.est-brasserie .pl-l { display: block; position: relative; padding-right: 3.4em; font-family: 'Libre Franklin', sans-serif; font-size: calc(8.4pt * var(--k)); line-height: 1.35; }
+/* Puntos guía desde la última palabra hasta el precio (también si el nombre ocupa dos líneas) */
+.est-brasserie .pl-l::after { content: ''; position: absolute; left: 0; right: .2em; bottom: .36em; border-bottom: 1.1pt dotted var(--suave); opacity: .75; }
+.est-brasserie .pl-n { position: relative; z-index: 1; background: var(--papel); padding-right: .4em; font-weight: 600; font-size: 1em; letter-spacing: .05em; text-transform: uppercase; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .est-brasserie .pl-r { text-transform: none; letter-spacing: .02em; font-weight: 500; }
-.est-brasserie .pl-g { display: block; flex: 1 1 6mm; min-width: 6mm; margin-bottom: calc(2.6pt * var(--k)); border-bottom: 1.1pt dotted var(--suave); opacity: .7; }
-.est-brasserie .pl-p { font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(9pt * var(--k)); line-height: 1.35; }
+.est-brasserie .pl-p { position: absolute; right: 0; bottom: 0; z-index: 1; background: var(--papel); padding-left: .3em; font-weight: 600; font-size: calc(9pt * var(--k)); line-height: 1.35; }
 .est-brasserie .pl-d { font-style: italic; font-size: calc(9.6pt * var(--k)); color: var(--suave); line-height: 1.25; margin-top: .4pt; }
 .est-brasserie .pl-a { font-family: 'Libre Franklin', sans-serif; font-size: calc(6.6pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; }
 .est-brasserie .pl-etq { font-family: 'Libre Franklin', sans-serif; font-weight: 600; font-size: calc(6.2pt * var(--k)); letter-spacing: .16em; text-transform: uppercase; color: var(--acento); }
