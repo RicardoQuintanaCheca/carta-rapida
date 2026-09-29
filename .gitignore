@@ -4,3 +4,4 @@ uploads
 airy-lodge-*.json
 *.pem
 datos
+datos/

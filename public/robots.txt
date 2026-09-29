@@ -3,4 +3,8 @@ Allow: /
 Disallow: /pago/
 Disallow: /carta/vista.html
 
+Disallow: /panel
+Disallow: /cuenta/
+Disallow: /cartas
+
 Sitemap: https://cartarapida.kartia.es/sitemap.xml

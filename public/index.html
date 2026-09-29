@@ -40,7 +40,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Carta Rápida",
-  "description": "Haz la carta de tu restaurante sin Canva ni plantillas: una foto de tu carta y en 30 segundos la tienes maquetada en PDF A4 listo para imprimir. 15 estilos, gratis sin límite y Carta Pro con logotipo y traducción a 6 idiomas.",
+  "description": "Haz la carta de tu restaurante sin Canva ni plantillas: una foto de tu carta y en 30 segundos la tienes maquetada en PDF A4 listo para imprimir. Gratis con 10 estilos y Carta Pro con panel para guardar y editar tus cartas, 15 estilos, logotipo y traducción a 6 idiomas.",
   "inLanguage": "es",
   "image": "https://cartarapida.kartia.es/og-deja-canva.jpg",
   "url": "https://cartarapida.kartia.es",
@@ -49,7 +49,8 @@
   "operatingSystem": "Web",
   "offers": [
     { "@type": "Offer", "name": "Gratis", "price": "0", "priceCurrency": "EUR" },
-    { "@type": "Offer", "name": "Carta Pro · 30 días", "price": "19", "priceCurrency": "EUR" }
+    { "@type": "Offer", "name": "Carta Pro mensual", "price": "9.90", "priceCurrency": "EUR" },
+    { "@type": "Offer", "name": "Carta Pro anual", "price": "99", "priceCurrency": "EUR" }
   ],
   "provider": {
     "@type": "Organization",
@@ -70,7 +71,7 @@
       "name": "¿Es realmente gratis? ¿Dónde está la trampa?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "La versión gratis es gratis de verdad y sin límite: tu carta rediseñada en PDF, con una firma pequeña de Kartia al pie. Si la quieres sin firma, con tu logo o traducida, está Carta Pro por 19 € (pago único, sin suscripción), y puedes probarla 7 días gratis solo con tu email. Kartia es un taller español de portamenús artesanales: si luego nos pides portamenús, te descontamos esos 19 €."
+        "text": "La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes o 99 € al año, y puedes probarla 7 días gratis sin tarjeta."
       }
     },
     {
@@ -110,7 +111,7 @@
       "name": "¿Dónde se guardan mis cartas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "En ningún sitio. Leemos tu carta al momento, te devolvemos el diseño y no guardamos ni la foto ni el texto. Tu email solo lo tenemos si nos lo das para la prueba o el montaje, y nunca lo vendemos. Más detalle en la política de privacidad."
+        "text": "Con la versión gratis, en ningún sitio: leemos tu carta, te devolvemos el diseño y no guardamos ni la foto ni el texto. Con Carta Pro, las cartas que tú decidas guardar se quedan en tu panel, solo visibles con tu cuenta, hasta que las borres o borres la cuenta. Nunca vendemos tus datos. Más detalle en la política de privacidad."
       }
     },
     {
@@ -131,10 +132,10 @@
     },
     {
       "@type": "Question",
-      "name": "¿Qué pasa cuando terminan los 30 días de Carta Pro?",
+      "name": "¿Cómo funciona la prueba y cómo cancelo?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Nada que te obligue a nada: no se renueva sola ni se cobra otra vez. Los PDF que hayas descargado son tuyos y los sigues usando. Si más adelante necesitas volver a quitar la firma, poner tu logo o traducir, compras otros 30 días."
+        "text": "La prueba de 7 días no pide tarjeta ni se convierte en pago: si no activas Pro, sigues con la versión gratis. La membresía se renueva sola cada mes o cada año hasta que la canceles desde tu panel, en un clic; sigues con Pro hasta el final del periodo pagado. Tus cartas guardadas no se borran: vuelves a editarlas en cuanto reactives Pro. Los PDF que hayas descargado son tuyos para siempre."
       }
     },
     {
@@ -142,13 +143,22 @@
       "name": "¿Sirve para estudios de diseño y agencias?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator. Con Carta Pro quitas la firma, pones el logo del cliente y traduces, con ajustes y descargas ilimitados durante 30 días."
+        "text": "Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Con Carta Pro guardas en tu panel las cartas de todos tus clientes, sin firma y con el logo de cada uno. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo cambiar los precios de mi carta más adelante?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, con Carta Pro. Guardas la carta en tu panel y, cuando cambie un precio o un plato, lo editas como en una hoja y descargas el PDF nuevo al momento. También puedes pedir el cambio con una frase: «sube los postres 50 céntimos»."
       }
     }
   ]
 }
 </script>
 
+<link rel="stylesheet" href="/cuenta.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" imagesrcset="/ejemplo/despues-riviera-640.webp 640w, /ejemplo/despues-riviera.webp 900w" imagesizes="(max-width: 640px) 92vw, 440px" fetchpriority="high">
@@ -1337,6 +1347,137 @@
     .estudios-section { padding: 60px 16px; }
     .estudios-section .cta-row .btn-primary { font-size: 17px; }
   }
+
+  /* ── Subida: arrastrar y miniaturas ── */
+  .solo-raton { display: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .solo-raton { display: inline; }
+    .solo-tactil { display: none; }
+    #addCamaraBtn { display: none !important; }
+    .t2-cta-big { border: 3px dashed rgba(255,255,255,.55); }
+  }
+  .drop-velo { position: fixed; inset: 0; z-index: 2000; background: rgba(20,18,15,.55); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; pointer-events: none; padding: 24px; }
+  body.arrastrando .drop-velo { display: flex; }
+  .drop-caja { width: min(560px, 100%); padding: 48px 32px; border: 4px dashed #fff; border-radius: 28px; background: rgba(226,86,26,.92); color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.35); animation: dropLatido 1.2s ease-in-out infinite; }
+  .drop-caja b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; letter-spacing: -.02em; }
+  .drop-caja span { font-size: 14px; opacity: .92; }
+  @keyframes dropLatido { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+  .fotos-preview { display: none; flex-direction: column; gap: 14px; padding: 18px; margin: 0 0 16px; border: 2px solid #0E0E0E; border-radius: 20px; background: #FFFBF7; box-shadow: 0 6px 0 #0E0E0E; }
+  .fotos-preview.on { display: flex; }
+  .fotos-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .fotos-tit { display: inline-flex; align-items: center; gap: 8px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 17px; color: #0E0E0E; }
+  .fotos-ok { width: 24px; height: 24px; border-radius: 50%; background: #2E7D32; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .fotos-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E6E6E; letter-spacing: .06em; }
+  .fotos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+  .foto-item { position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #fff; border: 1.5px solid #E8E1D6; box-shadow: 0 4px 12px -6px rgba(0,0,0,.25); animation: fotoEntra .25s ease-out; }
+  @keyframes fotoEntra { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+  .foto-item .foto-thumb { width: 100%; height: 100%; object-fit: cover; display: block; border: none; border-radius: 0; }
+  .foto-num { position: absolute; left: 6px; bottom: 6px; padding: 3px 8px; border-radius: 999px; background: rgba(14,14,14,.78); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .04em; }
+  .foto-item .foto-remove { position: absolute; top: 6px; right: 6px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; background: #0E0E0E; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; box-shadow: 0 2px 8px rgba(0,0,0,.3); transition: background .15s, transform .15s; font-size: 0; }
+  .foto-item .foto-remove:hover, .foto-item .foto-remove:focus-visible { background: #C62828; transform: scale(1.08); }
+  .foto-item.cargando { display: flex; align-items: center; justify-content: center; background: #F4EFE8; }
+  .foto-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid #E0D6CC; border-top-color: var(--cta); animation: fotoGira .8s linear infinite; }
+  @keyframes fotoGira { to { transform: rotate(360deg); } }
+  .fotos-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fotos-add-btn, .fotos-preview .add-camara-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 1.5px solid #0E0E0E; background: #fff; color: #0E0E0E; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; margin: 0; }
+  .fotos-add-btn:hover, .fotos-preview .add-camara-btn:hover { background: #0E0E0E; color: #fff; }
+  .fotos-add-btn input, .fotos-preview .add-camara-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .fotos-add-btn.lleno { display: none; }
+  .fotos-pista { margin: 0; font-size: 12.5px; color: #6E6E6E; }
+  body.arrastrando .fotos-preview.on { outline: 3px dashed var(--cta); outline-offset: 4px; }
+  @media (max-width: 640px) {
+    .fotos-preview { padding: 14px; }
+    .fotos-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  }
+
+  /* ── Pro en la herramienta ── */
+  .etq-pro { position: absolute; top: 8px; right: 8px; z-index: 4; background: #0E0E0E; color: #FFD9C4; font: 700 9.5px 'JetBrains Mono', monospace; letter-spacing: .1em; text-transform: uppercase; padding: 3px 7px; border-radius: 999px; pointer-events: none; }
+  .t2-scard .etq-pro { top: 14px; right: 40px; }
+  .res-estilo { position: relative; }
+  .res-estilo .etq-pro { position: static; display: inline-block; margin-left: 5px; padding: 1px 5px; font-size: 8.5px; vertical-align: 1px; }
+  .res-mini { position: relative; }
+  .res-mini .etq-pro { top: 6px; right: 6px; font-size: 8px; padding: 2px 5px; }
+  .etq-pro[hidden] { display: none; }
+  .guardar-btn { width: 100%; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 16px; border-radius: 999px; border: 2px solid #0E0E0E; background: #fff; color: #0E0E0E; font: 700 15.5px 'Bricolage Grotesque', sans-serif; cursor: pointer; transition: background .15s, color .15s; }
+  .guardar-btn svg { width: 18px; height: 18px; }
+  .guardar-btn:hover { background: #0E0E0E; color: #fff; }
+  .guardar-btn .pro-pill { margin-left: 2px; }
+  .guardar-btn.guardada { border-color: #2E7D32; color: #1F5E23; background: #EAF5EA; }
+  .guardar-btn.guardada .pro-pill { display: none; }
+  .guardar-nota { font-size: 12.5px; color: #6E6E6E; text-align: center; margin-top: 7px; line-height: 1.45; }
+  .pro-lista b { font-weight: 700; color: #0E0E0E; }
+  .pro-btn { background: var(--cta); font-size: 18.7px; box-shadow: 0 5px 0 #0E0E0E; }
+  .pro-prueba-btn { color: #0E0E0E; }
+  .enlace-pro { background: none; border: none; padding: 0; color: #1F5E23; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
+  .plan-estado a { color: #1F5E23; font-weight: 700; }
+
+  /* ── Neuromarketing ── */
+  .neuro-section { background: #FAF7F2; padding: 88px 24px; }
+  .neuro-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; align-items: center; }
+  .neuro-section .faq-h2 .o, .pro-section .faq-h2 .o { color: var(--cta); }
+  .neuro-lead, .pro-lead { font-size: 17px; line-height: 1.55; color: #444; margin: 16px 0 24px; max-width: 540px; }
+  .neuro-lista { list-style: none; counter-reset: n; padding: 0; margin: 0 0 28px; display: grid; gap: 14px; }
+  .neuro-lista li { counter-increment: n; position: relative; padding-left: 50px; display: flex; flex-direction: column; gap: 3px; }
+  .neuro-lista li::before { content: counter(n); position: absolute; left: 0; top: 0; width: 34px; height: 34px; border-radius: 50%; background: #0E0E0E; color: #fff; font: 800 15px 'Bricolage Grotesque', sans-serif; display: flex; align-items: center; justify-content: center; }
+  .neuro-lista b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 17.5px; }
+  .neuro-lista span { font-size: 14.5px; color: #555; line-height: 1.5; }
+  .neuro-fig { position: relative; margin: 0; }
+  .neuro-fig img { width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.06), 0 30px 60px -20px rgba(42,38,35,.4); transform: rotate(-1.5deg); background: #fff; }
+  .neuro-marca { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: var(--cta); color: #fff; font: 800 15px 'Bricolage Grotesque', sans-serif; display: flex; align-items: center; justify-content: center; border: 3px solid #fff; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+  .neuro-marca.m1 { left: -12px; top: 30%; }
+  .neuro-marca.m2 { right: -12px; top: 36%; }
+  .neuro-marca.m3 { left: -12px; top: 62%; }
+
+  /* ── Carta Pro ── */
+  .pro-section { background: #0E0E0E; color: #fff; padding: 96px 24px; overflow: hidden; }
+  .pro-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 56px; align-items: center; }
+  .pro-section .faq-eyebrow { color: #FF8A5C; }
+  .pro-section .faq-h2 { color: #fff; }
+  .pro-section .faq-h2 .o { color: #FF7A47; }
+  .pro-lead { color: #CFCAC2; }
+  .pro-ventajas { list-style: none; padding: 0; margin: 0 0 30px; display: grid; gap: 10px; }
+  .pro-ventajas li { position: relative; padding-left: 30px; font-size: 15.5px; color: #E6E1D9; line-height: 1.45; }
+  .pro-ventajas li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 50%; background: var(--cta); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .pro-ventajas b { color: #fff; }
+  .pro-section .btn-primary { box-shadow: 0 6px 0 0 rgba(255,255,255,.2); }
+  .pro-section .cta-note { color: #B5B0A8; }
+  .pro-fig { margin: 0; }
+  .pro-fig img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 40px 80px -20px rgba(0,0,0,.7); }
+  .pro-fig figcaption { margin-top: 12px; font-size: 13px; color: #9E998F; text-align: center; }
+  .hero-pro { font-size: 14px; color: #444; margin: -8px 0 12px; }
+  .hero-pro button { background: none; border: none; padding: 0; font: inherit; font-weight: 700; color: var(--coral-texto); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ── Precios ── */
+  .precio-card { position: relative; }
+  .precio-sello { position: absolute; top: -13px; right: 20px; background: #2E7D32; color: #fff; font: 700 12px 'Inter', sans-serif; padding: 5px 11px; border-radius: 999px; }
+  .precio-periodo { display: inline-flex; background: rgba(255,255,255,.12); border-radius: 999px; padding: 3px; margin: 10px 0 4px; }
+  .precio-periodo button { border: none; background: transparent; color: #CFCAC2; font: 600 12.5px 'Inter', sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+  .precio-periodo button.on { background: #fff; color: #0E0E0E; }
+  .precio-cifra small { font-size: .42em; font-weight: 600; opacity: .7; margin-left: 2px; }
+  .precio-card li b { font-weight: 700; }
+  button.precio-cta { width: 100%; cursor: pointer; font-size: 18.7px; }
+  .precio-directo { display: block; width: 100%; margin-top: 10px; background: none; border: none; color: #FFB38A; font: 600 14px 'Inter', sans-serif; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ── CTA final ── */
+  .final-botones { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
+  .final-pro-btn { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.5); border-radius: 999px; padding: 16px 26px; font: 700 17px 'Bricolage Grotesque', sans-serif; cursor: pointer; }
+  .final-pro-btn:hover { border-color: #fff; }
+
+  @media (max-width: 900px) {
+    .neuro-inner, .pro-inner { grid-template-columns: 1fr; gap: 36px; }
+    .neuro-fig { max-width: 420px; margin: 0 auto; }
+  }
+  @media (max-width: 640px) {
+    .neuro-section, .pro-section { padding: 60px 16px; }
+    .neuro-lista li { padding-left: 44px; }
+    .neuro-lista li::before { width: 30px; height: 30px; font-size: 13px; }
+    .pro-section .cta-row, .neuro-section .cta-row { flex-direction: column; align-items: stretch; text-align: center; }
+    .pro-section .btn-primary, .neuro-section .btn-primary { justify-content: center; }
+    .final-botones { flex-direction: column; align-items: stretch; }
+  }
+  .usos-section { background: #fff; }
+  .estudios-section { background: #FAF7F2; }
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -1373,9 +1514,10 @@
   </a>
   <div class="nav-links">
     <a href="#herramienta" onclick="irHerramienta(event)">Hacer mi carta</a>
-    <a href="#comparativa">Vs. Canva</a>
+    <a href="#pro">Carta Pro</a>
     <a href="#precios">Precio</a>
     <a href="#faq">Preguntas</a>
+    <a href="/panel" id="navCuenta">Entrar</a>
   </div>
   <a href="#herramienta" class="cta-nav" onclick="irHerramienta(event)">Haz tu carta gratis →</a>
 </nav>
@@ -1397,6 +1539,7 @@
       <li><b>0</b><span>platos que teclear</span></li>
       <li><b>15</b><span>estilos de imprenta</span></li>
     </ul>
+    <p class="hero-pro">¿La quieres guardar y editar cuando cambien los precios? <button type="button" onclick="document.getElementById('pro').scrollIntoView({behavior:'smooth'})">Mira Carta Pro →</button></p>
     <p class="hero-autoridad">Hecho en Madrid por <b>Kartia</b>, taller de cartas y portamenús para hostelería desde 2018.</p>
   </div>
 
@@ -1451,7 +1594,7 @@
           <div class="res-col-vista">
           <div class="res-barra">
             <div class="res-estilos" role="tablist" aria-label="Estilo de carta">
-              <button class="res-estilo on" data-estilo="riviera" onclick="cambiarEstiloResultado('riviera')" type="button">Riviera</button>
+              <button class="res-estilo" data-estilo="riviera" onclick="cambiarEstiloResultado('riviera')" type="button">Riviera</button>
               <button class="res-estilo" data-estilo="azulejo" onclick="cambiarEstiloResultado('azulejo')" type="button">Azulejo</button>
               <button class="res-estilo" data-estilo="serigrafia" onclick="cambiarEstiloResultado('serigrafia')" type="button">Serigrafía</button>
               <button class="res-estilo" data-estilo="cartel" onclick="cambiarEstiloResultado('cartel')" type="button">Cartel</button>
@@ -1459,7 +1602,7 @@
               <button class="res-estilo" data-estilo="gaceta" onclick="cambiarEstiloResultado('gaceta')" type="button">Gaceta</button>
               <button class="res-estilo" data-estilo="trattoria" onclick="cambiarEstiloResultado('trattoria')" type="button">Trattoria</button>
               <button class="res-estilo" data-estilo="editorial" onclick="cambiarEstiloResultado('editorial')" type="button">Editorial</button>
-              <button class="res-estilo" data-estilo="sobremesa" onclick="cambiarEstiloResultado('sobremesa')" type="button">Sobremesa</button>
+              <button class="res-estilo on" data-estilo="sobremesa" onclick="cambiarEstiloResultado('sobremesa')" type="button">Sobremesa</button>
               <button class="res-estilo" data-estilo="sumi" onclick="cambiarEstiloResultado('sumi')" type="button">Sumi</button>
               <button class="res-estilo" data-estilo="brasserie" onclick="cambiarEstiloResultado('brasserie')" type="button">Brasserie</button>
               <button class="res-estilo" data-estilo="deco" onclick="cambiarEstiloResultado('deco')" type="button">Déco</button>
@@ -1499,31 +1642,26 @@
             <div class="dl-nota" id="dlNota">A4 listo para imprimir · sin registro · puedes cambiar de estilo y volver a descargar</div>
             <div class="dl-revisa">Antes de imprimir, revisa precios y alérgenos: tu carta, tu responsabilidad.</div>
 
+            <button class="guardar-btn" id="guardarBtn" onclick="guardarEnPanel()" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span id="guardarTexto">Guardar en mis cartas</span><span class="pro-pill">Pro</span>
+            </button>
+            <div class="guardar-nota" id="guardarNota">Guárdala y cambia platos y precios cuando quieras, sin volver a empezar.</div>
+
             <div class="pro-caja" id="proCaja">
-              <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio"><b>19 €</b>pago único</span></div>
-              <div class="pro-titulo">Que parezca tuya. No nuestra.</div>
+              <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio"><b>9,90 €</b>al mes</span></div>
+              <div class="pro-titulo">Que parezca tuya. Y siempre al día.</div>
               <div class="pro-motivo" id="proMotivo"></div>
               <ul class="pro-lista">
-                <li>Sin la firma de Kartia al pie</li>
-                <li>Con tu logotipo en la cabecera</li>
-                <li>Traducida a inglés, francés, alemán, italiano, portugués o chino</li>
-                <li>Ajustes y descargas ilimitados durante 30 días</li>
-                <li>Si luego nos pides portamenús, te descontamos los 19 €</li>
+                <li><b>Tu panel:</b> guarda la carta y cambia platos y precios en segundos</li>
+                <li><b>Los 15 estilos</b>, también Riviera, Sumi y Cartel</li>
+                <li>Con <b>tu logotipo</b> y <b>sin la firma</b> de Carta Rápida</li>
+                <li><b>Traducida</b> a inglés, francés, alemán, italiano, portugués o chino</li>
+                <li><b>Cambios ilimitados</b> con una frase</li>
               </ul>
-              <label class="prueba-check pro-acepto" id="proAceptoLbl"><input type="checkbox" id="proAcepto"> Acepto las <a href="/legal/condiciones.html" target="_blank" rel="noopener">condiciones de Carta Pro</a> y pido que empiece ya, por lo que pierdo el derecho de desistimiento.</label>
-              <button class="pro-btn" id="proBtn" onclick="irAPro()" type="button">Pasar a Pro · 19 €</button>
-              <button class="pro-prueba-btn" id="pruebaAbrir" onclick="abrirPrueba()" type="button">o pruébalo 7 días gratis, sin tarjeta</button>
-              <form class="prueba-form" id="pruebaForm" onsubmit="enviarPrueba(event)" novalidate>
-                <label for="pruebaEmail">Déjanos tu email y la activamos ahora mismo.</label>
-                <div class="prueba-fila">
-                  <input type="email" id="pruebaEmail" placeholder="tu@restaurante.com" autocomplete="email">
-                  <button type="submit" id="pruebaBtn">Activar prueba</button>
-                </div>
-                <label class="prueba-check"><input type="checkbox" id="pruebaNovedades"> Quiero recibir ideas y ofertas de Kartia para mi restaurante (como mucho, dos al mes).</label>
-                <div class="prueba-legal">Usamos tu email para activar tu prueba. Nada de spam. <a href="/legal/privacidad.html" target="_blank" rel="noopener">Privacidad</a> · <a href="/legal/condiciones.html" target="_blank" rel="noopener">Condiciones</a></div>
-                <div class="prueba-error" id="pruebaError" role="alert"></div>
-              </form>
-              <div class="pro-garantia">Pago seguro con tarjeta, Apple Pay, Google Pay o PayPal · factura con tu CIF · sin suscripción</div>
+              <button class="pro-btn" id="proBtn" onclick="probarPro()" type="button">Pruébalo 7 días gratis</button>
+              <button class="pro-prueba-btn" id="proPagarBtn" onclick="hacersePro()" type="button">o hazte Pro ya · desde 8,25 € al mes</button>
+              <div class="pro-garantia">La prueba no pide tarjeta ni se renueva sola · después, 9,90 €/mes o 99 €/año</div>
             </div>
           <div class="ajuste-wrap" id="ajusteWrap">
             <div class="ajuste-inner">
@@ -1571,8 +1709,8 @@
           <div class="t2-cam-ring">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
-          <div class="t2-cta-title">Hacer foto ahora</div>
-          <div class="t2-cta-sub">Fotografía tu carta · o sube desde galería</div>
+          <div class="t2-cta-title"><span class="solo-tactil">Hacer foto ahora</span><span class="solo-raton">Arrastra aquí tu carta</span></div>
+          <div class="t2-cta-sub"><span class="solo-tactil">Fotografía tu carta · o sube desde galería</span><span class="solo-raton">o haz clic para elegir las fotos · JPG, PNG o WEBP</span></div>
         </div>
         <div class="t2-alt-row">
           <div class="t2-alt">
@@ -1588,14 +1726,24 @@
       </div>
 
       <div class="fotos-preview" id="fotosPreview">
-        <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-        <div class="add-camara-btn" id="addCamaraBtn">
-          <input type="file" accept="image/*" capture="environment" aria-label="Añadir otra página con la cámara" onchange="addMoreFiles(this)">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-          Otra página con cámara
+        <div class="fotos-cab">
+          <span class="fotos-tit"><span class="fotos-ok">✓</span><span id="fotosTit">Carta subida</span></span>
+          <span class="fotos-count" id="fotosCount"></span>
         </div>
-        <div class="fotos-add"><input type="file" accept="image/*" multiple aria-label="Añadir más páginas" onchange="addMoreFiles(this)">+</div>
-        <span class="fotos-count" id="fotosCount"></span>
+        <div class="fotos-grid" id="fotosContainer"></div>
+        <div class="fotos-acciones">
+          <label class="fotos-add-btn" id="fotosAddBtn">
+            <input type="file" accept="image/*" multiple aria-label="Añadir más páginas" onchange="addMoreFiles(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Añadir otra página
+          </label>
+          <label class="add-camara-btn" id="addCamaraBtn">
+            <input type="file" accept="image/*" capture="environment" aria-label="Añadir otra página con la cámara" onchange="addMoreFiles(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            Con la cámara
+          </label>
+        </div>
+        <p class="fotos-pista"><span class="solo-raton">También puedes arrastrar más fotos aquí. </span>Hasta 5 páginas por carta.</p>
       </div>
       <div id="uploadError"></div>
 
@@ -1674,9 +1822,9 @@
       <div class="t2-card t2-style-section">
         <div class="t2-sticker">15 estilos · 0 €</div>
         <div class="t2-eyebrow">03 · ESTILO <span class="t2-eyebrow-nota">· puedes cambiarlo después con un toque</span></div>
-        <div class="t2-panel-hint">Quince diseños pensados para imprimir en papel blanco, de la alta cocina a la taberna. Si no eliges, empezamos por Riviera. Cuando veas tu carta, cambias de estilo al instante y sin esperar.</div>
+        <div class="t2-panel-hint">Quince diseños pensados para imprimir en papel blanco, de la alta cocina a la taberna. Si no eliges, empezamos por Sobremesa. Los marcados con <b>Pro</b> puedes verlos con tu carta; para descargarlos, pruébalo 7 días gratis. Cuando veas tu carta, cambias de estilo al instante y sin esperar.</div>
         <div class="t2-scard-grid">
-          <button class="seg-btn t2-scard riviera on" onclick="selEstilo(this,'riviera')" type="button">
+          <button class="seg-btn t2-scard riviera" onclick="selEstilo(this,'riviera')" type="button">
             <span class="t2-recomendado">Recomendado</span>
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Riviera" style="background-image:url('/carta/muestra-riviera.webp')"></div>
@@ -1718,7 +1866,7 @@
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Editorial" style="background-image:url('/carta/muestra-editorial.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Editorial</span><span class="t2-scard-mood">Revista</span></div>
           </button>
-          <button class="seg-btn t2-scard sobremesa" onclick="selEstilo(this,'sobremesa')" type="button">
+          <button class="seg-btn t2-scard sobremesa on" onclick="selEstilo(this,'sobremesa')" type="button">
             <span class="t2-recomendado">Recomendado</span>
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sobremesa" style="background-image:url('/carta/muestra-sobremesa.webp')"></div>
@@ -1815,9 +1963,104 @@
       <div class="vs-fila"><span>Márgenes y columnas</span><span>A mano, hasta que cuadre</span><span><b>Cuadrados solos</b></span></div>
       <div class="vs-fila"><span>Orden de los platos</span><span>El que te salga</span><span><b>Lo que más vende, primero</b></span></div>
       <div class="vs-fila"><span>Cambiar un precio</span><span>Abrir, buscar, reexportar</span><span><b>«Croquetas a 13» y listo</b></span></div>
-      <div class="vs-fila"><span>Precio</span><span>Tu tiempo (y a veces una suscripción)</span><span><b>Gratis · Pro 19 € pago único</b></span></div>
+      <div class="vs-fila"><span>Precio</span><span>Tu tiempo (y a veces una suscripción)</span><span><b>Gratis · Pro desde 8,25 €/mes</b></span></div>
     </div>
     <div class="vs-cta"><a href="#herramienta" class="btn-primary" onclick="irHerramienta(event)">Pruébalo con tu carta <span class="arr">→</span></a><span class="cta-note">30 segundos · gratis</span></div>
+  </div>
+</section>
+
+<!-- NEUROMARKETING -->
+<section class="neuro-section" id="neuromarketing">
+  <div class="neuro-inner">
+    <div class="neuro-texto">
+      <div class="faq-eyebrow">Neuromarketing aplicado</div>
+      <h2 class="faq-h2">No solo más bonita.<br><span class="o">Una carta que vende más.</span></h2>
+      <p class="neuro-lead">Tu carta es el vendedor que tienes en todas las mesas. Cada carta que sale de Carta Rápida se maqueta con las reglas de la ingeniería de menús: cómo leemos una carta, qué miramos primero y qué nos hace pedir.</p>
+      <ol class="neuro-lista">
+        <li><b>Lo que más te interesa vender, primero</b><span>La especialidad y los platos de más valor abren cada sección: son los que más se miran.</span></li>
+        <li><b>El precio no manda</b><span>Detrás del plato, sin columna y sin el símbolo €. Se elige por lo que apetece, no por lo que cuesta.</span></li>
+        <li><b>Pocos destacados, bien elegidos</b><span>Como mucho uno por sección. Si todo destaca, nada destaca.</span></li>
+        <li><b>Descripciones que abren el apetito</b><span>Cortas, con producto y elaboración. Nada de «delicioso» ni «exquisito».</span></li>
+        <li><b>El orden de una comida</b><span>Entrantes, principales, postres y bebidas, en el orden en que se piden. Menos dudas, más platos.</span></li>
+      </ol>
+      <div class="cta-row"><a href="#herramienta" class="btn-primary" onclick="irHerramienta(event)">Quiero una carta que venda <span class="arr">→</span></a></div>
+    </div>
+    <figure class="neuro-fig">
+      <img src="/ejemplo/despues-sobremesa-640.webp" alt="Carta maquetada con neuromarketing: especialidad arriba y precios sin símbolo de euro" width="640" height="905" loading="lazy">
+      <span class="neuro-marca m1">1</span><span class="neuro-marca m2">2</span><span class="neuro-marca m3">5</span>
+    </figure>
+  </div>
+</section>
+
+<!-- CARTA PRO -->
+<section class="pro-section" id="pro">
+  <div class="pro-inner">
+    <div class="pro-texto">
+      <div class="faq-eyebrow">Carta Pro · 7 días gratis</div>
+      <h2 class="faq-h2">Sube un precio.<br><span class="o">Tu carta, lista en 5 segundos.</span></h2>
+      <p class="pro-lead">Con Carta Pro tus cartas se quedan guardadas en tu panel. Cambia un plato, un precio o la temporada, y descarga el PDF al momento. Sin volver a empezar y sin llamar a nadie.</p>
+      <ul class="pro-ventajas">
+        <li><b>Tu panel con todas tus cartas</b>: la del día, la de vinos, la de verano…</li>
+        <li><b>Edita platos y precios</b> como en una hoja, con la carta al lado</li>
+        <li><b>Los 15 estilos</b>, también Riviera, Sumi, Cartel, Serigrafía y Azulejo</li>
+        <li><b>Tu logotipo</b> y <b>sin la firma</b> de Carta Rápida</li>
+        <li><b>Traducida</b> a inglés, francés, alemán, italiano, portugués o chino</li>
+      </ul>
+      <div class="cta-row">
+        <button type="button" class="btn-primary" onclick="probarPro()">Pruébalo 7 días gratis <span class="arr">→</span></button>
+        <span class="cta-note">Sin tarjeta · luego desde 8,25 €/mes</span>
+      </div>
+    </div>
+    <figure class="pro-fig">
+      <img src="/ejemplo/panel-pro.webp" alt="Panel de Carta Pro: platos y precios editables a la izquierda y la carta a la derecha" width="1400" height="897" loading="lazy">
+      <figcaption>Tu panel: cambias el precio a la izquierda y la carta se actualiza a la derecha.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section class="precios-section" id="precios">
+  <div class="precios-inner">
+    <div class="faq-eyebrow">Precio · sin letra pequeña</div>
+    <h2 class="faq-h2">Empieza gratis.<br>Hazte Pro cuando la quieras tuya.</h2>
+    <div class="precios-grid">
+      <div class="precio-card">
+        <div class="precio-nombre">Gratis</div>
+        <div class="precio-cifra">0 €</div>
+        <div class="precio-cond">Sin registro · solo tu email para descargar</div>
+        <ul>
+          <li>10 estilos listos para imprimir en A4</li>
+          <li>El nombre de tu restaurante en la cabecera</li>
+          <li>Lectura de tu carta desde una foto o texto</li>
+          <li>Orden que vende y descripciones</li>
+          <li>3 ajustes por carta</li>
+          <li class="no">Con una firma pequeña al pie</li>
+          <li class="no">Sin guardar ni editar después</li>
+        </ul>
+        <a class="precio-cta" href="#herramienta" onclick="irHerramienta(event)">Hacer mi carta gratis</a>
+      </div>
+      <div class="precio-card pro">
+        <span class="precio-sello">Lo más elegido</span>
+        <div class="precio-nombre">Carta Pro</div>
+        <div class="precio-periodo" role="group" aria-label="Periodo de pago">
+          <button type="button" class="on" data-p="ano" onclick="periodoPrecios('ano')">Anual · 2 meses gratis</button>
+          <button type="button" data-p="mes" onclick="periodoPrecios('mes')">Mensual</button>
+        </div>
+        <div class="precio-cifra" id="precioCifra">99 €<small>/año</small></div>
+        <div class="precio-cond" id="precioCond">Sale a 8,25 € al mes · IVA incluido</div>
+        <ul>
+          <li><b>Panel con tus cartas</b>, editables cuando quieras</li>
+          <li>Los <b>15 estilos</b></li>
+          <li>Tu <b>logotipo</b> y <b>sin firma</b></li>
+          <li><b>Traducción</b> a 6 idiomas</li>
+          <li><b>Cambios ilimitados</b> con una frase</li>
+          <li>Cancelas cuando quieras, en un clic</li>
+        </ul>
+        <button type="button" class="precio-cta" onclick="probarPro()">Pruébalo 7 días gratis</button>
+        <button type="button" class="precio-directo" onclick="hacersePro()">o activa Pro ya</button>
+      </div>
+    </div>
+    <p class="precios-nota">La prueba no pide tarjeta y no se convierte en pago sola. Los PDF que descargues son tuyos para siempre. Factura con tu CIF.</p>
   </div>
 </section>
 
@@ -1851,7 +2094,7 @@
     <ul class="estudios-lista">
       <li><b>Propuestas en la primera reunión</b><span>Foto de la carta del cliente y le enseñas varios estilos antes de despedirte.</span></li>
       <li><b>Cambios del cliente en una frase</b><span>«Sube el cachopo a 23 y quita los boquerones», sin abrir InDesign.</span></li>
-      <li><b>Sin firma y con el logo del cliente</b><span>Con Carta Pro: ajustes y descargas ilimitados durante 30 días por 19 €, sin suscripción.</span></li>
+      <li><b>Todas las cartas de tus clientes, guardadas</b><span>Con Carta Pro, en tu panel: sin firma, con el logo de cada cliente y editables cuando pidan un cambio.</span></li>
       <li><b>Traducida para hoteles y turismo</b><span>Inglés, francés, alemán, italiano, portugués o chino, con vocabulario de hostelería.</span></li>
     </ul>
   </div>
@@ -1890,48 +2133,6 @@
   </div>
 </section>
 
-
-
-<!-- FAQ -->
-<section class="precios-section" id="precios">
-  <div class="precios-inner">
-    <div class="faq-eyebrow">Precio · sin letra pequeña</div>
-    <h2 class="faq-h2">Gratis para siempre.<br>Pro cuando la quieras tuya.</h2>
-    <div class="precios-grid">
-      <div class="precio-card">
-        <div class="precio-nombre">Gratis</div>
-        <div class="precio-cifra">0 €</div>
-        <div class="precio-cond">Sin registro, sin límite de cartas</div>
-        <ul>
-          <li>Los 15 estilos, listos para imprimir en A4</li>
-          <li>Con el nombre de tu restaurante en la cabecera</li>
-          <li>Lectura de tu carta desde una foto o texto</li>
-          <li>Orden para vender más y descripciones</li>
-          <li>3 ajustes por carta</li>
-          <li>Una firma pequeña de Kartia al pie</li>
-          <li class="no">Sin logotipo ni traducción</li>
-        </ul>
-        <a class="precio-cta" href="#herramienta" onclick="irHerramienta(event)">Hacer mi carta gratis</a>
-      </div>
-      <div class="precio-card pro">
-        <div class="precio-nombre">Carta Pro</div>
-        <div class="precio-cifra">19 €</div>
-        <div class="precio-cond">Pago único · 30 días · IVA incluido</div>
-        <ul>
-          <li>Todo lo de la versión gratis</li>
-          <li>Sin la firma de Kartia</li>
-          <li>Tu logotipo en la cabecera</li>
-          <li>Traducción a 6 idiomas</li>
-          <li>Ajustes y descargas ilimitados</li>
-          <li>Los 19 € se descuentan si nos pides portamenús</li>
-        </ul>
-        <a class="precio-cta" href="#herramienta" onclick="document.getElementById('herramienta').scrollIntoView({behavior:'smooth'});return false;">Pruébalo 7 días gratis</a>
-      </div>
-    </div>
-    <p class="precios-nota">Sin suscripción: pagas una vez y no se renueva solo. Los PDF que descargues son tuyos para siempre. Para la prueba basta tu email, sin tarjeta.</p>
-  </div>
-</section>
-
 <section class="faq-section" id="faq">
   <div class="faq-inner">
     <div class="faq-head">
@@ -1940,7 +2141,7 @@
     </div>
     <div class="faq-item open" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Es realmente gratis? ¿Dónde está la trampa?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">La versión gratis es gratis de verdad y sin límite: tu carta rediseñada en PDF, con una firma pequeña de Kartia al pie. Si la quieres sin firma, con tu logo o traducida, está Carta Pro por 19 € (pago único, sin suscripción), y puedes probarla 7 días gratis solo con tu email. Kartia es un taller español de portamenús artesanales: si luego nos pides portamenús, te descontamos esos 19 €.</div>
+      <div class="faq-answer">La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes o 99 € al año, y puedes probarla 7 días gratis sin tarjeta.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?</h3><span class="faq-plus">+</span></div>
@@ -1960,7 +2161,7 @@
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Dónde se guardan mis cartas?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">En ningún sitio. Leemos tu carta al momento, te devolvemos el diseño y no guardamos ni la foto ni el texto. Tu email solo lo tenemos si nos lo das para la prueba o el montaje, y nunca lo vendemos. Más detalle en la <a href="/legal/privacidad.html">política de privacidad</a>.</div>
+      <div class="faq-answer">Con la versión gratis, en ningún sitio: leemos tu carta, te devolvemos el diseño y no guardamos ni la foto ni el texto. Con Carta Pro, las cartas que tú decidas guardar se quedan en tu panel, solo visibles con tu cuenta, hasta que las borres o borres la cuenta. Nunca vendemos tus datos. Más detalle en la <a href="/legal/privacidad.html">política de privacidad</a>.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Por qué no hacerla en Canva o en Word?</h3><span class="faq-plus">+</span></div>
@@ -1971,12 +2172,16 @@
       <div class="faq-answer">Sí, las dos cosas. Todos los estilos van sobre fondo blanco para que salgan bien en una impresora normal, y el PDF es A4 a buena resolución, así que cualquier imprenta o copistería lo puede imprimir tal cual.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><h3>¿Qué pasa cuando terminan los 30 días de Carta Pro?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Nada que te obligue a nada: no se renueva sola ni se cobra otra vez. Los PDF que hayas descargado son tuyos y los sigues usando. Si más adelante necesitas volver a quitar la firma, poner tu logo o traducir, compras otros 30 días.</div>
+      <div class="faq-question"><h3>¿Cómo funciona la prueba y cómo cancelo?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">La prueba de 7 días no pide tarjeta ni se convierte en pago: si no activas Pro, sigues con la versión gratis. La membresía se renueva sola cada mes o cada año hasta que la canceles desde tu panel, en un clic; sigues con Pro hasta el final del periodo pagado. Tus cartas guardadas no se borran: vuelves a editarlas en cuanto reactives Pro. Los PDF que hayas descargado son tuyos para siempre.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Sirve para estudios de diseño y agencias?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator. Con Carta Pro quitas la firma, pones el logo del cliente y traduces, con ajustes y descargas ilimitados durante 30 días.</div>
+      <div class="faq-answer">Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Con Carta Pro guardas en tu panel las cartas de todos tus clientes, sin firma y con el logo de cada uno. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question"><h3>¿Puedo cambiar los precios de mi carta más adelante?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Sí, con Carta Pro. Guardas la carta en tu panel y, cuando cambie un precio o un plato, lo editas como en una hoja y descargas el PDF nuevo al momento. También puedes pedir el cambio con una frase: «sube los postres 50 céntimos».</div>
     </div>
   </div>
 </section>
@@ -1987,7 +2192,10 @@
   <div class="final-cta-inner">
     <h2>Deja de maquetar.<br>Empieza a <span class="o">vender.</span></h2>
     <p>Una foto de tu carta y en 30 segundos tienes el PDF. Gratis, sin registro y sin tarjeta.</p>
-    <a href="#herramienta" class="final-cta-btn" onclick="irHerramienta(event)">Haz tu carta gratis →</a>
+    <div class="final-botones">
+      <a href="#herramienta" class="final-cta-btn" onclick="irHerramienta(event)">Haz tu carta gratis →</a>
+      <button type="button" class="final-pro-btn" onclick="probarPro()">Probar Pro 7 días gratis</button>
+    </div>
   </div>
 </section>
 
@@ -1995,7 +2203,7 @@
 <section class="kartia-banda" id="portamenus">
   <div class="kb-inner">
     <div class="kb-texto">
-      <b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018. Si tienes Carta Pro, te descontamos los 19 € de tu pedido.
+      <b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018.
     </div>
     <a href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=banda" target="_blank" rel="noopener">Ver portamenús →</a>
   </div>
@@ -2038,6 +2246,24 @@
   <p>Los portamenús Kartia están disponibles en diferentes formatos y materiales, hechos a mano en nuestro taller de Madrid. El rediseño con nuestra herramienta es el primer paso para tener una carta que represente realmente el nivel de tu establecimiento.</p>
   </div>
 </section>
+
+<script src="/cuenta.js"></script>
+<!-- EMAIL PARA DESCARGAR -->
+<div class="cu-velo" id="emailVelo" hidden>
+  <div class="cu-caja" role="dialog" aria-modal="true" aria-labelledby="emailTit">
+    <button class="cu-cerrar" type="button" aria-label="Cerrar" onclick="cerrarEmail()">×</button>
+    <div class="cu-eyebrow">Tu carta está lista</div>
+    <h2 class="cu-titulo" id="emailTit">¿A qué email te la asociamos?</h2>
+    <p class="cu-sub">Descárgala gratis al momento. Solo te escribiremos si tienes algo pendiente con tu carta o si tú lo pides abajo.</p>
+    <form id="emailForm" novalidate>
+      <label class="cu-campo"><span>Tu email</span><input type="email" id="emailDescarga" autocomplete="email" placeholder="tu@restaurante.com"></label>
+      <label class="cu-check"><input type="checkbox" id="emailNovedades"> <span>Quiero recibir ideas para vender más con mi carta (como mucho, dos al mes).</span></label>
+      <button class="cu-btn" type="submit" id="emailBtn">Descargar mi carta gratis</button>
+      <p class="cu-error" id="emailError" role="alert"></p>
+    </form>
+    <p class="cu-pie">Al descargar aceptas la <a href="/legal/privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Nada de spam.<br>¿La quieres sin firma y guardada? <button type="button" class="cu-enlace" onclick="cerrarEmail(); probarPro();">Prueba Pro 7 días gratis</button></p>
+  </div>
+</div>
 
 <!-- BARRA MÓVIL -->
 <div class="barra-movil" id="barraMovil">
@@ -2169,13 +2395,15 @@
   let filesList = [], logoFile = null, logoDataUrl = null;
   let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
-  let estiloActual = 'riviera';
+  let estiloActual = 'sobremesa';
+  const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo'];
+  const esEstiloPro = e => ESTILOS_PRO.includes(e);
   let licencia = null, ajustesUsados = 0, cabeceraModo = 'logo';
   const AJUSTES_GRATIS = 3;
   const ESTILOS_VALIDOS = ['riviera', 'azulejo', 'serigrafia', 'cartel', 'ticket', 'gaceta', 'trattoria', 'editorial', 'sobremesa', 'sumi', 'brasserie', 'deco', 'mantel', 'barra', 'autor'];
 
   const MAX_FOTOS = 5;
-  const MAX_MB = 5;
+  const MAX_MB = 25;
   const TIPOS_VALIDOS = ['image/jpeg', 'image/png', 'image/webp'];
   const MAX_DIM = 1600;
   const CALIDAD_FOTO = 0.85;
@@ -2198,6 +2426,7 @@
 
   function mostrarErrorUpload(msg) {
     const el = document.getElementById('uploadError');
+    if (!msg) { el.style.display = 'none'; return; }
     el.textContent = msg;
     el.style.display = 'block';
     clearTimeout(el._timer);
@@ -2235,7 +2464,7 @@
     estiloActual = estilo;
     document.querySelectorAll('.t2-scard').forEach(b => b.classList.toggle('on', b.classList.contains(estilo)));
     document.querySelectorAll('.res-estilo, .res-mini').forEach(b => b.classList.toggle('on', b.dataset.estilo === estilo));
-    if (cartaActual) renderVista();
+    if (cartaActual) { renderVista(); pintarPlan(); }
   }
 
   // Galería de estilos con miniatura para la columna lateral (escritorio)
@@ -2418,8 +2647,8 @@
   });
   window.addEventListener('resize', ajustarVista);
 
-  function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
-  function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
+  function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); input.value = ''; }
+  function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); input.value = ''; }
 
   function addFiles(newFiles) {
     const invalidos = newFiles.filter(f => !TIPOS_VALIDOS.includes(f.type));
@@ -2437,37 +2666,57 @@
       return;
     }
 
+    mostrarErrorUpload('');
     document.getElementById('uploadGrid').style.display = 'none';
     document.getElementById('fotosPreview').classList.add('on');
     document.getElementById('addCamaraBtn').classList.add('on');
 
     let pendientes = newFiles.length;
+    fotosCargando += newFiles.length;
+    renderThumbs();
     newFiles.forEach(file => {
       comprimirImagen(file).then(({ file: comprimido, dataUrl }) => {
         filesList.push({ file: comprimido, dataUrl });
+      }).catch(() => {
+        mostrarErrorUpload('No hemos podido leer una de las fotos. Prueba con otra.');
+      }).finally(() => {
+        fotosCargando--; pendientes--;
         renderThumbs();
-        pendientes--;
-        if (pendientes === 0) checkReady();
+        if (pendientes === 0) {
+          if (!filesList.length) volverASubida();
+          checkReady();
+          medir('fotos_subidas', { fotos: filesList.length });
+        }
       });
     });
+  }
+  let fotosCargando = 0;
+  function volverASubida() {
+    document.getElementById('uploadGrid').style.display = '';
+    document.getElementById('fotosPreview').classList.remove('on');
   }
 
   function removePhoto(index) {
     filesList.splice(index, 1);
-    if (filesList.length === 0) {
-      document.getElementById('uploadGrid').style.display = 'grid';
-      document.getElementById('fotosPreview').classList.remove('on');
-    }
+    if (filesList.length === 0 && !fotosCargando) volverASubida();
     renderThumbs(); checkReady();
   }
 
   function renderThumbs() {
+    const n = filesList.length;
     document.getElementById('fotosContainer').innerHTML = filesList.map((f, i) => `
-      <div class="foto-thumb-wrap">
-        <img class="foto-thumb" src="${f.dataUrl}" alt="">
-        <button class="foto-remove" onclick="removePhoto(${i})">×</button>
-      </div>`).join('');
-    document.getElementById('fotosCount').textContent = filesList.length > 1 ? `${filesList.length} fotos` : '';
+      <div class="foto-item">
+        <img class="foto-thumb" src="${f.dataUrl}" alt="Página ${i + 1} de tu carta">
+        <span class="foto-num">Pág. ${i + 1}</span>
+        <button type="button" class="foto-remove" onclick="removePhoto(${i})" aria-label="Quitar la página ${i + 1}" title="Quitar esta página">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>`).join('') + Array.from({ length: fotosCargando }, () => `
+      <div class="foto-item cargando"><span class="foto-spin"></span><span class="foto-num">Subiendo…</span></div>`).join('');
+    document.getElementById('fotosTit').textContent = fotosCargando ? 'Subiendo tu carta…' : (n === 1 ? 'Carta subida' : `Carta subida · ${n} páginas`);
+    document.querySelector('#fotosPreview .fotos-ok').style.visibility = fotosCargando ? 'hidden' : 'visible';
+    document.getElementById('fotosCount').textContent = `${n}/${MAX_FOTOS}`;
+    document.getElementById('fotosAddBtn').classList.toggle('lleno', n + fotosCargando >= MAX_FOTOS);
   }
 
   function toggleLogo() {
@@ -2773,6 +3022,7 @@
   async function run() {
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
+    if (fotosCargando) { mostrarErrorUpload('Espera un segundo, aún se está subiendo una página.'); return; }
     isProcessing = true;
     document.getElementById('inputWrap').style.opacity = '0.4';
     document.getElementById('inputWrap').style.pointerEvents = 'none';
@@ -2802,6 +3052,7 @@
       stopCountdown();
       if (!data.ok) throw new Error(data.error || 'Ha habido un problema. Inténtalo de nuevo.');
       medir('carta_generada', { fotos: filesList.length, estilo: estiloActual });
+      cartaGuardadaId = null;
       mostrarCarta(data.carta);
     } catch (err) {
       stopCountdown();
@@ -2889,7 +3140,7 @@
     filesList = []; logoFile = null; logoDataUrl = null;
     descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
     idiomaSeleccionado = null; textoActivo = false; cartaActual = null;
-    estiloActual = 'riviera'; ajustesUsados = 0; cabeceraModo = 'logo';
+    estiloActual = 'sobremesa'; ajustesUsados = 0; cabeceraModo = 'logo'; cartaGuardadaId = null;
     document.getElementById('nombreRest').value = ''; document.getElementById('subtituloRest').value = '';
 
     // Reset UI — mensajes y resultado
@@ -2915,7 +3166,8 @@
     setEstado('inicial');
 
     // Reset fotos
-    document.getElementById('uploadGrid').style.display = 'grid';
+    fotosCargando = 0;
+    document.getElementById('uploadGrid').style.display = '';
     document.getElementById('fotosPreview').classList.remove('on');
     document.getElementById('fotosContainer').innerHTML = '';
     document.getElementById('addCamaraBtn').classList.remove('on');
@@ -2954,25 +3206,31 @@
   let descargando = false;
   async function descargar() {
     if (!cartaActual || descargando) return;
-    if (!esPro() && cartaTraducida()) { mostrarPro('Tu carta está traducida, y la traducción es de Carta Pro. Actívala gratis 7 días o pásate a Pro para descargarla.'); return; }
+    if (!esPro() && cartaTraducida()) { mostrarPro('Tu carta está traducida, y la traducción es de Carta Pro. Pruébalo gratis 7 días para descargarla.'); return; }
+    if (!esPro() && esEstiloPro(estiloActual)) { mostrarPro('Riviera, Sumi, Cartel, Serigrafía y Azulejo son estilos Pro. Pruébalos gratis 7 días o elige otro estilo para descargarla gratis.'); return; }
+    let emailDescarga = '';
+    if (!esPro() && !(window.Cuenta && Cuenta.estado)) {
+      emailDescarga = await pedirEmail();
+      if (!emailDescarga) return;
+    }
     descargando = true;
     const btn = document.getElementById('dlBtn');
     const htmlBtn = btn.innerHTML;
     btn.disabled = true;
     btn.textContent = 'Preparando tu PDF…';
     const cabeceras = { 'Content-Type': 'application/json' };
-    if (esPro()) cabeceras['X-Licencia'] = licencia.licencia;
+    if (licencia && licencia.caduca > Date.now()) cabeceras['X-Licencia'] = licencia.licencia;
     try {
       const res = await fetch('/pdf', {
         method: 'POST',
         headers: cabeceras,
-        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera() })
+        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera(), email: emailDescarga })
       });
       if (!res.ok) {
         let msg = 'No hemos podido generar el PDF. Inténtalo de nuevo.';
         let d = {};
         try { d = await res.json(); if (d.error) msg = d.error; } catch (e) {}
-        if (res.status === 402) { olvidarLicencia(); pintarPlan(); renderVista(); mostrarPro(msg); return; }
+        if (res.status === 402) { if (licencia) olvidarLicencia(); if (window.Cuenta) await Cuenta.cargar(); pintarPlan(); renderVista(); mostrarPro(msg); return; }
         throw new Error(msg);
       }
       const blob = await res.blob();
@@ -2987,8 +3245,9 @@
       setTimeout(() => URL.revokeObjectURL(url), 60000);
       setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
       updateToolBubble('¡Tu carta está descargada! 🎉');
-      medir('pdf_descargado', { plan: esPro() ? licencia.plan : 'gratis', estilo: estiloActual });
+      medir('pdf_descargado', { plan: planActual(), estilo: estiloActual });
       if (!esPro() && logoEnCabecera()) mostrarPro('Descargada con tu nombre en lugar del logo: el logo es de Carta Pro. Pruébalo gratis 7 días y vuelve a descargarla.');
+      else if (!esPro()) mostrarPro('¿Te ha gustado? Con Pro la guardas y cambias los precios cuando quieras, sin firma y con tu logo.');
     } catch (err) {
       status(mensajeAmable(err));
     } finally {
@@ -3038,6 +3297,7 @@
   const CARTA_EJEMPLO = {"nombre_restaurante":"Casa Pepe","subtitulo":"Taberna tradicional desde 1962 · Chamberí","idioma":"es","nota_pie":"IVA incluido. Consulte la carta de alérgenos a nuestro personal.","servicios":[{"nombre":"Pan y cubierto","precio":"1.8"}],"secciones":[{"nombre":"Para picar","platos":[{"nombre":"Jamón ibérico de bellota","racion":"100 g","precio":"24"},{"nombre":"Croquetas caseras de cocido","racion":"8 uds.","precio":"12.5","alergenos":"1, 7"},{"nombre":"Patatas bravas","descripcion":"Salsa brava de la casa","precio":"6.5"},{"nombre":"Pimientos de Padrón","precio":"7"},{"nombre":"Boquerones en vinagre","precio":"8.5"}]},{"nombre":"De la huerta","platos":[{"nombre":"Ensalada de tomate Raf","descripcion":"Con ventresca y cebolleta","precio":"11"},{"nombre":"Alcachofas confitadas","descripcion":"Con jamón y yema curada","precio":"13.5"},{"nombre":"Pisto manchego con huevo","precio":"10"}]},{"nombre":"Del mar","platos":[{"nombre":"Pescado del día","descripcion":"Preguntar al camarero","precio":"SPM"},{"nombre":"Calamares a la andaluza","precio":"14"},{"nombre":"Pulpo a feira","descripcion":"Con cachelos y pimentón","precio":"19.5"},{"nombre":"Arroz negro","racion":"mín. 2 pers.","precio":"17/pers"}]},{"nombre":"Carnes","platos":[{"nombre":"Chuletón de vaca vieja","descripcion":"Madurado 45 días","precio":"65/kg"},{"nombre":"Rabo de toro","descripcion":"Guisado al vino tinto","precio":"18.5"},{"nombre":"Cachopo asturiano","descripcion":"Para compartir","precio":"21"}]},{"nombre":"Postres","platos":[{"nombre":"Tarta de queso","precio":"6.5"},{"nombre":"Arroz con leche","descripcion":"Requemado","precio":"5.5"},{"nombre":"Flan de huevo","precio":"5"}]},{"nombre":"Vinos · copa / botella","platos":[{"nombre":"Rioja crianza","precio":"3.5 | 18"},{"nombre":"Ribera del Duero roble","precio":"3.8 | 19.5"},{"nombre":"Albariño","precio":"4 | 22"}]}]};
   function probarEjemplo() {
     medir('ejemplo_probado');
+    cartaGuardadaId = null;
     mostrarCarta(JSON.parse(JSON.stringify(CARTA_EJEMPLO)));
     updateToolBubble('¡Así quedaría! Ahora prueba con la tuya 📸');
   }
@@ -3049,6 +3309,44 @@
     img.alt = 'La misma carta rediseñada en estilo ' + nombre;
     adTocado = true;
     medir('hero_estilo', { estilo: estilo });
+  }
+
+  /* ── Arrastrar y soltar fotos (ordenador) ── */
+  (function () {
+    const velo = document.createElement('div');
+    velo.className = 'drop-velo';
+    velo.innerHTML = '<div class="drop-caja"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg><b>Suelta aquí tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span></div>';
+    document.body.appendChild(velo);
+    let capas = 0;
+    const conArchivos = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+    const herramientaAbierta = () => document.getElementById('inputWrap').style.display !== 'none' && !isProcessing;
+    const cerrar = () => { capas = 0; document.body.classList.remove('arrastrando'); };
+    window.addEventListener('dragenter', e => {
+      if (!conArchivos(e)) return;
+      capas++;
+      const logo = e.target.closest && e.target.closest('#logoDrop');
+      document.body.classList.toggle('arrastrando', herramientaAbierta() && !logo);
+    });
+    window.addEventListener('dragleave', e => { if (conArchivos(e) && --capas <= 0) cerrar(); });
+    window.addEventListener('dragover', e => { if (conArchivos(e)) { e.preventDefault(); e.dataTransfer.dropEffect = herramientaAbierta() ? 'copy' : 'none'; } });
+    window.addEventListener('drop', e => {
+      if (!conArchivos(e)) return;
+      e.preventDefault(); cerrar();
+      const archivos = Array.from(e.dataTransfer.files || []);
+      if (!archivos.length) return;
+      if (e.target.closest && e.target.closest('#logoDrop')) { handleLogo({ files: archivos }); return; }
+      if (!herramientaAbierta()) return;
+      addFiles(archivos);
+      medir('fotos_arrastradas', { fotos: archivos.length });
+      const destino = document.getElementById('fotosPreview');
+      setTimeout(() => destino.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
+    });
+  })();
+
+  function periodoPrecios(p) {
+    document.querySelectorAll('.precio-periodo button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+    document.getElementById('precioCifra').innerHTML = p === 'ano' ? '99 €<small>/año</small>' : '9,90 €<small>/mes</small>';
+    document.getElementById('precioCond').textContent = p === 'ano' ? 'Sale a 8,25 € al mes · IVA incluido' : 'Cancela cuando quieras · IVA incluido';
   }
 
   /* ── Ir a la herramienta ── */
@@ -3123,31 +3421,36 @@
     [hero, tool, fin].forEach(el => el && io.observe(el));
   })();
 
-  /* ── Carta Pro: licencia guardada en el navegador, sin cuentas ── */
+  /* ── Carta Pro: cuenta (email + contraseña) con prueba de 7 días y membresía ── */
   const almacen = {
     leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
     guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
     borrar(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
-  function esPro() { return !!(licencia && licencia.caduca > Date.now()); }
-  function cartaTraducida() { return !!cartaActual && String(cartaActual.idioma || 'es').slice(0, 2).toLowerCase() !== 'es'; }
-  function guardarLicencia(l) { licencia = l; almacen.guardar('cr_licencia', l); }
-  function olvidarLicencia() { licencia = null; almacen.borrar('cr_licencia'); }
+  // Licencias antiguas de pago único (antes de las cuentas): se respetan hasta que caduquen
   (function cargarLicencia() {
     const l = almacen.leer('cr_licencia');
     if (l && l.licencia && l.caduca > Date.now()) licencia = l; else almacen.borrar('cr_licencia');
   })();
+  function esPro() { return (window.Cuenta && Cuenta.esPro()) || !!(licencia && licencia.caduca > Date.now()); }
+  function planActual() { return window.Cuenta && Cuenta.estado ? Cuenta.estado.plan : (esPro() ? 'pro' : 'gratis'); }
+  function cartaTraducida() { return !!cartaActual && String(cartaActual.idioma || 'es').slice(0, 2).toLowerCase() !== 'es'; }
+  function olvidarLicencia() { licencia = null; almacen.borrar('cr_licencia'); }
+  let cartaGuardadaId = null;
 
   const fechaCorta = ms => new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
 
   function pintarPlan() {
     const pro = esPro();
+    const c = window.Cuenta && Cuenta.estado;
     const estado = document.getElementById('planEstado');
-    if (pro) {
-      const prueba = licencia.plan === 'prueba';
-      estado.innerHTML = '<b>✓ ' + (prueba ? 'Prueba de Carta Pro activa' : 'Carta Pro activa') + '</b> hasta el ' + fechaCorta(licencia.caduca) + '.'
-        + (prueba ? ' Tu carta sale sin firma, con tu logo y en el idioma que elijas.' : '')
-        + (licencia.codigo ? '<br>Tu código para descontar los 19 € en portamenús: <code>' + licencia.codigo + '</code>' : '');
+    if (c && c.plan !== 'gratis') {
+      estado.innerHTML = '<b>✓ ' + Cuenta.esc(Cuenta.textoPlan()) + '</b>'
+        + (c.plan === 'prueba' ? ' · Tu carta sale sin firma, con tu logo y en el idioma que elijas. <button type="button" class="enlace-pro" onclick="hacersePro()">Hazte Pro</button>' : '')
+        + '<br><a href="/panel">Ir a mis cartas →</a>';
+      estado.classList.add('on');
+    } else if (licencia && pro) {
+      estado.innerHTML = '<b>✓ Carta Pro activa</b> hasta el ' + fechaCorta(licencia.caduca) + '.';
       estado.classList.add('on');
     } else {
       estado.classList.remove('on');
@@ -3156,23 +3459,48 @@
     const nota = document.getElementById('dlNota');
     const boton = document.getElementById('dlBtn');
     const traducida = cartaTraducida();
-    boton.classList.toggle('dl-secundario', !pro && traducida);
+    const estiloPro = esEstiloPro(estiloActual);
+    boton.classList.toggle('dl-secundario', !pro && (traducida || estiloPro));
     if (pro) {
       texto.textContent = 'Descargar PDF';
       nota.textContent = 'A4 listo para imprimir · sin firma' + (logoEnCabecera() ? ' · con tu logo' : '') + ' · cambia de estilo y vuelve a descargar cuando quieras';
     } else if (traducida) {
       texto.textContent = 'Desbloquear la carta traducida';
       nota.textContent = 'La traducción es de Carta Pro. Pruébala gratis 7 días, sin tarjeta.';
+    } else if (estiloPro) {
+      texto.textContent = 'Desbloquear el estilo ' + nombreEstilo(estiloActual);
+      nota.textContent = 'Es un estilo Pro. Pruébalo gratis 7 días o elige un estilo sin la etiqueta Pro.';
     } else {
       texto.textContent = 'Descargar gratis';
-      nota.textContent = 'Versión gratis: A4 con una firma pequeña de Kartia al pie' + (logoEnCabecera() ? '. Sale con tu nombre en lugar del logo' : '') + '.';
+      nota.textContent = 'Versión gratis: A4 con una firma pequeña de Carta Rápida al pie' + (logoEnCabecera() ? '. Sale con tu nombre en lugar del logo' : '') + '.';
     }
     document.getElementById('proCaja').classList.toggle('on', !pro);
+    const plan = planActual();
+    document.getElementById('guardarTexto').textContent = cartaGuardadaId ? 'Guardada ✓ · abrir en mi panel' : 'Guardar en mis cartas';
+    document.getElementById('guardarBtn').classList.toggle('guardada', !!cartaGuardadaId);
+    document.getElementById('guardarNota').textContent = cartaGuardadaId ? 'Los cambios que hagas aquí no se guardan solos: edítala desde tu panel.'
+      : plan === 'gratis' ? 'Guárdala y cambia platos y precios cuando quieras. Pruébalo gratis 7 días.' : 'Guárdala en tu panel y cambia platos y precios cuando quieras.';
     pintarCabecera();
     const quedan = Math.max(0, AJUSTES_GRATIS - ajustesUsados);
     document.getElementById('ajusteCuenta').innerHTML = pro ? 'Ajustes ilimitados con Carta Pro'
       : quedan ? 'Te quedan <b>' + quedan + '</b> ' + (quedan === 1 ? 'ajuste gratis' : 'ajustes gratis') + ' en esta carta'
       : 'Has usado los ajustes gratis · <b>ilimitados con Carta Pro</b>';
+    marcarEstilosPro();
+  }
+  function nombreEstilo(e) {
+    const b = document.querySelector('.res-estilo[data-estilo="' + e + '"]');
+    return b ? b.textContent.replace('Pro', '').trim() : e;
+  }
+  // Etiqueta "Pro" en los estilos de pago (se quita si ya eres Pro)
+  function marcarEstilosPro() {
+    const pro = esPro();
+    document.querySelectorAll('.t2-scard, .res-estilo, .res-mini').forEach(el => {
+      const e = el.dataset.estilo || ESTILOS_VALIDOS.find(x => el.classList.contains(x));
+      if (!esEstiloPro(e)) return;
+      let t = el.querySelector('.etq-pro');
+      if (!t) { t = document.createElement('span'); t.className = 'etq-pro'; t.textContent = 'Pro'; el.appendChild(t); }
+      t.hidden = pro;
+    });
   }
 
   function logoEnCabecera() { return logoDataUrl && cabeceraModo === 'logo' ? logoDataUrl : null; }
@@ -3217,12 +3545,6 @@
     caja.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
-  function abrirPrueba() {
-    document.getElementById('pruebaForm').classList.add('on');
-    document.getElementById('pruebaAbrir').style.display = 'none';
-    setTimeout(() => document.getElementById('pruebaEmail').focus(), 50);
-  }
-
   function datosCarta() {
     return {
       restaurante: cartaActual ? cartaActual.nombre_restaurante : '',
@@ -3231,67 +3553,59 @@
     };
   }
 
-  async function enviarPrueba(ev) {
-    ev.preventDefault();
-    const input = document.getElementById('pruebaEmail');
-    const error = document.getElementById('pruebaError');
-    const email = input.value.trim();
-    error.classList.remove('on');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { input.classList.add('error'); input.focus(); return; }
-    input.classList.remove('error');
-    const btn = document.getElementById('pruebaBtn');
-    btn.disabled = true; btn.textContent = 'Activando…';
-    try {
-      const res = await fetch('/prueba', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, novedades: document.getElementById('pruebaNovedades').checked, ...datosCarta() })
-      });
-      const d = await res.json();
-      if (!d.ok) throw new Error(d.error || 'No hemos podido activar la prueba.');
-      guardarLicencia(d);
-      medir('prueba_activada');
-      pintarPlan();
-      renderVista();
-      setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
-      updateToolBubble('¡Prueba activada! Ya sale sin firma y con tu logo ✨');
-      document.getElementById('planEstado').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } catch (err) {
-      error.textContent = mensajeAmable(err);
-      error.classList.add('on');
-    } finally {
-      btn.disabled = false; btn.textContent = 'Activar prueba';
+  // Prueba de 7 días: crear cuenta (o entrar) y, si hay carta, guardarla en el panel
+  function probarPro(motivo) {
+    if (window.Cuenta && Cuenta.estado) {
+      if (Cuenta.estado.plan === 'gratis') return hacersePro(motivo);
+      return;
     }
+    Cuenta.acceso({
+      modo: 'crear', motivo: typeof motivo === 'string' ? motivo : '', datos: datosCarta,
+      alEntrar: async (c, modo) => {
+        pintarPlan(); renderVista();
+        if (c.plan === 'gratis') { hacersePro(modo === 'entrar' ? 'Tu prueba ya terminó. Activa Pro para seguir.' : ''); return; }
+        setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
+        if (cartaActual) {
+          await guardarEnPanel(true);
+          updateToolBubble(modo === 'crear' ? '¡Prueba activada! Tu carta ya está guardada ✨' : '¡Hola de nuevo! Carta guardada ✨');
+        } else {
+          updateToolBubble('¡Prueba activada! Sube tu carta ✨');
+        }
+      }
+    });
+  }
+  function hacersePro(motivo) {
+    Cuenta.planes({ motivo: typeof motivo === 'string' ? motivo : '', antesDePagar: guardarPendiente });
+  }
+
+  // Guardar la carta en el panel (Pro o prueba)
+  async function guardarEnPanel(silencio) {
+    if (!cartaActual) return;
+    if (cartaGuardadaId && silencio !== true) { location.href = '/panel#carta=' + cartaGuardadaId; return; }
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta y tu carta se guarda en tu panel para editarla cuando quieras.');
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('Guardar y editar tus cartas es de Carta Pro.');
+    const btn = document.getElementById('guardarBtn');
+    btn.disabled = true;
+    document.getElementById('guardarTexto').textContent = 'Guardando…';
+    const d = await Cuenta.api('/cartas', { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, cabecera: cabeceraModo });
+    btn.disabled = false;
+    if (d.ok) {
+      cartaGuardadaId = d.id;
+      medir('carta_guardada', { estilo: estiloActual });
+      Cuenta.aviso('Carta guardada en tu panel.', { href: '/panel#carta=' + d.id, texto: 'Abrir →' });
+    } else if (d.status === 402) {
+      hacersePro(d.error);
+    } else {
+      Cuenta.aviso(d.error || 'No se ha podido guardar.');
+    }
+    pintarPlan();
   }
 
   // Antes de ir a la pasarela guardamos la carta, para recuperarla al volver
   function guardarPendiente() {
     if (!cartaActual) return;
-    const completo = { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, modo: cabeceraModo, ajustes: ajustesUsados, t: Date.now() };
+    const completo = { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, modo: cabeceraModo, ajustes: ajustesUsados, guardada: cartaGuardadaId, t: Date.now() };
     if (!almacen.guardar('cr_pendiente', completo)) almacen.guardar('cr_pendiente', { ...completo, logo: null });
-  }
-
-  async function irAPro() {
-    const acepto = document.getElementById('proAcepto');
-    const lbl = document.getElementById('proAceptoLbl');
-    if (!acepto.checked) { lbl.classList.add('error'); acepto.focus(); return; }
-    lbl.classList.remove('error');
-    medir('pago_iniciado', { value: 19, currency: 'EUR' });
-    const btn = document.getElementById('proBtn');
-    btn.disabled = true; btn.textContent = 'Abriendo el pago seguro…';
-    try {
-      guardarPendiente();
-      const email = document.getElementById('pruebaEmail').value.trim();
-      const res = await fetch('/pago/crear', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, restaurante: datosCarta().restaurante })
-      });
-      const d = await res.json();
-      if (!d.ok || !d.url) throw new Error(d.error || 'No hemos podido abrir el pago.');
-      location.href = d.url;
-    } catch (err) {
-      btn.disabled = false; btn.textContent = 'Pasar a Pro · 19 €';
-      status(mensajeAmable(err));
-    }
   }
 
   function restaurarPendiente() {
@@ -3303,35 +3617,71 @@
     ajustesUsados = p.ajustes || 0;
     if (p.modo === 'nombre' || p.modo === 'logo') cabeceraModo = p.modo;
     mostrarCarta(p.carta);
+    cartaGuardadaId = p.guardada || null;
+    pintarPlan();
     return true;
   }
 
-  // Vuelta de la pasarela: ?pago=<sesión> o ?pago=cancelado
-  (async function vueltaDelPago() {
-    const params = new URLSearchParams(location.search);
-    const pago = params.get('pago');
-    if (!pago) return;
-    history.replaceState(null, '', location.pathname + '#herramienta');
-    if (pago === 'cancelado') {
-      const hay = restaurarPendiente();
-      if (hay) status('Pago cancelado. Tu carta sigue aquí: puedes descargarla gratis o probar Pro 7 días.');
-      return;
-    }
+  // ── Email para descargar la versión gratis ──
+  let emailPendiente = null;
+  function pedirEmail() {
+    return new Promise(res => {
+      emailPendiente = res;
+      const v = document.getElementById('emailVelo');
+      v.hidden = false;
+      document.body.style.overflow = 'hidden';
+      const i = document.getElementById('emailDescarga');
+      const guardado = almacen.leer('cr_email');
+      if (guardado && !i.value) i.value = guardado;
+      setTimeout(() => i.focus(), 30);
+    });
+  }
+  function cerrarEmail(valor) {
+    document.getElementById('emailVelo').hidden = true;
+    document.body.style.overflow = '';
+    const r = emailPendiente; emailPendiente = null;
+    if (r) r(valor || null);
+  }
+  document.getElementById('emailVelo').addEventListener('mousedown', e => { if (e.target.id === 'emailVelo') cerrarEmail(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('emailVelo').hidden) cerrarEmail(); });
+  document.getElementById('emailForm').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const i = document.getElementById('emailDescarga');
+    const email = i.value.trim().toLowerCase();
+    const err = document.getElementById('emailError');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { i.classList.add('error'); err.textContent = 'Revisa el email.'; i.focus(); return; }
+    i.classList.remove('error'); err.textContent = '';
+    const btn = document.getElementById('emailBtn');
+    btn.disabled = true;
     try {
-      const res = await fetch('/pago/confirmar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sesion: pago }) });
-      const d = await res.json();
-      if (!d.ok) throw new Error(d.error);
-      guardarLicencia(d);
-      if (!d.demo) medir('purchase', { value: 19, currency: 'EUR', transaction_id: pago, items: [{ item_name: 'Carta Pro 30 días', price: 19, quantity: 1 }] });
-      if (!restaurarPendiente()) {
-        document.getElementById('herramienta').scrollIntoView();
-        updateToolBubble('¡Carta Pro activa! Sube tu carta y sale sin firma ✨');
-      } else {
-        updateToolBubble('¡Carta Pro activa! Ya puedes descargarla ✨');
-      }
-    } catch (err) {
-      restaurarPendiente();
-      status(err.message || 'No hemos podido comprobar el pago. Escríbenos a hola@kartia.es.');
+      await fetch('/guardar-email', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, origen: 'carta-rapida-descarga', novedades: document.getElementById('emailNovedades').checked, ...datosCarta() }) });
+    } catch (e) {}
+    btn.disabled = false;
+    almacen.guardar('cr_email', email);
+    medir('generate_lead', { origen: 'descarga' });
+    cerrarEmail(email);
+  });
+
+  // Vuelta de la pasarela (membresía) y licencias antiguas
+  window.addEventListener('cuenta', () => { pintarPlan(); if (cartaActual) renderVista(); pintarNavCuenta(); });
+  function pintarNavCuenta() {
+    const c = window.Cuenta && Cuenta.estado;
+    const a = document.getElementById('navCuenta');
+    if (!a) return;
+    a.textContent = c ? 'Mis cartas' : 'Entrar';
+    a.href = c ? '/panel' : '/panel';
+  }
+  (async function iniciarCuenta() {
+    if (!window.Cuenta) return;
+    await Cuenta.cargar();
+    const params = new URLSearchParams(location.search);
+    if (params.get('suscripcion')) {
+      await Cuenta.vueltaDelPago(async (ok) => {
+        const hay = restaurarPendiente();
+        if (ok && hay) { if (!cartaGuardadaId) await guardarEnPanel(true); updateToolBubble('¡Ya eres Pro! Tu carta está guardada ✨'); }
+        else if (!ok && hay) status('Pago cancelado. Tu carta sigue aquí: puedes descargarla gratis o probar Pro 7 días.');
+      });
     }
   })();
 

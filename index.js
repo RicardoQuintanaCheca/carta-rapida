@@ -4,7 +4,7 @@ const compression = require('compression');
 const multer = require('multer');
 const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
-const { crearRutas: rutasPago, licenciaDe, MODO_DEMO } = require('./pagos');
+const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 
 const app = express();
@@ -395,16 +395,27 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
 
-    // Versión gratis: con firma y sin logo. Logo, sin firma y traducción son de Carta Pro (o de la prueba)
-    const licencia = licenciaDe(req);
-    const pro = !!licencia;
-    if (!pro && String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
-      return res.status(402).json({ ok: false, pro: true, error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
+    // Versión gratis: con firma, sin logo, en español y con los estilos gratis; a cambio del email.
+    // Logo, sin firma, traducción y estilos Pro son de Carta Pro (o de la prueba de 7 días)
+    const plan = await planDe(req);
+    const pro = plan.plan !== 'gratis';
+    const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
+    if (!pro) {
+      if (String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
+        return res.status(402).json({ ok: false, pro: true, motivo: 'idioma', error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
+      }
+      if (ESTILOS_PRO.includes(estiloFinal)) {
+        return res.status(402).json({ ok: false, pro: true, motivo: 'estilo', error: 'Este estilo es de Carta Pro. Pruébalo gratis 7 días o elige uno de los estilos gratis.' });
+      }
+      const email = String((req.body || {}).email || '').trim().toLowerCase();
+      if (!plan.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ ok: false, email: true, error: 'Déjanos tu email para descargar la carta.' });
+      }
     }
 
     const t0 = Date.now();
-    const { pdf, info } = await generarPDF(limpia, { estilo: ESTILOS.includes(estilo) ? estilo : 'mantel', logo: pro ? logo : null, credito: !pro });
-    console.log(`[PDF] ${estilo} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${pro ? licencia.plan : 'gratis'} · ${Date.now() - t0} ms`);
+    const { pdf, info } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro });
+    console.log(`[PDF] ${estiloFinal} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${plan.plan} · ${Date.now() - t0} ms`);
 
     res.set({
       'Content-Type': 'application/pdf',
@@ -420,7 +431,13 @@ app.post('/pdf', limitePDF, async (req, res) => {
 
 const limiteLeads = crearLimite(10, 30, 'Demasiados envíos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario.');
 
-app.use(rutasPago({ limite: crearLimite(20, 60, 'Demasiados intentos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario.') }));
+app.use(rutasCuenta({
+  limite: crearLimite(60, 300, 'Demasiadas peticiones seguidas. Espera unos minutos.', 'Has alcanzado el límite diario.'),
+  limiteCuenta: crearLimite(15, 60, 'Demasiados intentos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario de intentos.')
+}));
+
+// Panel del cliente (Mis cartas)
+app.get(['/panel', '/panel/'], (req, res) => { res.set('Cache-Control', 'no-cache'); res.sendFile(require('path').join(__dirname, 'public', 'panel.html')); });
 
 app.post('/guardar-email', limiteLeads, async (req, res) => {
   const b = req.body || {};
@@ -439,7 +456,7 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : (process.env.STRIPE_SECRET_KEY ? 'stripe' : 'desactivado'), listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));
+app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : (process.env.STRIPE_SECRET_KEY ? 'stripe' : 'desactivado'), cuentas: CUENTAS_ACTIVAS, datos: persistente ? 'volumen' : 'temporal', listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));
 
 // Configuración pública para la web (analítica solo si está configurada; se carga tras el consentimiento)
 const GA4 = /^G-[A-Z0-9]{4,20}$/.test(process.env.GA4_ID || '') ? process.env.GA4_ID : '';
