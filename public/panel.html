@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Mis cartas · Carta Rápida</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#FAF7F2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/cuenta.css">
+<style>
+  :root { --ink: #0E0E0E; --cta: #E2561A; --coral: #FF6B35; --crema: #FAF7F2; --linea: #E8E1D6; --gris: #6E6E6E; --tinta-coral: #C2410C; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--crema); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; font-size: 15px; min-height: 100vh; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: var(--tinta-coral); }
+  [hidden] { display: none !important; }
+
+  /* Barra superior */
+  .barra { position: sticky; top: 0; z-index: 50; background: rgba(250,247,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--linea); }
+  .barra-in { max-width: 1320px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 14px; }
+  .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
+  .logo .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--coral); color: #fff; display: flex; align-items: center; justify-content: center; }
+  .barra-esp { flex: 1; }
+  .plan-pill { font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: #fff; border: 1.5px solid var(--linea); white-space: nowrap; }
+  .plan-pill.pro { background: #EAF5EA; border-color: #BFE0C0; color: #1F5E23; }
+  .plan-pill.prueba { background: #FFF4EC; border-color: #FFD9C4; color: #7A2E0A; }
+  .btn-pro-barra { border: none; background: var(--cta); color: #fff; font-weight: 700; font-size: 13.5px; padding: 9px 16px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+  .menu-cuenta { position: relative; }
+  .menu-cuenta > button { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--ink); background: #fff; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+  .menu-lista { position: absolute; right: 0; top: 46px; background: #fff; border: 1.5px solid var(--ink); border-radius: 16px; box-shadow: 0 6px 0 var(--ink), 0 20px 40px rgba(0,0,0,.15); padding: 8px; min-width: 250px; z-index: 60; }
+  .menu-lista .menu-email { font-size: 12.5px; color: var(--gris); padding: 8px 10px 10px; border-bottom: 1px solid var(--linea); margin-bottom: 6px; word-break: break-all; }
+  .menu-lista button, .menu-lista a { display: block; width: 100%; text-align: left; border: none; background: none; padding: 10px; border-radius: 10px; font-size: 14px; cursor: pointer; color: var(--ink); text-decoration: none; }
+  .menu-lista button:hover, .menu-lista a:hover { background: #F4EFE8; }
+  .menu-lista .peligro { color: #C62828; }
+
+  .envoltura { max-width: 1320px; margin: 0 auto; padding: 28px 20px 80px; }
+
+  /* Acceso sin sesión */
+  .bienvenida { max-width: 560px; margin: 40px auto; text-align: center; }
+  .bienvenida h1 { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(32px, 6vw, 48px); line-height: 1; letter-spacing: -.03em; margin: 0 0 14px; }
+  .bienvenida p { color: #444; font-size: 16.5px; line-height: 1.55; margin: 0 0 26px; }
+  .fila-botones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 2px solid var(--ink); background: #fff; color: var(--ink); border-radius: 999px; padding: 12px 20px; font-weight: 700; font-size: 15px; cursor: pointer; text-decoration: none; transition: transform .12s, box-shadow .12s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.primario { background: var(--cta); border-color: var(--cta); color: #fff; box-shadow: 0 4px 0 var(--ink); }
+  .btn.oscuro { background: var(--ink); color: #fff; }
+  .btn.peq { padding: 8px 14px; font-size: 13.5px; border-width: 1.5px; }
+  .btn:disabled { opacity: .55; cursor: default; transform: none; }
+
+  /* Lista de cartas */
+  .cab-lista { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .cab-lista h1 { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(30px, 4vw, 42px); letter-spacing: -.03em; margin: 0; line-height: 1; }
+  .cab-lista p { margin: 6px 0 0; color: var(--gris); }
+  .aviso-plan { display: flex; align-items: center; gap: 16px; justify-content: space-between; flex-wrap: wrap; border: 2px solid var(--ink); border-radius: 20px; padding: 18px 20px; background: #fff; box-shadow: 0 5px 0 var(--ink); margin-bottom: 24px; }
+  .aviso-plan.prueba { background: #FFF8F2; }
+  .aviso-plan.caducado { background: #FFF1EE; }
+  .aviso-plan b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; display: block; margin-bottom: 3px; }
+  .aviso-plan span { color: #555; font-size: 14px; }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+  .tarjeta { background: #fff; border: 1.5px solid var(--linea); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s, transform .15s, box-shadow .15s; }
+  .tarjeta:hover { border-color: var(--ink); transform: translateY(-2px); box-shadow: 0 8px 20px -10px rgba(0,0,0,.25); }
+  .tarjeta-img { aspect-ratio: 210 / 170; background: #fff center top / 100% auto no-repeat; border-bottom: 1px solid var(--linea); cursor: pointer; }
+  .tarjeta-cuerpo { padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .tarjeta-tit { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.2; }
+  .tarjeta-meta { font-size: 12.5px; color: var(--gris); }
+  .tarjeta-acc { display: flex; gap: 6px; margin-top: 10px; }
+  .tarjeta-acc .btn { flex: 1; }
+  .icono-btn { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 50%; border: 1.5px solid var(--linea); background: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--ink); padding: 0; }
+  .icono-btn:hover { border-color: var(--ink); }
+  .icono-btn.rojo:hover { border-color: #C62828; color: #C62828; }
+  .vacio { text-align: center; padding: 56px 20px; border: 2px dashed #D9CFC2; border-radius: 24px; background: #fff; }
+  .vacio h2 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; margin: 0 0 8px; }
+  .vacio p { color: #555; margin: 0 0 20px; }
+  .nueva-tarjeta { border: 2px dashed #D9CFC2; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 260px; text-decoration: none; color: var(--ink); font-weight: 700; background: transparent; }
+  .nueva-tarjeta:hover { border-color: var(--cta); color: var(--cta); }
+  .nueva-tarjeta .mas { width: 48px; height: 48px; border-radius: 50%; background: var(--cta); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .nueva-tarjeta small { font-weight: 400; color: var(--gris); }
+
+  /* Editor */
+  .ed-barra { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .volver { border: none; background: none; cursor: pointer; font-weight: 600; color: var(--ink); padding: 8px 0; }
+  .ed-titulo { flex: 1; min-width: 200px; border: 1.5px solid transparent; background: transparent; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -.02em; padding: 4px 8px; border-radius: 10px; }
+  .ed-titulo:hover, .ed-titulo:focus { border-color: var(--linea); background: #fff; outline: none; }
+  .guardado { font-size: 13px; color: var(--gris); white-space: nowrap; }
+  .guardado.error { color: #C62828; }
+  .ed { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 28px; align-items: start; }
+  .ed-form { min-width: 0; }
+  .ed-vista { position: sticky; top: 76px; }
+  .bloque { background: #fff; border: 1.5px solid var(--linea); border-radius: 20px; padding: 18px; margin-bottom: 16px; }
+  .bloque-tit { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-coral); font-weight: 600; margin: 0 0 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .campo { width: 100%; padding: 10px 12px; border: 1.5px solid #E0D6CC; border-radius: 10px; background: #fff; outline: none; font-size: 14.5px; }
+  .campo:focus { border-color: var(--cta); box-shadow: 0 0 0 3px rgba(226,86,26,.12); }
+  .campo.grande { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px; }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .etq { display: block; font-size: 12.5px; font-weight: 600; margin: 0 0 5px; color: #333; }
+  .grupo { margin-bottom: 12px; }
+  .segmento { display: inline-flex; background: #F1EFE8; border-radius: 999px; padding: 3px; }
+  .segmento button { border: none; background: transparent; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); cursor: pointer; }
+  .segmento button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+  .logo-fila { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .logo-img { height: 48px; max-width: 160px; object-fit: contain; border: 1px solid var(--linea); border-radius: 8px; padding: 4px; background: #fff; }
+  .subir-logo { position: relative; overflow: hidden; }
+  .subir-logo input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .estilos { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+  .estilo-b { border: 2px solid #E8E6E0; border-radius: 12px; background: #fff; padding: 4px 4px 6px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+  .estilo-b span:first-child { display: block; aspect-ratio: 210 / 200; border-radius: 7px; background: #fff center top / 100% auto no-repeat; border: 1px solid #EEE; }
+  .estilo-b span:last-child { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; font-weight: 700; text-align: center; }
+  .estilo-b.on { border-color: var(--cta); background: #FFF4EC; }
+  .seccion { border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px; margin-bottom: 12px; background: #FFFDFB; }
+  .seccion-cab { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .seccion-cab .campo { flex: 1; }
+  .plato { display: grid; grid-template-columns: minmax(0, 1fr) 96px auto; gap: 6px 8px; padding: 10px 0; border-top: 1px dashed #E6DDD1; }
+  .plato:first-of-type { border-top: none; }
+  .plato .desc { grid-column: 1 / 3; }
+  .plato .mas-datos { grid-column: 1 / 3; display: grid; grid-template-columns: 1fr 1fr auto; gap: 6px; }
+  .plato .acciones { grid-row: 1 / span 3; grid-column: 3; display: flex; flex-direction: column; gap: 4px; }
+  .plato .campo { padding: 8px 10px; font-size: 14px; }
+  .plato .campo.nombre { font-weight: 600; }
+  .plato .precio { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .destacado { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: #555; white-space: nowrap; cursor: pointer; padding: 0 4px; }
+  .destacado input { accent-color: var(--cta); }
+  .mini-btn { width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid var(--linea); background: #fff; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; color: #444; }
+  .mini-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .mini-btn.rojo:hover { border-color: #C62828; color: #C62828; }
+  .anadir { border: 1.5px dashed #D9CFC2; background: transparent; border-radius: 10px; padding: 9px 12px; width: 100%; cursor: pointer; font-weight: 600; color: #555; margin-top: 8px; }
+  .anadir:hover { border-color: var(--cta); color: var(--cta); }
+  .anadir.seccion-nueva { padding: 13px; font-size: 15px; border-radius: 14px; }
+  .servicio { display: grid; grid-template-columns: 1fr 96px 30px; gap: 6px; margin-bottom: 6px; }
+  .frase { display: flex; gap: 8px; }
+  .frase textarea { flex: 1; resize: vertical; min-height: 44px; }
+  .ayuda { font-size: 12.5px; color: var(--gris); margin: 6px 0 0; line-height: 1.45; }
+  fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
+  fieldset:disabled .campo, fieldset:disabled button { opacity: .55; cursor: not-allowed; }
+
+  .vista-cab { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .vista-info { font-size: 12.5px; color: var(--gris); flex: 1; }
+  .vista-marco { position: relative; background: #EDE7DE; border-radius: 20px; padding: 18px; overflow: hidden; max-height: calc(100vh - 210px); overflow-y: auto; }
+  .vista-escala { margin: 0 auto; position: relative; }
+  .vista-escala iframe { border: 0; transform-origin: top left; display: block; background: transparent; }
+  .vista-cargando { position: absolute; top: 12px; right: 14px; font-size: 12px; background: #fff; padding: 5px 10px; border-radius: 999px; display: none; }
+  .vista-marco.cargando .vista-cargando { display: block; }
+  .descargar { width: 100%; margin-top: 12px; }
+  .nota-vista { font-size: 12px; color: var(--gris); text-align: center; margin-top: 8px; }
+  .pestanas { display: none; }
+
+  .cargando-pag { text-align: center; padding: 80px 20px; color: var(--gris); }
+
+  @media (max-width: 1000px) {
+    .ed { grid-template-columns: 1fr; }
+    .ed-vista { position: static; }
+    .pestanas { display: flex; position: sticky; top: 63px; z-index: 40; background: var(--crema); padding: 6px 0 10px; }
+    .pestanas .segmento { width: 100%; }
+    .pestanas .segmento button { flex: 1; padding: 10px; }
+    .ed.solo-form .ed-vista { position: absolute; left: -10000px; top: 0; width: 360px; visibility: hidden; } /* sigue maquetando aunque no se vea */
+    .ed.solo-vista .ed-form { display: none; }
+    .vista-marco { max-height: none; }
+  }
+  @media (max-width: 600px) {
+    .envoltura { padding: 18px 14px 80px; }
+    .barra-in { padding: 10px 14px; gap: 8px; }
+    .logo span:last-child { display: none; }
+    .plan-pill { display: none; }
+    .ed-titulo { font-size: 21px; }
+    .plato { grid-template-columns: minmax(0, 1fr) 78px; }
+    .plato .acciones { grid-row: auto; grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
+    .plato .desc, .plato .mas-datos { grid-column: 1 / -1; }
+    .plato .mas-datos { grid-template-columns: 1fr 1fr; }
+    .plato .mas-datos .destacado { grid-column: 1 / -1; }
+    .dos { grid-template-columns: 1fr; }
+    .bloque { padding: 14px; border-radius: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="barra-in">
+    <a class="logo" href="/"><span class="dot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span>Carta Rápida</span></a>
+    <div class="barra-esp"></div>
+    <span class="plan-pill" id="planPill" hidden></span>
+    <button class="btn-pro-barra" id="btnProBarra" type="button" hidden onclick="Cuenta.planes({ vuelta: 'panel' })">Hazte Pro</button>
+    <div class="menu-cuenta" id="menuCuenta" hidden>
+      <button type="button" id="menuBoton" aria-haspopup="true" aria-expanded="false" aria-label="Tu cuenta"></button>
+      <div class="menu-lista" id="menuLista" hidden>
+        <div class="menu-email" id="menuEmail"></div>
+        <a href="/panel">Mis cartas</a>
+        <a href="/#herramienta">Crear carta desde una foto</a>
+        <button type="button" id="menuPortal" onclick="Cuenta.portal()">Facturas y suscripción</button>
+        <button type="button" onclick="cambiarClave()">Cambiar contraseña</button>
+        <button type="button" onclick="Cuenta.salir().then(() => location.href = '/panel')">Salir</button>
+        <button type="button" class="peligro" onclick="borrarCuenta()">Borrar mi cuenta</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="envoltura" id="app">
+  <div class="cargando-pag">Cargando…</div>
+</main>
+
+<script src="/cuenta.js"></script>
+<script>
+  const ESTILOS = [['riviera','Riviera'],['azulejo','Azulejo'],['serigrafia','Serigrafía'],['cartel','Cartel'],['ticket','Ticket'],['gaceta','Gaceta'],['trattoria','Trattoria'],['editorial','Editorial'],['sobremesa','Sobremesa'],['sumi','Sumi'],['brasserie','Brasserie'],['deco','Déco'],['mantel','Mantel'],['barra','Barra'],['autor','Autor']];
+  const NOMBRE_ESTILO = Object.fromEntries(ESTILOS);
+  const IDIOMAS = { en: 'inglés', fr: 'francés', de: 'alemán', it: 'italiano', pt: 'portugués', zh: 'chino' };
+  const esc = Cuenta.esc;
+  const app = document.getElementById('app');
+  let ed = null; // estado del editor
+
+  function medir(e, d) { /* la analítica se carga en la web principal */ }
+
+  // ── Barra ──
+  function pintarBarra() {
+    const c = Cuenta.estado;
+    document.getElementById('menuCuenta').hidden = !c;
+    const pill = document.getElementById('planPill');
+    const pro = document.getElementById('btnProBarra');
+    if (!c) { pill.hidden = true; pro.hidden = true; return; }
+    document.getElementById('menuBoton').textContent = c.email.charAt(0);
+    document.getElementById('menuEmail').textContent = c.email;
+    document.getElementById('menuPortal').hidden = !c.puedePortal;
+    pill.hidden = false;
+    pill.className = 'plan-pill ' + c.plan;
+    pill.textContent = Cuenta.textoPlan();
+    pro.hidden = c.plan === 'pro';
+  }
+  const menuBoton = document.getElementById('menuBoton');
+  menuBoton.onclick = (e) => {
+    e.stopPropagation();
+    const l = document.getElementById('menuLista');
+    l.hidden = !l.hidden;
+    menuBoton.setAttribute('aria-expanded', String(!l.hidden));
+  };
+  document.addEventListener('click', () => { document.getElementById('menuLista').hidden = true; });
+  window.addEventListener('cuenta', () => { pintarBarra(); if (!ed) route(); else pintarBloqueo(); });
+
+  // ── Rutas: /panel y /panel#carta=ID ──
+  function route() {
+    if (!Cuenta.estado) return pintarBienvenida();
+    const m = location.hash.match(/^#carta=([\w-]+)/);
+    if (m) abrirEditor(m[1]); else pintarLista();
+  }
+  window.addEventListener('hashchange', () => { if (ed && ed.pendiente) guardarYa(); ed = null; route(); });
+
+  function pintarBienvenida() {
+    ed = null;
+    app.innerHTML = `<div class="bienvenida">
+      <h1>Tus cartas, siempre a mano.</h1>
+      <p>Guarda tus cartas y cámbialas cuando cambien los precios o la temporada: platos, precios, estilo y logo. Descarga el PDF al momento.</p>
+      <div class="fila-botones">
+        <button class="btn primario" type="button" onclick="Cuenta.acceso({ modo: 'crear', alEntrar: route })">Crear cuenta · 7 días gratis</button>
+        <button class="btn" type="button" onclick="Cuenta.acceso({ modo: 'entrar', alEntrar: route })">Entrar</button>
+      </div>
+      <p style="margin-top:28px;font-size:14px">¿Aún no tienes tu carta? <a href="/#herramienta">Hazla gratis en 30 segundos →</a></p>
+    </div>`;
+  }
+
+  function haceCuanto(ms) {
+    const s = (Date.now() - ms) / 1000;
+    if (s < 60) return 'hace un momento';
+    if (s < 3600) return 'hace ' + Math.round(s / 60) + ' min';
+    if (s < 86400) return 'hace ' + Math.round(s / 3600) + ' h';
+    return new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  }
+
+  function avisoPlanHTML() {
+    const c = Cuenta.estado;
+    if (c.plan === 'pro') return '';
+    if (c.plan === 'prueba') {
+      const dias = Math.max(1, Math.ceil((c.hasta - Date.now()) / 864e5));
+      return `<div class="aviso-plan prueba"><div><b>Tu prueba de Pro: ${dias === 1 ? 'queda 1 día' : 'quedan ' + dias + ' días'}</b><span>Hazte Pro para seguir editando tus cartas cuando termine. Desde 8,25 € al mes.</span></div>
+        <button class="btn primario" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Hazte Pro</button></div>`;
+    }
+    return `<div class="aviso-plan caducado"><div><b>${c.habiaPro ? 'Tu Carta Pro ha terminado' : 'Tu prueba de Pro ha terminado'}</b><span>Tus cartas siguen aquí. Actívala para editarlas, cambiar precios y descargarlas sin firma.</span></div>
+      <button class="btn primario" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Activar Pro</button></div>`;
+  }
+
+  async function pintarLista() {
+    ed = null;
+    app.innerHTML = '<div class="cargando-pag">Cargando tus cartas…</div>';
+    const d = await Cuenta.api('/cartas');
+    if (d.status === 401) { Cuenta.poner(null); return; }
+    const cartas = d.cartas || [];
+    const n = cartas.length;
+    app.innerHTML = `
+      <div class="cab-lista"><div><h1>Mis cartas</h1><p>${n ? n + (n === 1 ? ' carta guardada' : ' cartas guardadas') : 'Aún no has guardado ninguna carta'}</p></div>
+        <a class="btn primario" href="/#herramienta">+ Nueva carta desde una foto</a></div>
+      ${avisoPlanHTML()}
+      ${n ? `<div class="rejilla">${cartas.map(c => `
+        <article class="tarjeta">
+          <div class="tarjeta-img" style="background-image:url(/carta/muestra-${esc(c.estilo)}.webp)" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
+          <div class="tarjeta-cuerpo">
+            <div class="tarjeta-tit">${esc(c.titulo)}</div>
+            <div class="tarjeta-meta">${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
+            <div class="tarjeta-acc">
+              <a class="btn peq oscuro" href="#carta=${esc(c.id)}">Editar</a>
+              <button class="icono-btn" type="button" title="Duplicar" aria-label="Duplicar ${esc(c.titulo)}" onclick="duplicar('${esc(c.id)}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+              <button class="icono-btn rojo" type="button" title="Borrar" aria-label="Borrar ${esc(c.titulo)}" onclick="borrarCarta('${esc(c.id)}', this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+          </div>
+        </article>`).join('')}
+        <a class="nueva-tarjeta" href="/#herramienta"><span class="mas">+</span>Nueva carta<small>Sube una foto y la guardas aquí</small></a>
+      </div>` : `<div class="vacio"><h2>Tu primera carta, en 30 segundos</h2><p>Hazle una foto a tu carta, elige estilo y pulsa «Guardar en mis cartas». Aparecerá aquí para editarla cuando quieras.</p><a class="btn primario" href="/#herramienta">Hacer mi carta</a></div>`}`;
+    app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') el.click(); }));
+  }
+
+  async function duplicar(id) {
+    const d = await Cuenta.api('/cartas/' + id + '/duplicar', {});
+    if (d.status === 402) return Cuenta.planes({ motivo: 'Duplicar y editar cartas es de Carta Pro.', vuelta: 'panel' });
+    if (!d.ok) return Cuenta.aviso(d.error || 'No se ha podido duplicar.');
+    Cuenta.aviso('Carta duplicada.');
+    pintarLista();
+  }
+  async function borrarCarta(id, btn) {
+    if (btn.dataset.confirmar !== '1') {
+      btn.dataset.confirmar = '1';
+      btn.innerHTML = '¿Borrar?'; btn.style.width = 'auto'; btn.style.flex = '0 0 auto'; btn.style.padding = '0 10px'; btn.style.color = '#C62828'; btn.style.borderColor = '#C62828';
+      setTimeout(() => { if (btn.isConnected && btn.dataset.confirmar === '1') pintarLista(); }, 4000);
+      return;
+    }
+    const d = await Cuenta.api('/cartas/' + id, null, 'DELETE');
+    Cuenta.aviso(d.ok ? 'Carta borrada.' : 'No se ha podido borrar.');
+    pintarLista();
+  }
+
+  // ── Editor ──
+  async function abrirEditor(id) {
+    app.innerHTML = '<div class="cargando-pag">Abriendo tu carta…</div>';
+    const d = await Cuenta.api('/cartas/' + id);
+    if (!d.ok) { Cuenta.aviso(d.error || 'No encontramos esa carta.'); location.hash = ''; return; }
+    const carta = d.carta;
+    carta.secciones = carta.secciones || [];
+    carta.servicios = carta.servicios || [];
+    // Precios a la española para editar (12.5 → 12,50)
+    const aEs = p => /^\d+\.\d+$/.test(String(p || '')) ? parseFloat(p).toFixed(2).replace('.', ',') : (p || '');
+    carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
+    carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
+    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null };
+    pintarEditor();
+  }
+
+  function puedeEditar() { return Cuenta.esPro(); }
+
+  function pintarEditor() {
+    const c = ed.carta;
+    app.innerHTML = `
+      <div class="ed-barra">
+        <button class="volver" type="button" onclick="location.hash=''">← Mis cartas</button>
+        <input class="ed-titulo" id="edTitulo" value="${esc(ed.titulo)}" maxlength="80" aria-label="Nombre de esta carta en tu panel">
+        <span class="guardado" id="guardado">Guardado</span>
+      </div>
+      <div id="bloqueo"></div>
+      <div class="pestanas"><div class="segmento"><button type="button" class="on" data-p="form">Editar</button><button type="button" data-p="vista">Ver carta</button></div></div>
+      <div class="ed solo-form" id="ed">
+        <div class="ed-form">
+          <fieldset id="edFs">
+            <section class="bloque">
+              <h2 class="bloque-tit">Cabecera</h2>
+              <div class="grupo"><label class="etq" for="fNombre">Nombre del restaurante</label><input class="campo grande" id="fNombre" maxlength="60" value="${esc(c.nombre_restaurante || '')}" data-k="nombre_restaurante"></div>
+              <div class="grupo"><label class="etq" for="fSub">Frase bajo el nombre (opcional)</label><input class="campo" id="fSub" maxlength="90" value="${esc(c.subtitulo || '')}" data-k="subtitulo"></div>
+              <div class="etq">Arriba de la carta sale</div>
+              <div class="segmento" id="segCab"><button type="button" data-v="nombre">El nombre</button><button type="button" data-v="logo">Tu logotipo</button></div>
+              <div class="logo-fila">
+                ${ed.logo ? `<img class="logo-img" src="${ed.logo}" alt="Tu logotipo">` : ''}
+                <label class="btn peq subir-logo">${ed.logo ? 'Cambiar logotipo' : 'Subir logotipo'}<input type="file" accept="image/png,image/jpeg,image/webp" id="fLogo"></label>
+                ${ed.logo ? '<button class="btn peq" type="button" id="quitarLogo">Quitar</button>' : ''}
+              </div>
+              <p class="ayuda">PNG con fondo transparente queda mejor. Si no hay logotipo, sale el nombre.</p>
+            </section>
+
+            <section class="bloque">
+              <h2 class="bloque-tit">Estilo</h2>
+              <div class="estilos">${ESTILOS.map(([k, n]) => `<button type="button" class="estilo-b${k === ed.estilo ? ' on' : ''}" data-estilo="${k}"><span style="background-image:url(/carta/muestra-${k}.webp)"></span><span>${n}</span></button>`).join('')}</div>
+            </section>
+
+            <section class="bloque">
+              <h2 class="bloque-tit">Platos y precios <span style="text-transform:none;letter-spacing:0;font-family:Inter;color:var(--gris);font-weight:500">Los cambios se guardan solos</span></h2>
+              <div id="secciones"></div>
+              <button class="anadir seccion-nueva" type="button" id="nuevaSeccion">+ Añadir sección</button>
+            </section>
+
+            <section class="bloque">
+              <h2 class="bloque-tit">Pan, servicio y pie</h2>
+              <div id="servicios"></div>
+              <button class="anadir" type="button" id="nuevoServicio">+ Añadir pan, cubierto o suplemento</button>
+              <div class="grupo" style="margin-top:14px"><label class="etq" for="fPie">Nota al pie</label><input class="campo" id="fPie" maxlength="300" value="${esc(c.nota_pie || '')}" data-k="nota_pie" placeholder="IVA incluido. Consulte la información sobre alérgenos a nuestro personal."></div>
+            </section>
+
+            <section class="bloque">
+              <h2 class="bloque-tit">Cambios con una frase</h2>
+              <div class="frase"><textarea class="campo" id="fFrase" maxlength="600" placeholder="Ej: sube todos los postres 50 céntimos y pon las croquetas las primeras"></textarea><button class="btn oscuro peq" type="button" id="aplicarFrase">Aplicar</button></div>
+              <p class="ayuda">Escribe el cambio como se lo dirías a una persona. Revisa el resultado antes de imprimir.</p>
+              <div class="grupo" style="margin-top:14px"><label class="etq" for="fIdioma">Crear una copia traducida</label>
+                <div class="frase"><select class="campo" id="fIdioma">${Object.entries(IDIOMAS).map(([k, n]) => `<option value="${k}">En ${n}</option>`).join('')}</select><button class="btn peq" type="button" id="traducir">Traducir</button></div>
+                <p class="ayuda">Se guarda como carta nueva; esta se queda como está.</p></div>
+            </section>
+          </fieldset>
+        </div>
+
+        <div class="ed-vista">
+          <div class="vista-cab"><span class="vista-info" id="vistaInfo">Componiendo…</span></div>
+          <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando">Actualizando…</div></div>
+          <button class="btn primario descargar" type="button" id="descargar">Descargar PDF</button>
+          <div class="nota-vista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
+        </div>
+      </div>`;
+
+    // Pestañas en móvil
+    app.querySelectorAll('.pestanas button').forEach(b => b.onclick = () => {
+      app.querySelectorAll('.pestanas button').forEach(x => x.classList.toggle('on', x === b));
+      const e = document.getElementById('ed');
+      e.classList.toggle('solo-form', b.dataset.p === 'form');
+      e.classList.toggle('solo-vista', b.dataset.p === 'vista');
+      if (b.dataset.p === 'vista') ajustarVista();
+      window.scrollTo({ top: 0 });
+    });
+
+    document.getElementById('edTitulo').oninput = e => { ed.titulo = e.target.value; cambio(false); };
+    app.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { ed.carta[inp.dataset.k] = inp.value; cambio(); });
+    const seg = document.getElementById('segCab');
+    const pintarSeg = () => seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (ed.logo && ed.cabecera === 'logo' ? 'logo' : 'nombre')));
+    seg.querySelectorAll('button').forEach(b => b.onclick = () => {
+      if (b.dataset.v === 'logo' && !ed.logo) { document.getElementById('fLogo').click(); return; }
+      ed.cabecera = b.dataset.v; pintarSeg(); cambio();
+    });
+    pintarSeg();
+    document.getElementById('fLogo').onchange = e => cargarLogo(e.target.files[0]);
+    const quitar = document.getElementById('quitarLogo');
+    if (quitar) quitar.onclick = () => { ed.logo = null; ed.cabecera = 'nombre'; cambio(); pintarEditor(); };
+    app.querySelectorAll('.estilo-b').forEach(b => b.onclick = () => {
+      ed.estilo = b.dataset.estilo;
+      app.querySelectorAll('.estilo-b').forEach(x => x.classList.toggle('on', x === b));
+      cambio();
+    });
+    document.getElementById('nuevaSeccion').onclick = () => { ed.carta.secciones.push({ nombre: '', platos: [plato()] }); pintarSecciones(true); cambio(); };
+    document.getElementById('nuevoServicio').onclick = () => { ed.carta.servicios.push({ nombre: '', precio: '' }); pintarServicios(true); cambio(); };
+    document.getElementById('aplicarFrase').onclick = aplicarFrase;
+    document.getElementById('traducir').onclick = traducir;
+    document.getElementById('descargar').onclick = descargar;
+    pintarSecciones();
+    pintarServicios();
+    pintarBloqueo();
+    prepararVista();
+    renderVista();
+  }
+
+  function pintarBloqueo() {
+    if (!ed) return;
+    const b = document.getElementById('bloqueo');
+    const fs = document.getElementById('edFs');
+    if (!b || !fs) return;
+    const ok = puedeEditar();
+    fs.disabled = !ok;
+    document.getElementById('edTitulo').disabled = !ok;
+    b.innerHTML = ok ? '' : avisoPlanHTML();
+  }
+
+  const plato = () => ({ nombre: '', descripcion: '', precio: '', racion: '', alergenos: '', destacado: false });
+
+  function pintarSecciones(enfocarUltimo) {
+    const cont = document.getElementById('secciones');
+    const S = ed.carta.secciones;
+    cont.innerHTML = S.map((s, si) => `
+      <div class="seccion" data-si="${si}">
+        <div class="seccion-cab">
+          <input class="campo grande" data-s="nombre" value="${esc(s.nombre)}" placeholder="Nombre de la sección (Entrantes, Carnes…)" maxlength="80" aria-label="Nombre de la sección">
+          <button class="mini-btn" type="button" data-acc="s-arriba" title="Subir sección" ${si === 0 ? 'disabled' : ''}>↑</button>
+          <button class="mini-btn" type="button" data-acc="s-abajo" title="Bajar sección" ${si === S.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="mini-btn rojo" type="button" data-acc="s-borrar" title="Borrar sección">✕</button>
+        </div>
+        ${(s.platos || []).map((p, pi) => `
+          <div class="plato" data-pi="${pi}">
+            <input class="campo nombre" data-p="nombre" value="${esc(p.nombre)}" placeholder="Plato" maxlength="120" aria-label="Nombre del plato">
+            <input class="campo precio" data-p="precio" value="${esc(p.precio)}" placeholder="Precio" maxlength="20" inputmode="decimal" aria-label="Precio">
+            <div class="acciones">
+              <button class="mini-btn" type="button" data-acc="p-arriba" title="Subir" ${pi === 0 ? 'disabled' : ''}>↑</button>
+              <button class="mini-btn" type="button" data-acc="p-abajo" title="Bajar" ${pi === s.platos.length - 1 ? 'disabled' : ''}>↓</button>
+              <button class="mini-btn rojo" type="button" data-acc="p-borrar" title="Quitar plato">✕</button>
+            </div>
+            <input class="campo desc" data-p="descripcion" value="${esc(p.descripcion)}" placeholder="Descripción (opcional)" maxlength="200" aria-label="Descripción">
+            <div class="mas-datos">
+              <input class="campo" data-p="racion" value="${esc(p.racion)}" placeholder="Ración (80 g, 6 uds.)" maxlength="40" aria-label="Ración">
+              <input class="campo" data-p="alergenos" value="${esc(p.alergenos)}" placeholder="Alérgenos" maxlength="80" aria-label="Alérgenos">
+              <label class="destacado"><input type="checkbox" data-p="destacado" ${p.destacado ? 'checked' : ''}> Destacar</label>
+            </div>
+          </div>`).join('')}
+        <button class="anadir" type="button" data-acc="p-nuevo">+ Añadir plato</button>
+      </div>`).join('') || '<p class="ayuda">Esta carta no tiene secciones. Añade la primera.</p>';
+
+    cont.querySelectorAll('.seccion').forEach(secEl => {
+      const si = +secEl.dataset.si;
+      secEl.querySelector('[data-s="nombre"]').oninput = e => { S[si].nombre = e.target.value; cambio(); };
+      secEl.querySelectorAll('.plato').forEach(pEl => {
+        const pi = +pEl.dataset.pi;
+        pEl.querySelectorAll('[data-p]').forEach(inp => {
+          const k = inp.dataset.p;
+          const ev = inp.type === 'checkbox' ? 'onchange' : 'oninput';
+          inp[ev] = () => { S[si].platos[pi][k] = inp.type === 'checkbox' ? inp.checked : inp.value; cambio(); };
+        });
+      });
+      secEl.querySelectorAll('[data-acc]').forEach(b => b.onclick = () => {
+        const acc = b.dataset.acc;
+        const pi = b.closest('.plato') ? +b.closest('.plato').dataset.pi : -1;
+        const P = S[si].platos;
+        if (acc === 's-arriba' && si > 0) [S[si - 1], S[si]] = [S[si], S[si - 1]];
+        else if (acc === 's-abajo' && si < S.length - 1) [S[si + 1], S[si]] = [S[si], S[si + 1]];
+        else if (acc === 's-borrar') {
+          if (P.some(p => p.nombre) && b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = '¿Seguro?'; b.style.width = 'auto'; b.style.padding = '0 8px'; return; }
+          S.splice(si, 1);
+        }
+        else if (acc === 'p-arriba' && pi > 0) [P[pi - 1], P[pi]] = [P[pi], P[pi - 1]];
+        else if (acc === 'p-abajo' && pi < P.length - 1) [P[pi + 1], P[pi]] = [P[pi], P[pi + 1]];
+        else if (acc === 'p-borrar') P.splice(pi, 1);
+        else if (acc === 'p-nuevo') { P.push(plato()); pintarSecciones(); cambio(); const ult = document.querySelector(`.seccion[data-si="${si}"] .plato:last-of-type .nombre`); if (ult) ult.focus(); return; }
+        pintarSecciones(); cambio();
+      });
+    });
+    if (enfocarUltimo) { const u = cont.querySelector('.seccion:last-child [data-s="nombre"]'); if (u) u.focus(); }
+  }
+
+  function pintarServicios(enfocar) {
+    const cont = document.getElementById('servicios');
+    const V = ed.carta.servicios;
+    cont.innerHTML = V.map((s, i) => `<div class="servicio" data-i="${i}">
+      <input class="campo" data-v="nombre" value="${esc(s.nombre)}" placeholder="Pan y cubierto" maxlength="60" aria-label="Concepto">
+      <input class="campo precio" data-v="precio" value="${esc(s.precio)}" placeholder="Precio" maxlength="20" inputmode="decimal" aria-label="Precio">
+      <button class="mini-btn rojo" type="button" title="Quitar">✕</button></div>`).join('');
+    cont.querySelectorAll('.servicio').forEach(el => {
+      const i = +el.dataset.i;
+      el.querySelectorAll('[data-v]').forEach(inp => inp.oninput = () => { V[i][inp.dataset.v] = inp.value; cambio(); });
+      el.querySelector('button').onclick = () => { V.splice(i, 1); pintarServicios(); cambio(); };
+    });
+    if (enfocar) { const u = cont.querySelector('.servicio:last-child input'); if (u) u.focus(); }
+  }
+
+  function cargarLogo(file) {
+    if (!file) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return Cuenta.aviso('El logotipo debe ser PNG, JPG o WEBP.');
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 900, esc2 = Math.min(1, max / Math.max(img.width, img.height));
+        const cv = document.createElement('canvas');
+        cv.width = Math.round(img.width * esc2); cv.height = Math.round(img.height * esc2);
+        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+        ed.logo = cv.toDataURL('image/png');
+        ed.cabecera = 'logo';
+        cambio(); pintarEditor();
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  }
+
+  // ── Guardado automático ──
+  let tGuardar = null, tVista = null;
+  function cambio(conVista = true) {
+    if (!ed || !puedeEditar()) return;
+    ed.pendiente = true;
+    const g = document.getElementById('guardado');
+    g.textContent = 'Cambios sin guardar…'; g.classList.remove('error');
+    clearTimeout(tGuardar);
+    tGuardar = setTimeout(guardarYa, 1200);
+    if (conVista) { clearTimeout(tVista); tVista = setTimeout(renderVista, 350); }
+  }
+  async function guardarYa() {
+    if (!ed || !ed.pendiente || ed.guardando) return;
+    ed.guardando = true; ed.pendiente = false;
+    const g = document.getElementById('guardado');
+    if (g) g.textContent = 'Guardando…';
+    const d = await Cuenta.api('/cartas/' + ed.id, { titulo: ed.titulo, carta: ed.carta, estilo: ed.estilo, logo: ed.logo, cabecera: ed.cabecera }, 'PUT');
+    ed.guardando = false;
+    const g2 = document.getElementById('guardado');
+    if (d.ok) { if (g2) g2.textContent = 'Guardado ✓'; }
+    else {
+      ed.pendiente = true;
+      if (g2) { g2.textContent = d.error || 'No se ha podido guardar'; g2.classList.add('error'); }
+      if (d.status === 402) { await Cuenta.cargar(); }
+    }
+    if (ed.pendiente && d.ok) guardarYa();
+  }
+  window.addEventListener('beforeunload', e => { if (ed && (ed.pendiente || ed.guardando)) { guardarYa(); e.preventDefault(); e.returnValue = ''; } });
+
+  // ── Vista previa (mismo motor que el PDF) ──
+  const vista = { iframe: null, lista: false, pendiente: false, id: 0, ancho: 794, alto: 1123 };
+  function prepararVista() {
+    vista.iframe = null; vista.lista = false;
+    const f = document.createElement('iframe');
+    f.title = 'Vista previa de tu carta';
+    f.src = '/carta/vista.html';
+    f.setAttribute('scrolling', 'no');
+    f.tabIndex = -1;
+    document.getElementById('vistaEscala').appendChild(f);
+    vista.iframe = f;
+    ajustarVista();
+  }
+  function logoActivo() { return ed.logo && ed.cabecera === 'logo' ? ed.logo : null; }
+  function renderVista() {
+    if (!ed || !vista.iframe) return;
+    const m = document.getElementById('vistaMarco');
+    if (m) m.classList.add('cargando');
+    vista.pendiente = true;
+    if (vista.lista) enviarVista();
+  }
+  function enviarVista() {
+    vista.pendiente = false; vista.id++;
+    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: ed.carta, estilo: ed.estilo, logo: logoActivo(), credito: !Cuenta.esPro() }, location.origin);
+  }
+  function ajustarVista() {
+    if (!vista.iframe) return;
+    const marco = document.getElementById('vistaMarco');
+    if (!marco || !marco.clientWidth) return;
+    const disp = marco.clientWidth - 36;
+    const e = Math.min(1, disp / vista.ancho);
+    vista.iframe.style.width = vista.ancho + 'px';
+    vista.iframe.style.height = vista.alto + 'px';
+    vista.iframe.style.transform = 'scale(' + e + ')';
+    const escala = document.getElementById('vistaEscala');
+    escala.style.width = Math.floor(vista.ancho * e) + 'px';
+    escala.style.height = Math.ceil(vista.alto * e) + 'px';
+  }
+  window.addEventListener('message', e => {
+    if (e.origin !== location.origin || !e.data || !vista.iframe || e.source !== vista.iframe.contentWindow) return;
+    if (e.data.tipo === 'vista-lista') { vista.lista = true; if (vista.pendiente) enviarVista(); }
+    else if (e.data.tipo === 'compuesta' && e.data.id === vista.id) {
+      const m = document.getElementById('vistaMarco'); if (m) m.classList.remove('cargando');
+      if (e.data.error || !e.data.info) return;
+      vista.ancho = Math.ceil(e.data.ancho) || 794; vista.alto = Math.ceil(e.data.alto) || 1123;
+      ajustarVista();
+      const i = e.data.info;
+      const vi = document.getElementById('vistaInfo');
+      if (vi) vi.textContent = `A4 · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'} · ${i.platos} platos · ${NOMBRE_ESTILO[ed.estilo] || ed.estilo}`;
+    }
+  });
+  window.addEventListener('resize', ajustarVista);
+
+  // ── Descargar, frase y traducción ──
+  async function descargar() {
+    const b = document.getElementById('descargar');
+    b.disabled = true; const t = b.textContent; b.textContent = 'Preparando tu PDF…';
+    try {
+      if (ed.pendiente) await guardarYa();
+      const r = await fetch('/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+        body: JSON.stringify({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }) });
+      if (!r.ok) {
+        let d = {}; try { d = await r.json(); } catch (e) {}
+        if (r.status === 402) return Cuenta.planes({ motivo: d.error, vuelta: 'panel' });
+        throw new Error(d.error || 'No hemos podido generar el PDF.');
+      }
+      const blob = await r.blob();
+      const n = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = n ? n[1] : 'carta.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      Cuenta.aviso('PDF descargado.');
+    } catch (e) { Cuenta.aviso(e.message); }
+    finally { b.disabled = false; b.textContent = t; }
+  }
+
+  async function pedirAjuste(ajuste) {
+    const r = await Cuenta.api('/rehacer', { carta: ed.carta, ajuste });
+    if (!r.ok) throw new Error(r.error || 'No ha sido posible aplicar el cambio.');
+    return r.carta;
+  }
+  async function aplicarFrase() {
+    const t = document.getElementById('fFrase');
+    const ajuste = t.value.trim();
+    if (!ajuste) { t.focus(); return; }
+    const b = document.getElementById('aplicarFrase');
+    b.disabled = true; b.textContent = 'Aplicando…';
+    try {
+      const nueva = await pedirAjuste(ajuste);
+      ed.carta = { ...ed.carta, ...nueva, nombre_restaurante: nueva.nombre_restaurante || ed.carta.nombre_restaurante };
+      t.value = '';
+      cambio(); pintarEditor();
+      Cuenta.aviso('Cambio aplicado. Revisa la carta.');
+    } catch (e) { Cuenta.aviso(e.message); }
+    finally { const b2 = document.getElementById('aplicarFrase'); if (b2) { b2.disabled = false; b2.textContent = 'Aplicar'; } }
+  }
+  async function traducir() {
+    const cod = document.getElementById('fIdioma').value;
+    const b = document.getElementById('traducir');
+    b.disabled = true; b.textContent = 'Traduciendo…';
+    try {
+      const nueva = await pedirAjuste(`Traduce TODA la carta al ${IDIOMAS[cod]} (código ${cod}) con terminología profesional de hostelería: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "${cod}".`);
+      nueva.idioma = cod;
+      const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, logo: ed.logo, cabecera: ed.cabecera });
+      if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la copia.');
+      Cuenta.aviso('Copia traducida guardada.');
+      location.hash = 'carta=' + d.id;
+    } catch (e) { Cuenta.aviso(e.message); }
+    finally { const b2 = document.getElementById('traducir'); if (b2) { b2.disabled = false; b2.textContent = 'Traducir'; } }
+  }
+
+  // ── Cuenta ──
+  function cambiarClave() {
+    const velo = document.createElement('div');
+    velo.className = 'cu-velo';
+    velo.innerHTML = `<div class="cu-caja" role="dialog" aria-modal="true"><button class="cu-cerrar" type="button" aria-label="Cerrar">×</button>
+      <h2 class="cu-titulo">Cambiar contraseña</h2>
+      <form novalidate><label class="cu-campo"><span>Contraseña actual</span><input type="password" name="actual" autocomplete="current-password"></label>
+      <label class="cu-campo"><span>Nueva contraseña (mínimo 8)</span><input type="password" name="nueva" autocomplete="new-password"></label>
+      <button class="cu-btn" type="submit">Guardar</button><p class="cu-error"></p></form></div>`;
+    document.body.appendChild(velo);
+    const cerrarV = () => velo.remove();
+    velo.querySelector('.cu-cerrar').onclick = cerrarV;
+    velo.addEventListener('mousedown', e => { if (e.target === velo) cerrarV(); });
+    const f = velo.querySelector('form');
+    f.actual.focus();
+    f.onsubmit = async ev => {
+      ev.preventDefault();
+      const d = await Cuenta.api('/cuenta/clave', { actual: f.actual.value, nueva: f.nueva.value });
+      if (!d.ok) { velo.querySelector('.cu-error').textContent = d.error; return; }
+      cerrarV(); Cuenta.aviso('Contraseña cambiada.');
+    };
+  }
+  function borrarCuenta() {
+    const velo = document.createElement('div');
+    velo.className = 'cu-velo';
+    velo.innerHTML = `<div class="cu-caja" role="dialog" aria-modal="true"><button class="cu-cerrar" type="button" aria-label="Cerrar">×</button>
+      <h2 class="cu-titulo">Borrar mi cuenta</h2>
+      <p class="cu-sub">Se borran tu cuenta y todas tus cartas guardadas, y se cancela tu suscripción si la tienes. No se puede deshacer.</p>
+      <form novalidate><label class="cu-campo"><span>Escribe tu contraseña para confirmar</span><input type="password" name="clave" autocomplete="current-password"></label>
+      <button class="cu-btn" type="submit" style="background:#C62828">Borrar para siempre</button><p class="cu-error"></p></form></div>`;
+    document.body.appendChild(velo);
+    const cerrarV = () => velo.remove();
+    velo.querySelector('.cu-cerrar').onclick = cerrarV;
+    const f = velo.querySelector('form');
+    f.clave.focus();
+    f.onsubmit = async ev => {
+      ev.preventDefault();
+      const d = await Cuenta.api('/cuenta/borrar', { clave: f.clave.value });
+      if (!d.ok) { velo.querySelector('.cu-error').textContent = d.error; return; }
+      location.href = '/';
+    };
+  }
+
+  // ── Inicio ──
+  (async function () {
+    await Cuenta.cargar();
+    await Cuenta.vueltaDelPago();
+    const params = new URLSearchParams(location.search);
+    if (params.get('portal')) { history.replaceState(null, '', '/panel' + location.hash); await Cuenta.cargar(); }
+  })();
+</script>
+</body>
+</html>
