@@ -229,31 +229,7 @@ async function pedirCarta(messages) {
   return JSON.parse(m.content);
 }
 
-// Limpieza final: quita secciones vacías y espacios sobrantes
-function normalizarCarta(c) {
-  const t = s => (typeof s === 'string' ? s.trim() : '');
-  const out = {
-    nombre_restaurante: t(c.nombre_restaurante),
-    subtitulo: t(c.subtitulo),
-    idioma: t(c.idioma) || 'es',
-    nota_pie: t(c.nota_pie),
-    servicios: (c.servicios || []).map(s => ({ nombre: t(s.nombre), precio: t(s.precio) })).filter(s => s.nombre),
-    secciones: (c.secciones || []).map(s => ({
-      nombre: t(s.nombre),
-      platos: (s.platos || []).map(p => ({
-        nombre: t(p.nombre), racion: t(p.racion), descripcion: t(p.descripcion),
-        precio: t(p.precio).replace(/€/g, '').trim(), alergenos: t(p.alergenos), destacado: p.destacado === true
-      })).filter(p => p.nombre)
-    })).filter(s => s.platos.length)
-  };
-  // Criterio de diseño: destacar poco para que destaque. Máx. 1 por sección y 3 en total.
-  let quedan = 3;
-  out.secciones.forEach(s => {
-    let enSeccion = 0;
-    s.platos.forEach(p => { if (p.destacado) { if (enSeccion < 1 && quedan > 0) { enSeccion++; quedan--; } else p.destacado = false; } });
-  });
-  return out;
-}
+const { normalizarCarta } = require('./limpieza');
 
 function mensajeError(error) {
   const m = String(error && error.message || '');
