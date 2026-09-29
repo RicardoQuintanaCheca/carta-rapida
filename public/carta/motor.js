@@ -29,7 +29,11 @@
       if (Number.isInteger(n)) return String(n);
       return n.toFixed(2).replace('.', ',');
     }
-    return s.replace(/(\d)\.(\d)/g, '$1,$2');
+    // Formatos mixtos ("3.5 | 18", "17/pers", "65/kg"): cada número a la española
+    return s.replace(/\d+(?:[.,]\d+)?/g, n => {
+      const v = parseFloat(n.replace(',', '.'));
+      return Number.isInteger(v) ? String(v) : v.toFixed(2).replace('.', ',');
+    });
   }
 
   // Tipografía: evita que la última palabra quede sola en una línea
@@ -42,13 +46,13 @@
   /* ---------- Criterio editorial (por si la lectura no lo dejó limpio) ---------- */
   let IDIOMA = 'es';
   const TXT = {
-    es: { rec: 'Recomendado', carta: 'Carta' },
-    en: { rec: 'Recommended', carta: 'Menu' },
-    fr: { rec: 'Recommandé', carta: 'Carte' },
-    de: { rec: 'Empfehlung', carta: 'Speisekarte' },
-    it: { rec: 'Consigliato', carta: 'Menù' },
-    pt: { rec: 'Recomendado', carta: 'Ementa' },
-    zh: { rec: '推荐', carta: '菜单' }
+    es: { rec: 'Recomendado', carta: 'Carta', alergenos: 'Alérgenos' },
+    en: { rec: 'Recommended', carta: 'Menu', alergenos: 'Allergens' },
+    fr: { rec: 'Recommandé', carta: 'Carte', alergenos: 'Allergènes' },
+    de: { rec: 'Empfehlung', carta: 'Speisekarte', alergenos: 'Allergene' },
+    it: { rec: 'Consigliato', carta: 'Menù', alergenos: 'Allergeni' },
+    pt: { rec: 'Recomendado', carta: 'Ementa', alergenos: 'Alergénios' },
+    zh: { rec: '推荐', carta: '菜单', alergenos: '过敏原' }
   };
   const t = k => (TXT[IDIOMA] || TXT.es)[k];
 
@@ -80,9 +84,10 @@
     const pr = precio(p.precio);
     return `<div class="pl${p.destacado ? ' pl-dest' : ''}">`
       + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
-      + `<div class="pl-l"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
+      + `<div class="pl-l" style="--pw:${pr.length}"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
       + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}</div>` : '')
-      + (d.alergenos ? `<div class="pl-a">${esc(d.alergenos)}</div>` : '')
+      // Alérgenos en números (códigos de la carta): se rotulan para que se entiendan
+      + (d.alergenos ? `<div class="pl-a">${/^\d/.test(d.alergenos) ? esc(t('alergenos')) + ' ' : ''}${esc(d.alergenos)}</div>` : '')
       + `</div>`;
   }
 

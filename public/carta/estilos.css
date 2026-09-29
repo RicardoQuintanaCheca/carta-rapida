@@ -230,7 +230,7 @@
 .est-brasserie .sec-t { text-align: center; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: calc(19pt * var(--k)); line-height: 1.05; color: var(--acento); margin-bottom: calc(4pt * var(--k)); }
 .est-brasserie .sec-t::after { content: '• • •'; display: block; font-style: normal; font-size: .32em; letter-spacing: .6em; padding-left: .6em; color: var(--tinta); margin-top: calc(2pt * var(--k)); }
 .est-brasserie .pl { margin-top: calc(5.4pt * var(--k)); }
-.est-brasserie .pl-l { display: block; position: relative; padding-right: 3.4em; font-family: 'Libre Franklin', sans-serif; font-size: calc(8.4pt * var(--k)); line-height: 1.35; }
+.est-brasserie .pl-l { display: block; position: relative; padding-right: calc(var(--pw, 4) * .62em + 1em); font-family: 'Libre Franklin', sans-serif; font-size: calc(8.4pt * var(--k)); line-height: 1.35; }
 /* Puntos guía desde la última palabra hasta el precio (también si el nombre ocupa dos líneas) */
 .est-brasserie .pl-l::after { content: ''; position: absolute; left: 0; right: .2em; bottom: .36em; border-bottom: 1.1pt dotted var(--suave); opacity: .75; }
 .est-brasserie .pl-n { position: relative; z-index: 1; background: var(--papel); padding-right: .4em; font-weight: 600; font-size: 1em; letter-spacing: .05em; text-transform: uppercase; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
@@ -467,7 +467,7 @@
 .est-ticket .sec-t::before, .est-ticket .sec-t::after { content: ''; flex: 1; border-top: 1pt dashed var(--tinta); }
 .est-ticket .sec-t::before { flex: 0 0 4mm; }
 .est-ticket .pl { margin-top: calc(5.6pt * var(--k)); }
-.est-ticket .pl-l { display: block; position: relative; padding-right: 3.6em; font-size: calc(10pt * var(--k)); line-height: 1.3; }
+.est-ticket .pl-l { display: block; position: relative; padding-right: calc(var(--pw, 4) * .62em + 1em); font-size: calc(10pt * var(--k)); line-height: 1.3; }
 .est-ticket .pl-l::after { content: ''; position: absolute; left: 0; right: .2em; bottom: .34em; border-bottom: 1.2pt dotted var(--suave); }
 .est-ticket .pl-n { position: relative; z-index: 1; background: var(--papel); padding-right: .4em; font-weight: 700; font-size: 1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .est-ticket .pl-r { font-weight: 400; }
