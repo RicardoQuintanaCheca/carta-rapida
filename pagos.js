@@ -92,8 +92,8 @@ function crearRutas({ limite }) {
       if (conFactura) linea.tax_rates = [process.env.STRIPE_TAX_RATE];
       const sesion = await stripe.checkout.sessions.create({
         mode: 'payment',
-        // Solo tarjeta: Apple Pay y Google Pay aparecen solos dentro de la tarjeta; fuera Klarna, MB Way, etc.
-        payment_method_types: ['card'],
+        // Tarjeta (con Apple Pay y Google Pay) y PayPal; fuera Klarna, MB Way, etc.
+        payment_method_types: ['card', 'paypal'],
         line_items: [linea],
         locale: 'es',
         customer_email: emailValido(email) ? email : undefined,
