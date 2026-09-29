@@ -35,11 +35,16 @@ function limpiarPlato(p) {
   let descripcion = sinPuntoFinal(limpio(p.descripcion));
   // Una descripción no repite el nombre del plato: "Pulpo a feira con cachelos" → "Con cachelos"
   if (nombre && descripcion.toLowerCase().startsWith(nombre.toLowerCase() + ' ')) descripcion = descripcion.slice(nombre.length).trim();
+  // Una "descripción" que solo repite la ración ("100g", "8 uds", "Mín. 2 pers") no es descripción
+  const racion = limpio(p.racion).replace(/^\(|\)$/g, '');
+  const n = x => x.toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
+  if (descripcion && (racion && n(descripcion).length <= n(racion).length + 4 && (n(descripcion).includes(n(racion)) || n(racion).includes(n(descripcion)))
+      || /^(m[ií]n\.?\s*)?\d+\s*(g|gr|kg|ml|cl|l|uds?\.?|unidades|pers\.?|personas|pax|raciones)\b\.?$/i.test(descripcion))) descripcion = '';
   descripcion = mayusInicial(descripcion);
   let alergenos = limpio(p.alergenos).replace(/^al[eé]rgenos\s*:?\s*/i, '');
   alergenos = alergenos ? mayusInicial(alergenos.toLocaleLowerCase('es')) : '';
   return {
-    nombre, racion: limpio(p.racion).replace(/^\(|\)$/g, ''), descripcion: descripcion === nombre ? '' : descripcion,
+    nombre, racion, descripcion: descripcion === nombre ? '' : descripcion,
     precio, alergenos: sinPuntoFinal(alergenos), destacado: p.destacado === true
   };
 }
