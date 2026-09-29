@@ -156,8 +156,8 @@ const REGLAS_CAMPOS = `REGLAS DE CAMPOS:
   · Dos precios (copa/botella, media/entera, tapa/ración) → "3.5 | 18".
   · "S/M", "según mercado", "consultar" → "SPM". NUNCA dejes vacío un plato que en la carta tiene S/M.
   · Sin precio → "".
-- nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y respetando nombres propios ("LOMO BAJO DE VACA GALLEGA" → "Lomo bajo de vaca gallega"). Sin punto final.
-- racion: cantidades, unidades o condiciones que acompañan al nombre, SACADAS del nombre: "80 g", "6 uds.", "2 pax", "por encargo", "½ ración", "(V)", "(VG)". Ejemplo: "Jamón ibérico (80g)" → nombre "Jamón ibérico", racion "80 g". Si no hay → "".
+- nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y con mayúscula en nombres propios y denominaciones: lugares (Padrón, Huelva, Jabugo, Rioja, Ribera del Duero), variedades (tomate Raf, Idiazábal) y marcas. Ejemplo: "PIMIENTOS DE PADRÓN" → "Pimientos de Padrón". Sin punto final.
+- racion: SOLO cantidades o condiciones de servicio (peso, unidades, personas, "por encargo", "½ ración"), SACADAS del nombre. Nunca descripciones ("madurado 45 días" es descripción, no ración): "80 g", "6 uds.", "2 pax", "por encargo", "½ ración", "(V)", "(VG)". Ejemplo: "Jamón ibérico (80g)" → nombre "Jamón ibérico", racion "80 g". Si no hay → "".
 - destacado: true solo si la carta original marca el plato como especialidad, recomendación o plato de la casa (estrella, "de la casa", "recomendado", recuadro…). Si no → false.
 - nombre (sección): igual que en el original, también en minúsculas con mayúscula inicial si venía todo en mayúsculas.
 - alergenos: sin la palabra "Alérgenos:". Formato "Gluten, lácteos, huevo". Si no hay → "".
@@ -176,14 +176,15 @@ const REGLAS_ORDEN_VALOR = `ORDEN DENTRO DE CADA SECCIÓN (orden estratégico):
 
 const REGLAS_ORDEN_ORIGINAL = `ORDEN DENTRO DE CADA SECCIÓN: respeta EXACTAMENTE el orden original. NO reordenes platos.`;
 
-const INSTRUCCION_DESCRIPCIONES = `DESCRIPCIONES DE PLATOS — OBLIGATORIO:
-Cada plato de comida DEBE llevar una descripción breve. Si el original trae descripción, respétala (puedes pulirla). Si no la trae, escríbela tú.
-- Entre 5 y 11 palabras, todas de longitud parecida: una carta profesional tiene un ritmo uniforme. Sin punto final. Tono de carta seria de restaurante, no publicitario.
-- Menciona ingrediente principal, técnica o procedencia.
-- PROHIBIDO: "delicioso", "exquisito", "sabroso", "magnífico", "espectacular", "irresistible", "una explosión de sabor".
-- Si no hay información, usa la descripción estándar del tipo de plato. NUNCA inventes ingredientes concretos que el restaurante podría no tener.
-- Bebidas, pan, extras y suplementos: descripción "".
-BUENAS: "Jamón ibérico de bellota con tostas y tomate" · "Merluza de pincho a la romana con patatas" · "Tarta de queso al horno con frutos rojos".`;
+const INSTRUCCION_DESCRIPCIONES = `DESCRIPCIONES DE PLATOS — OBLIGATORIO. Escribe como el redactor de la carta de un buen restaurante:
+- Si el original trae descripción, CONSÉRVALA tal cual (solo corrige erratas). No la reescribas.
+- Si no la trae, escríbela tú: entre 4 y 9 palabras, todas de longitud parecida. Sin punto final.
+- NUNCA repitas el nombre del plato en la descripción. La descripción COMPLETA al nombre: guarnición, técnica, origen o punto.
+  MAL: "Pulpo a feira" → "Pulpo a feira con cachelos". BIEN: "Pulpo a feira" → "Cachelos, pimentón de la Vera y aceite de oliva".
+  MAL: "Patatas bravas" → "Patatas con salsa brava". BIEN: "Patatas bravas" → "Salsa brava de la casa y alioli".
+- Sin adjetivos de relleno: PROHIBIDO "delicioso", "exquisito", "sabroso", "cremoso", "crujiente", "jugoso", "tierno", "dorado", "casero", "tradicional", "irresistible", "espectacular".
+- No inventes ingredientes concretos arriesgados; si no sabes, describe la elaboración clásica del plato.
+- Bebidas, vinos, pan, extras y suplementos: descripción "".`;
 
 const INSTRUCCION_SIN_DESCRIPCIONES = `DESCRIPCIONES: copia literalmente el texto descriptivo que aparezca bajo cada plato en el original. Si no hay, deja "". No escribas descripciones nuevas.`;
 
