@@ -160,7 +160,7 @@ const REGLAS_CAMPOS = `REGLAS DE CAMPOS:
 - racion: SOLO cantidades o condiciones de servicio (peso, unidades, personas, "por encargo", "½ ración"), SACADAS del nombre. Nunca descripciones ("madurado 45 días" es descripción, no ración): "80 g", "6 uds.", "2 pax", "por encargo", "½ ración", "(V)", "(VG)". Ejemplo: "Jamón ibérico (80g)" → nombre "Jamón ibérico", racion "80 g". Si no hay → "".
 - destacado: true solo si la carta original marca el plato como especialidad, recomendación o plato de la casa (estrella, "de la casa", "recomendado", recuadro…). Si no → false.
 - nombre (sección): igual que en el original, también en minúsculas con mayúscula inicial si venía todo en mayúsculas.
-- alergenos: sin la palabra "Alérgenos:". Formato "Gluten, lácteos, huevo". Si no hay → "".
+- alergenos: cópialos tal cual aparecen en la carta, sin la palabra "Alérgenos:". Si son números o códigos, deja los números ("1, 7"): NUNCA los conviertas en nombres. Si son palabras: "Gluten, lácteos, huevo". Si no hay → "".
 - nombre_restaurante: solo si aparece claramente en la carta; si no → "".
 - subtitulo: frase corta que acompañe al nombre si aparece en la carta (tipo de cocina, lema, ciudad: "Cocina de mercado · Valencia"). Si no aparece → "". No lo inventes.
 - servicios: conceptos que se cobran aparte y no son platos: pan, servicio de mesa, cubierto, suplemento de terraza. Cada uno con su nombre y precio. Si un "Pan" aparece como línea suelta con precio, va aquí y NO como plato. Si no hay → [].
@@ -175,16 +175,6 @@ const REGLAS_ORDEN_VALOR = `ORDEN DENTRO DE CADA SECCIÓN (orden estratégico):
 - destacado: además de lo que marque el original, puedes marcar como destacado COMO MÁXIMO 1 plato por sección y 3 en toda la carta: el más representativo de la casa y de precio medio-alto. Menos es más: si la carta es corta, 1 o ninguno.`;
 
 const REGLAS_ORDEN_ORIGINAL = `ORDEN DENTRO DE CADA SECCIÓN: respeta EXACTAMENTE el orden original. NO reordenes platos.`;
-
-const INSTRUCCION_DESCRIPCIONES = `DESCRIPCIONES DE PLATOS — OBLIGATORIO. Escribe como el redactor de la carta de un buen restaurante:
-- Si el original trae descripción, CONSÉRVALA tal cual (solo corrige erratas). No la reescribas.
-- Si no la trae, escríbela tú: entre 4 y 9 palabras, todas de longitud parecida. Sin punto final.
-- NUNCA repitas el nombre del plato en la descripción. La descripción COMPLETA al nombre: guarnición, técnica, origen o punto.
-  MAL: "Pulpo a feira" → "Pulpo a feira con cachelos". BIEN: "Pulpo a feira" → "Cachelos, pimentón de la Vera y aceite de oliva".
-  MAL: "Patatas bravas" → "Patatas con salsa brava". BIEN: "Patatas bravas" → "Salsa brava de la casa y alioli".
-- Sin adjetivos de relleno: PROHIBIDO "delicioso", "exquisito", "sabroso", "cremoso", "crujiente", "jugoso", "tierno", "dorado", "casero", "tradicional", "irresistible", "espectacular".
-- No inventes ingredientes concretos arriesgados; si no sabes, describe la elaboración clásica del plato.
-- Bebidas, vinos, pan, extras y suplementos: descripción "".`;
 
 const INSTRUCCION_SIN_DESCRIPCIONES = `DESCRIPCIONES: copia literalmente el texto descriptivo que aparezca bajo cada plato en el original. Si no hay, deja "". No escribas descripciones nuevas.`;
 
@@ -215,7 +205,8 @@ function construirPrompt({ conDescripciones, conOrden, estilo, idioma }) {
     ORDEN_SECCIONES,
     conOrden ? REGLAS_ORDEN_VALOR : REGLAS_ORDEN_ORIGINAL,
     REGLAS_CAMPOS,
-    conDescripciones ? INSTRUCCION_DESCRIPCIONES : INSTRUCCION_SIN_DESCRIPCIONES,
+    // Las descripciones nuevas se escriben en una segunda pasada: aquí solo se copian las que ya existen
+    INSTRUCCION_SIN_DESCRIPCIONES,
     instruccionEstilo(estilo),
     idioma !== 'es' ? instruccionTraduccion(idioma) : ''
   ].filter(Boolean).join('\n\n');
@@ -234,7 +225,52 @@ async function pedirCarta(messages) {
   return JSON.parse(m.content);
 }
 
-const { normalizarCarta } = require('./limpieza');
+const { normalizarCarta, limpio } = require('./limpieza');
+
+// Adjetivos de relleno que un redactor profesional no usa
+const RELLENO = /\b(deliciosa?s?|exquisita?s?|sabrosa?s?|cremosa?s?|crujientes?|jugosa?s?|tiernas?|tiernos?|doradas?|dorados?|caseras?|caseros?|tradicional(es)?|irresistibles?|espectacular(es)?|selecta?s?|seleccionad[oa]s?|de (alta|gran|primera) calidad|calidad superior|artesan[oa]s?)\b/gi;
+
+// Segunda pasada: un "redactor" escribe SOLO las descripciones que faltan.
+// Las descripciones originales no se tocan nunca (se protegen en el código, no en el prompt).
+async function redactarDescripciones(carta, { estilo, idioma }) {
+  const pendientes = [];
+  carta.secciones.forEach((s, si) => s.platos.forEach((p, pi) => {
+    if (!p.descripcion) pendientes.push({ id: `${si}.${pi}`, seccion: s.nombre, plato: p.nombre, racion: p.racion });
+  }));
+  if (!pendientes.length) return carta;
+  const nombreIdioma = IDIOMAS[idioma] || 'español';
+  const r = await openai.chat.completions.create({
+    model: MODELO,
+    max_completion_tokens: 6000,
+    messages: [
+      { role: 'system', content: `Eres el redactor de cartas de un restaurante con criterio. Escribe la descripción de cada plato de la lista, en ${nombreIdioma}.
+REGLAS:
+- De 3 a 8 palabras. Todas con un ritmo parecido. Sin punto final. Primera letra en mayúscula.
+- Describe lo que acompaña o cómo se elabora: guarnición, salsa, técnica, origen. Ejemplos del tono: "Con alioli de ajo asado", "Guisado lento al vino tinto", "Brasa de encina y sal en escamas".
+- NO repitas el nombre del plato ni palabras de su nombre. NO repitas la ración ni el número de unidades o personas.
+- PROHIBIDO usar adjetivos de relleno: delicioso, exquisito, sabroso, cremoso, crujiente, jugoso, tierno, dorado, casero, tradicional, selecto, de calidad, artesano.
+- No inventes productos caros ni denominaciones de origen que la carta no nombra. Si dudas, describe la elaboración clásica.
+- Bebidas, vinos, cafés, pan, extras y suplementos: texto "".
+${instruccionEstilo(estilo)}` },
+      { role: 'user', content: JSON.stringify(pendientes) }
+    ],
+    response_format: { type: 'json_schema', json_schema: { name: 'descripciones', strict: true, schema: {
+      type: 'object', additionalProperties: false, required: ['descripciones'],
+      properties: { descripciones: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['id', 'texto'],
+        properties: { id: { type: 'string' }, texto: { type: 'string' } } } } }
+    } } }
+  });
+  const salida = JSON.parse(r.choices[0].message.content || '{}').descripciones || [];
+  salida.forEach(({ id, texto }) => {
+    const [si, pi] = String(id).split('.').map(Number);
+    const p = carta.secciones[si] && carta.secciones[si].platos[pi];
+    if (!p || p.descripcion) return;
+    let t = limpio(String(texto || '').replace(RELLENO, '')).replace(/\s+(y|con|de)\s*$/i, '').replace(/\s+,/g, ',').replace(/[.]+$/, '').trim();
+    if (t.split(/\s+/).length < 2) return;
+    p.descripcion = t.charAt(0).toLocaleUpperCase('es') + t.slice(1);
+  });
+  return carta;
+}
 
 function mensajeError(error) {
   const m = String(error && error.message || '');
@@ -285,7 +321,11 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
       return res.json({ ok: false, error: 'No se recibió imagen ni texto.' });
     }
 
-    const carta = normalizarCarta(await pedirCarta(messages));
+    let carta = normalizarCarta(await pedirCarta(messages));
+    if (conDescripciones) {
+      try { carta = normalizarCarta(await redactarDescripciones(carta, { estilo, idioma })); }
+      catch (e) { console.error('[DESCRIPCIONES] error:', e.message); } // si falla, la carta sale igual, sin descripciones nuevas
+    }
     const platos = carta.secciones.reduce((n, s) => n + s.platos.length, 0);
     console.log(`[PROCESAR] ok · ${carta.secciones.length} secciones · ${platos} platos · "${carta.nombre_restaurante}"`);
     if (!platos) return res.json({ ok: false, error: 'No hemos encontrado platos en la imagen. Prueba con una foto más nítida y de frente.' });
