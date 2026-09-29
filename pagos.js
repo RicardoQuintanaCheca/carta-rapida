@@ -65,13 +65,7 @@ function codigoDescuento(sesion) {
 const emailValido = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 const origenDe = req => (process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
 
-function avisarLead(lead) {
-  console.log(`LEAD: ${JSON.stringify(lead)}`);
-  if (process.env.LEADS_WEBHOOK_URL) {
-    fetch(process.env.LEADS_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
-      .catch(err => console.error('[LEAD] webhook falló:', err.message));
-  }
-}
+const { enviarLead: avisarLead } = require('./leads');
 const ahoraMadrid = () => new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
 
 function crearRutas({ limite }) {

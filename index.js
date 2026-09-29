@@ -4,6 +4,7 @@ const multer = require('multer');
 const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
 const { crearRutas: rutasPago, licenciaDe, MODO_DEMO } = require('./pagos');
+const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 
 const app = express();
 app.set('trust proxy', true);
@@ -422,18 +423,18 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
     restaurante: String(b.restaurante || '').slice(0, 120),
     estilo: ESTILOS.includes(b.estilo) ? b.estilo : '',
     platos: Number.isFinite(+b.platos) ? +b.platos : 0,
+    novedades: b.novedades === true,
     fecha: new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })
   };
-  console.log(`LEAD: ${JSON.stringify(lead)}`);
-  // Opcional: reenviar el lead a otra herramienta (Listmonk, Make, Google Sheets…)
-  if (process.env.LEADS_WEBHOOK_URL) {
-    fetch(process.env.LEADS_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
-      .catch(err => console.error('[LEAD] webhook falló:', err.message));
-  }
+  enviarLead(lead);
   res.json({ ok: true });
 });
 
-app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : 'stripe' }));
+app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : 'stripe', listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));
+
+// Configuración pública para la web (analítica solo si está configurada; se carga tras el consentimiento)
+const GA4 = /^G-[A-Z0-9]{4,20}$/.test(process.env.GA4_ID || '') ? process.env.GA4_ID : '';
+app.get('/config', (req, res) => res.set('Cache-Control', 'public, max-age=300').json({ ga4: GA4 }));
 
 // Errores de subida (archivo demasiado grande, etc.)
 app.use((err, req, res, next) => {
