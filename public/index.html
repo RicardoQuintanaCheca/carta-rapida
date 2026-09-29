@@ -1337,6 +1337,49 @@
     .estudios-section { padding: 60px 16px; }
     .estudios-section .cta-row .btn-primary { font-size: 17px; }
   }
+
+  /* ── Subida: arrastrar y miniaturas ── */
+  .solo-raton { display: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .solo-raton { display: inline; }
+    .solo-tactil { display: none; }
+    #addCamaraBtn { display: none !important; }
+    .t2-cta-big { border: 3px dashed rgba(255,255,255,.55); }
+  }
+  .drop-velo { position: fixed; inset: 0; z-index: 2000; background: rgba(20,18,15,.55); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; pointer-events: none; padding: 24px; }
+  body.arrastrando .drop-velo { display: flex; }
+  .drop-caja { width: min(560px, 100%); padding: 48px 32px; border: 4px dashed #fff; border-radius: 28px; background: rgba(226,86,26,.92); color: #fff; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.35); animation: dropLatido 1.2s ease-in-out infinite; }
+  .drop-caja b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; letter-spacing: -.02em; }
+  .drop-caja span { font-size: 14px; opacity: .92; }
+  @keyframes dropLatido { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+  .fotos-preview { display: none; flex-direction: column; gap: 14px; padding: 18px; margin: 0 0 16px; border: 2px solid #0E0E0E; border-radius: 20px; background: #FFFBF7; box-shadow: 0 6px 0 #0E0E0E; }
+  .fotos-preview.on { display: flex; }
+  .fotos-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .fotos-tit { display: inline-flex; align-items: center; gap: 8px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 17px; color: #0E0E0E; }
+  .fotos-ok { width: 24px; height: 24px; border-radius: 50%; background: #2E7D32; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .fotos-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6E6E6E; letter-spacing: .06em; }
+  .fotos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+  .foto-item { position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; background: #fff; border: 1.5px solid #E8E1D6; box-shadow: 0 4px 12px -6px rgba(0,0,0,.25); animation: fotoEntra .25s ease-out; }
+  @keyframes fotoEntra { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+  .foto-item .foto-thumb { width: 100%; height: 100%; object-fit: cover; display: block; border: none; border-radius: 0; }
+  .foto-num { position: absolute; left: 6px; bottom: 6px; padding: 3px 8px; border-radius: 999px; background: rgba(14,14,14,.78); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .04em; }
+  .foto-item .foto-remove { position: absolute; top: 6px; right: 6px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; background: #0E0E0E; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; box-shadow: 0 2px 8px rgba(0,0,0,.3); transition: background .15s, transform .15s; font-size: 0; }
+  .foto-item .foto-remove:hover, .foto-item .foto-remove:focus-visible { background: #C62828; transform: scale(1.08); }
+  .foto-item.cargando { display: flex; align-items: center; justify-content: center; background: #F4EFE8; }
+  .foto-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid #E0D6CC; border-top-color: var(--cta); animation: fotoGira .8s linear infinite; }
+  @keyframes fotoGira { to { transform: rotate(360deg); } }
+  .fotos-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fotos-add-btn, .fotos-preview .add-camara-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 1.5px solid #0E0E0E; background: #fff; color: #0E0E0E; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; margin: 0; }
+  .fotos-add-btn:hover, .fotos-preview .add-camara-btn:hover { background: #0E0E0E; color: #fff; }
+  .fotos-add-btn input, .fotos-preview .add-camara-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .fotos-add-btn.lleno { display: none; }
+  .fotos-pista { margin: 0; font-size: 12.5px; color: #6E6E6E; }
+  body.arrastrando .fotos-preview.on { outline: 3px dashed var(--cta); outline-offset: 4px; }
+  @media (max-width: 640px) {
+    .fotos-preview { padding: 14px; }
+    .fotos-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  }
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -1571,8 +1614,8 @@
           <div class="t2-cam-ring">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
-          <div class="t2-cta-title">Hacer foto ahora</div>
-          <div class="t2-cta-sub">Fotografía tu carta · o sube desde galería</div>
+          <div class="t2-cta-title"><span class="solo-tactil">Hacer foto ahora</span><span class="solo-raton">Arrastra aquí tu carta</span></div>
+          <div class="t2-cta-sub"><span class="solo-tactil">Fotografía tu carta · o sube desde galería</span><span class="solo-raton">o haz clic para elegir las fotos · JPG, PNG o WEBP</span></div>
         </div>
         <div class="t2-alt-row">
           <div class="t2-alt">
@@ -1588,14 +1631,24 @@
       </div>
 
       <div class="fotos-preview" id="fotosPreview">
-        <div id="fotosContainer" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-        <div class="add-camara-btn" id="addCamaraBtn">
-          <input type="file" accept="image/*" capture="environment" aria-label="Añadir otra página con la cámara" onchange="addMoreFiles(this)">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-          Otra página con cámara
+        <div class="fotos-cab">
+          <span class="fotos-tit"><span class="fotos-ok">✓</span><span id="fotosTit">Carta subida</span></span>
+          <span class="fotos-count" id="fotosCount"></span>
         </div>
-        <div class="fotos-add"><input type="file" accept="image/*" multiple aria-label="Añadir más páginas" onchange="addMoreFiles(this)">+</div>
-        <span class="fotos-count" id="fotosCount"></span>
+        <div class="fotos-grid" id="fotosContainer"></div>
+        <div class="fotos-acciones">
+          <label class="fotos-add-btn" id="fotosAddBtn">
+            <input type="file" accept="image/*" multiple aria-label="Añadir más páginas" onchange="addMoreFiles(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Añadir otra página
+          </label>
+          <label class="add-camara-btn" id="addCamaraBtn">
+            <input type="file" accept="image/*" capture="environment" aria-label="Añadir otra página con la cámara" onchange="addMoreFiles(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            Con la cámara
+          </label>
+        </div>
+        <p class="fotos-pista"><span class="solo-raton">También puedes arrastrar más fotos aquí. </span>Hasta 5 páginas por carta.</p>
       </div>
       <div id="uploadError"></div>
 
@@ -2175,7 +2228,7 @@
   const ESTILOS_VALIDOS = ['riviera', 'azulejo', 'serigrafia', 'cartel', 'ticket', 'gaceta', 'trattoria', 'editorial', 'sobremesa', 'sumi', 'brasserie', 'deco', 'mantel', 'barra', 'autor'];
 
   const MAX_FOTOS = 5;
-  const MAX_MB = 5;
+  const MAX_MB = 25;
   const TIPOS_VALIDOS = ['image/jpeg', 'image/png', 'image/webp'];
   const MAX_DIM = 1600;
   const CALIDAD_FOTO = 0.85;
@@ -2198,6 +2251,7 @@
 
   function mostrarErrorUpload(msg) {
     const el = document.getElementById('uploadError');
+    if (!msg) { el.style.display = 'none'; return; }
     el.textContent = msg;
     el.style.display = 'block';
     clearTimeout(el._timer);
@@ -2418,8 +2472,8 @@
   });
   window.addEventListener('resize', ajustarVista);
 
-  function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
-  function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); }
+  function handleFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); input.value = ''; }
+  function addMoreFiles(input) { if (input.files.length) addFiles(Array.from(input.files)); input.value = ''; }
 
   function addFiles(newFiles) {
     const invalidos = newFiles.filter(f => !TIPOS_VALIDOS.includes(f.type));
@@ -2437,37 +2491,57 @@
       return;
     }
 
+    mostrarErrorUpload('');
     document.getElementById('uploadGrid').style.display = 'none';
     document.getElementById('fotosPreview').classList.add('on');
     document.getElementById('addCamaraBtn').classList.add('on');
 
     let pendientes = newFiles.length;
+    fotosCargando += newFiles.length;
+    renderThumbs();
     newFiles.forEach(file => {
       comprimirImagen(file).then(({ file: comprimido, dataUrl }) => {
         filesList.push({ file: comprimido, dataUrl });
+      }).catch(() => {
+        mostrarErrorUpload('No hemos podido leer una de las fotos. Prueba con otra.');
+      }).finally(() => {
+        fotosCargando--; pendientes--;
         renderThumbs();
-        pendientes--;
-        if (pendientes === 0) checkReady();
+        if (pendientes === 0) {
+          if (!filesList.length) volverASubida();
+          checkReady();
+          medir('fotos_subidas', { fotos: filesList.length });
+        }
       });
     });
+  }
+  let fotosCargando = 0;
+  function volverASubida() {
+    document.getElementById('uploadGrid').style.display = '';
+    document.getElementById('fotosPreview').classList.remove('on');
   }
 
   function removePhoto(index) {
     filesList.splice(index, 1);
-    if (filesList.length === 0) {
-      document.getElementById('uploadGrid').style.display = 'grid';
-      document.getElementById('fotosPreview').classList.remove('on');
-    }
+    if (filesList.length === 0 && !fotosCargando) volverASubida();
     renderThumbs(); checkReady();
   }
 
   function renderThumbs() {
+    const n = filesList.length;
     document.getElementById('fotosContainer').innerHTML = filesList.map((f, i) => `
-      <div class="foto-thumb-wrap">
-        <img class="foto-thumb" src="${f.dataUrl}" alt="">
-        <button class="foto-remove" onclick="removePhoto(${i})">×</button>
-      </div>`).join('');
-    document.getElementById('fotosCount').textContent = filesList.length > 1 ? `${filesList.length} fotos` : '';
+      <div class="foto-item">
+        <img class="foto-thumb" src="${f.dataUrl}" alt="Página ${i + 1} de tu carta">
+        <span class="foto-num">Pág. ${i + 1}</span>
+        <button type="button" class="foto-remove" onclick="removePhoto(${i})" aria-label="Quitar la página ${i + 1}" title="Quitar esta página">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>`).join('') + Array.from({ length: fotosCargando }, () => `
+      <div class="foto-item cargando"><span class="foto-spin"></span><span class="foto-num">Subiendo…</span></div>`).join('');
+    document.getElementById('fotosTit').textContent = fotosCargando ? 'Subiendo tu carta…' : (n === 1 ? 'Carta subida' : `Carta subida · ${n} páginas`);
+    document.querySelector('#fotosPreview .fotos-ok').style.visibility = fotosCargando ? 'hidden' : 'visible';
+    document.getElementById('fotosCount').textContent = `${n}/${MAX_FOTOS}`;
+    document.getElementById('fotosAddBtn').classList.toggle('lleno', n + fotosCargando >= MAX_FOTOS);
   }
 
   function toggleLogo() {
@@ -2773,6 +2847,7 @@
   async function run() {
     const textoManual = document.getElementById('txt').value.trim();
     if (filesList.length === 0 && !textoManual) return;
+    if (fotosCargando) { mostrarErrorUpload('Espera un segundo, aún se está subiendo una página.'); return; }
     isProcessing = true;
     document.getElementById('inputWrap').style.opacity = '0.4';
     document.getElementById('inputWrap').style.pointerEvents = 'none';
@@ -2910,7 +2985,8 @@
     setEstado('inicial');
 
     // Reset fotos
-    document.getElementById('uploadGrid').style.display = 'grid';
+    fotosCargando = 0;
+    document.getElementById('uploadGrid').style.display = '';
     document.getElementById('fotosPreview').classList.remove('on');
     document.getElementById('fotosContainer').innerHTML = '';
     document.getElementById('addCamaraBtn').classList.remove('on');
@@ -3045,6 +3121,38 @@
     adTocado = true;
     medir('hero_estilo', { estilo: estilo });
   }
+
+  /* ── Arrastrar y soltar fotos (ordenador) ── */
+  (function () {
+    const velo = document.createElement('div');
+    velo.className = 'drop-velo';
+    velo.innerHTML = '<div class="drop-caja"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg><b>Suelta aquí tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span></div>';
+    document.body.appendChild(velo);
+    let capas = 0;
+    const conArchivos = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+    const herramientaAbierta = () => document.getElementById('inputWrap').style.display !== 'none' && !isProcessing;
+    const cerrar = () => { capas = 0; document.body.classList.remove('arrastrando'); };
+    window.addEventListener('dragenter', e => {
+      if (!conArchivos(e)) return;
+      capas++;
+      const logo = e.target.closest && e.target.closest('#logoDrop');
+      document.body.classList.toggle('arrastrando', herramientaAbierta() && !logo);
+    });
+    window.addEventListener('dragleave', e => { if (conArchivos(e) && --capas <= 0) cerrar(); });
+    window.addEventListener('dragover', e => { if (conArchivos(e)) { e.preventDefault(); e.dataTransfer.dropEffect = herramientaAbierta() ? 'copy' : 'none'; } });
+    window.addEventListener('drop', e => {
+      if (!conArchivos(e)) return;
+      e.preventDefault(); cerrar();
+      const archivos = Array.from(e.dataTransfer.files || []);
+      if (!archivos.length) return;
+      if (e.target.closest && e.target.closest('#logoDrop')) { handleLogo({ files: archivos }); return; }
+      if (!herramientaAbierta()) return;
+      addFiles(archivos);
+      medir('fotos_arrastradas', { fotos: archivos.length });
+      const destino = document.getElementById('fotosPreview');
+      setTimeout(() => destino.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
+    });
+  })();
 
   /* ── Ir a la herramienta ── */
   function irHerramienta(e) {
