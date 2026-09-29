@@ -323,6 +323,11 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
     }
 
     let carta = normalizarCarta(await pedirCarta(messages));
+    // El nombre y la frase que escribe el cliente mandan sobre lo que leamos de la carta
+    const nombreManual = String(req.body.nombre || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    const subtituloManual = String(req.body.subtitulo || '').replace(/\s+/g, ' ').trim().slice(0, 90);
+    if (nombreManual) carta.nombre_restaurante = nombreManual;
+    if (subtituloManual) carta.subtitulo = subtituloManual;
     if (conDescripciones) {
       try { carta = normalizarCarta(await redactarDescripciones(carta, { estilo, idioma })); }
       catch (e) { console.error('[DESCRIPCIONES] error:', e.message); } // si falla, la carta sale igual, sin descripciones nuevas

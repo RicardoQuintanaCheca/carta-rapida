@@ -967,6 +967,22 @@
     .t2-scard-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
+  /* ── Nombre del restaurante (gratis) ── */
+  .t2-nombre { padding: 14px 0 16px; border-top: 1px solid #F0EDE8; }
+  .t2-nombre-tit { font-size: 13.5px; font-weight: 600; color: #0E0E0E; }
+  .t2-nombre-tit small { font-weight: 400; color: #888; font-size: 11px; margin-left: 6px; }
+  .campo-txt { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 11px 13px; border-radius: 10px; border: 1.5px solid #E0D6CC; background: #fff; font-family: 'Inter', sans-serif; font-size: 14px; color: #0E0E0E; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .campo-txt:focus { border-color: #FF6B35; box-shadow: 0 0 0 3px rgba(255,107,53,.12); }
+  .campo-txt.nombre { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; }
+  .campo-txt.vacio { border-color: #FF6B35; background: #FFF6F0; }
+  .cabecera-caja { margin-top: 18px; padding: 16px; border: 1.5px solid #E8E6E0; border-radius: 16px; background: #fff; }
+  .cabecera-caja .t2-eyebrow { margin-bottom: 2px; }
+  .cabecera-aviso { font-size: 12px; color: #6E6E6E; margin-top: 8px; line-height: 1.45; }
+  .cabecera-modo { display: none; margin-top: 12px; background: #F1EFE8; border-radius: 999px; padding: 3px; gap: 2px; }
+  .cabecera-modo.on { display: flex; }
+  .cabecera-modo button { flex: 1; padding: 8px 10px; border: none; border-radius: 999px; background: transparent; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600; color: #6E6E6E; cursor: pointer; }
+  .cabecera-modo button.on { background: #fff; color: #0E0E0E; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
   /* ── Carta Pro ── */
   .pro-pill { display: inline-block; vertical-align: 2px; margin-left: 6px; padding: 2px 7px; border-radius: 999px; background: #0E0E0E; color: #FFD9C4; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
   .plan-estado { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #EEF5E8; border: 1px solid #C9DDB8; color: #2F4A1E; font-size: 13px; line-height: 1.55; }
@@ -1158,6 +1174,16 @@
             <div class="t2-eyebrow">Estilo de tu carta</div>
             <div class="res-galeria" id="resGaleria" role="tablist" aria-label="Estilo de carta"></div>
           </div>
+          <div class="cabecera-caja" id="cabeceraCaja">
+            <div class="t2-eyebrow">Cabecera de tu carta</div>
+            <div class="cabecera-modo" id="cabeceraModo" role="tablist" aria-label="Qué aparece arriba">
+              <button type="button" data-modo="nombre" onclick="cambiarCabecera('nombre')">Nombre</button>
+              <button type="button" data-modo="logo" onclick="cambiarCabecera('logo')">Logotipo · Pro</button>
+            </div>
+            <input class="campo-txt nombre" id="resNombre" type="text" maxlength="60" placeholder="Escribe el nombre de tu restaurante" oninput="editarCabecera()" aria-label="Nombre del restaurante">
+            <input class="campo-txt" id="resSubtitulo" type="text" maxlength="90" placeholder="Frase bajo el nombre (opcional)" oninput="editarCabecera()" aria-label="Frase bajo el nombre">
+            <div class="cabecera-aviso" id="cabeceraAviso">Cambia el nombre cuando quieras: gratis y al momento.</div>
+          </div>
           <div class="actions" id="actions">
             <div class="plan-estado" id="planEstado" role="status"></div>
             <button class="dl-principal" id="dlBtn" onclick="descargar()" type="button">
@@ -1347,6 +1373,12 @@
 
       <div class="t2-card t2-toggles-card">
         <div class="t2-eyebrow">03 · OPCIONES</div>
+        <!-- Nombre del restaurante -->
+        <div class="t2-nombre">
+          <label class="t2-nombre-tit" for="nombreRest">Nombre del restaurante<small>si lo dejas vacío, lo leemos de tu carta</small></label>
+          <input class="campo-txt nombre" id="nombreRest" type="text" maxlength="60" placeholder="Ej: Casa Marín" autocomplete="organization">
+          <input class="campo-txt" id="subtituloRest" type="text" maxlength="90" placeholder="Frase bajo el nombre (opcional) · Ej: Cocina de mercado desde 1962">
+        </div>
         <!-- Logo -->
         <div class="t2-feat-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
@@ -1575,6 +1607,7 @@
         <div class="precio-cond">Sin registro, sin límite de cartas</div>
         <ul>
           <li>Los 15 estilos, listos para imprimir en A4</li>
+          <li>Con el nombre de tu restaurante en la cabecera</li>
           <li>Lectura de tu carta desde una foto o texto</li>
           <li>Orden para vender más y descripciones</li>
           <li>3 ajustes por carta</li>
@@ -1758,7 +1791,7 @@
   let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
   let estiloActual = 'riviera';
-  let licencia = null, ajustesUsados = 0;
+  let licencia = null, ajustesUsados = 0, cabeceraModo = 'logo';
   const AJUSTES_GRATIS = 3;
   const ESTILOS_VALIDOS = ['riviera', 'azulejo', 'serigrafia', 'cartel', 'ticket', 'gaceta', 'trattoria', 'editorial', 'sobremesa', 'sumi', 'brasserie', 'deco', 'mantel', 'barra', 'autor'];
 
@@ -1961,7 +1994,7 @@
   function enviarVista() {
     vista.pendiente = false;
     vista.id++;
-    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, credito: !esPro() }, location.origin);
+    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera(), credito: !esPro() }, location.origin);
   }
 
   function ajustarVista() {
@@ -2195,7 +2228,7 @@
           const red = Math.min(1, 1200 / Math.max(canvas.width, canvas.height));
           const out = document.createElement('canvas'); out.width = Math.round(canvas.width * red); out.height = Math.round(canvas.height * red);
           out.getContext('2d').drawImage(canvas, 0, 0, out.width, out.height);
-          logoDataUrl = out.toDataURL('image/png');
+          logoDataUrl = out.toDataURL('image/png'); cabeceraModo = 'logo';
         }
         else {
           const pad = 4, cx = Math.max(0,left-pad), cy = Math.max(0,top-pad);
@@ -2204,7 +2237,7 @@
           const out = document.createElement('canvas'); out.width = Math.round(cw * red); out.height = Math.round(ch * red);
           const octx = out.getContext('2d'); octx.imageSmoothingQuality = 'high';
           octx.drawImage(canvas, cx, cy, cw, ch, 0, 0, out.width, out.height);
-          logoDataUrl = out.toDataURL('image/png');
+          logoDataUrl = out.toDataURL('image/png'); cabeceraModo = 'logo';
         }
         document.getElementById('logoThumb').src = logoDataUrl;
         document.getElementById('logoName').textContent = logoFile.name;
@@ -2375,6 +2408,8 @@
       formData.append('neuromarketing', neuroActivo ? 'si' : 'no');
       formData.append('idioma', tradActivo && idiomaSeleccionado ? idiomaSeleccionado : 'es');
       formData.append('estilo', estiloActual);
+      formData.append('nombre', document.getElementById('nombreRest').value.trim());
+      formData.append('subtitulo', document.getElementById('subtituloRest').value.trim());
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
       stopCountdown();
@@ -2466,7 +2501,8 @@
     filesList = []; logoFile = null; logoDataUrl = null;
     descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
     idiomaSeleccionado = null; textoActivo = false; cartaActual = null;
-    estiloActual = 'riviera'; ajustesUsados = 0;
+    estiloActual = 'riviera'; ajustesUsados = 0; cabeceraModo = 'logo';
+    document.getElementById('nombreRest').value = ''; document.getElementById('subtituloRest').value = '';
 
     // Reset UI — mensajes y resultado
     document.getElementById('msgResult').style.display = 'none';
@@ -2542,7 +2578,7 @@
       const res = await fetch('/pdf', {
         method: 'POST',
         headers: cabeceras,
-        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoDataUrl })
+        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera() })
       });
       if (!res.ok) {
         let msg = 'No hemos podido generar el PDF. Inténtalo de nuevo.';
@@ -2563,7 +2599,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 60000);
       setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
       updateToolBubble('¡Tu carta está descargada! 🎉');
-      if (!esPro() && logoDataUrl) mostrarPro('Descargada sin tu logo: el logo es de Carta Pro. Pruébalo gratis 7 días y vuelve a descargarla.');
+      if (!esPro() && logoEnCabecera()) mostrarPro('Descargada con tu nombre en lugar del logo: el logo es de Carta Pro. Pruébalo gratis 7 días y vuelve a descargarla.');
     } catch (err) {
       status(mensajeAmable(err));
     } finally {
@@ -2610,19 +2646,54 @@
     boton.classList.toggle('dl-secundario', !pro && traducida);
     if (pro) {
       texto.textContent = 'Descargar PDF';
-      nota.textContent = 'A4 listo para imprimir · sin firma' + (logoDataUrl ? ' · con tu logo' : '') + ' · cambia de estilo y vuelve a descargar cuando quieras';
+      nota.textContent = 'A4 listo para imprimir · sin firma' + (logoEnCabecera() ? ' · con tu logo' : '') + ' · cambia de estilo y vuelve a descargar cuando quieras';
     } else if (traducida) {
       texto.textContent = 'Desbloquear la carta traducida';
       nota.textContent = 'La traducción es de Carta Pro. Pruébala gratis 7 días, sin tarjeta.';
     } else {
       texto.textContent = 'Descargar gratis';
-      nota.textContent = 'Versión gratis: A4 con una firma pequeña de Kartia al pie' + (logoDataUrl ? ', sin tu logo' : '') + '.';
+      nota.textContent = 'Versión gratis: A4 con una firma pequeña de Kartia al pie' + (logoEnCabecera() ? '. Sale con tu nombre en lugar del logo' : '') + '.';
     }
     document.getElementById('proCaja').classList.toggle('on', !pro);
+    pintarCabecera();
     const quedan = Math.max(0, AJUSTES_GRATIS - ajustesUsados);
     document.getElementById('ajusteCuenta').innerHTML = pro ? 'Ajustes ilimitados con Carta Pro'
       : quedan ? 'Te quedan <b>' + quedan + '</b> ' + (quedan === 1 ? 'ajuste gratis' : 'ajustes gratis') + ' en esta carta'
       : 'Has usado los ajustes gratis · <b>ilimitados con Carta Pro</b>';
+  }
+
+  function logoEnCabecera() { return logoDataUrl && cabeceraModo === 'logo' ? logoDataUrl : null; }
+
+  function pintarCabecera() {
+    if (!cartaActual) return;
+    const n = document.getElementById('resNombre'), sub = document.getElementById('resSubtitulo');
+    if (document.activeElement !== n) n.value = cartaActual.nombre_restaurante || '';
+    if (document.activeElement !== sub) sub.value = cartaActual.subtitulo || '';
+    const conLogo = !!logoEnCabecera();
+    n.classList.toggle('vacio', !n.value.trim() && (!conLogo || !esPro()));
+    document.getElementById('cabeceraModo').classList.toggle('on', !!logoDataUrl);
+    document.querySelectorAll('#cabeceraModo button').forEach(b => b.classList.toggle('on', b.dataset.modo === (conLogo ? 'logo' : 'nombre')));
+    const aviso = document.getElementById('cabeceraAviso');
+    aviso.textContent = conLogo
+      ? (esPro() ? 'Arriba sale tu logotipo. El nombre se usa si cambias a «Nombre».' : 'Estás viendo tu logo: es de Carta Pro. En la versión gratis sale tu nombre' + (n.value.trim() ? '.' : ': escríbelo aquí.'))
+      : (!n.value.trim() ? 'No hemos encontrado el nombre en tu carta. Escríbelo y aparece al momento.' : 'Cambia el nombre cuando quieras: gratis y al momento.');
+  }
+
+  function cambiarCabecera(modo) {
+    cabeceraModo = modo;
+    pintarPlan();
+    renderVista();
+  }
+
+  let temporizadorCabecera = null;
+  function editarCabecera() {
+    if (!cartaActual) return;
+    cartaActual.nombre_restaurante = document.getElementById('resNombre').value.replace(/\s+/g, ' ').trimStart().slice(0, 60);
+    cartaActual.subtitulo = document.getElementById('resSubtitulo').value.replace(/\s+/g, ' ').trimStart().slice(0, 90);
+    if (logoDataUrl && cabeceraModo === 'logo') cabeceraModo = 'nombre'; // si edita el nombre, que lo vea
+    pintarPlan();
+    clearTimeout(temporizadorCabecera);
+    temporizadorCabecera = setTimeout(renderVista, 350);
   }
 
   function mostrarPro(motivo) {
@@ -2681,7 +2752,7 @@
   // Antes de ir a la pasarela guardamos la carta, para recuperarla al volver
   function guardarPendiente() {
     if (!cartaActual) return;
-    const completo = { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, ajustes: ajustesUsados, t: Date.now() };
+    const completo = { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, modo: cabeceraModo, ajustes: ajustesUsados, t: Date.now() };
     if (!almacen.guardar('cr_pendiente', completo)) almacen.guardar('cr_pendiente', { ...completo, logo: null });
   }
 
@@ -2711,6 +2782,7 @@
     if (p.logo) { logoDataUrl = p.logo; logoActivo = true; }
     if (ESTILOS_VALIDOS.includes(p.estilo)) selEstilo(document.querySelector('.t2-scard.' + p.estilo), p.estilo);
     ajustesUsados = p.ajustes || 0;
+    if (p.modo === 'nombre' || p.modo === 'logo') cabeceraModo = p.modo;
     mostrarCarta(p.carta);
     return true;
   }
