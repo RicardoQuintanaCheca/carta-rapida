@@ -23,6 +23,7 @@
     if (p == null) return '';
     let s = String(p).trim().replace(/€/g, '').trim();
     if (!s) return '';
+    if (/^spm$/i.test(s)) return 'S/M';
     if (/^\d+([.,]\d+)?$/.test(s)) {
       const n = parseFloat(s.replace(',', '.'));
       if (Number.isInteger(n)) return String(n);

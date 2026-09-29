@@ -151,7 +151,11 @@ const ORDEN_SECCIONES = `ORDEN DE SECCIONES (aplícalo siempre; si una sección 
 1. Menús del día o especiales · 2. Entrantes, tapas, para compartir · 3. Ensaladas · 4. Sopas, cremas y cuchara · 5. Arroces y pastas · 6. Pescados · 7. Carnes · 8. Postres · 9. Quesos · 10. Café e infusiones · 11. Vinos y bebidas · 12. Otros (pan, extras, suplementos)`;
 
 const REGLAS_CAMPOS = `REGLAS DE CAMPOS:
-- precio: solo el número, SIN símbolo €. Decimales con punto ("16.5", no "16,50"); sin ceros finales ("16", no "16.00"). Conserva formatos especiales: "5/u", "84/k", "9 | 16", "SPM". Sin precio → "".
+- precio: solo el número, SIN símbolo €. Decimales con punto ("16.5", no "16,50"); sin ceros finales ("16", no "16.00").
+  · La unidad del precio se queda EN EL PRECIO, nunca en racion: "65 €/kg" → "65/kg"; "17 €/pers" → "17/pers"; "5 €/ud" → "5/u".
+  · Dos precios (copa/botella, media/entera, tapa/ración) → "3.5 | 18".
+  · "S/M", "según mercado", "consultar" → "SPM". NUNCA dejes vacío un plato que en la carta tiene S/M.
+  · Sin precio → "".
 - nombre (plato): respeta el nombre original; corrige solo erratas evidentes. Si el original está TODO EN MAYÚSCULAS, escríbelo en minúsculas con mayúscula inicial y respetando nombres propios ("LOMO BAJO DE VACA GALLEGA" → "Lomo bajo de vaca gallega"). Sin punto final.
 - racion: cantidades, unidades o condiciones que acompañan al nombre, SACADAS del nombre: "80 g", "6 uds.", "2 pax", "por encargo", "½ ración", "(V)", "(VG)". Ejemplo: "Jamón ibérico (80g)" → nombre "Jamón ibérico", racion "80 g". Si no hay → "".
 - destacado: true solo si la carta original marca el plato como especialidad, recomendación o plato de la casa (estrella, "de la casa", "recomendado", recuadro…). Si no → false.
