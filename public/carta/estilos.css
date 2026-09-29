@@ -359,15 +359,8 @@
 .est-azulejo .pagina { font-family: 'Figtree', sans-serif; padding: 27mm 18mm 24mm; }
 .est-azulejo .pagina::before, .est-azulejo .pagina::after {
   content: ''; position: absolute; left: 12mm; right: 12mm; height: 8mm;
-  background-image:
-    radial-gradient(circle, var(--acento) 0 20%, transparent 22%),
-    radial-gradient(circle at 0 0, var(--acento) 0 16%, transparent 18%),
-    radial-gradient(circle at 100% 0, var(--acento) 0 16%, transparent 18%),
-    radial-gradient(circle at 0 100%, var(--acento) 0 16%, transparent 18%),
-    radial-gradient(circle at 100% 100%, var(--acento) 0 16%, transparent 18%),
-    linear-gradient(45deg, transparent calc(50% - .5pt), var(--acento) calc(50% - .5pt) calc(50% + .5pt), transparent calc(50% + .5pt)),
-    linear-gradient(-45deg, transparent calc(50% - .5pt), var(--acento) calc(50% - .5pt) calc(50% + .5pt), transparent calc(50% + .5pt));
-  background-size: 8mm 8mm; background-position: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cg fill='%231E4FA0'%3E%3Ccircle cx='15' cy='15' r='3.4'/%3E%3Ccircle cx='0' cy='0' r='2.6'/%3E%3Ccircle cx='30' cy='0' r='2.6'/%3E%3Ccircle cx='0' cy='30' r='2.6'/%3E%3Ccircle cx='30' cy='30' r='2.6'/%3E%3C/g%3E%3Cpath d='M0 0L30 30M30 0L0 30' stroke='%231E4FA0' stroke-width='1.1'/%3E%3Cpath d='M15 4.5Q19 11 25.5 15Q19 19 15 25.5Q11 19 4.5 15Q11 11 15 4.5Z' fill='none' stroke='%231E4FA0' stroke-width='1.1'/%3E%3C/svg%3E");
+  background-size: 8mm 8mm; background-position: center; background-repeat: repeat-x;
   border-top: 1pt solid var(--acento); border-bottom: 1pt solid var(--acento);
 }
 .est-azulejo .pagina::before { top: 10mm; }
@@ -379,10 +372,7 @@
 .est-azulejo .cab-sub { margin-top: 2.6mm; font-size: 7.6pt; font-weight: 600; letter-spacing: .32em; padding-left: .32em; text-transform: uppercase; }
 .est-azulejo .cols-2 .cuerpo { column-gap: 13mm; }
 .est-azulejo .sec-t { display: flex; align-items: center; gap: 2.4mm; font-family: 'Young Serif', serif; font-weight: 400; font-size: calc(16pt * var(--k)); line-height: 1.1; color: var(--acento); margin-bottom: calc(5pt * var(--k)); padding-bottom: calc(3pt * var(--k)); border-bottom: .7pt solid var(--acento); }
-.est-azulejo .azu-flor { flex: none; width: calc(9pt * var(--k)); height: calc(9pt * var(--k)); background:
-  radial-gradient(circle at 50% 18%, var(--acento) 0 17%, transparent 19%), radial-gradient(circle at 50% 82%, var(--acento) 0 17%, transparent 19%),
-  radial-gradient(circle at 18% 50%, var(--acento) 0 17%, transparent 19%), radial-gradient(circle at 82% 50%, var(--acento) 0 17%, transparent 19%),
-  radial-gradient(circle, var(--acento) 0 12%, transparent 14%); }
+.est-azulejo .azu-flor { flex: none; width: calc(9pt * var(--k)); height: calc(9pt * var(--k)); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231E4FA0'%3E%3Ccircle cx='10' cy='3.6' r='3.4'/%3E%3Ccircle cx='10' cy='16.4' r='3.4'/%3E%3Ccircle cx='3.6' cy='10' r='3.4'/%3E%3Ccircle cx='16.4' cy='10' r='3.4'/%3E%3Ccircle cx='10' cy='10' r='2.4'/%3E%3C/svg%3E") center / contain no-repeat; }
 .est-azulejo .pl { margin-top: calc(6pt * var(--k)); }
 .est-azulejo .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.25; }
 .est-azulejo .pl-p { font-weight: 600; font-size: calc(10.4pt * var(--k)); color: var(--acento); }
