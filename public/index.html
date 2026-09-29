@@ -981,12 +981,17 @@
         <div style="flex:1;min-width:0">
           <div class="res-barra">
             <div class="res-estilos" role="tablist" aria-label="Estilo de carta">
-              <button class="res-estilo on" data-estilo="sobremesa" onclick="cambiarEstiloResultado('sobremesa')" type="button">Sobremesa</button>
-              <button class="res-estilo" data-estilo="noche" onclick="cambiarEstiloResultado('noche')" type="button">Medianoche</button>
-              <button class="res-estilo" data-estilo="brasserie" onclick="cambiarEstiloResultado('brasserie')" type="button">Brasserie</button>
+              <button class="res-estilo on" data-estilo="riviera" onclick="cambiarEstiloResultado('riviera')" type="button">Riviera</button>
+              <button class="res-estilo" data-estilo="azulejo" onclick="cambiarEstiloResultado('azulejo')" type="button">Azulejo</button>
+              <button class="res-estilo" data-estilo="serigrafia" onclick="cambiarEstiloResultado('serigrafia')" type="button">Serigrafía</button>
+              <button class="res-estilo" data-estilo="cartel" onclick="cambiarEstiloResultado('cartel')" type="button">Cartel</button>
+              <button class="res-estilo" data-estilo="ticket" onclick="cambiarEstiloResultado('ticket')" type="button">Ticket</button>
+              <button class="res-estilo" data-estilo="gaceta" onclick="cambiarEstiloResultado('gaceta')" type="button">Gaceta</button>
+              <button class="res-estilo" data-estilo="trattoria" onclick="cambiarEstiloResultado('trattoria')" type="button">Trattoria</button>
               <button class="res-estilo" data-estilo="editorial" onclick="cambiarEstiloResultado('editorial')" type="button">Editorial</button>
+              <button class="res-estilo" data-estilo="sobremesa" onclick="cambiarEstiloResultado('sobremesa')" type="button">Sobremesa</button>
               <button class="res-estilo" data-estilo="sumi" onclick="cambiarEstiloResultado('sumi')" type="button">Sumi</button>
-              <button class="res-estilo" data-estilo="riviera" onclick="cambiarEstiloResultado('riviera')" type="button">Riviera</button>
+              <button class="res-estilo" data-estilo="brasserie" onclick="cambiarEstiloResultado('brasserie')" type="button">Brasserie</button>
               <button class="res-estilo" data-estilo="deco" onclick="cambiarEstiloResultado('deco')" type="button">Déco</button>
               <button class="res-estilo" data-estilo="mantel" onclick="cambiarEstiloResultado('mantel')" type="button">Mantel</button>
               <button class="res-estilo" data-estilo="barra" onclick="cambiarEstiloResultado('barra')" type="button">Barra</button>
@@ -1012,39 +1017,64 @@
 
     <div class="input-wrap" id="inputWrap">
       <div class="t2-card t2-style-section">
-        <div class="t2-sticker">10 estilos · 0 €</div>
+        <div class="t2-sticker">15 estilos · 0 €</div>
         <div class="t2-eyebrow">02 · ESTILO DE CARTA</div>
-        <div class="t2-panel-hint">Diez diseños de imprenta, de la alta cocina a la taberna. Desliza y elige uno — al ver tu carta podrás cambiarlo con un toque.</div>
+        <div class="t2-panel-hint">Quince diseños pensados para imprimir en papel blanco, de la alta cocina a la taberna. Desliza y elige uno — al ver tu carta podrás cambiarlo con un toque.</div>
         <div class="t2-scard-grid">
-          <button class="seg-btn t2-scard sobremesa on" onclick="selEstilo(this,'sobremesa')" type="button">
+          <button class="seg-btn t2-scard riviera on" onclick="selEstilo(this,'riviera')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sobremesa" style="background-image:url('/carta/muestra-sobremesa.webp')"></div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Sobremesa</span><span class="t2-scard-mood">Alta cocina</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Riviera" style="background-image:url('/carta/muestra-riviera.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Riviera</span><span class="t2-scard-mood">Atrevido</span></div>
           </button>
-          <button class="seg-btn t2-scard noche" onclick="selEstilo(this,'noche')" type="button">
+          <button class="seg-btn t2-scard azulejo" onclick="selEstilo(this,'azulejo')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Medianoche" style="background-image:url('/carta/muestra-noche.webp')"></div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Medianoche</span><span class="t2-scard-mood">Noche y lujo</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Azulejo" style="background-image:url('/carta/muestra-azulejo.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Azulejo</span><span class="t2-scard-mood">Mediterráneo</span></div>
           </button>
-          <button class="seg-btn t2-scard brasserie" onclick="selEstilo(this,'brasserie')" type="button">
+          <button class="seg-btn t2-scard serigrafia" onclick="selEstilo(this,'serigrafia')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Brasserie" style="background-image:url('/carta/muestra-brasserie.webp')"></div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Brasserie</span><span class="t2-scard-mood">Gran café</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Serigrafía" style="background-image:url('/carta/muestra-serigrafia.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Serigrafía</span><span class="t2-scard-mood">Dos tintas</span></div>
+          </button>
+          <button class="seg-btn t2-scard cartel" onclick="selEstilo(this,'cartel')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Cartel" style="background-image:url('/carta/muestra-cartel.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Cartel</span><span class="t2-scard-mood">Póster</span></div>
+          </button>
+          <button class="seg-btn t2-scard ticket" onclick="selEstilo(this,'ticket')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Ticket" style="background-image:url('/carta/muestra-ticket.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Ticket</span><span class="t2-scard-mood">Bar de vinos</span></div>
+          </button>
+          <button class="seg-btn t2-scard gaceta" onclick="selEstilo(this,'gaceta')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Gaceta" style="background-image:url('/carta/muestra-gaceta.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Gaceta</span><span class="t2-scard-mood">Periódico</span></div>
+          </button>
+          <button class="seg-btn t2-scard trattoria" onclick="selEstilo(this,'trattoria')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Trattoria" style="background-image:url('/carta/muestra-trattoria.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Trattoria</span><span class="t2-scard-mood">Casa italiana</span></div>
           </button>
           <button class="seg-btn t2-scard editorial" onclick="selEstilo(this,'editorial')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Editorial" style="background-image:url('/carta/muestra-editorial.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Editorial</span><span class="t2-scard-mood">Revista</span></div>
           </button>
+          <button class="seg-btn t2-scard sobremesa" onclick="selEstilo(this,'sobremesa')" type="button">
+            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sobremesa" style="background-image:url('/carta/muestra-sobremesa.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Sobremesa</span><span class="t2-scard-mood">Alta cocina</span></div>
+          </button>
           <button class="seg-btn t2-scard sumi" onclick="selEstilo(this,'sumi')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sumi" style="background-image:url('/carta/muestra-sumi.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Sumi</span><span class="t2-scard-mood">Japonés</span></div>
           </button>
-          <button class="seg-btn t2-scard riviera" onclick="selEstilo(this,'riviera')" type="button">
+          <button class="seg-btn t2-scard brasserie" onclick="selEstilo(this,'brasserie')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Riviera" style="background-image:url('/carta/muestra-riviera.webp')"></div>
-            <div class="t2-scard-label"><span class="t2-scard-name">Riviera</span><span class="t2-scard-mood">Atrevido</span></div>
+            <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Brasserie" style="background-image:url('/carta/muestra-brasserie.webp')"></div>
+            <div class="t2-scard-label"><span class="t2-scard-name">Brasserie</span><span class="t2-scard-mood">Gran café</span></div>
           </button>
           <button class="seg-btn t2-scard deco" onclick="selEstilo(this,'deco')" type="button">
             <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
@@ -1485,8 +1515,8 @@
   let filesList = [], logoFile = null, logoDataUrl = null;
   let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
-  let estiloActual = 'sobremesa';
-  const ESTILOS_VALIDOS = ['sobremesa', 'noche', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'mantel', 'barra', 'autor'];
+  let estiloActual = 'riviera';
+  const ESTILOS_VALIDOS = ['riviera', 'azulejo', 'serigrafia', 'cartel', 'ticket', 'gaceta', 'trattoria', 'editorial', 'sobremesa', 'sumi', 'brasserie', 'deco', 'mantel', 'barra', 'autor'];
 
   const MAX_FOTOS = 5;
   const MAX_MB = 5;
@@ -2086,7 +2116,7 @@
     filesList = []; logoFile = null; logoDataUrl = null;
     descActivo = false; logoActivo = false; neuroActivo = true; tradActivo = false;
     idiomaSeleccionado = null; textoActivo = false; cartaActual = null;
-    estiloActual = 'sobremesa';
+    estiloActual = 'riviera';
 
     // Reset UI — mensajes y resultado
     document.getElementById('msgResult').style.display = 'none';
@@ -2134,7 +2164,7 @@
     document.getElementById('textoArrow').classList.remove('open');
 
     // Reset estilo
-    selEstilo(document.querySelector('.t2-scard.sobremesa'), 'sobremesa');
+    selEstilo(document.querySelector('.t2-scard.riviera'), 'riviera');
 
     // Reset montaje
     document.getElementById('leadForm').style.display = '';

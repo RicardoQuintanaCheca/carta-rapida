@@ -173,6 +173,44 @@
       seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
       plato: platoComun
     },
+    azulejo: {
+      nombre: 'Azulejo',
+      fuentes: ['400 1em "Young Serif"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"', 'italic 400 1em "Figtree"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="azu-banda"></div>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: s => `<section class="sec"><h2 class="sec-t"><i class="azu-flor"></i><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    trattoria: {
+      nombre: 'Trattoria',
+      fuentes: ['400 1em "DM Serif Display"', 'italic 400 1em "DM Serif Display"', '400 1em "Karla"', '600 1em "Karla"', 'italic 400 1em "Karla"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    cartel: {
+      nombre: 'Cartel',
+      fuentes: ['400 1em "Anton"', '500 1em "Archivo"', '600 1em "Archivo"', '800 1em "Archivo"', 'italic 400 1em "Archivo"'],
+      cabecera: (c, logo) => `<header class="cab">${logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`}${c.subtitulo ? `<div class="cab-sub">${esc(c.subtitulo)}</div>` : ''}</header>`,
+      seccion: (s, i) => `<section class="sec"><h2 class="sec-t"><span class="sec-num">${String(i + 1).padStart(2, '0')}</span><span class="sec-nom">${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
+      plato: platoComun
+    },
+    ticket: {
+      nombre: 'Ticket',
+      fuentes: ['400 1em "Courier Prime"', '700 1em "Courier Prime"', 'italic 400 1em "Courier Prime"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="tk-linea">${'*'.repeat(3)} ${esc(t('carta'))} ${'*'.repeat(3)}</div>${nombreOLogo(c, logo)}${subtit(c)}<div class="tk-linea">${esc(fechaEdicion())}</div></header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    gaceta: {
+      nombre: 'Gaceta',
+      fuentes: ['400 1em "UnifrakturMaguntia"', '400 1em "Old Standard TT"', '700 1em "Old Standard TT"', 'italic 400 1em "Old Standard TT"', '600 1em "Archivo"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="gz-arriba"><span>${esc(c.subtitulo || '')}</span><span>${esc(fechaEdicion())}</span></div>${nombreOLogo(c, logo)}<div class="gz-abajo"><span>${esc(t('carta'))}</span></div></header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    serigrafia: {
+      nombre: 'Serigrafía',
+      fuentes: ['800 1em "Bricolage Grotesque"', '700 1em "Bricolage Grotesque"', '500 1em "Bricolage Grotesque"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
+    },
     riviera: {
       nombre: 'Riviera',
       fuentes: ['700 1em "Syne"', '600 1em "Syne"', '300 1em "Space Grotesk"', '400 1em "Space Grotesk"', '500 1em "Space Grotesk"', '600 1em "Space Grotesk"'],
@@ -181,6 +219,12 @@
       plato: platoComun
     }
   };
+
+  function fechaEdicion() {
+    try { const f = new Date().toLocaleDateString(IDIOMA === 'es' ? 'es-ES' : IDIOMA, { month: 'long', year: 'numeric' }); return f.charAt(0).toUpperCase() + f.slice(1); }
+    catch (e) { return ''; }
+  }
+  function secBasica(s) { return `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`; }
 
   function nombreOLogo(c, logo) {
     return logo ? `<img class="cab-logo" src="${logo}" alt="">` : `<div class="cab-nombre">${esc(c.nombre_restaurante)}</div>`;
@@ -293,6 +337,7 @@
     function pagina(cols, conCabecera, esUltima, k) {
       const p = document.createElement('div');
       p.className = `pagina cols-${cols}`;
+      p.style.setProperty('--letras', Math.max(6, String(carta.nombre_restaurante || '').length));
       p.style.setProperty('--k', k);
       p.innerHTML = `${conCabecera ? estilo.cabecera(carta, logo) : `<header class="cab-corta">${esc(carta.nombre_restaurante || '')}</header>`}
         <main class="cuerpo">${Array.from({ length: cols }, () => '<div class="col"></div>').join('')}</main>

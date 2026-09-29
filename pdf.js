@@ -31,7 +31,17 @@ const CARAS = [
   ['syne', 'Syne', [[600, 'normal'], [700, 'normal']]],
   ['space-grotesk', 'Space Grotesk', [[300, 'normal'], [400, 'normal'], [500, 'normal'], [600, 'normal']]],
   ['italiana', 'Italiana', [[400, 'normal']]],
-  ['cinzel', 'Cinzel', [[400, 'normal'], [500, 'normal']]]
+  ['cinzel', 'Cinzel', [[400, 'normal'], [500, 'normal']]],
+  // Colección papel blanco
+  ['young-serif', 'Young Serif', [[400, 'normal']]],
+  ['figtree', 'Figtree', [[400, 'normal'], [500, 'normal'], [600, 'normal'], [400, 'italic']]],
+  ['karla', 'Karla', [[400, 'normal'], [600, 'normal'], [400, 'italic']]],
+  ['anton', 'Anton', [[400, 'normal']]],
+  ['archivo', 'Archivo', [[500, 'normal'], [600, 'normal'], [800, 'normal'], [400, 'italic']]],
+  ['courier-prime', 'Courier Prime', [[400, 'normal'], [700, 'normal'], [400, 'italic']]],
+  ['unifrakturmaguntia', 'UnifrakturMaguntia', [[400, 'normal']]],
+  ['old-standard-tt', 'Old Standard TT', [[400, 'normal'], [700, 'normal'], [400, 'italic']]],
+  ['bricolage-grotesque', 'Bricolage Grotesque', [[500, 'normal'], [700, 'normal'], [800, 'normal']]]
 ];
 const RANGOS = {
   latin: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
@@ -71,7 +81,7 @@ async function obtenerNavegador() {
   return navegador;
 }
 
-const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco']);
+const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia']);
 
 async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
