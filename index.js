@@ -228,7 +228,7 @@ async function pedirCarta(messages) {
 const { normalizarCarta, limpio } = require('./limpieza');
 
 // Adjetivos de relleno que un redactor profesional no usa
-const RELLENO = /\b(deliciosa?s?|exquisita?s?|sabrosa?s?|cremosa?s?|crujientes?|jugosa?s?|tiernas?|tiernos?|doradas?|dorados?|caseras?|caseros?|tradicional(es)?|irresistibles?|espectacular(es)?|selecta?s?|seleccionad[oa]s?|de (alta|gran|primera) calidad|calidad superior|artesan[oa]s?)\b/gi;
+const RELLENO = /\b(deliciosa?s?|exquisita?s?|sabrosa?s?|cremosa?s?|crujientes?|jugosa?s?|tiernas?|tiernos?|doradas?|dorados?|caseras?|caseros?|tradicional(es)?|irresistibles?|espectacular(es)?|selecta?s?|seleccionad[oa]s?|de (alta|gran|primera) calidad|calidad superior|artesan[oa]s?|crispy|crunchy|creamy|silky|delicious|tasty|juicy|tender|golden|homemade|exquisite|mouth-?watering|croustillante?s?|délicieu(x|se)s?|fondante?s?|croccant[ei]|cremos[oa]|delizios[oa]|knusprig(e|en)?|cremig(e|en)?|lecker(e|en)?)\b/gi;
 
 // Segunda pasada: un "redactor" escribe SOLO las descripciones que faltan.
 // Las descripciones originales no se tocan nunca (se protegen en el código, no en el prompt).
@@ -248,7 +248,7 @@ REGLAS:
 - De 3 a 8 palabras. Todas con un ritmo parecido. Sin punto final. Primera letra en mayúscula.
 - Describe lo que acompaña o cómo se elabora: guarnición, salsa, técnica, origen. Ejemplos del tono: "Con alioli de ajo asado", "Guisado lento al vino tinto", "Brasa de encina y sal en escamas".
 - NO repitas el nombre del plato ni palabras de su nombre. NO repitas la ración ni el número de unidades o personas.
-- PROHIBIDO usar adjetivos de relleno: delicioso, exquisito, sabroso, cremoso, crujiente, jugoso, tierno, dorado, casero, tradicional, selecto, de calidad, artesano.
+- PROHIBIDO usar adjetivos de relleno, en cualquier idioma: delicioso, exquisito, sabroso, cremoso, crujiente, jugoso, tierno, dorado, casero, tradicional, selecto, de calidad, artesano (en inglés: crispy, crunchy, creamy, silky, delicious, tasty, juicy, tender, golden, homemade).
 - No inventes productos caros ni denominaciones de origen que la carta no nombra. Si dudas, describe la elaboración clásica.
 - Bebidas, vinos, cafés, pan, extras y suplementos: texto "".
 ${instruccionEstilo(estilo)}` },
@@ -313,7 +313,7 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
       const content = fotos.map(f => ({ type: 'image_url', image_url: { url: `data:${f.mimetype};base64,${f.buffer.toString('base64')}`, detail: 'high' } }));
       content.push({ type: 'text', text: fotos.length > 1
         ? `Esta carta tiene ${fotos.length} páginas. Léelas TODAS y únelas en una sola carta, sin omitir ningún plato.`
-        : 'Lee esta carta.' });
+        : 'Lee esta carta.' + (idioma !== 'es' ? ` Y tradúcela ENTERA al ${IDIOMAS[idioma]} (${idioma}): secciones, platos, descripciones, subtítulo, servicios y nota al pie.` : '') });
       messages = [{ role: 'system', content: prompt }, { role: 'user', content }];
     } else if (textoManual.trim()) {
       messages = [{ role: 'system', content: prompt }, { role: 'user', content: 'Carta:\n' + textoManual }];
