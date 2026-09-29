@@ -86,27 +86,24 @@ function crearRutas({ limite }) {
         const id = 'demo_' + crypto.randomBytes(9).toString('base64url');
         return res.json({ ok: true, url: `${origen}/pago/demo?s=${id}` });
       }
-      const linea = {
-        quantity: 1,
-        price_data: {
-          currency: 'eur',
-          unit_amount: PRECIO_CENTIMOS,
-          product_data: {
-            name: `Carta Rápida Pro · ${DIAS_PRO} días`,
-            description: 'Carta sin firma, con tu logotipo, traducida y con ajustes ilimitados durante 30 días.'
-          }
-        }
-      };
-      if (process.env.STRIPE_TAX_RATE) linea.tax_rates = [process.env.STRIPE_TAX_RATE];
+      // Producto y precio creados en Stripe (19 € IVA incluido); se puede cambiar con STRIPE_PRICE_ID
+      const linea = { quantity: 1, price: process.env.STRIPE_PRICE_ID || 'price_1UL12HRZgd5ArTbXFbsfkhAl' };
+      const conFactura = !!process.env.STRIPE_TAX_RATE; // factura con IVA desglosado solo si hay tipo de IVA configurado
+      if (conFactura) linea.tax_rates = [process.env.STRIPE_TAX_RATE];
       const sesion = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [linea],
         locale: 'es',
         customer_email: emailValido(email) ? email : undefined,
-        billing_address_collection: 'required',
-        tax_id_collection: { enabled: true },
-        invoice_creation: { enabled: true, invoice_data: { description: 'Carta Rápida Pro · Kartia', footer: 'Te descontamos este importe si nos pides portamenús Kartia.' } },
+        customer_creation: 'always',
+        billing_address_collection: conFactura ? 'required' : 'auto',
+        ...(conFactura ? {
+          tax_id_collection: { enabled: true },
+          invoice_creation: { enabled: true, invoice_data: { description: 'Carta Rápida Pro · Kartia', footer: 'Te descontamos este importe si en los próximos 6 meses nos pides portamenús Kartia.' } }
+        } : {}),
         allow_promotion_codes: true,
+        payment_intent_data: { description: 'Carta Rápida Pro · 30 días', metadata: { origen: 'carta-rapida', restaurante } },
+        custom_text: { submit: { message: 'Carta Pro se activa al momento. Al pagar pides que empiece ya y aceptas que por ello no hay desistimiento.' } },
         metadata: { origen: 'carta-rapida', restaurante },
         success_url: `${origen}/?pago={CHECKOUT_SESSION_ID}#herramienta`,
         cancel_url: `${origen}/?pago=cancelado#herramienta`
@@ -147,7 +144,8 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
         } else {
           if (!stripe) return res.json({ ok: false, error: 'Pago no válido.' });
           const s = await stripe.checkout.sessions.retrieve(sesionId);
-          if (s.payment_status !== 'paid') return res.json({ ok: false, error: 'El pago no se ha completado.' });
+          if (s.payment_status !== 'paid' && s.payment_status !== 'no_payment_required') return res.json({ ok: false, error: 'El pago no se ha completado.' });
+          if (s.status !== 'complete') return res.json({ ok: false, error: 'El pago no se ha completado.' });
           email = (s.customer_details && s.customer_details.email) || s.customer_email || '';
           restaurante = (s.metadata && s.metadata.restaurante) || '';
           importe = s.amount_total;
