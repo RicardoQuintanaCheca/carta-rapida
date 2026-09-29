@@ -6,12 +6,11 @@
 
 <!-- SEO -->
 <title>Haz que tu Carta de Restaurante Venda Más | Carta Rápida — Kartia</title>
-<meta name="description" content="Sube una foto de tu carta y aplicamos neuromarketing profesional para reorganizarla. Gratis, sin registro. Descripciones apetecibles y traducción a 6 idiomas. Para restaurantes, hoteles y cafeterías.">
+<meta name="description" content="Sube una foto de tu carta y en 30 segundos te la devolvemos maquetada como en una imprenta, en PDF A4 listo para imprimir. 15 estilos, gratis y sin registro. Para restaurantes, hoteles y cafeterías.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://cartarapida.kartia.es">
 <meta name="author" content="Kartia — Gastrotouch Marketing Solutions S.L.">
 <meta name="google-site-verification" content="7gcd7Za9VdgWriu-mxJw-DraLrb4Cloj-KGuGZI9VkY" />
-<meta name="keywords" content="rediseñar carta restaurante gratis, diseño carta restaurante, neuromarketing carta restaurante, mejorar carta restaurante, carta menú profesional">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Haz que tu Carta de Restaurante Venda Más — Gratis | Kartia">
@@ -20,11 +19,20 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="Kartia">
+<meta property="og:image" content="https://cartarapida.kartia.es/og-carta-rapida.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tu carta, rediseñada en 30 segundos: tres ejemplos de carta de restaurante">
+<meta name="twitter:image" content="https://cartarapida.kartia.es/og-carta-rapida.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#FF6B35">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Haz que tu Carta de Restaurante Venda Más — Gratis | Kartia">
-<meta name="twitter:description" content="Sube una foto de tu carta. Aplicamos neuromarketing profesional para reorganizarla. Gratis, sin registro.">
+<meta name="twitter:description" content="Sube una foto de tu carta y en 30 segundos te la devolvemos maquetada como en una imprenta. 15 estilos, gratis y sin registro.">
 
 <!-- Schema.org WebApplication -->
 <script type="application/ld+json">
@@ -32,15 +40,14 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Carta Rápida",
-  "description": "Herramienta gratuita que rediseña cartas de restaurante aplicando neuromarketing profesional. Genera descripciones de platos y traduce a 6 idiomas.",
+  "description": "Rediseña la carta de tu restaurante a partir de una foto: 15 estilos listos para imprimir en A4, orden que vende y descripciones de platos. Versión gratis sin límite y Carta Pro con logotipo y traducción a 6 idiomas.",
   "url": "https://cartarapida.kartia.es",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "EUR"
-  },
+  "offers": [
+    { "@type": "Offer", "name": "Gratis", "price": "0", "priceCurrency": "EUR" },
+    { "@type": "Offer", "name": "Carta Pro · 30 días", "price": "19", "priceCurrency": "EUR" }
+  ],
   "provider": {
     "@type": "Organization",
     "name": "Kartia — Gastrotouch Marketing Solutions S.L.",
@@ -68,7 +75,7 @@
       "name": "¿Es realmente gratuita?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí, completamente gratuita. Sin registro, sin límite de usos y sin coste de ningún tipo. Kartia ofrece esta herramienta como servicio gratuito para el sector HORECA."
+        "text": "Sí. La versión gratis no tiene límite de cartas ni pide registro: tu carta en PDF A4, con una firma pequeña de Kartia al pie. Carta Pro (19 €, pago único) añade tu logotipo, la traducción a 6 idiomas, ajustes ilimitados y quita la firma; se puede probar 7 días gratis."
       }
     },
     {
@@ -76,7 +83,7 @@
       "name": "¿Qué es el neuromarketing aplicado a cartas de restaurante?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "El neuromarketing aplicado a cartas consiste en reorganizar los platos estratégicamente para maximizar las ventas. Los platos más rentables se colocan en primer lugar dentro de cada sección, ya que los clientes tienden a pedir los primeros que leen. Estudios de la Cornell University demuestran que esta técnica puede aumentar el ticket medio hasta un 18%."
+        "text": "El neuromarketing aplicado a cartas consiste en reorganizar los platos estratégicamente para maximizar las ventas. Los platos más rentables se colocan en primer lugar dentro de cada sección, ya que los clientes tienden a pedir los primeros que leen."
       }
     },
     {
@@ -563,6 +570,13 @@
     .hero-right { min-height: 280px; overflow: hidden; }
     .speech { white-space: normal; max-width: 220px; }
     .mascot-wrap > div { width: 220px !important; height: 220px !important; }
+  }
+  /* Móvil: la mascota más pequeña para que la herramienta aparezca antes */
+  @media (max-width: 640px) {
+    section.hero { gap: 12px; padding-bottom: 24px; }
+    .hero-right { min-height: 0; height: 200px; }
+    .mascota-hero { width: 170px !important; height: 170px !important; }
+    .floaty.one { font-size: 20px; top: 6%; }
   }
 
   /* ══════════════════════════════════════════
@@ -1073,7 +1087,7 @@
   <div class="nav-links">
     <a href="#herramienta">La herramienta</a>
     <a href="#como-funciona">Cómo funciona</a>
-    <a href="https://kartia.es">Portamenús</a>
+    <a href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=menu">Portamenús</a>
     <a href="#faq">FAQ</a>
   </div>
   <a href="#herramienta" class="cta-nav">Probar gratis →</a>
@@ -1085,9 +1099,9 @@
 
   <!-- Columna izquierda: copy -->
   <div style="position:relative;z-index:2;">
-    <span class="hero-eyebrow"><span class="b"></span>Carta Rápida · Beta gratis</span>
+    <span class="hero-eyebrow"><span class="b"></span>Carta Rápida · by Kartia</span>
     <h1>Tu carta,<br><span class="under">rediseñada</span><br>en <span class="o">30 segundos</span>.</h1>
-    <p class="hero-lead">Sube una foto de tu carta y te la devolvemos <b>maquetada como en una imprenta</b>: tipografía cuidada, el orden que más vende y el precio donde debe ir. En PDF, listo para imprimir — y en 6 idiomas si lo necesitas.</p>
+    <p class="hero-lead">Sube una foto de tu carta y te la devolvemos <b>maquetada como en una imprenta</b>: tipografía cuidada, el orden que más vende y el precio donde debe ir. En PDF, listo para imprimir. Gratis, con el nombre de tu restaurante.</p>
     <div class="cta-row">
       <a href="#herramienta" class="btn-primary">Dame tu carta <span class="arr">→</span></a>
       <span class="cta-note">0€ · sin tarjeta · sin registro</span>
@@ -1096,7 +1110,7 @@
       <span class="hero-tick"><span class="c">✓</span>Gratis sin límite</span>
       <span class="hero-tick"><span class="c">✓</span>PDF para imprimir</span>
       <span class="hero-tick"><span class="c">✓</span>Neuromarketing</span>
-      <span class="hero-tick"><span class="c">✓</span>6 idiomas</span>
+      <span class="hero-tick"><span class="c">✓</span>15 estilos</span>
     </div>
   </div>
 
@@ -1107,7 +1121,7 @@
     <span class="floaty three">🍽️</span>
     <div class="speech" id="speechBubble">¡Hola! ¿Empezamos? 🥑</div>
     <div class="mascot-wrap">
-      <img src="/mascota/kart-feliz.png" alt=""
+      <img src="/mascota/kart-feliz.webp" alt=""
            class="mascota-kart mascota-hero"
            onerror="this.style.display='none'"
            style="width:300px;height:300px;display:block;user-select:none;pointer-events:none;"
@@ -1122,7 +1136,7 @@
     <!-- SALUDO MASCOTA -->
     <div class="t2-greeting">
       <div style="position:relative;width:40px;height:40px;display:inline-block;flex-shrink:0;">
-        <img src="/mascota/kart-feliz.png" alt="" class="mascota-kart" onerror="this.style.display='none'" style="width:100%;height:100%;display:block;" draggable="false">
+        <img src="/mascota/kart-feliz.webp" alt="" class="mascota-kart" onerror="this.style.display='none'" style="width:100%;height:100%;display:block;" draggable="false">
       </div>
       <div class="t2-bubble" id="toolBubble">¡Empezamos! Elige tu estilo ↓</div>
     </div>
@@ -1241,7 +1255,7 @@
             </form>
             <div class="lead-ok" id="leadOk">Hecho. Te enviamos el montaje en 1–2 días laborables. Si quieres adelantarlo, escríbenos a <a href="mailto:hola@kartia.es" style="color:#C9A961">hola@kartia.es</a>.</div>
             <div class="lead-legal" id="leadLegal">Usaremos tu email solo para enviarte el montaje y, si lo pides, un presupuesto.</div>
-            <a class="lead-link" href="https://kartia.es" target="_blank" rel="noopener">O mira ya los portamenús →</a>
+            <a class="lead-link" href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=resultado" target="_blank" rel="noopener">O mira ya los portamenús →</a>
           </div>
 
           <button class="nueva-carta-btn" id="nuevaCartaBtn" onclick="nuevaCarta()">
@@ -1451,7 +1465,7 @@
             <span class="bubble-emoji" id="progressEmoji">👀</span>
             <span class="bubble-text" id="progressBubbleText">Mirando...</span>
           </div>
-          <img src="/mascota/kart-feliz.png" alt="" class="mascota-kart mascota-procesado" onerror="this.style.display='none'" draggable="false">
+          <img src="/mascota/kart-feliz.webp" alt="" class="mascota-kart mascota-procesado" onerror="this.style.display='none'" draggable="false">
           <div class="sparkles">
             <div class="sparkle sparkle-1"></div>
             <div class="sparkle sparkle-2"></div>
@@ -1512,7 +1526,7 @@
         <div class="p3-step-icn">📄</div>
         <div class="p3-step-num">03</div>
         <h4>Descarga el PDF</h4>
-        <p>Listo para imprimir en A4. Traducido a 6 idiomas si lo necesitas. Úsalo hoy en tu restaurante.</p>
+        <p>Listo para imprimir en A4, con el nombre de tu restaurante. Úsalo hoy mismo en tus mesas.</p>
       </div>
     </div>
   </div>
@@ -1523,7 +1537,7 @@
   <div class="seo-inner">
   <h2>Por qué el diseño de tu carta importa más de lo que crees</h2>
   <p>La carta de un restaurante es la herramienta de ventas más poderosa que existe en hostelería. Sin embargo, la mayoría de los restaurantes en España llevan años con la misma carta, con el mismo diseño y el mismo orden de platos con el que abrieron. El resultado es una oportunidad de venta desperdiciada en cada servicio.</p>
-  <p>Un estudio de la Cornell University School of Hotel Administration demostró que los restaurantes que aplican técnicas de neuromarketing y diseño estratégico en su carta consiguen un incremento medio del 18% en el ticket medio. No por subir precios, sino por reorganizar el contenido de forma inteligente.</p>
+  <p>La ingeniería de menús lleva décadas estudiándose en escuelas de hostelería como la de Cornell. Una de sus conclusiones más citadas: cuando los precios aparecen sin el símbolo de moneda, los clientes gastan más. No se trata de subir precios, sino de presentar el contenido de forma inteligente.</p>
   <h3>Qué es el neuromarketing aplicado a cartas de restaurante</h3>
   <p>El neuromarketing gastronómico es la aplicación de principios de psicología del consumidor al diseño de cartas. Se basa en cómo funciona el cerebro humano cuando lee un menú: qué mira primero, qué recuerda mejor y qué decide pedir en función de cómo está presentada la información.</p>
   <p>Las técnicas más efectivas incluyen la posición de primacía —los primeros platos de cada sección son los más pedidos—, el efecto ancla de precio —un plato caro al inicio hace que el resto parezca más asequible— y la eliminación del símbolo del euro, que está demostrado que reduce la percepción de coste en el cliente.</p>
@@ -1537,18 +1551,19 @@
   <ul>
     <li><strong>Orden que vende</strong> — la especialidad y los platos de más valor aparecen primero en cada sección.</li>
     <li><strong>Descripción de platos</strong> — textos elegantes y apetecibles con terminología profesional de hostelería.</li>
-    <li><strong>Traducción a 6 idiomas</strong> — inglés, francés, alemán, italiano, portugués y chino.</li>
-    <li><strong>Ajustes libres</strong> — indica cualquier cambio en texto normal y se aplica sin resubir la carta.</li>
-    <li><strong>PDF listo para imprimir</strong> — formato A4, tipografía de imprenta y tu logotipo en la cabecera.</li>
+    <li><strong>15 estilos para imprimir</strong> — de la alta cocina a la taberna, siempre sobre papel blanco.</li>
+    <li><strong>Ajustes en texto normal</strong> — pide el cambio como se lo dirías a una persona y se aplica sin volver a subir la carta.</li>
+    <li><strong>PDF listo para imprimir</strong> — formato A4, tipografía de imprenta y el nombre de tu restaurante en la cabecera.</li>
+    <li><strong>Con Carta Pro</strong> — tu logotipo, traducción a inglés, francés, alemán, italiano, portugués o chino, y sin la firma de Kartia.</li>
   </ul>
   <hr class="seo-divider">
   <h2>La carta en inglés: una oportunidad que muchos restaurantes ignoran</h2>
-  <p>España recibe más de 80 millones de turistas internacionales al año. La mayoría se encuentra con cartas en español que no puede leer, lo que genera incomodidad o directamente la decisión de ir a otro restaurante.</p>
-  <p>Tener tu carta disponible en inglés, francés o alemán no es un lujo, es una ventaja competitiva real. Con Carta Rápida puedes tener la versión traducida de tu carta en menos de un minuto, con terminología profesional de hostelería adaptada a cada idioma.</p>
+  <p>España recibió casi 97 millones de turistas internacionales en 2025. La mayoría se encuentra con cartas en español que no puede leer, lo que genera incomodidad o directamente la decisión de ir a otro restaurante.</p>
+  <p>Tener tu carta disponible en inglés, francés o alemán no es un lujo, es una ventaja competitiva real. Con Carta Pro tienes la versión traducida de tu carta en menos de un minuto, con terminología profesional de hostelería adaptada a cada idioma.</p>
   <hr class="seo-divider">
   <h2>De la carta rediseñada al portamenú premium</h2>
   <p>Carta Rápida es una herramienta gratuita de Kartia, fabricante español de portamenús artesanales premium para el sector HORECA. Si tras rediseñar tu carta quieres fabricarla en un portamenú de calidad —polipiel, grabado en relieve, acabados artesanales— Kartia puede ayudarte.</p>
-  <p>Los portamenús Kartia están disponibles en diferentes formatos y materiales, con producción artesanal en España y entrega a toda Europa. El rediseño con nuestra herramienta es el primer paso para tener una carta que represente realmente el nivel de tu establecimiento.</p>
+  <p>Los portamenús Kartia están disponibles en diferentes formatos y materiales, hechos a mano en nuestro taller de Madrid. El rediseño con nuestra herramienta es el primer paso para tener una carta que represente realmente el nivel de tu establecimiento.</p>
   </div>
 </section>
 
@@ -1558,17 +1573,17 @@
     <div>
       <div class="pm-eyebrow">04 · UPGRADE OPCIONAL</div>
       <h2>Esta carta merece<br>un portamenú<br><span class="o">a su altura.</span></h2>
-      <p class="pm-lead">Kartia es un taller artesanal español que fabrica portamenús premium para hostelería desde 2018. Polipiel, madera, tela, terciopelo, metal y acabados vintage. Todo hecho a mano, con materiales seleccionados y personalizado para tu marca.</p>
+      <p class="pm-lead">Kartia es un taller artesanal español que fabrica portamenús premium para hostelería desde 2018. Polipiel, tela, terciopelo, madera e impreso a todo color. Todo hecho a mano, con materiales seleccionados y personalizado para tu marca.</p>
       <p class="pm-clients">Clientes: <span>Meliá · Vincci · Marqués de Riscal · Pacha · Marugal · Gran Hotel Inglés</span></p>
       <ul class="pm-features">
-        <li><span class="c">✓</span>6 materiales premium disponibles</li>
+        <li><span class="c">✓</span>Polipiel, tela, terciopelo, madera e impreso</li>
         <li><span class="c">✓</span>Personalización total con tu marca</li>
-        <li><span class="c">✓</span>Taller propio con grabado láser</li>
+        <li><span class="c">✓</span>Grabado en caliente y golpe en seco</li>
         <li><span class="c">✓</span>Hecho artesanalmente en España</li>
       </ul>
       <div class="pm-ctas">
-        <a href="https://kartia.es/presupuesto/" class="pm-btn-primary" target="_blank">Quiero un portamenú premium →</a>
-        <a href="https://kartia.es/muestras" class="pm-btn-outline" target="_blank">Pedir Kit de Muestras · 25€</a>
+        <a href="https://kartia.es/presupuesto-portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=portamenu" class="pm-btn-primary" target="_blank" rel="noopener">Quiero un portamenú premium →</a>
+        <a href="https://kartia.es/muestras/?utm_source=cartarapida&utm_medium=referral&utm_campaign=kit-muestras" class="pm-btn-outline" target="_blank" rel="noopener">Pedir Kit de Muestras · 25€</a>
       </div>
     </div>
     <div class="pm-mock">
@@ -1683,7 +1698,7 @@
   <div class="site-footer-inner">
     <div class="footer-logo">kartia · Carta Rápida</div>
     <div class="footer-links">
-      <a href="https://kartia.es">kartia.es</a>
+      <a href="https://kartia.es/?utm_source=cartarapida&utm_medium=referral&utm_campaign=pie">kartia.es</a>
       <a href="https://escandallo.kartia.es">Escandallos</a>
       <a href="mailto:hola@kartia.es">Contacto</a>
     </div>
@@ -1713,14 +1728,14 @@
 
 <script>
   const MASCOTA_POSES = {
-    feliz:      '/mascota/kart-feliz.png',
-    asombrado:  '/mascota/kart-asombrado.png',
-    riendo:     '/mascota/kart-riendo.png',
-    pensando:   '/mascota/kart-pensando.png',
-    trabajando: '/mascota/kart-trabajando.png',
-    sudando:    '/mascota/kart-sudando.png',
-    asustado:   '/mascota/kart-asustado.png',
-    durmiendo:  '/mascota/kart-durmiendo.png'
+    feliz:      '/mascota/kart-feliz.webp',
+    asombrado:  '/mascota/kart-asombrado.webp',
+    riendo:     '/mascota/kart-riendo.webp',
+    pensando:   '/mascota/kart-pensando.webp',
+    trabajando: '/mascota/kart-trabajando.webp',
+    sudando:    '/mascota/kart-sudando.webp',
+    asustado:   '/mascota/kart-asustado.webp',
+    durmiendo:  '/mascota/kart-durmiendo.webp'
   };
 
   function setPose(nombre) {

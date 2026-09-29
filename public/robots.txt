@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /pago/
+Disallow: /carta/vista.html
+
+Sitemap: https://cartarapida.kartia.es/sitemap.xml
