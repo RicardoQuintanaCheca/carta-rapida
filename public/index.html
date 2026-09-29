@@ -45,6 +45,7 @@
   "image": "https://cartarapida.kartia.es/og-deja-canva.jpg",
   "url": "https://cartarapida.kartia.es",
   "applicationCategory": "BusinessApplication",
+  "audience": [{ "@type": "BusinessAudience", "audienceType": "Restaurantes, bares, hoteles y cafeterías" }, { "@type": "BusinessAudience", "audienceType": "Estudios de diseño y agencias" }],
   "operatingSystem": "Web",
   "offers": [
     { "@type": "Offer", "name": "Gratis", "price": "0", "priceCurrency": "EUR" },
@@ -134,6 +135,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Nada que te obligue a nada: no se renueva sola ni se cobra otra vez. Los PDF que hayas descargado son tuyos y los sigues usando. Si más adelante necesitas volver a quitar la firma, poner tu logo o traducir, compras otros 30 días."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Sirve para estudios de diseño y agencias?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator. Con Carta Pro quitas la firma, pones el logo del cliente y traduces, con ajustes y descargas ilimitados durante 30 días."
       }
     }
   ]
@@ -1311,6 +1320,23 @@
   .precios-grid .precio-card ul li.no { color: #6E6E6E; opacity: 1; }
   .vs-section .faq-h2 .o, .usos-section .faq-h2 .o { color: var(--cta); }
   .precios-grid .precio-card ul li.no { color: #6E6E6E; }
+
+  /* ── Estudios de diseño ── */
+  .estudios-section { background: #fff; padding: 88px 24px; }
+  .estudios-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .estudios-section .faq-h2 .o { color: var(--cta); }
+  .estudios-lead { font-size: 17px; line-height: 1.55; color: #444; margin: 18px 0 28px; max-width: 480px; }
+  .estudios-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .estudios-lista li { border: 2px solid #0E0E0E; border-radius: 16px; padding: 18px 20px 18px 56px; display: flex; flex-direction: column; gap: 5px; background: #fff; position: relative; box-shadow: 0 4px 0 #0E0E0E; }
+  .estudios-lista li::before { content: "✓"; position: absolute; left: 18px; top: 18px; width: 24px; height: 24px; border-radius: 50%; background: var(--cta); color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .estudios-lista b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; color: #0E0E0E; }
+  .estudios-lista span { font-size: 14px; color: #555; line-height: 1.5; }
+  .kb-inner { gap: 24px; }
+  @media (max-width: 900px) { .estudios-inner { grid-template-columns: 1fr; gap: 32px; } }
+  @media (max-width: 640px) {
+    .estudios-section { padding: 60px 16px; }
+    .estudios-section .cta-row .btn-primary { font-size: 17px; }
+  }
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -1371,7 +1397,7 @@
       <li><b>0</b><span>platos que teclear</span></li>
       <li><b>15</b><span>estilos de imprenta</span></li>
     </ul>
-    <p class="hero-autoridad">Hecho por el taller que fabrica las cartas de <b>Four Seasons Madrid</b>, <b>Meliá</b> y <b>Marqués de Riscal</b>.</p>
+    <p class="hero-autoridad">Hecho en Madrid por <b>Kartia</b>, taller de cartas y portamenús para hostelería desde 2018.</p>
   </div>
 
   <div class="hero-demo">
@@ -1813,6 +1839,24 @@
   </div>
 </section>
 
+<!-- ESTUDIOS DE DISEÑO -->
+<section class="estudios-section" id="estudios">
+  <div class="estudios-inner">
+    <div class="estudios-texto">
+      <div class="faq-eyebrow">Para estudios de diseño y agencias</div>
+      <h2 class="faq-h2">Deja de picar cartas.<br><span class="o">Dedica las horas a diseñar.</span></h2>
+      <p class="estudios-lead">Pasar a limpio la carta de un cliente es la parte que nadie quiere: copiar platos de una foto borrosa, cuadrar precios y rehacerlo todo cuando cambia algo. Carta Rápida te lo deja resuelto en 30 segundos y tú pones el criterio.</p>
+      <div class="cta-row"><a href="#herramienta" class="btn-primary" onclick="irHerramienta(event)">Pruébalo con una carta real <span class="arr">→</span></a></div>
+    </div>
+    <ul class="estudios-lista">
+      <li><b>Propuestas en la primera reunión</b><span>Foto de la carta del cliente y le enseñas varios estilos antes de despedirte.</span></li>
+      <li><b>Cambios del cliente en una frase</b><span>«Sube el cachopo a 23 y quita los boquerones», sin abrir InDesign.</span></li>
+      <li><b>Sin firma y con el logo del cliente</b><span>Con Carta Pro: ajustes y descargas ilimitados durante 30 días por 19 €, sin suscripción.</span></li>
+      <li><b>Traducida para hoteles y turismo</b><span>Inglés, francés, alemán, italiano, portugués o chino, con vocabulario de hostelería.</span></li>
+    </ul>
+  </div>
+</section>
+
 <!-- CÓMO FUNCIONA -->
 <section class="como-section" id="como-funciona">
   <div class="process-inner">
@@ -1930,6 +1974,10 @@
       <div class="faq-question"><h3>¿Qué pasa cuando terminan los 30 días de Carta Pro?</h3><span class="faq-plus">+</span></div>
       <div class="faq-answer">Nada que te obligue a nada: no se renueva sola ni se cobra otra vez. Los PDF que hayas descargado son tuyos y los sigues usando. Si más adelante necesitas volver a quitar la firma, poner tu logo o traducir, compras otros 30 días.</div>
     </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question"><h3>¿Sirve para estudios de diseño y agencias?</h3><span class="faq-plus">+</span></div>
+      <div class="faq-answer">Sí, sobre todo para lo más pesado: pasar a limpio la carta del cliente, enseñarle varias propuestas y aplicar sus cambios en segundos. Ten en cuenta que lo que entregamos es un PDF A4 listo para imprimir, no un archivo editable de InDesign o Illustrator. Con Carta Pro quitas la firma, pones el logo del cliente y traduces, con ajustes y descargas ilimitados durante 30 días.</div>
+    </div>
   </div>
 </section>
 
@@ -1946,9 +1994,8 @@
 <!-- KARTIA (discreto) -->
 <section class="kartia-banda" id="portamenus">
   <div class="kb-inner">
-    <img src="https://kartia.es/wp-content/uploads/2025/07/carta-restaurante-sky-madrid-four-season-isa.jpg" alt="Carta del Sky Bar del Four Seasons Madrid fabricada por Kartia" loading="lazy" decoding="async" onerror="this.style.display='none'" width="760" height="950">
     <div class="kb-texto">
-      <b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica portamenús a mano para Four Seasons, Meliá o Marqués de Riscal. Si tienes Carta Pro, te descontamos los 19 € de tu pedido.
+      <b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018. Si tienes Carta Pro, te descontamos los 19 € de tu pedido.
     </div>
     <a href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=banda" target="_blank" rel="noopener">Ver portamenús →</a>
   </div>
