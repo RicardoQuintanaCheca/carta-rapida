@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
+const { crearRutas: rutasPago, licenciaDe, MODO_DEMO } = require('./pagos');
 
 const app = express();
 app.set('trust proxy', true);
@@ -379,9 +380,16 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
 
+    // Versión gratis: con firma y sin logo. Logo, sin firma y traducción son de Carta Pro (o de la prueba)
+    const licencia = licenciaDe(req);
+    const pro = !!licencia;
+    if (!pro && String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
+      return res.status(402).json({ ok: false, pro: true, error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
+    }
+
     const t0 = Date.now();
-    const { pdf, info } = await generarPDF(limpia, { estilo: ESTILOS.includes(estilo) ? estilo : 'mantel', logo, credito: true });
-    console.log(`[PDF] ${estilo} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${Date.now() - t0} ms`);
+    const { pdf, info } = await generarPDF(limpia, { estilo: ESTILOS.includes(estilo) ? estilo : 'mantel', logo: pro ? logo : null, credito: !pro });
+    console.log(`[PDF] ${estilo} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${pro ? licencia.plan : 'gratis'} · ${Date.now() - t0} ms`);
 
     res.set({
       'Content-Type': 'application/pdf',
@@ -396,6 +404,8 @@ app.post('/pdf', limitePDF, async (req, res) => {
 });
 
 const limiteLeads = crearLimite(10, 30, 'Demasiados envíos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario.');
+
+app.use(rutasPago({ limite: crearLimite(20, 60, 'Demasiados intentos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario.') }));
 
 app.post('/guardar-email', limiteLeads, async (req, res) => {
   const b = req.body || {};
@@ -418,7 +428,7 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO }));
+app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : 'stripe' }));
 
 // Errores de subida (archivo demasiado grande, etc.)
 app.use((err, req, res, next) => {
