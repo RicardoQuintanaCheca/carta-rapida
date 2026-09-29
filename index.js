@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
 const multer = require('multer');
 const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
@@ -18,8 +19,16 @@ const upload = multer({
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const MODELO = process.env.OPENAI_MODEL || 'gpt-4o';
 
+app.use(compression());
 app.use(express.json({ limit: '6mb' }));
-app.use(express.static('public'));
+// HTML siempre fresco; imágenes y fuentes una semana; CSS y JS una hora (cambian con cada versión)
+app.use(express.static('public', {
+  setHeaders(res, ruta) {
+    if (/\.html?$/.test(ruta)) res.setHeader('Cache-Control', 'no-cache');
+    else if (/\.(webp|png|jpe?g|ico|svg|woff2?)$/.test(ruta)) res.setHeader('Cache-Control', 'public, max-age=604800');
+    else if (/\.(css|js)$/.test(ruta)) res.setHeader('Cache-Control', 'public, max-age=3600');
+  }
+}));
 
 // Tipografías de las cartas para la vista previa (las mismas del PDF)
 app.get('/carta/fuentes.css', (req, res) => {
