@@ -32,7 +32,10 @@ function limpiarPlato(p) {
   }
   // Precio repetido dentro del nombre cuando ya viene aparte
   if (precio && nombre.endsWith(precio.replace('.', ','))) nombre = nombre.slice(0, -precio.length).replace(/[-–—.·…\s]+$/, '').trim();
-  const descripcion = mayusInicial(sinPuntoFinal(limpio(p.descripcion)));
+  let descripcion = sinPuntoFinal(limpio(p.descripcion));
+  // Una descripción no repite el nombre del plato: "Pulpo a feira con cachelos" → "Con cachelos"
+  if (nombre && descripcion.toLowerCase().startsWith(nombre.toLowerCase() + ' ')) descripcion = descripcion.slice(nombre.length).trim();
+  descripcion = mayusInicial(descripcion);
   let alergenos = limpio(p.alergenos).replace(/^al[eé]rgenos\s*:?\s*/i, '');
   alergenos = alergenos ? mayusInicial(alergenos.toLocaleLowerCase('es')) : '';
   return {
