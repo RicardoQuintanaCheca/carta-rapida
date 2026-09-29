@@ -11,7 +11,10 @@ const DIAS_PRUEBA = 7;
 const DIA = 24 * 60 * 60 * 1000;
 
 const CLAVE_STRIPE = process.env.STRIPE_SECRET_KEY || '';
-const MODO_DEMO = !CLAVE_STRIPE;
+// El pago simulado solo existe si se pide expresamente (PAGOS_DEMO=si) y no hay clave de Stripe.
+// Sin clave y sin demo, el pago de Pro queda desactivado: nunca se regala Pro por error en producción.
+const MODO_DEMO = !CLAVE_STRIPE && process.env.PAGOS_DEMO === 'si';
+const PAGOS_ACTIVOS = !!CLAVE_STRIPE || MODO_DEMO;
 const stripe = CLAVE_STRIPE ? require('stripe')(CLAVE_STRIPE) : null;
 
 // Secreto para firmar licencias. Si no se configura, se deriva de la clave de OpenAI (estable entre reinicios)
@@ -82,6 +85,7 @@ function crearRutas({ limite }) {
     const restaurante = String(b.restaurante || '').slice(0, 120);
     const origen = origenDe(req);
     try {
+      if (!PAGOS_ACTIVOS) return res.json({ ok: false, error: 'El pago con tarjeta estará disponible en unos minutos. Mientras, prueba Carta Pro gratis 7 días.' });
       if (MODO_DEMO) {
         const id = 'demo_' + crypto.randomBytes(9).toString('base64url');
         return res.json({ ok: true, url: `${origen}/pago/demo?s=${id}` });
@@ -198,4 +202,4 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
   return r;
 }
 
-module.exports = { crearRutas, licenciaDe, MODO_DEMO };
+module.exports = { crearRutas, licenciaDe, MODO_DEMO, PAGOS_ACTIVOS };

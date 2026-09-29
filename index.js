@@ -430,7 +430,7 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : 'stripe', listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));
+app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : (process.env.STRIPE_SECRET_KEY ? 'stripe' : 'desactivado'), listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));
 
 // Configuración pública para la web (analítica solo si está configurada; se carga tras el consentimiento)
 const GA4 = /^G-[A-Z0-9]{4,20}$/.test(process.env.GA4_ID || '') ? process.env.GA4_ID : '';
