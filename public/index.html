@@ -2856,7 +2856,12 @@
     const segundos = filesList.length > 1 ? 25 : 15;
     document.getElementById('msgTyping').style.display = 'flex';
     startCountdown(segundos); scroll();
-    if (window.innerWidth < 1024) document.getElementById('msgTyping').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Llevar al usuario a la animación de progreso (queda debajo de los estilos)
+    requestAnimationFrame(() => {
+      const prog = document.getElementById('progressBarWrap');
+      const destino = prog && prog.offsetParent !== null ? prog : document.getElementById('msgTyping');
+      destino.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
     try {
       const formData = new FormData();
       filesList.forEach((f, i) => formData.append(`foto_${i}`, f.file));
