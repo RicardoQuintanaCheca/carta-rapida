@@ -6,7 +6,7 @@
 
 <!-- SEO -->
 <title>Tu carta de restaurante lista en 30 segundos, sin Canva | Carta Rápida</title>
-<meta name="description" content="Hazle una foto a tu carta y en 30 segundos la tienes maquetada como en una imprenta, en PDF A4 listo para imprimir. Sin plantillas, sin teclear platos. 15 estilos, gratis y sin registro.">
+<meta name="description" content="Hazle una foto a tu carta y en 30 segundos la tienes maquetada como en una imprenta, en PDF A4 listo para imprimir. Sin plantillas, sin teclear platos. 10 estilos gratis y sin registro.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://cartarapida.kartia.es">
 <meta name="author" content="Kartia — Gastrotouch Marketing Solutions S.L.">
@@ -999,8 +999,8 @@
   .res-mini { border: 2px solid #E8E6E0; border-radius: 10px; background: #fff; padding: 4px 4px 5px; cursor: pointer; font-family: inherit; display: flex; flex-direction: column; gap: 4px; transition: border-color .15s, transform .15s; }
   .res-mini:hover { border-color: #FF6B35; transform: translateY(-1px); }
   .res-mini.on { border-color: #FF6B35; background: #FFF4EC; }
-  .res-mini span:first-child { display: block; aspect-ratio: 210 / 230; border-radius: 5px; background: #fff center top / 100% auto no-repeat; border: 1px solid #EEE; }
-  .res-mini span:last-child { font-family: 'Bricolage Grotesque', sans-serif; font-size: 10.5px; font-weight: 700; color: #0E0E0E; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .res-mini .rm-img { display: block; aspect-ratio: 210 / 230; border-radius: 5px; background: #fff center top / 100% auto no-repeat; border: 1px solid #EEE; }
+  .res-mini .rm-nom { font-family: 'Bricolage Grotesque', sans-serif; font-size: 10.5px; font-weight: 700; color: #0E0E0E; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   @media (min-width: 1024px) {
     .tool-section { max-width: none; padding: 56px 32px 96px; }
@@ -1651,7 +1651,7 @@
               <span id="dlTexto">Descargar PDF</span>
             </button>
             <div class="dl-nota" id="dlNota">A4 listo para imprimir · sin registro · puedes cambiar de estilo y volver a descargar</div>
-            <div class="dl-revisa">Antes de imprimir, revisa precios y alérgenos: tu carta, tu responsabilidad.</div>
+            <div class="dl-revisa">Antes de imprimir, revisa platos, precios y alérgenos.</div>
 
             <button class="guardar-btn" id="guardarBtn" onclick="guardarEnPanel()" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -1832,7 +1832,7 @@
         </div>
       </div>
       <div class="t2-card t2-style-section">
-        <div class="t2-sticker">15 estilos · 0 €</div>
+        <div class="t2-sticker">10 gratis · 5 Pro</div>
         <div class="t2-eyebrow">03 · ESTILO <span class="t2-eyebrow-nota">· puedes cambiarlo después con un toque</span></div>
         <div class="t2-panel-hint">Quince diseños pensados para imprimir en papel blanco, de la alta cocina a la taberna. Si no eliges, empezamos por Sobremesa. Los marcados con <b>Pro</b> puedes verlos con tu carta; para descargarlos, pruébalo 7 días gratis. Cuando veas tu carta, cambias de estilo al instante y sin esperar.</div>
         <div class="t2-scard-grid">
@@ -1986,13 +1986,13 @@
   <div class="neuro-inner">
     <div class="neuro-texto">
       <div class="faq-eyebrow">Neuromarketing aplicado</div>
-      <h2 class="faq-h2">No solo más bonita.<br><span class="o">Una carta que vende más.</span></h2>
+      <h2 class="faq-h2">No solo más bonita.<br><span class="o">Una carta pensada para vender.</span></h2>
       <p class="neuro-lead">Tu carta es el vendedor que tienes en todas las mesas. Cada carta que sale de Carta Rápida se maqueta con las reglas de la ingeniería de menús: cómo leemos una carta, qué miramos primero y qué nos hace pedir.</p>
       <ol class="neuro-lista">
         <li><b>Lo que más te interesa vender, primero</b><span>La especialidad y los platos de más valor abren cada sección: son los que más se miran.</span></li>
         <li><b>El precio no manda</b><span>Detrás del plato, sin columna y sin el símbolo €. Se elige por lo que apetece, no por lo que cuesta.</span></li>
         <li><b>Pocos destacados, bien elegidos</b><span>Como mucho uno por sección. Si todo destaca, nada destaca.</span></li>
-        <li><b>Descripciones que abren el apetito</b><span>Cortas, con producto y elaboración. Nada de «delicioso» ni «exquisito».</span></li>
+        <li><b>Descripciones que abren el apetito</b><span>Cortas y solo con lo que lleva el plato. Nada de «delicioso» ni «exquisito».</span></li>
         <li><b>El orden de una comida</b><span>Entrantes, principales, postres y bebidas, en el orden en que se piden. Menos dudas, más platos.</span></li>
       </ol>
       <div class="cta-row"><a href="#herramienta" class="btn-primary" onclick="irHerramienta(event)">Quiero una carta que venda <span class="arr">→</span></a></div>
@@ -2052,7 +2052,7 @@
         <a class="precio-cta" href="#herramienta" onclick="irHerramienta(event)">Hacer mi carta gratis</a>
       </div>
       <div class="precio-card pro">
-        <span class="precio-sello">Lo más elegido</span>
+        <span class="precio-sello">Recomendado</span>
         <div class="precio-nombre">Carta Pro</div>
         <div class="precio-periodo" role="group" aria-label="Periodo de pago">
           <button type="button" class="on" data-p="ano" onclick="periodoPrecios('ano')">Anual · ahorra 36 €</button>
@@ -2127,7 +2127,7 @@
         <div class="p3-step-icn">📷</div>
         <div class="p3-step-num">01</div>
         <h3>Sube tu carta</h3>
-        <p>Una foto con el móvil, un PDF, o simplemente pega el texto. Da igual cómo la tengas — nosotros la leemos.</p>
+        <p>Una foto con el móvil, una captura de tu PDF o simplemente el texto pegado. Da igual cómo la tengas — nosotros la leemos.</p>
       </div>
       <div class="p3-step">
         <div class="p3-step-icn">🧠</div>
@@ -2477,7 +2477,7 @@
       b.className = 'res-mini' + (e === estiloActual ? ' on' : '');
       b.dataset.estilo = e;
       b.setAttribute('aria-label', 'Estilo ' + chip.textContent);
-      b.innerHTML = '<span style="background-image:url(/carta/muestra-' + e + '.webp)"></span><span>' + chip.textContent + '</span>';
+      b.innerHTML = '<span class="rm-img" style="background-image:url(/carta/muestra-' + e + '.webp)"></span><span class="rm-nom">' + chip.textContent.replace('Pro', '').trim() + '</span>';
       b.onclick = () => cambiarEstiloResultado(e);
       g.appendChild(b);
     });
