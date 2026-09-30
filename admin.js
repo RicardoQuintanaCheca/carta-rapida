@@ -5,7 +5,9 @@
 const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
-const { db } = require('./db');
+const { db, copiaA } = require('./db');
+const os = require('os');
+const fs = require('fs');
 const { usuarioDe, planDeUsuario, firmar, iguales, leerCookie } = require('./cuentas');
 const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
@@ -209,6 +211,23 @@ r.post('/admin/solicitudes/:id/atendida', express.json(), (req, res) => {
   const hecha = (req.body || {}).atendida !== false;
   const info = db.prepare('UPDATE solicitudes SET atendida = ?, estado = ? WHERE id = ?').run(hecha ? 1 : 0, hecha ? 'atendida' : 'nueva', String(req.params.id));
   res.json({ ok: !!info.changes });
+});
+
+// Copia de seguridad completa de la base de datos, para guardarla fuera de Railway
+r.get('/admin/copia.db', (req, res) => {
+  if (!db || !esAdmin(req)) return res.status(403).end();
+  const fecha = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
+  const tmp = path.join(os.tmpdir(), `cr-copia-${Date.now()}.db`);
+  try {
+    copiaA(tmp);
+    console.log('[ADMIN] copia de seguridad descargada');
+    res.set('Cache-Control', 'no-store');
+    res.download(tmp, `carta-rapida-copia-${fecha}.db`, () => fs.unlink(tmp, () => {}));
+  } catch (e) {
+    console.error('[ADMIN] copia:', e.message);
+    fs.unlink(tmp, () => {});
+    res.status(500).send('No se ha podido hacer la copia.');
+  }
 });
 
 r.get('/admin/usuarios.csv', (req, res) => {
