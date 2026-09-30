@@ -86,7 +86,7 @@
   const eur = n => n.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
   const ORIGEN = { 'descarga': 'Descarga gratis', 'montaje': 'Montaje portamenú', 'carta-rapida-descarga': 'Descarga gratis', 'carta-rapida-cuenta': 'Cuenta creada', 'carta-rapida-pro': 'Pago Pro', 'carta-rapida-montaje': 'Montaje portamenú', 'carta-rapida-prueba': 'Prueba (antigua)' };
   const r = await fetch('/admin/datos', { credentials: 'same-origin' });
-  if (!r.ok) { location.href = '/panel?admin=1'; return; }
+  if (!r.ok) { location.href = '/admin'; return; }
   const d = await r.json();
   const R = d.resumen, U = d.uso;
   const kpi = (v, t, extra = '', clave = false) => `<div class="kpi${clave ? ' clave' : ''}"><b>${v}</b><span>${t}</span>${extra ? `<small>${extra}</small>` : ''}</div>`;

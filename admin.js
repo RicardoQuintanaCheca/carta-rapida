@@ -1,18 +1,76 @@
-// Panel de administración (/admin): solo para las cuentas cuyo email está en ADMIN_EMAILS.
-// Por defecto: tienda.kartia@gmail.com e info@kartia.es (hay que crear la cuenta con ese email en la web).
+// Panel de administración (/admin): solo para las cuentas cuyo email está en ADMIN_EMAILS
+// Y que además demuestran que controlan ese buzón con un código de 6 cifras enviado por email.
+// (El registro no verifica el email: sin el código, cualquiera que registrase un email de admin entraría.)
+// Por defecto: tienda.kartia@gmail.com e info@kartia.es.
 const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const { db } = require('./db');
-const { usuarioDe, planDeUsuario } = require('./cuentas');
+const { usuarioDe, planDeUsuario, firmar, iguales, leerCookie } = require('./cuentas');
+const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
 const ADMINS = (process.env.ADMIN_EMAILS || 'tienda.kartia@gmail.com,info@kartia.es')
   .split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 const DIA = 24 * 60 * 60 * 1000;
 const PRECIO = { mes: 12.9, ano: 118.8 };
 
-function esAdmin(req) {
+// ── Verificación por código ──
+const COOKIE_ADMIN = 'cr_admin';
+const HORAS_ADMIN = 12;
+const MIN_CODIGO = 10;
+const codigos = new Map(); // id de usuario -> { hash, x: caduca, intentos, enviado }
+const enviosHora = new Map(); // id de usuario -> marcas de tiempo de los códigos pedidos
+const hashCodigo = (uid, c) => firmar(`admin-codigo|${uid}|${c}`);
+
+function usuarioAdmin(req) {
   const u = usuarioDe(req);
-  return !!(u && ADMINS.includes(u.email));
+  return u && ADMINS.includes(u.email) ? u : null;
+}
+function verificado(req, u) {
+  const token = leerCookie(req, COOKIE_ADMIN);
+  if (!u || !token || token.length > 400 || !token.includes('.')) return false;
+  const [datos, firma] = token.split('.');
+  if (!firma || !iguales(firma, firmar('admin|' + datos))) return false;
+  try {
+    const t = JSON.parse(Buffer.from(datos, 'base64url').toString());
+    return t.u === u.id && t.v === u.version_sesion && t.x > Date.now();
+  } catch { return false; }
+}
+function esAdmin(req) {
+  const u = usuarioAdmin(req);
+  return !!(u && verificado(req, u));
+}
+
+function paginaCodigo(email) {
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Verificación · Administración</title>
+<style>body{margin:0;font-family:Inter,system-ui,sans-serif;background:#FAF7F2;color:#0E0E0E;display:grid;place-items:center;min-height:100vh;padding:16px;box-sizing:border-box}
+.c{background:#fff;max-width:420px;width:100%;border-radius:18px;padding:28px;border:1.5px solid #E8E1D6}
+h1{font-size:22px;margin:0 0 8px}p{color:#555;font-size:14.5px;line-height:1.5;margin:0 0 16px}
+input{width:100%;box-sizing:border-box;font-size:28px;letter-spacing:.4em;text-align:center;padding:12px;border:1.5px solid #E8E1D6;border-radius:12px;font-variant-numeric:tabular-nums}
+button{width:100%;margin-top:12px;padding:14px;border:0;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:#0E0E0E;color:#fff}
+button.sec{background:#fff;color:#0E0E0E;border:1.5px solid #0E0E0E}.m{min-height:20px;font-size:13.5px;margin-top:10px}.m.err{color:#B42318}.m.ok{color:#2E7D32}</style></head>
+<body><div class="c"><h1>Verifica que eres tú</h1>
+<p>Para entrar en la administración te enviamos un código de 6 cifras a <b>${esc(email)}</b>. Caduca en ${MIN_CODIGO} minutos.</p>
+<button type="button" class="sec" id="enviar">Enviarme el código</button>
+<form id="f" style="margin-top:16px"><input id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" aria-label="Código de 6 cifras"><button type="submit">Entrar</button></form>
+<div class="m" id="m"></div></div>
+<script>
+const m = document.getElementById('m');
+const post = async (u, b) => { const r = await fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(b || {}) }); return r.json().catch(() => ({ ok: false, error: 'Error inesperado.' })); };
+document.getElementById('enviar').onclick = async (e) => {
+  e.target.disabled = true; m.className = 'm'; m.textContent = 'Enviando…';
+  const d = await post('/admin/codigo');
+  m.className = 'm ' + (d.ok ? 'ok' : 'err'); m.textContent = d.ok ? 'Código enviado. Revisa tu correo (y la carpeta de spam).' : d.error;
+  setTimeout(() => { e.target.disabled = false; }, 30000);
+  document.getElementById('codigo').focus();
+};
+document.getElementById('f').onsubmit = async (e) => {
+  e.preventDefault();
+  const d = await post('/admin/verificar', { codigo: document.getElementById('codigo').value.trim() });
+  if (d.ok) location.reload(); else { m.className = 'm err'; m.textContent = d.error; }
+};
+</script></body></html>`;
 }
 
 const csv = filas => filas.map(f => f.map(v => {
@@ -33,8 +91,52 @@ const r = express.Router();
 r.get(['/admin', '/admin/'], (req, res) => {
   res.set('Cache-Control', 'no-store');
   if (!db) return res.status(503).send('Base de datos no disponible.');
-  if (!esAdmin(req)) return res.redirect('/panel?entrar=1&admin=1');
+  const u = usuarioAdmin(req);
+  if (!u) return res.redirect('/panel?entrar=1&admin=1');
+  if (!verificado(req, u)) return res.type('html').send(paginaCodigo(u.email));
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Enviar el código al email de administración (como mucho uno cada 30 s)
+r.post('/admin/codigo', express.json(), async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const u = usuarioAdmin(req);
+  if (!u) return res.status(403).json({ ok: false, error: 'Esta cuenta no tiene acceso de administrador.' });
+  if (!CORREO_ACTIVO) return res.json({ ok: false, error: 'El envío de correo no está configurado en el servidor.' });
+  const previo = codigos.get(u.id);
+  if (previo && Date.now() - previo.enviado < 30 * 1000) return res.json({ ok: false, error: 'Espera unos segundos antes de pedir otro código.' });
+  const envios = (enviosHora.get(u.id) || []).filter(t => Date.now() - t < 60 * 60 * 1000);
+  if (envios.length >= 6) return res.json({ ok: false, error: 'Has pedido demasiados códigos. Espera una hora.' });
+  enviosHora.set(u.id, [...envios, Date.now()]);
+  const codigo = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
+  codigos.set(u.id, { hash: hashCodigo(u.id, codigo), x: Date.now() + MIN_CODIGO * 60 * 1000, intentos: 0, enviado: Date.now() });
+  const ok = await enviarCorreo({
+    para: u.email,
+    asunto: `Código de acceso a la administración: ${codigo}`,
+    html: plantilla({ titulo: `Tu código: ${codigo}`, texto: `Úsalo para entrar en la administración de Carta Rápida. Caduca en ${MIN_CODIGO} minutos.`, boton: 'Abrir la administración', enlace: `${(process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '')}/admin`, pie: 'Si no has sido tú, alguien ha entrado con tu contraseña: cámbiala desde tu panel.' }),
+    texto: `Tu código de acceso a la administración de Carta Rápida: ${codigo}\nCaduca en ${MIN_CODIGO} minutos. Si no has sido tú, cambia tu contraseña.`
+  });
+  if (!ok) { codigos.delete(u.id); return res.json({ ok: false, error: 'No hemos podido enviar el correo. Inténtalo en un minuto.' }); }
+  console.log(`[ADMIN] código enviado a ${u.email}`);
+  res.json({ ok: true });
+});
+
+// Comprobar el código (5 intentos por código)
+r.post('/admin/verificar', express.json(), (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const u = usuarioAdmin(req);
+  if (!u) return res.status(403).json({ ok: false, error: 'Esta cuenta no tiene acceso de administrador.' });
+  const c = codigos.get(u.id);
+  const codigo = String((req.body || {}).codigo || '').replace(/\D/g, '');
+  if (!c || c.x < Date.now()) { codigos.delete(u.id); return res.json({ ok: false, error: 'El código ha caducado. Pide otro.' }); }
+  if (c.intentos >= 5) { codigos.delete(u.id); return res.json({ ok: false, error: 'Demasiados intentos. Pide un código nuevo.' }); }
+  c.intentos++;
+  if (codigo.length !== 6 || !iguales(c.hash, hashCodigo(u.id, codigo))) return res.json({ ok: false, error: 'Código incorrecto.' });
+  codigos.delete(u.id);
+  const datos = Buffer.from(JSON.stringify({ u: u.id, v: u.version_sesion, x: Date.now() + HORAS_ADMIN * 60 * 60 * 1000 })).toString('base64url');
+  res.cookie(COOKIE_ADMIN, `${datos}.${firmar('admin|' + datos)}`, { httpOnly: true, sameSite: 'strict', secure: req.secure, maxAge: HORAS_ADMIN * 60 * 60 * 1000, path: '/admin' });
+  console.log(`[ADMIN] acceso verificado: ${u.email}`);
+  res.json({ ok: true });
 });
 
 r.get('/admin/datos', (req, res) => {

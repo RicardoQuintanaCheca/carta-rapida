@@ -544,4 +544,4 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
   return r;
 }
 
-module.exports = { crearRutas, planDe, usuarioDe, planDeUsuario, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente };
+module.exports = { crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente };
