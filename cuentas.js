@@ -8,7 +8,8 @@ const { enviarLead } = require('./leads');
 const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
 // Acceso con Google: el «ID de cliente» de Google Cloud (es público, no es una clave secreta)
-const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || '').trim();
+// Proyecto «Carta Rapida» en Google Cloud (cuenta info@ricardoquintana.com). Se puede cambiar con la variable GOOGLE_CLIENT_ID.
+const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || '697270189757-36clge703bga3uukmoqbff6p4v5hseaq.apps.googleusercontent.com').trim();
 
 const DIA = 24 * 60 * 60 * 1000;
 const DIAS_PRUEBA = 7;
