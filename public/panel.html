@@ -750,6 +750,12 @@
     await Cuenta.vueltaDelPago();
     const params = new URLSearchParams(location.search);
     if (params.get('portal')) { history.replaceState(null, '', '/panel' + location.hash); await Cuenta.cargar(); }
+    // Acceso al panel de administración: /admin manda aquí si no hay sesión de administrador
+    if (params.get('admin') === '1') {
+      history.replaceState(null, '', '/panel');
+      if (Cuenta.estado) Cuenta.aviso('Esta cuenta no tiene acceso de administrador. Entra con el email de administración.', 7000);
+      else Cuenta.acceso({ modo: 'entrar', motivo: 'Entra con tu cuenta de administración.', alEntrar: () => { location.href = '/admin'; } });
+    }
   })();
 </script>
 </body>

@@ -47,6 +47,23 @@ try {
       actualizado INTEGER NOT NULL
     );
     CREATE INDEX IF NOT EXISTS cartas_usuario ON cartas(usuario_id, actualizado DESC);
+    CREATE TABLE IF NOT EXISTS leads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      origen TEXT,
+      restaurante TEXT,
+      estilo TEXT,
+      platos INTEGER,
+      novedades INTEGER NOT NULL DEFAULT 0,
+      fecha INTEGER NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS leads_fecha ON leads(fecha DESC);
+    CREATE TABLE IF NOT EXISTS eventos (
+      tipo TEXT NOT NULL,
+      fecha INTEGER NOT NULL,
+      detalle TEXT
+    );
+    CREATE INDEX IF NOT EXISTS eventos_tipo ON eventos(tipo, fecha);
   `);
 } catch (e) {
   motivo = e.message;
@@ -57,4 +74,10 @@ try {
 // ¿Está en un volumen persistente? En Railway, RAILWAY_VOLUME_MOUNT_PATH existe solo si hay volumen.
 const persistente = !process.env.RAILWAY_ENVIRONMENT || !!process.env.RAILWAY_VOLUME_MOUNT_PATH;
 
-module.exports = { db, motivo, persistente, ARCHIVO };
+// Contador sencillo de uso (cartas generadas, PDF descargados…) para el panel de administración
+function evento(tipo, detalle = '') {
+  if (!db) return;
+  try { db.prepare('INSERT INTO eventos (tipo, fecha, detalle) VALUES (?, ?, ?)').run(tipo, Date.now(), String(detalle).slice(0, 60)); } catch {}
+}
+
+module.exports = { db, motivo, persistente, ARCHIVO, evento };

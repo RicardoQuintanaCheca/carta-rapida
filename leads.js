@@ -58,6 +58,13 @@ async function aListmonk(lead) {
 
 function enviarLead(lead) {
   console.log(`LEAD: ${JSON.stringify(lead)}`);
+  // Se guarda también en la base de datos para verlo en /admin
+  try {
+    const { db } = require('./db');
+    if (db) db.prepare('INSERT INTO leads (email, origen, restaurante, estilo, platos, novedades, fecha) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .run(String(lead.email || '').slice(0, 200), String(lead.origen || '').slice(0, 60), String(lead.restaurante || '').slice(0, 120),
+        String(lead.estilo || '').slice(0, 20), Number.isFinite(+lead.platos) ? +lead.platos : 0, lead.novedades === true ? 1 : 0, Date.now());
+  } catch (e) { console.error('[LEAD] no se pudo guardar en la base de datos:', e.message); }
   if (process.env.LEADS_WEBHOOK_URL) {
     fetch(process.env.LEADS_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
       .catch(err => console.error('[LEAD] webhook falló:', err.message));
