@@ -89,7 +89,10 @@
       gisIniciado = true;
     }
     hueco.innerHTML = '';
-    const ancho = Math.max(220, Math.min(400, Math.round(hueco.getBoundingClientRect().width || 320)));
+    // Se mide cuando la ventana ya está pintada: el botón ocupa todo el ancho (Google admite como máximo 400 px)
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const caja = hueco.closest('.cu-google') || hueco.parentElement || hueco;
+    const ancho = Math.max(220, Math.min(400, Math.floor(caja.getBoundingClientRect().width || hueco.getBoundingClientRect().width || 320)));
     window.google.accounts.id.renderButton(hueco, { type: 'standard', theme: 'outline', size: 'large', shape: 'pill', text: modo === 'crear' ? 'signup_with' : 'continue_with', logo_alignment: 'center', width: ancho, locale: 'es' });
     return true;
   }
