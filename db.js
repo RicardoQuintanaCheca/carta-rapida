@@ -65,6 +65,10 @@ try {
     );
     CREATE INDEX IF NOT EXISTS eventos_tipo ON eventos(tipo, fecha);
   `);
+  // Columnas nuevas (bases de datos ya creadas): acceso con Google y cuentas sin contraseña propia
+  const cols = db.prepare('PRAGMA table_info(usuarios)').all().map(c => c.name);
+  if (!cols.includes('google_sub')) db.exec('ALTER TABLE usuarios ADD COLUMN google_sub TEXT');
+  if (!cols.includes('sin_clave')) db.exec('ALTER TABLE usuarios ADD COLUMN sin_clave INTEGER NOT NULL DEFAULT 0');
 } catch (e) {
   motivo = e.message;
   db = null;

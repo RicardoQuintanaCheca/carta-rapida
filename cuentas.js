@@ -5,6 +5,10 @@ const crypto = require('crypto');
 const express = require('express');
 const { db, persistente } = require('./db');
 const { enviarLead } = require('./leads');
+const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
+
+// Acceso con Google: el «ID de cliente» de Google Cloud (es público, no es una clave secreta)
+const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || '').trim();
 
 const DIA = 24 * 60 * 60 * 1000;
 const DIAS_PRUEBA = 7;
@@ -144,7 +148,7 @@ async function planDe(req) {
 function datosCuenta(u) {
   const p = planDeUsuario(u);
   const n = db.prepare('SELECT COUNT(*) AS n FROM cartas WHERE usuario_id = ?').get(u.id).n;
-  return { email: u.email, cartas: n, ...p, puedePortal: !!(u.stripe_cliente && stripe) };
+  return { email: u.email, cartas: n, ...p, puedePortal: !!(u.stripe_cliente && stripe), sinClave: !!u.sin_clave, google: !!u.google_sub };
 }
 
 // ── Cartas ──
@@ -173,6 +177,35 @@ function resumenCarta(c) {
     idioma = d.carta.idioma || 'es';
   } catch {}
   return { id: c.id, titulo: c.titulo, estilo: c.estilo, creado: c.creado, actualizado: c.actualizado, platos, secciones, idioma };
+}
+
+// ── Recuperar contraseña: enlace firmado que caduca en 1 hora y deja de valer al cambiar la contraseña ──
+const HORA = 60 * 60 * 1000;
+function tokenRestablecer(u) {
+  const datos = Buffer.from(JSON.stringify({ u: u.id, h: u.hash.slice(0, 16), x: Date.now() + HORA })).toString('base64url');
+  return `${datos}.${firmar('restablecer|' + datos)}`;
+}
+function leerRestablecer(token) {
+  if (!db || typeof token !== 'string' || token.length > 400 || !token.includes('.')) return null;
+  const [datos, firma] = token.split('.');
+  if (!firma || !iguales(firma, firmar('restablecer|' + datos))) return null;
+  try {
+    const t = JSON.parse(Buffer.from(datos, 'base64url').toString());
+    if (!(t.x > Date.now())) return null;
+    const u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(t.u);
+    return u && u.hash.slice(0, 16) === t.h ? u : null;
+  } catch { return null; }
+}
+
+// ── Google: se comprueba el token con Google (firma, destinatario y email verificado) ──
+async function verificarGoogle(credencial) {
+  if (!GOOGLE_CLIENT_ID || typeof credencial !== 'string' || credencial.length > 4000) return null;
+  const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(credencial), { signal: AbortSignal.timeout(8000) });
+  if (!r.ok) return null;
+  const t = await r.json();
+  const emisorOk = t.iss === 'accounts.google.com' || t.iss === 'https://accounts.google.com';
+  if (t.aud !== GOOGLE_CLIENT_ID || !emisorOk || String(t.email_verified) !== 'true' || !(Number(t.exp) * 1000 > Date.now())) return null;
+  return { sub: String(t.sub), email: String(t.email || '').trim().toLowerCase(), nombre: String(t.name || '') };
 }
 
 function crearRutas({ limite, limiteCuenta }) {
@@ -231,6 +264,79 @@ function crearRutas({ limite, limiteCuenta }) {
 
   r.post('/cuenta/salir', (req, res) => { quitarSesion(req, res); res.json({ ok: true }); });
 
+  // Qué formas de acceso hay disponibles (para pintar los botones)
+  r.get('/cuenta/config', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.json({ ok: true, google: GOOGLE_CLIENT_ID || null, correo: CORREO_ACTIVO });
+  });
+
+  // Entrar o crear cuenta con Google. Si ya había cuenta con ese email, se une a ella.
+  r.post('/cuenta/google', limiteCuenta, sinCuentas, async (req, res) => {
+    const b = req.body || {};
+    let g = null;
+    try { g = await verificarGoogle(b.credencial); } catch (e) { console.error('[GOOGLE] verificación falló:', e.message); }
+    if (!g || !emailValido(g.email)) return res.json({ ok: false, error: 'No hemos podido entrar con Google. Inténtalo otra vez.' });
+    let u = db.prepare('SELECT * FROM usuarios WHERE google_sub = ?').get(g.sub) || db.prepare('SELECT * FROM usuarios WHERE email = ?').get(g.email);
+    let nueva = false;
+    if (u) {
+      if (!u.google_sub) db.prepare('UPDATE usuarios SET google_sub = ? WHERE id = ?').run(g.sub, u.id);
+    } else {
+      // Cuenta nueva: contraseña aleatoria que nadie conoce (puede crear una desde «Olvidé mi contraseña» o desde su panel)
+      const { sal, hash } = hashClave(crypto.randomBytes(24).toString('hex'));
+      const ahora = Date.now();
+      const info = db.prepare('INSERT INTO usuarios (email, hash, sal, creado, novedades, prueba_hasta, google_sub, sin_clave) VALUES (?, ?, ?, ?, ?, ?, ?, 1)')
+        .run(g.email, hash, sal, ahora, b.novedades === true ? 1 : 0, ahora + DIAS_PRUEBA * DIA, g.sub);
+      nueva = true;
+      console.log(`CUENTA: ${JSON.stringify({ email: g.email, fecha: ahoraMadrid(), origen: 'google' })}`);
+      enviarLead({
+        email: g.email, origen: 'carta-rapida-cuenta', restaurante: String(b.restaurante || '').slice(0, 120),
+        estilo: String(b.estilo || '').slice(0, 20), platos: Number.isFinite(+b.platos) ? +b.platos : 0,
+        novedades: b.novedades === true, fecha: ahoraMadrid()
+      });
+      u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(info.lastInsertRowid);
+    }
+    u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(u.id);
+    ponerSesion(req, res, u);
+    const al = await sincronizar(u, true);
+    res.json({ ok: true, nueva, cuenta: datosCuenta(al) });
+  });
+
+  // Olvidé mi contraseña: manda un enlace al email. Siempre responde igual, exista o no la cuenta.
+  r.post('/cuenta/olvide', limiteCuenta, sinCuentas, async (req, res) => {
+    const email = String((req.body || {}).email || '').trim().toLowerCase();
+    if (!emailValido(email)) return res.json({ ok: false, campo: 'email', error: 'Revisa el email.' });
+    if (!CORREO_ACTIVO) return res.json({ ok: false, sinCorreo: true, error: 'Escríbenos desde tu email a hola@kartia.es y te la restablecemos en el día.' });
+    const u = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
+    if (u) {
+      const enlace = `${origenDe(req)}/panel?restablecer=${tokenRestablecer(u)}`;
+      const texto = u.sin_clave
+        ? 'Entraste con Google, así que tu cuenta no tiene contraseña. Si quieres crear una, pulsa el botón. También puedes seguir entrando con Google.'
+        : 'Has pedido cambiar la contraseña de tu cuenta de Carta Rápida. Pulsa el botón y elige una nueva.';
+      enviarCorreo({
+        para: u.email,
+        asunto: 'Tu nueva contraseña de Carta Rápida',
+        html: plantilla({ titulo: 'Elige una contraseña nueva', texto, boton: 'Crear contraseña nueva', enlace, pie: 'El enlace caduca en 1 hora. Si no lo has pedido tú, ignora este correo: tu contraseña sigue igual.' }),
+        texto: `${texto}\n\n${enlace}\n\nEl enlace caduca en 1 hora. Si no lo has pedido tú, ignora este correo.`
+      });
+    }
+    res.json({ ok: true });
+  });
+
+  // Poner la contraseña nueva desde el enlace del correo (y entrar)
+  r.post('/cuenta/restablecer', limiteCuenta, sinCuentas, (req, res) => {
+    const b = req.body || {};
+    const u = leerRestablecer(String(b.token || ''));
+    if (!u) return res.json({ ok: false, caducado: true, error: 'El enlace ha caducado o ya se ha usado. Pide otro desde «¿Olvidaste la contraseña?».' });
+    const nueva = String(b.clave || '');
+    if (nueva.length < 8 || nueva.length > 200) return res.json({ ok: false, campo: 'clave', error: 'La contraseña debe tener al menos 8 caracteres.' });
+    const { sal, hash } = hashClave(nueva);
+    db.prepare('UPDATE usuarios SET hash = ?, sal = ?, sin_clave = 0, version_sesion = version_sesion + 1 WHERE id = ?').run(hash, sal, u.id);
+    const al = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(u.id);
+    ponerSesion(req, res, al);
+    console.log(`CLAVE RESTABLECIDA: ${JSON.stringify({ email: al.email, fecha: ahoraMadrid() })}`);
+    res.json({ ok: true, cuenta: datosCuenta(al) });
+  });
+
   r.get('/cuenta/yo', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     let u = usuarioDe(req);
@@ -241,11 +347,11 @@ function crearRutas({ limite, limiteCuenta }) {
 
   r.post('/cuenta/clave', limiteCuenta, sinCuentas, conSesion, (req, res) => {
     const b = req.body || {};
-    if (!claveCorrecta(String(b.actual || ''), req.usuario)) return res.json({ ok: false, campo: 'actual', error: 'La contraseña actual no es correcta.' });
+    if (!req.usuario.sin_clave && !claveCorrecta(String(b.actual || ''), req.usuario)) return res.json({ ok: false, campo: 'actual', error: 'La contraseña actual no es correcta.' });
     const nueva = String(b.nueva || '');
     if (nueva.length < 8 || nueva.length > 200) return res.json({ ok: false, campo: 'nueva', error: 'La nueva contraseña debe tener al menos 8 caracteres.' });
     const { sal, hash } = hashClave(nueva);
-    db.prepare('UPDATE usuarios SET hash = ?, sal = ?, version_sesion = version_sesion + 1 WHERE id = ?').run(hash, sal, req.usuario.id);
+    db.prepare('UPDATE usuarios SET hash = ?, sal = ?, sin_clave = 0, version_sesion = version_sesion + 1 WHERE id = ?').run(hash, sal, req.usuario.id);
     ponerSesion(req, res, db.prepare('SELECT * FROM usuarios WHERE id = ?').get(req.usuario.id));
     res.json({ ok: true });
   });
@@ -253,7 +359,9 @@ function crearRutas({ limite, limiteCuenta }) {
   // Borrar la cuenta y todas sus cartas (RGPD). Si hay suscripción viva, se cancela en Stripe.
   r.post('/cuenta/borrar', limiteCuenta, sinCuentas, conSesion, async (req, res) => {
     const u = req.usuario;
-    if (!claveCorrecta(String((req.body || {}).clave || ''), u)) return res.json({ ok: false, error: 'La contraseña no es correcta.' });
+    const cb = req.body || {};
+    const confirmado = u.sin_clave ? String(cb.confirmar || '').trim().toUpperCase() === 'BORRAR' : claveCorrecta(String(cb.clave || ''), u);
+    if (!confirmado) return res.json({ ok: false, error: u.sin_clave ? 'Escribe BORRAR para confirmar.' : 'La contraseña no es correcta.' });
     if (u.sub_id && stripe && !u.sub_id.startsWith('demo_') && SUB_VIVA.includes(u.sub_estado)) {
       try { await stripe.subscriptions.cancel(u.sub_id); }
       catch (e) { console.error('[CUENTA] no se pudo cancelar la suscripción al borrar:', e.message); return res.json({ ok: false, error: 'No hemos podido cancelar tu suscripción. Escríbenos a hola@kartia.es y la borramos a mano.' }); }
