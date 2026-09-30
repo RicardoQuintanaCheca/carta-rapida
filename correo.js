@@ -1,7 +1,7 @@
 // Envío de correos de la plataforma (recuperar contraseña).
 // Funciona con cualquiera de estas dos opciones (se configura en Railway → Variables):
 //
-//   A) Resend (recomendado, 3.000 correos/mes gratis):
+//   A) Resend (recomendado y OBLIGATORIO en Railway Hobby, que bloquea los puertos SMTP; 3.000 correos/mes gratis):
 //      RESEND_API_KEY     la clave que da Resend
 //
 //   B) Cualquier servidor SMTP (Gmail, Amazon SES, Brevo, el hosting…):
@@ -27,7 +27,9 @@ function smtp() {
     const puerto = parseInt(process.env.SMTP_PORT, 10) || 587;
     transporte = nodemailer.createTransport({
       host: process.env.SMTP_HOST, port: puerto, secure: puerto === 465,
-      auth: { user: process.env.SMTP_USUARIO, pass: process.env.SMTP_CLAVE }
+      auth: { user: process.env.SMTP_USUARIO, pass: process.env.SMTP_CLAVE },
+      // Sin esperas de minutos si el puerto está bloqueado (Railway bloquea SMTP salvo en el plan Pro)
+      connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 20000
     });
   }
   return transporte;
