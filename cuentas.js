@@ -527,6 +527,54 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
     }
   });
 
+  // ── Avisos de Stripe (webhook) ──
+  // Stripe nos avisa al momento de pagos, renovaciones, cobros fallidos y bajas. No nos fiamos del contenido
+  // del aviso: solo usamos los identificadores y volvemos a pedir el dato a Stripe con nuestra clave, así un
+  // aviso falso no puede activar nada (como mucho provoca una consulta). También cubre al cliente que paga
+  // y cierra la pestaña sin volver a la web.
+  r.post('/stripe/webhook', async (req, res) => {
+    if (!stripe) return res.status(503).json({ ok: false });
+    const ev = req.body || {};
+    const obj = (ev.data && ev.data.object) || {};
+    const tipo = String(ev.type || '');
+    try {
+      if (tipo === 'checkout.session.completed' || tipo === 'checkout.session.async_payment_succeeded') {
+        const s = await stripe.checkout.sessions.retrieve(String(obj.id || ''), { expand: ['subscription'] });
+        const uid = Number(s.client_reference_id);
+        const u = (s.metadata || {}).origen === 'carta-rapida' && uid && db.prepare('SELECT * FROM usuarios WHERE id = ?').get(uid);
+        if (u && s.status === 'complete' && s.subscription) {
+          const sub = typeof s.subscription === 'string' ? await stripe.subscriptions.retrieve(s.subscription) : s.subscription;
+          const nuevo = u.sub_id !== sub.id;
+          guardarSuscripcion(u.id, { ...sub, customer: sub.customer || s.customer });
+          if (nuevo) {
+            console.log(`PAGO: ${JSON.stringify({ email: u.email, sub: sub.id, periodo: periodoDe(sub), importe: (s.amount_total || 0) / 100, fecha: ahoraMadrid(), via: 'webhook' })}`);
+            enviarLead({ email: u.email, origen: 'carta-rapida-pro', restaurante: '', estilo: '', platos: 0, fecha: ahoraMadrid(), pago: (s.amount_total || 0) / 100 });
+          }
+        }
+      } else if (tipo.startsWith('customer.subscription.') || tipo.startsWith('invoice.')) {
+        const subId = tipo.startsWith('invoice.')
+          ? (obj.subscription || (obj.parent && obj.parent.subscription_details && obj.parent.subscription_details.subscription) || '')
+          : obj.id;
+        if (subId) {
+          const sub = await stripe.subscriptions.retrieve(String(typeof subId === 'string' ? subId : subId.id));
+          const uid = Number((sub.metadata || {}).usuario) || 0;
+          const u = db.prepare('SELECT * FROM usuarios WHERE sub_id = ?').get(sub.id)
+            || ((sub.metadata || {}).origen === 'carta-rapida' && uid && db.prepare('SELECT * FROM usuarios WHERE id = ?').get(uid));
+          // Un aviso tardío de una suscripción antigua no pisa la suscripción viva actual
+          const otraViva = u && u.sub_id && u.sub_id !== sub.id && SUB_VIVA.includes(u.sub_estado) && u.sub_hasta > Date.now();
+          if (u && !otraViva) {
+            guardarSuscripcion(u.id, sub);
+            console.log(`[STRIPE] ${tipo} · ${u.email} · ${sub.status}${sub.cancel_at_period_end ? ' (cancela al final)' : ''}`);
+          }
+        }
+      }
+      res.json({ ok: true });
+    } catch (e) {
+      console.error('[STRIPE] aviso no procesado:', tipo, e.message);
+      res.status(e && e.statusCode === 404 ? 200 : 500).json({ ok: false });
+    }
+  });
+
   // Portal de Stripe: cambiar tarjeta, ver facturas, cambiar de mensual a anual o cancelar
   r.post('/cuenta/portal', limite, sinCuentas, conSesion, async (req, res) => {
     const u = req.usuario;
