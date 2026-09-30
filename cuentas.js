@@ -11,6 +11,10 @@ const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 // Proyecto «Carta Rapida» en Google Cloud (cuenta info@ricardoquintana.com). Se puede cambiar con la variable GOOGLE_CLIENT_ID.
 const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || '697270189757-36clge703bga3uukmoqbff6p4v5hseaq.apps.googleusercontent.com').trim();
 
+// Emails con acceso a /admin (además necesitan el código por email)
+const ADMINS = (process.env.ADMIN_EMAILS || 'tienda.kartia@gmail.com,info@kartia.es')
+  .split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+
 const DIA = 24 * 60 * 60 * 1000;
 const DIAS_PRUEBA = 7;
 const DIAS_SESION = 60;
@@ -150,7 +154,7 @@ async function planDe(req) {
 function datosCuenta(u) {
   const p = planDeUsuario(u);
   const n = db.prepare('SELECT COUNT(*) AS n FROM cartas WHERE usuario_id = ?').get(u.id).n;
-  return { email: u.email, cartas: n, ...p, puedePortal: !!(u.stripe_cliente && stripe), sinClave: !!u.sin_clave, google: !!u.google_sub };
+  return { email: u.email, cartas: n, ...p, puedePortal: !!(u.stripe_cliente && stripe), sinClave: !!u.sin_clave, google: !!u.google_sub, ...(ADMINS.includes(u.email) ? { admin: true } : {}) };
 }
 
 // ── Cartas ──
@@ -592,4 +596,4 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
   return r;
 }
 
-module.exports = { crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente };
+module.exports = { ADMINS, crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente };

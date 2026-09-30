@@ -192,6 +192,7 @@
         <div class="menu-email" id="menuEmail"></div>
         <a href="/panel">Mis cartas</a>
         <a href="/#herramienta">Crear carta desde una foto</a>
+        <a href="/admin" id="menuAdmin" hidden>Administración</a>
         <button type="button" id="menuPortal" onclick="Cuenta.portal()">Facturas y suscripción</button>
         <button type="button" onclick="cambiarClave()">Contraseña</button>
         <button type="button" onclick="Cuenta.salir().then(() => location.href = '/panel')">Salir</button>
@@ -226,6 +227,7 @@
     document.getElementById('menuBoton').textContent = c.email.charAt(0);
     document.getElementById('menuEmail').textContent = c.email;
     document.getElementById('menuPortal').hidden = !c.puedePortal;
+    document.getElementById('menuAdmin').hidden = !c.admin;
     pill.hidden = false;
     pill.className = 'plan-pill ' + c.plan;
     pill.textContent = Cuenta.textoPlan();
