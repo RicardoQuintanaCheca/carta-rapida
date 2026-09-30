@@ -145,14 +145,14 @@ REGLA 3 — DISTINGUIR SECCIÓN DE PLATO:
 Una SECCIÓN es un título corto y genérico (Entrantes, Carnes, Postres, Empecemos, Del Mar…), separado visualmente, que agrupa varios platos y NO va seguido de un precio.
 Un PLATO va seguido de un precio o de una descripción y aparece bajo una sección. Aunque esté en MAYÚSCULAS y sea largo ("TABLA DE QUESOS DE NUESTRA TIERRA (120g)", "LOMO BAJO DE VACA GALLEGA MADURADA 35 DÍAS"), sigue siendo un plato. Sin excepciones.
 
-REGLA 4 — CERO DUPLICADOS: cada plato aparece UNA SOLA VEZ.
+REGLA 4 — NI DUPLICAR NI FUSIONAR: no escribas dos veces una línea que en el original aparece una sola vez. Pero si el original tiene el mismo plato en dos secciones o con dos precios o raciones distintas ("Ensaladilla" en Tapas a 4 € y en Raciones a 10 €), CONSÉRVALOS TODOS, cada uno en su sección y con su precio.
 
 REGLA 5 — NO OMITIR: ni un solo plato ni elemento puede faltar.
 
 REGLA 6 — VERIFICACIÓN ANTES DE RESPONDER:
 1. ¿Mismo número de secciones que el original?
 2. ¿Cada plato está en su misma sección del original?
-3. ¿Algún duplicado?
+3. ¿Alguna línea escrita dos veces por error, o alguna variante del original (misma receta, otra sección o precio) que hayas eliminado?
 4. ¿Alguna sección con un único plato que se llama igual que la sección? Es un error: ese plato pertenece a otra sección.
 
 EJEMPLO CORRECTO: sección "EMPECEMOS" con Jamón ibérico, Tabla de quesos de nuestra tierra (120g), Ensaladilla, Ensalada de langostinos, Tomate rosa → la misma sección con los mismos 5 platos.

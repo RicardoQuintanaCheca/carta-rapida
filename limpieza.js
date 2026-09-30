@@ -62,10 +62,17 @@ function normalizarCarta(c) {
       secciones[i - 1].platos.push(s.platos[0]); secciones.splice(i, 1);
     }
   }
-  // Platos repetidos (mismo nombre y precio) se quedan una sola vez
-  const vistos = new Set();
+  // Solo se quita un plato si está repetido DENTRO de la misma sección con el mismo nombre, ración y precio
+  // (una lectura duplicada). El mismo nombre en otra sección o con otro precio es una variante real
+  // ("Ensaladilla" de tapa a 4 € y de ración a 10 €) y se conserva siempre.
+  const precioClave = p => isNaN(parseFloat(p)) ? String(p || '') : String(parseFloat(p));
   secciones.forEach(s => {
-    s.platos = s.platos.filter(p => { const k = (p.nombre + '|' + (isNaN(parseFloat(p.precio)) ? p.precio : parseFloat(p.precio))).toLowerCase(); if (vistos.has(k)) return false; vistos.add(k); return true; });
+    const vistos = new Set();
+    s.platos = s.platos.filter(p => {
+      const k = [p.nombre, p.racion, precioClave(p.precio)].join('|').toLowerCase();
+      if (vistos.has(k)) return false;
+      vistos.add(k); return true;
+    });
   });
   const out = {
     nombre_restaurante: sinPuntoFinal(limpio(c.nombre_restaurante)),
