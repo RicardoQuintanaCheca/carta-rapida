@@ -193,7 +193,7 @@
         <a href="/panel">Mis cartas</a>
         <a href="/#herramienta">Crear carta desde una foto</a>
         <button type="button" id="menuPortal" onclick="Cuenta.portal()">Facturas y suscripción</button>
-        <button type="button" onclick="cambiarClave()">Cambiar contraseña</button>
+        <button type="button" onclick="cambiarClave()">Contraseña</button>
         <button type="button" onclick="Cuenta.salir().then(() => location.href = '/panel')">Salir</button>
         <button type="button" class="peligro" onclick="borrarCuenta()">Borrar mi cuenta</button>
       </div>
@@ -703,11 +703,13 @@
 
   // ── Cuenta ──
   function cambiarClave() {
+    const sinClave = !!(Cuenta.estado && Cuenta.estado.sinClave);
     const velo = document.createElement('div');
     velo.className = 'cu-velo';
     velo.innerHTML = `<div class="cu-caja" role="dialog" aria-modal="true"><button class="cu-cerrar" type="button" aria-label="Cerrar">×</button>
-      <h2 class="cu-titulo">Cambiar contraseña</h2>
-      <form novalidate><label class="cu-campo"><span>Contraseña actual</span><input type="password" name="actual" autocomplete="current-password"></label>
+      <h2 class="cu-titulo">${sinClave ? 'Crear contraseña' : 'Cambiar contraseña'}</h2>
+      ${sinClave ? '<p class="cu-sub">Entras con Google. Si quieres, crea también una contraseña para entrar con tu email.</p>' : ''}
+      <form novalidate><label class="cu-campo"${sinClave ? ' hidden' : ''}><span>Contraseña actual</span><input type="password" name="actual" autocomplete="current-password"></label>
       <label class="cu-campo"><span>Nueva contraseña (mínimo 8)</span><input type="password" name="nueva" autocomplete="new-password"></label>
       <button class="cu-btn" type="submit">Guardar</button><p class="cu-error"></p></form></div>`;
     document.body.appendChild(velo);
@@ -715,21 +717,22 @@
     velo.querySelector('.cu-cerrar').onclick = cerrarV;
     velo.addEventListener('mousedown', e => { if (e.target === velo) cerrarV(); });
     const f = velo.querySelector('form');
-    f.actual.focus();
+    (sinClave ? f.nueva : f.actual).focus();
     f.onsubmit = async ev => {
       ev.preventDefault();
       const d = await Cuenta.api('/cuenta/clave', { actual: f.actual.value, nueva: f.nueva.value });
       if (!d.ok) { velo.querySelector('.cu-error').textContent = d.error; return; }
-      cerrarV(); Cuenta.aviso('Contraseña cambiada.');
+      cerrarV(); await Cuenta.cargar(); Cuenta.aviso(sinClave ? 'Contraseña creada.' : 'Contraseña cambiada.');
     };
   }
   function borrarCuenta() {
+    const sinClave = !!(Cuenta.estado && Cuenta.estado.sinClave);
     const velo = document.createElement('div');
     velo.className = 'cu-velo';
     velo.innerHTML = `<div class="cu-caja" role="dialog" aria-modal="true"><button class="cu-cerrar" type="button" aria-label="Cerrar">×</button>
       <h2 class="cu-titulo">Borrar mi cuenta</h2>
       <p class="cu-sub">Se borran tu cuenta y todas tus cartas guardadas, y se cancela tu suscripción si la tienes. No se puede deshacer.</p>
-      <form novalidate><label class="cu-campo"><span>Escribe tu contraseña para confirmar</span><input type="password" name="clave" autocomplete="current-password"></label>
+      <form novalidate><label class="cu-campo"><span>${sinClave ? 'Escribe BORRAR para confirmar' : 'Escribe tu contraseña para confirmar'}</span><input type="${sinClave ? 'text' : 'password'}" name="clave" autocomplete="${sinClave ? 'off' : 'current-password'}"></label>
       <button class="cu-btn" type="submit" style="background:#C62828">Borrar para siempre</button><p class="cu-error"></p></form></div>`;
     document.body.appendChild(velo);
     const cerrarV = () => velo.remove();
@@ -738,7 +741,7 @@
     f.clave.focus();
     f.onsubmit = async ev => {
       ev.preventDefault();
-      const d = await Cuenta.api('/cuenta/borrar', { clave: f.clave.value });
+      const d = await Cuenta.api('/cuenta/borrar', sinClave ? { confirmar: f.clave.value } : { clave: f.clave.value });
       if (!d.ok) { velo.querySelector('.cu-error').textContent = d.error; return; }
       location.href = '/';
     };
@@ -750,6 +753,9 @@
     await Cuenta.vueltaDelPago();
     const params = new URLSearchParams(location.search);
     if (params.get('portal')) { history.replaceState(null, '', '/panel' + location.hash); await Cuenta.cargar(); }
+    // Enlace del correo de «Olvidé mi contraseña»
+    const tokenClave = params.get('restablecer');
+    if (tokenClave) { history.replaceState(null, '', '/panel'); Cuenta.restablecer(tokenClave, { alEntrar: route }); }
     // Acceso al panel de administración: /admin manda aquí si no hay sesión de administrador
     if (params.get('admin') === '1') {
       history.replaceState(null, '', '/panel');

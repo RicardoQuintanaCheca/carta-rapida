@@ -3,6 +3,8 @@
    - Cuenta.acceso({modo, motivo, alEntrar}): ventana de entrar / crear cuenta (crear = 7 días de Pro gratis)
    - Cuenta.planes({motivo, vuelta}): ventana para hacerse Pro (mensual o anual)
    - Cuenta.vueltaDelPago(): al volver de Stripe con ?suscripcion=...
+   - Cuenta.restablecer(token): nueva contraseña desde el enlace del correo (?restablecer=...)
+   Acceso con Google si el servidor tiene GOOGLE_CLIENT_ID (/cuenta/config).
    Emite el evento "cuenta" en window cada vez que cambia el estado. */
 (function () {
   const PRECIOS = { mes: '9,90 €', ano: '99 €' };
@@ -57,8 +59,40 @@
       const d = await api('/cuenta/portal', {});
       if (d.ok && d.url) location.href = d.url; else aviso(d.error || 'No se ha podido abrir.');
     },
-    acceso, planes, aviso, vueltaDelPago, fmtFecha, esc
+    acceso, planes, aviso, vueltaDelPago, restablecer, olvide, fmtFecha, esc
   };
+
+  // ── Configuración de acceso (Google, correo) ──
+  let configPromesa = null;
+  function config() {
+    if (!configPromesa) configPromesa = api('/cuenta/config').then(d => (d && d.ok ? d : { google: null, correo: false })).catch(() => ({ google: null, correo: false }));
+    return configPromesa;
+  }
+  let gisPromesa = null, alGoogle = null, gisIniciado = false;
+  function cargarGoogle() {
+    if (!gisPromesa) gisPromesa = new Promise((ok, ko) => {
+      if (window.google && window.google.accounts && window.google.accounts.id) return ok();
+      const sc = document.createElement('script');
+      sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
+      sc.onload = () => ok(); sc.onerror = () => { gisPromesa = null; ko(new Error('google')); };
+      document.head.appendChild(sc);
+    });
+    return gisPromesa;
+  }
+  async function botonGoogle(hueco, modo, alCredencial) {
+    const c = await config();
+    if (!c.google || !hueco) return false;
+    try { await cargarGoogle(); } catch (e) { return false; }
+    alGoogle = alCredencial;
+    if (!gisIniciado) {
+      window.google.accounts.id.initialize({ client_id: c.google, callback: r => { if (alGoogle) alGoogle(r.credential); }, ux_mode: 'popup', auto_select: false, itp_support: true });
+      gisIniciado = true;
+    }
+    hueco.innerHTML = '';
+    const ancho = Math.max(220, Math.min(400, Math.round(hueco.getBoundingClientRect().width || 320)));
+    window.google.accounts.id.renderButton(hueco, { type: 'standard', theme: 'outline', size: 'large', shape: 'pill', text: modo === 'crear' ? 'signup_with' : 'continue_with', logo_alignment: 'center', width: ancho, locale: 'es' });
+    return true;
+  }
 
   // ── Ventanas ──
   let velo = null, focoAntes = null, alCerrar = null;
@@ -97,6 +131,11 @@
         <button type="button" data-m="crear">Crear cuenta</button>
         <button type="button" data-m="entrar">Ya tengo cuenta</button>
       </div>
+      <div class="cu-google" id="cuGoogle" hidden>
+        <div class="cu-google-btn" id="cuGoogleBtn"></div>
+        <p class="cu-google-nota" id="cuGoogleNota"></p>
+        <div class="cu-o"><span>o con tu email</span></div>
+      </div>
       <form novalidate>
         <label class="cu-campo"><span>Email</span><input type="email" name="email" autocomplete="email" placeholder="tu@restaurante.com" required></label>
         <label class="cu-campo"><span id="cuClaveTxt">Contraseña</span><input type="password" name="clave" minlength="8" required></label>
@@ -122,8 +161,28 @@
       caja.querySelector('#cuSoloCrear').style.display = crear ? '' : 'none';
       caja.querySelector('#cuBtn').textContent = crear ? 'Empezar mis 7 días gratis' : 'Entrar';
       caja.querySelector('#cuPie').innerHTML = crear ? 'Sin tarjeta · no se renueva sola · cancelas cuando quieras'
-        : '¿Olvidaste la contraseña? Escríbenos desde tu email a <a href="mailto:hola@kartia.es?subject=Contrase%C3%B1a%20Carta%20R%C3%A1pida">hola@kartia.es</a> y te la restablecemos.';
+        : '<button type="button" class="cu-enlace" id="cuOlvide">¿Olvidaste la contraseña?</button>';
+      const ol = caja.querySelector('#cuOlvide');
+      if (ol) ol.onclick = () => olvide({ email: f.email.value.trim(), volver: () => acceso({ ...op, modo: 'entrar', email: f.email.value.trim() }) });
+      caja.querySelector('#cuGoogleNota').innerHTML = crear
+        ? 'Al continuar con Google aceptas las <a href="/legal/condiciones.html" target="_blank" rel="noopener">condiciones</a> y la <a href="/legal/privacidad.html" target="_blank" rel="noopener">privacidad</a>.' : '';
       err.textContent = '';
+      botonGoogle(caja.querySelector('#cuGoogleBtn'), modo, conGoogle).then(ok => { const g = caja.querySelector('#cuGoogle'); if (g) g.hidden = !ok; });
+    }
+    async function conGoogle(credencial) {
+      err.textContent = '';
+      const btnG = caja.querySelector('#cuGoogleBtn');
+      if (btnG) btnG.style.opacity = '.5';
+      const extra = typeof op.datos === 'function' ? op.datos() : {};
+      const d = await api('/cuenta/google', { credencial, novedades: f.novedades.checked, ...extra });
+      if (btnG) btnG.style.opacity = '';
+      if (!d.ok) { err.textContent = d.error || 'No ha sido posible entrar con Google.'; return; }
+      medir(d.nueva ? 'sign_up' : 'login', { method: 'google' });
+      if (d.nueva) medir('prueba_activada');
+      alCerrar = null;
+      cerrar(true);
+      Cuenta.poner(d.cuenta);
+      if (op.alEntrar) op.alEntrar(d.cuenta, d.nueva ? 'crear' : 'entrar');
     }
     caja.querySelectorAll('.cu-tabs button').forEach(b => b.onclick = () => { modo = b.dataset.m; pintar(); f.email.focus(); });
     pintar();
@@ -155,6 +214,86 @@
       cerrar(true);
       Cuenta.poner(d.cuenta);
       if (op.alEntrar) op.alEntrar(d.cuenta, modo);
+    };
+  }
+
+  // Olvidé mi contraseña: pide el email y manda el enlace
+  function olvide(op = {}) {
+    const volver = op.volver || null;
+    const caja = abrir(`
+      <div class="cu-eyebrow">Tu cuenta</div>
+      <h2 class="cu-titulo">¿Olvidaste la contraseña?</h2>
+      <p class="cu-sub">Escribe el email de tu cuenta y te mandamos un enlace para crear una nueva. Tarda un minuto.</p>
+      <form novalidate>
+        <label class="cu-campo"><span>Email</span><input type="email" name="email" autocomplete="email" placeholder="tu@restaurante.com" required></label>
+        <button class="cu-btn" type="submit" id="cuBtn">Enviarme el enlace</button>
+        <p class="cu-error" role="alert"></p>
+      </form>
+      <p class="cu-pie">${volver ? '<button type="button" class="cu-enlace" id="cuVolver">Volver a entrar</button>' : ''}</p>`);
+    const f = caja.querySelector('form');
+    const err = caja.querySelector('.cu-error');
+    if (op.email) f.email.value = op.email;
+    setTimeout(() => f.email.focus(), 30);
+    const v = caja.querySelector('#cuVolver');
+    if (v) v.onclick = () => volver();
+    f.onsubmit = async ev => {
+      ev.preventDefault();
+      err.textContent = '';
+      const email = f.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { f.email.classList.add('error'); err.textContent = 'Revisa el email.'; return; }
+      const btn = caja.querySelector('#cuBtn');
+      btn.disabled = true; btn.textContent = 'Enviando…';
+      const d = await api('/cuenta/olvide', { email });
+      btn.disabled = false; btn.textContent = 'Enviarme el enlace';
+      if (!d.ok) {
+        if (d.sinCorreo) {
+          err.innerHTML = 'Escríbenos desde ese email a <a href="mailto:hola@kartia.es?subject=Contrase%C3%B1a%20Carta%20R%C3%A1pida">hola@kartia.es</a> y te la restablecemos en el día.';
+        } else err.textContent = d.error || 'No ha sido posible.';
+        return;
+      }
+      caja.innerHTML = `<button class="cu-cerrar" type="button" aria-label="Cerrar">×</button><div class="cu-centro"><div class="cu-ok-icono">✓</div>
+        <h2 class="cu-titulo">Revisa tu correo</h2>
+        <p class="cu-sub">Si hay una cuenta con <b>${esc(email)}</b>, te acabamos de mandar un enlace para crear una contraseña nueva. Caduca en 1 hora.</p>
+        <p class="cu-sub">¿No llega en un par de minutos? Mira en spam o promociones.</p>
+        <button class="cu-btn" type="button" id="cuSeguir">Entendido</button></div>`;
+      caja.querySelector('.cu-cerrar').onclick = () => cerrar();
+      caja.querySelector('#cuSeguir').onclick = () => cerrar();
+    };
+  }
+
+  // Nueva contraseña desde el enlace del correo
+  function restablecer(token, op = {}) {
+    alCerrar = null;
+    const caja = abrir(`
+      <div class="cu-eyebrow">Tu cuenta</div>
+      <h2 class="cu-titulo">Crea tu contraseña nueva</h2>
+      <p class="cu-sub">Mínimo 8 caracteres. Al guardarla entrarás directamente en tu panel.</p>
+      <form novalidate>
+        <label class="cu-campo"><span>Contraseña nueva</span><input type="password" name="clave" autocomplete="new-password" minlength="8" required></label>
+        <button class="cu-btn" type="submit" id="cuBtn">Guardar y entrar</button>
+        <p class="cu-error" role="alert"></p>
+      </form>`);
+    const f = caja.querySelector('form');
+    const err = caja.querySelector('.cu-error');
+    setTimeout(() => f.clave.focus(), 30);
+    f.onsubmit = async ev => {
+      ev.preventDefault();
+      err.textContent = '';
+      if (f.clave.value.length < 8) { f.clave.classList.add('error'); err.textContent = 'La contraseña debe tener al menos 8 caracteres.'; return; }
+      const btn = caja.querySelector('#cuBtn');
+      btn.disabled = true; btn.textContent = 'Guardando…';
+      const d = await api('/cuenta/restablecer', { token, clave: f.clave.value });
+      btn.disabled = false; btn.textContent = 'Guardar y entrar';
+      if (!d.ok) {
+        if (d.caducado) err.innerHTML = esc(d.error) + ' <button type="button" class="cu-enlace" id="cuOtro">Pedir otro enlace</button>';
+        else err.textContent = d.error || 'No ha sido posible.';
+        const o = caja.querySelector('#cuOtro'); if (o) o.onclick = () => olvide();
+        return;
+      }
+      cerrar(true);
+      Cuenta.poner(d.cuenta);
+      aviso('Contraseña guardada. Ya estás dentro.');
+      if (op.alEntrar) op.alEntrar(d.cuenta);
     };
   }
 

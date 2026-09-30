@@ -60,3 +60,12 @@
   .cu-titulo { font-size: 24px; }
   .cu-planes { grid-template-columns: 1fr; }
 }
+
+/* Acceso con Google */
+.cu-google { margin: 14px 0 4px; }
+.cu-google-btn { display: flex; justify-content: center; min-height: 44px; }
+.cu-google-nota { font-size: 12px; color: #6E6E6E; text-align: center; margin: 8px 0 0; line-height: 1.45; }
+.cu-google-nota:empty { display: none; }
+.cu-google-nota a { color: #C2410C; }
+.cu-o { display: flex; align-items: center; gap: 12px; margin: 16px 0 4px; color: #8A8580; font-size: 12.5px; }
+.cu-o::before, .cu-o::after { content: ""; flex: 1; height: 1px; background: #E7E2DA; }
