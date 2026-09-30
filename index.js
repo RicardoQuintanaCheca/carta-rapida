@@ -6,6 +6,8 @@ const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
 const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
+const { evento } = require('./db');
+const rutasAdmin = require('./admin');
 
 const app = express();
 app.set('trust proxy', true);
@@ -346,6 +348,7 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
     console.log(`[PROCESAR] ok · ${carta.secciones.length} secciones · ${platos} platos · "${carta.nombre_restaurante}"`);
     if (!platos) return res.json({ ok: false, error: 'No hemos encontrado platos en la imagen. Prueba con una foto más nítida y de frente.' });
 
+    evento('carta_generada', estilo);
     res.json({ ok: true, carta, logo });
   } catch (error) {
     console.error('[PROCESAR] error:', error.message);
@@ -422,6 +425,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
       'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}.pdf"`,
       'Cache-Control': 'no-store'
     });
+    evento(pro ? 'pdf_pro' : 'pdf_gratis', estiloFinal);
     res.send(Buffer.from(pdf));
   } catch (error) {
     console.error('[PDF] error:', error.message);
@@ -435,6 +439,8 @@ app.use(rutasCuenta({
   limite: crearLimite(60, 300, 'Demasiadas peticiones seguidas. Espera unos minutos.', 'Has alcanzado el límite diario.'),
   limiteCuenta: crearLimite(15, 60, 'Demasiados intentos seguidos. Espera unos minutos.', 'Has alcanzado el límite diario de intentos.')
 }));
+
+app.use(rutasAdmin);
 
 // Panel del cliente (Mis cartas)
 app.get(['/panel', '/panel/'], (req, res) => { res.set('Cache-Control', 'no-cache'); res.sendFile(require('path').join(__dirname, 'public', 'panel.html')); });

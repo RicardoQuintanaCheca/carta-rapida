@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración · Carta Rápida</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --tinta: #0E0E0E; --crema: #FAF7F2; --linea: #E8E1D6; --gris: #6E6E6E; --cta: #E2561A; --coral-texto: #C2410C; --verde: #2E7D32; }
+  body { margin: 0; background: var(--crema); color: var(--tinta); font-family: 'Inter', system-ui, sans-serif; font-size: 14.5px; }
+  .barra { background: var(--tinta); color: #fff; }
+  .barra-in { max-width: 1320px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .barra b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; }
+  .barra span { font: 600 11px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #FFB38A; }
+  .barra .hueco { flex: 1; }
+  .barra a { color: #fff; font-size: 13.5px; text-decoration: none; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 7px 13px; }
+  .barra a:hover { background: #fff; color: var(--tinta); }
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 20px 70px; }
+  h2 { font: 600 11px 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--coral-texto); margin: 30px 0 12px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .kpi { background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; }
+  .kpi.clave { border: 2px solid var(--tinta); box-shadow: 0 4px 0 var(--tinta); }
+  .kpi b { display: block; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -.02em; line-height: 1.1; }
+  .kpi span { font-size: 12.5px; color: var(--gris); }
+  .kpi small { display: block; font-size: 12px; color: var(--gris); margin-top: 4px; }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .caja { background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; overflow: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; font: 600 10.5px 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--gris); padding: 8px 10px; border-bottom: 1.5px solid var(--linea); white-space: nowrap; position: sticky; top: 0; background: #fff; }
+  td { padding: 9px 10px; border-bottom: 1px solid #F1ECE4; vertical-align: top; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:hover td { background: #FFFBF7; }
+  .tabla { max-height: 520px; overflow: auto; background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .pill.pro { background: #E7F5E8; color: var(--verde); }
+  .pill.prueba { background: #FFF1E8; color: var(--coral-texto); }
+  .pill.gratis { background: #F1EFE8; color: var(--gris); }
+  .herr { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .herr input { flex: 1; min-width: 200px; padding: 10px 12px; border: 1.5px solid var(--linea); border-radius: 10px; font: 14px 'Inter', sans-serif; }
+  .herr a { font-weight: 600; color: var(--tinta); border: 1.5px solid var(--tinta); border-radius: 999px; padding: 8px 14px; text-decoration: none; font-size: 13px; white-space: nowrap; }
+  .herr a:hover { background: var(--tinta); color: #fff; }
+  .barras div { display: grid; grid-template-columns: 110px 1fr 40px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
+  .barras i { display: block; height: 10px; border-radius: 99px; background: var(--cta); min-width: 3px; }
+  .barras em { font-style: normal; text-align: right; color: var(--gris); font-variant-numeric: tabular-nums; }
+  .vacio { color: var(--gris); padding: 10px 0; }
+  .nota { font-size: 12.5px; color: var(--gris); margin-top: 6px; }
+  @media (max-width: 800px) { .dos { grid-template-columns: 1fr; } .kpi b { font-size: 26px; } }
+</style>
+</head>
+<body>
+<header class="barra"><div class="barra-in"><b>Carta Rápida</b><span>Administración</span><span class="hueco"></span>
+  <a href="https://dashboard.stripe.com/subscriptions" target="_blank" rel="noopener">Stripe</a>
+  <a href="/panel">Mi panel</a><a href="/">Web</a></div></header>
+<main>
+  <p id="cargando">Cargando datos…</p>
+  <div id="todo" hidden>
+    <h2>Negocio</h2>
+    <div class="kpis" id="kpisNegocio"></div>
+    <h2>Uso de la herramienta</h2>
+    <div class="kpis" id="kpisUso"></div>
+    <div class="dos" style="margin-top:16px">
+      <div class="caja"><b>Leads por origen · 30 días</b><div class="barras" id="origenes"></div></div>
+      <div class="caja"><b>Estilos más usados · 30 días</b><div class="barras" id="estilos"></div></div>
+    </div>
+
+    <h2>Clientes</h2>
+    <div class="herr"><input id="buscaU" placeholder="Buscar por email…" aria-label="Buscar cliente"><a href="/admin/usuarios.csv">Descargar Excel (CSV)</a></div>
+    <div class="tabla"><table><thead><tr><th>Email</th><th>Alta</th><th>Plan</th><th>Hasta</th><th>Cartas</th><th>Última edición</th><th>Novedades</th></tr></thead><tbody id="usuarios"></tbody></table></div>
+
+    <h2>Leads (últimos 200)</h2>
+    <div class="herr"><input id="buscaL" placeholder="Buscar por email o restaurante…" aria-label="Buscar lead"><a href="/admin/leads.csv">Descargar todos (CSV)</a></div>
+    <div class="tabla"><table><thead><tr><th>Fecha</th><th>Email</th><th>Origen</th><th>Restaurante</th><th>Estilo</th><th>Platos</th><th>Novedades</th></tr></thead><tbody id="leads"></tbody></table></div>
+    <p class="nota">Los ingresos (MRR) son una estimación con los precios de lista: los cupones y el IVA no se descuentan. La cifra exacta está en Stripe.</p>
+  </div>
+</main>
+<script>
+(async function () {
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const f = ms => ms ? new Date(ms).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
+  const fd = ms => ms ? new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+  const eur = n => n.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+  const ORIGEN = { 'descarga': 'Descarga gratis', 'montaje': 'Montaje portamenú', 'carta-rapida-descarga': 'Descarga gratis', 'carta-rapida-cuenta': 'Cuenta creada', 'carta-rapida-pro': 'Pago Pro', 'carta-rapida-montaje': 'Montaje portamenú', 'carta-rapida-prueba': 'Prueba (antigua)' };
+  const r = await fetch('/admin/datos', { credentials: 'same-origin' });
+  if (!r.ok) { location.href = '/panel?admin=1'; return; }
+  const d = await r.json();
+  const R = d.resumen, U = d.uso;
+  const kpi = (v, t, extra = '', clave = false) => `<div class="kpi${clave ? ' clave' : ''}"><b>${v}</b><span>${t}</span>${extra ? `<small>${extra}</small>` : ''}</div>`;
+  document.getElementById('kpisNegocio').innerHTML =
+    kpi(eur(R.mrr), 'Ingresos al mes (MRR)', `${eur(R.mrr * 12)} al año`, true) +
+    kpi(R.pro, 'Clientes Pro', `${R.proMes} mensual · ${R.proAno} anual`, true) +
+    kpi(R.enPrueba, 'En prueba ahora') +
+    kpi(R.usuarios, 'Cuentas creadas', `${R.altas7} esta semana · ${R.altas30} en 30 días`) +
+    kpi(R.cancelan, 'Pro que han cancelado', 'Siguen activos hasta fin de periodo') +
+    kpi(R.cartasGuardadas, 'Cartas guardadas') +
+    kpi(R.leads.total, 'Leads totales', `${R.leads.d7} esta semana · ${R.leads.d30} en 30 días`);
+  document.getElementById('kpisUso').innerHTML =
+    kpi(U.cartas.hoy, 'Cartas generadas hoy', `${U.cartas.d7} en 7 días · ${U.cartas.d30} en 30`) +
+    kpi(U.pdfGratis.hoy, 'PDF gratis hoy', `${U.pdfGratis.d7} en 7 días · ${U.pdfGratis.d30} en 30`) +
+    kpi(U.pdfPro.hoy, 'PDF Pro hoy', `${U.pdfPro.d7} en 7 días · ${U.pdfPro.d30} en 30`) +
+    kpi(U.cartas.d30 ? Math.round((U.pdfGratis.d30 + U.pdfPro.d30) / U.cartas.d30 * 100) + ' %' : '—', 'Cartas que acaban en descarga', 'Últimos 30 días');
+  const barras = (el, filas, etiqueta) => {
+    const max = Math.max(1, ...filas.map(x => x.n));
+    el.innerHTML = filas.length ? filas.map(x => `<div><span>${esc(etiqueta(x))}</span><i style="width:${Math.round(x.n / max * 100)}%"></i><em>${x.n}</em></div>`).join('') : '<p class="vacio">Aún sin datos.</p>';
+  };
+  barras(document.getElementById('origenes'), d.leadsPor, x => ORIGEN[x.origen] || x.origen || '—');
+  barras(document.getElementById('estilos'), d.estilos, x => x.estilo || '—');
+  const pintarU = (q = '') => {
+    const filas = d.usuarios.filter(u => u.email.includes(q.toLowerCase()));
+    document.getElementById('usuarios').innerHTML = filas.length ? filas.map(u => `<tr><td>${esc(u.email)}</td><td>${fd(u.alta)}</td>
+      <td><span class="pill ${u.plan}">${u.plan === 'pro' ? 'Pro ' + (u.periodo === 'ano' ? 'anual' : 'mensual') + (u.cancela ? ' · cancela' : '') : u.plan === 'prueba' ? 'Prueba' : 'Gratis'}</span></td>
+      <td>${u.plan === 'gratis' ? '—' : fd(u.hasta)}</td><td class="num">${u.cartas}</td><td>${fd(u.ultima)}</td><td>${u.novedades ? 'Sí' : 'No'}</td></tr>`).join('')
+      : '<tr><td colspan="7" class="vacio">Sin clientes todavía.</td></tr>';
+  };
+  const pintarL = (q = '') => {
+    q = q.toLowerCase();
+    const filas = d.leads.filter(l => (l.email + ' ' + (l.restaurante || '')).toLowerCase().includes(q));
+    document.getElementById('leads').innerHTML = filas.length ? filas.map(l => `<tr><td>${f(l.fecha)}</td><td>${esc(l.email)}</td><td>${esc(ORIGEN[l.origen] || l.origen)}</td>
+      <td>${esc(l.restaurante)}</td><td>${esc(l.estilo)}</td><td class="num">${l.platos || ''}</td><td>${l.novedades ? 'Sí' : 'No'}</td></tr>`).join('')
+      : '<tr><td colspan="7" class="vacio">Sin leads todavía.</td></tr>';
+  };
+  pintarU(); pintarL();
+  document.getElementById('buscaU').oninput = e => pintarU(e.target.value);
+  document.getElementById('buscaL').oninput = e => pintarL(e.target.value);
+  document.getElementById('cargando').hidden = true;
+  document.getElementById('todo').hidden = false;
+})();
+</script>
+</body>
+</html>
