@@ -1458,18 +1458,19 @@
   .precio-card li b { font-weight: 700; }
   button.precio-cta { width: 100%; cursor: pointer; font-size: 18.7px; }
   .precio-directo { display: block; width: 100%; margin-top: 10px; background: none; border: none; color: #FFB38A; font: 600 14px 'Inter', sans-serif; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  /* Tarjeta Pro en naranja (texto oscuro para que se lea bien) */
-  .precios-grid .precio-card.pro { background: #FF6B35; color: #1C1917; border-color: #1C1917; box-shadow: 0 6px 0 0 #1C1917; }
-  .precios-grid .precio-card.pro .precio-nombre { color: #1C1917; }
-  .precios-grid .precio-card.pro .precio-cond { opacity: 1; color: #3B1A0C; }
-  .precios-grid .precio-card.pro li::before { border-color: #1C1917; }
+  /* Tarjeta Pro en naranja, texto blanco y botón negro */
+  .precios-grid .precio-card.pro { background: #E2561A; color: #fff; border-color: #1C1917; box-shadow: 0 6px 0 0 #1C1917; }
+  .precios-grid .precio-card.pro .precio-nombre { color: #fff; }
+  .precios-grid .precio-card.pro .precio-cond { opacity: 1; color: #fff; }
+  .precios-grid .precio-card.pro li { color: #fff; }
+  .precios-grid .precio-card.pro li::before { border-color: #fff; }
   .precios-grid .precio-card.pro .precio-cta { background: #1C1917; border-color: #1C1917; color: #fff; }
-  .precios-grid .precio-card.pro .precio-directo { color: #1C1917; }
-  .precios-grid .precio-card.pro .precio-periodo { background: rgba(28,25,23,.14); }
-  .precios-grid .precio-card.pro .precio-periodo button { color: #1C1917; }
-  .precios-grid .precio-card.pro .precio-periodo button.on { background: #1C1917; color: #fff; }
+  .precios-grid .precio-card.pro .precio-directo { color: #fff; }
+  .precios-grid .precio-card.pro .precio-periodo { background: rgba(255,255,255,.2); }
+  .precios-grid .precio-card.pro .precio-periodo button { color: #fff; }
+  .precios-grid .precio-card.pro .precio-periodo button.on { background: #fff; color: #C2410C; }
   .precios-grid .precio-card.pro .precio-sello { background: #1C1917; color: #fff; }
-  .precios-grid .precio-card.pro .precio-cifra small { opacity: .8; }
+  .precios-grid .precio-card.pro .precio-cifra small { opacity: .9; }
 
   /* ── CTA final ── */
   .final-botones { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
