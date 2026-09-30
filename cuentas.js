@@ -18,8 +18,9 @@ const MAX_CARTAS = 60;
 const MAX_DATOS = 2.5 * 1024 * 1024; // carta + logo en data URL
 
 const PLANES = {
-  mes: { precio: 9.9, texto: '9,90 € al mes', env: 'STRIPE_PRICE_MES', defecto: 'price_1UL62CRZgd5ArTbXO44o8DbJ' },
-  ano: { precio: 99, texto: '99 € al año', env: 'STRIPE_PRICE_ANO', defecto: 'price_1UL62DRZgd5ArTbXDtHOFjzh' }
+  // Precios desde el 30-09-2026 (los de antes, 9,90 €/mes y 99 €/año, siguen para quien ya los tenía)
+  mes: { precio: 12.9, texto: '12,90 € al mes', env: 'STRIPE_PRICE_MES_V2', defecto: 'price_1ULMrwRZgd5ArTbXWWeCFC3P' },
+  ano: { precio: 118.8, texto: '118,80 € al año (9,90 € al mes)', env: 'STRIPE_PRICE_ANO_V2', defecto: 'price_1ULMryRZgd5ArTbXxjBE6TeN' }
 };
 // Estilos solo para Pro (se pueden ver con tu carta, pero el PDF pide Pro)
 const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo'];
