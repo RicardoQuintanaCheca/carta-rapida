@@ -8,11 +8,9 @@ const express = require('express');
 const { db, copiaA } = require('./db');
 const os = require('os');
 const fs = require('fs');
-const { usuarioDe, planDeUsuario, firmar, iguales, leerCookie } = require('./cuentas');
+const { ADMINS, usuarioDe, planDeUsuario, firmar, iguales, leerCookie } = require('./cuentas');
 const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
-const ADMINS = (process.env.ADMIN_EMAILS || 'tienda.kartia@gmail.com,info@kartia.es')
-  .split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 const DIA = 24 * 60 * 60 * 1000;
 const PRECIO = { mes: 12.9, ano: 118.8 };
 
