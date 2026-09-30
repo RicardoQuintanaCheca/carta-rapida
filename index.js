@@ -260,10 +260,10 @@ async function redactarDescripciones(carta, { estilo, idioma }) {
       { role: 'system', content: `Eres el redactor de cartas de un restaurante con criterio. Escribe la descripción de cada plato de la lista, en ${nombreIdioma}.
 REGLAS:
 - De 3 a 8 palabras. Todas con un ritmo parecido. Sin punto final. Primera letra en mayúscula.
-- Describe lo que acompaña o cómo se elabora: guarnición, salsa, técnica, origen. Ejemplos del tono: "Con alioli de ajo asado", "Guisado lento al vino tinto", "Brasa de encina y sal en escamas".
+- REGLA DE ORO: el restaurante imprime esta carta y sus clientes pueden tener alergias. NUNCA añadas ingredientes, salsas, guarniciones, acompañamientos, técnicas, orígenes ni denominaciones que no estén en el nombre del plato o que no formen parte inequívoca e imprescindible de la receta que ese nombre designa (una tortilla de patatas lleva patata y huevo; unas bravas, salsa brava). Si no puedes escribir nada sin suponer, devuelve texto "".
+- Ejemplos correctos: "Pulpo a la brasa" → "Hecho a la brasa"; "Tortilla de patatas" → "Patata y huevo, al momento"; "Tarta de queso" → "". Incorrecto: "Pulpo a la brasa" → "Con cachelos y pimentón" (inventa guarnición).
 - NO repitas el nombre del plato ni palabras de su nombre. NO repitas la ración ni el número de unidades o personas.
 - PROHIBIDO usar adjetivos de relleno, en cualquier idioma: delicioso, exquisito, sabroso, cremoso, crujiente, jugoso, tierno, dorado, casero, tradicional, selecto, de calidad, artesano (en inglés: crispy, crunchy, creamy, silky, delicious, tasty, juicy, tender, golden, homemade).
-- No inventes productos caros ni denominaciones de origen que la carta no nombra. Si dudas, describe la elaboración clásica.
 - Bebidas, vinos, cafés, pan, extras y suplementos: texto "".
 ${instruccionEstilo(estilo)}` },
       { role: 'user', content: JSON.stringify(pendientes) }
@@ -357,7 +357,17 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
   }
 });
 
-app.post('/rehacer', limiteRehacer, async (req, res) => {
+// Ajustes gratis: además del contador del navegador (3 por carta), tope por IP en el servidor.
+// Con Carta Pro o durante la prueba no hay tope propio (solo el general de limiteRehacer).
+const limiteRehacerGratis = crearLimite(8, 12,
+  'Has usado los ajustes gratis. Con Carta Pro son ilimitados: pruébala gratis 7 días.',
+  'Has usado los ajustes gratis de hoy. Con Carta Pro son ilimitados: pruébala gratis 7 días.');
+const soloGratis = limite => async (req, res, next) => {
+  try { const p = await planDe(req); if (p.plan !== 'gratis') return next(); } catch (e) {}
+  limite(req, { status: code => ({ json: d => res.status(code === 429 ? 402 : code).json({ ...d, pro: true }) }) }, next);
+};
+
+app.post('/rehacer', limiteRehacer, soloGratis(limiteRehacerGratis), async (req, res) => {
   try {
     const { carta } = req.body || {};
     const ajuste = String((req.body || {}).ajuste || '').trim().slice(0, 600);

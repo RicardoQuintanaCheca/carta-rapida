@@ -1793,9 +1793,9 @@
           <button class="logo-remove-btn" onclick="removeLogo()">×</button>
         </div>
         <!-- Descripciones -->
-        <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Escribiré una descripción para cada plato ✍️' : 'Sin descripciones, ¡de acuerdo!')">
+        <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Escribiré descripciones breves, sin inventar ingredientes ✍️' : 'Sin descripciones, ¡de acuerdo!')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Breves y concretas, para cada plato</div></span>
+          <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Breves, solo con lo que lleva el plato · revísalas</div></span>
           <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Rentabilidad -->
@@ -3084,6 +3084,7 @@
       const res = await fetch('/rehacer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carta: cartaActual, ajuste }) });
       const data = await res.json();
       stopCountdown();
+      if (!data.ok && data.pro) { stopCountdown(); ajustesUsados = AJUSTES_GRATIS; setEstado('listo'); pintarPlan(); btn.classList.add('activo'); btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`; mostrarPro(data.error); return; }
       if (!data.ok) throw new Error(data.error || 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.');
       document.getElementById('ajusteTxt').value = '';
       if (!esPro()) ajustesUsados++;
@@ -3190,7 +3191,7 @@
     document.getElementById('textoArrow').classList.remove('open');
 
     // Reset estilo
-    selEstilo(document.querySelector('.t2-scard.riviera'), 'riviera');
+    selEstilo(document.querySelector('.t2-scard.sobremesa'), 'sobremesa');
 
     // Reset montaje
     document.getElementById('leadForm').style.display = '';
