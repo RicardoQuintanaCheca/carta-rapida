@@ -8,7 +8,7 @@ const { usuarioDe, planDeUsuario } = require('./cuentas');
 const ADMINS = (process.env.ADMIN_EMAILS || 'tienda.kartia@gmail.com,info@kartia.es')
   .split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 const DIA = 24 * 60 * 60 * 1000;
-const PRECIO = { mes: 9.9, ano: 99 };
+const PRECIO = { mes: 12.9, ano: 118.8 };
 
 function esAdmin(req) {
   const u = usuarioDe(req);

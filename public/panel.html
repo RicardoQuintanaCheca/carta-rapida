@@ -275,7 +275,7 @@
     if (c.plan === 'pro') return '';
     if (c.plan === 'prueba') {
       const dias = Math.max(1, Math.ceil((c.hasta - Date.now()) / 864e5));
-      return `<div class="aviso-plan prueba"><div><b>Tu prueba de Pro: ${dias === 1 ? 'queda 1 día' : 'quedan ' + dias + ' días'}</b><span>Hazte Pro para seguir editando tus cartas cuando termine. Desde 8,25 € al mes.</span></div>
+      return `<div class="aviso-plan prueba"><div><b>Tu prueba de Pro: ${dias === 1 ? 'queda 1 día' : 'quedan ' + dias + ' días'}</b><span>Hazte Pro para seguir editando tus cartas cuando termine. Desde 9,90 € al mes.</span></div>
         <button class="btn primario" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Hazte Pro</button></div>`;
     }
     return `<div class="aviso-plan caducado"><div><b>${c.habiaPro ? 'Tu Carta Pro ha terminado' : 'Tu prueba de Pro ha terminado'}</b><span>Tus cartas siguen aquí. Actívala para editarlas, cambiar precios y descargarlas sin firma.</span></div>

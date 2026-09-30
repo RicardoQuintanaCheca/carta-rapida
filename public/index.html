@@ -49,8 +49,8 @@
   "operatingSystem": "Web",
   "offers": [
     { "@type": "Offer", "name": "Gratis", "price": "0", "priceCurrency": "EUR" },
-    { "@type": "Offer", "name": "Carta Pro mensual", "price": "9.90", "priceCurrency": "EUR" },
-    { "@type": "Offer", "name": "Carta Pro anual", "price": "99", "priceCurrency": "EUR" }
+    { "@type": "Offer", "name": "Carta Pro anual (9,90 € al mes)", "price": "118.80", "priceCurrency": "EUR" },
+    { "@type": "Offer", "name": "Carta Pro mensual", "price": "12.90", "priceCurrency": "EUR" }
   ],
   "provider": {
     "@type": "Organization",
@@ -71,7 +71,7 @@
       "name": "¿Es realmente gratis? ¿Dónde está la trampa?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes o 99 € al año, y puedes probarla 7 días gratis sin tarjeta."
+        "text": "La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta."
       }
     },
     {
@@ -1458,6 +1458,18 @@
   .precio-card li b { font-weight: 700; }
   button.precio-cta { width: 100%; cursor: pointer; font-size: 18.7px; }
   .precio-directo { display: block; width: 100%; margin-top: 10px; background: none; border: none; color: #FFB38A; font: 600 14px 'Inter', sans-serif; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  /* Tarjeta Pro en naranja (texto oscuro para que se lea bien) */
+  .precios-grid .precio-card.pro { background: #FF6B35; color: #1C1917; border-color: #1C1917; box-shadow: 0 6px 0 0 #1C1917; }
+  .precios-grid .precio-card.pro .precio-nombre { color: #1C1917; }
+  .precios-grid .precio-card.pro .precio-cond { opacity: 1; color: #3B1A0C; }
+  .precios-grid .precio-card.pro li::before { border-color: #1C1917; }
+  .precios-grid .precio-card.pro .precio-cta { background: #1C1917; border-color: #1C1917; color: #fff; }
+  .precios-grid .precio-card.pro .precio-directo { color: #1C1917; }
+  .precios-grid .precio-card.pro .precio-periodo { background: rgba(28,25,23,.14); }
+  .precios-grid .precio-card.pro .precio-periodo button { color: #1C1917; }
+  .precios-grid .precio-card.pro .precio-periodo button.on { background: #1C1917; color: #fff; }
+  .precios-grid .precio-card.pro .precio-sello { background: #1C1917; color: #fff; }
+  .precios-grid .precio-card.pro .precio-cifra small { opacity: .8; }
 
   /* ── CTA final ── */
   .final-botones { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
@@ -1649,7 +1661,7 @@
             <div class="guardar-nota" id="guardarNota">Guárdala y cambia platos y precios cuando quieras, sin volver a empezar.</div>
 
             <div class="pro-caja" id="proCaja">
-              <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio"><b>9,90 €</b>al mes</span></div>
+              <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio">desde <b>9,90 €</b>al mes</span></div>
               <div class="pro-titulo">Que parezca tuya. Y siempre al día.</div>
               <div class="pro-motivo" id="proMotivo"></div>
               <ul class="pro-lista">
@@ -1660,8 +1672,8 @@
                 <li><b>Cambios ilimitados</b> con una frase</li>
               </ul>
               <button class="pro-btn" id="proBtn" onclick="probarPro()" type="button">Pruébalo 7 días gratis</button>
-              <button class="pro-prueba-btn" id="proPagarBtn" onclick="hacersePro()" type="button">o hazte Pro ya · desde 8,25 € al mes</button>
-              <div class="pro-garantia">La prueba no pide tarjeta ni se renueva sola · después, 9,90 €/mes o 99 €/año</div>
+              <button class="pro-prueba-btn" id="proPagarBtn" onclick="hacersePro()" type="button">o hazte Pro ya · desde 9,90 € al mes</button>
+              <div class="pro-garantia">La prueba no pide tarjeta ni se renueva sola · después, desde 9,90 €/mes</div>
             </div>
           <div class="ajuste-wrap" id="ajusteWrap">
             <div class="ajuste-inner">
@@ -1963,7 +1975,7 @@
       <div class="vs-fila"><span>Márgenes y columnas</span><span>A mano, hasta que cuadre</span><span><b>Cuadrados solos</b></span></div>
       <div class="vs-fila"><span>Orden de los platos</span><span>El que te salga</span><span><b>Lo que más vende, primero</b></span></div>
       <div class="vs-fila"><span>Cambiar un precio</span><span>Abrir, buscar, reexportar</span><span><b>«Croquetas a 13» y listo</b></span></div>
-      <div class="vs-fila"><span>Precio</span><span>Tu tiempo (y a veces una suscripción)</span><span><b>Gratis · Pro desde 8,25 €/mes</b></span></div>
+      <div class="vs-fila"><span>Precio</span><span>Tu tiempo (y a veces una suscripción)</span><span><b>Gratis · Pro desde 9,90 €/mes</b></span></div>
     </div>
     <div class="vs-cta"><a href="#herramienta" class="btn-primary" onclick="irHerramienta(event)">Pruébalo con tu carta <span class="arr">→</span></a><span class="cta-note">30 segundos · gratis</span></div>
   </div>
@@ -2008,7 +2020,7 @@
       </ul>
       <div class="cta-row">
         <button type="button" class="btn-primary" onclick="probarPro()">Pruébalo 7 días gratis <span class="arr">→</span></button>
-        <span class="cta-note">Sin tarjeta · luego desde 8,25 €/mes</span>
+        <span class="cta-note">Sin tarjeta · luego desde 9,90 €/mes</span>
       </div>
     </div>
     <figure class="pro-fig">
@@ -2043,11 +2055,11 @@
         <span class="precio-sello">Lo más elegido</span>
         <div class="precio-nombre">Carta Pro</div>
         <div class="precio-periodo" role="group" aria-label="Periodo de pago">
-          <button type="button" class="on" data-p="ano" onclick="periodoPrecios('ano')">Anual · 2 meses gratis</button>
+          <button type="button" class="on" data-p="ano" onclick="periodoPrecios('ano')">Anual · ahorra 36 €</button>
           <button type="button" data-p="mes" onclick="periodoPrecios('mes')">Mensual</button>
         </div>
-        <div class="precio-cifra" id="precioCifra">99 €<small>/año</small></div>
-        <div class="precio-cond" id="precioCond">Sale a 8,25 € al mes · IVA incluido</div>
+        <div class="precio-cifra" id="precioCifra">9,90 €<small>/mes</small></div>
+        <div class="precio-cond" id="precioCond">Con el plan anual (118,80 € al año) · IVA incluido</div>
         <ul>
           <li><b>Panel con tus cartas</b>, editables cuando quieras</li>
           <li>Los <b>15 estilos</b></li>
@@ -2141,7 +2153,7 @@
     </div>
     <div class="faq-item open" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Es realmente gratis? ¿Dónde está la trampa?</h3><span class="faq-plus">+</span></div>
-      <div class="faq-answer">La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes o 99 € al año, y puedes probarla 7 días gratis sin tarjeta.</div>
+      <div class="faq-answer">La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 10 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 15 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-question"><h3>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?</h3><span class="faq-plus">+</span></div>
@@ -3345,8 +3357,8 @@
 
   function periodoPrecios(p) {
     document.querySelectorAll('.precio-periodo button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
-    document.getElementById('precioCifra').innerHTML = p === 'ano' ? '99 €<small>/año</small>' : '9,90 €<small>/mes</small>';
-    document.getElementById('precioCond').textContent = p === 'ano' ? 'Sale a 8,25 € al mes · IVA incluido' : 'Cancela cuando quieras · IVA incluido';
+    document.getElementById('precioCifra').innerHTML = p === 'ano' ? '9,90 €<small>/mes</small>' : '12,90 €<small>/mes</small>';
+    document.getElementById('precioCond').textContent = p === 'ano' ? 'Con el plan anual (118,80 € al año) · IVA incluido' : 'Mes a mes, cancela cuando quieras · IVA incluido';
   }
 
   /* ── Ir a la herramienta ── */

@@ -7,7 +7,7 @@
    Acceso con Google si el servidor tiene GOOGLE_CLIENT_ID (/cuenta/config).
    Emite el evento "cuenta" en window cada vez que cambia el estado. */
 (function () {
-  const PRECIOS = { mes: '9,90 €', ano: '99 €' };
+  const PRECIOS = { mes: '12,90 €', ano: '9,90 €', anoTotal: '118,80 €' };
   const fmtFecha = ms => new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   const medir = (e, d) => { try { if (typeof window.medir === 'function') window.medir(e, d); } catch (err) {} };
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -312,8 +312,8 @@
       <p class="cu-sub">${prueba ? 'Estás en tu prueba gratis. Asegura Pro para no perder tus cartas editables cuando termine.' : 'Guarda tus cartas y cámbialas cuando quieras: precios, platos, temporada. En segundos.'}</p>
       <div class="cu-motivo">${esc(op.motivo || '')}</div>
       <div class="cu-planes">
+        <button type="button" class="cu-plan" data-p="ano"><span class="cu-ahorro">Ahorra 36 €</span><div class="cu-plan-nombre">Anual</div><div class="cu-plan-precio">${PRECIOS.ano}<small> /mes</small></div><div class="cu-plan-nota">Un pago de ${PRECIOS.anoTotal} al año</div></button>
         <button type="button" class="cu-plan" data-p="mes"><div class="cu-plan-nombre">Mensual</div><div class="cu-plan-precio">${PRECIOS.mes}<small> /mes</small></div><div class="cu-plan-nota">Cancela cuando quieras</div></button>
-        <button type="button" class="cu-plan" data-p="ano"><span class="cu-ahorro">2 meses gratis</span><div class="cu-plan-nombre">Anual</div><div class="cu-plan-precio">${PRECIOS.ano}<small> /año</small></div><div class="cu-plan-nota">Sale a 8,25 € al mes</div></button>
       </div>
       <ul class="cu-lista">
         <li><b>Panel con tus cartas</b>: cambia platos y precios y descarga al momento</li>
@@ -329,7 +329,7 @@
     const btn = caja.querySelector('#cuPagar');
     const pintar = () => {
       caja.querySelectorAll('.cu-plan').forEach(b => b.classList.toggle('on', b.dataset.p === periodo));
-      btn.textContent = `Activar Pro · ${PRECIOS[periodo]}${periodo === 'ano' ? ' al año' : ' al mes'}`;
+      btn.textContent = periodo === 'ano' ? `Activar Pro · ${PRECIOS.anoTotal} al año` : `Activar Pro · ${PRECIOS.mes} al mes`;
     };
     caja.querySelectorAll('.cu-plan').forEach(b => b.onclick = () => { periodo = b.dataset.p; pintar(); });
     pintar();
@@ -337,7 +337,7 @@
       const ok = caja.querySelector('#cuPagoAcepto');
       if (!ok.checked) { caja.querySelector('#cuPagoLbl').classList.add('error'); caja.querySelector('.cu-error').textContent = 'Marca la casilla para continuar.'; return; }
       btn.disabled = true; btn.textContent = 'Abriendo el pago seguro…';
-      medir('begin_checkout', { value: periodo === 'ano' ? 99 : 9.9, currency: 'EUR', items: [{ item_name: 'Carta Pro ' + periodo }] });
+      medir('begin_checkout', { value: periodo === 'ano' ? 118.8 : 12.9, currency: 'EUR', items: [{ item_name: 'Carta Pro ' + periodo }] });
       if (typeof op.antesDePagar === 'function') op.antesDePagar();
       const d = await api('/pago/crear', { periodo, vuelta: op.vuelta || '' });
       if (d.ok && d.url) { location.href = d.url; return; }
@@ -366,7 +366,7 @@
     const d = await api('/pago/confirmar', { sesion: s });
     if (d.ok) {
       Cuenta.poner(d.cuenta);
-      if (!s.startsWith('demo_')) medir('purchase', { transaction_id: s, value: d.cuenta.periodo === 'ano' ? 99 : 9.9, currency: 'EUR', items: [{ item_name: 'Carta Pro ' + d.cuenta.periodo }] });
+      if (!s.startsWith('demo_')) medir('purchase', { transaction_id: s, value: d.cuenta.periodo === 'ano' ? 118.8 : 12.9, currency: 'EUR', items: [{ item_name: 'Carta Pro ' + d.cuenta.periodo }] });
       const caja = abrir(`<div class="cu-centro"><div class="cu-ok-icono">✓</div>
         <h2 class="cu-titulo">¡Ya eres Pro!</h2>
         <p class="cu-sub">Tus cartas se guardan en tu panel y puedes cambiarlas cuando quieras. Te llegará el recibo por email.</p>
