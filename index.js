@@ -8,6 +8,7 @@ const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
 const rutasAdmin = require('./admin');
+const { enviarCorreo, plantilla } = require('./correo');
 
 const app = express();
 app.set('trust proxy', true);
@@ -460,6 +461,64 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
   };
   enviarLead(lead);
   res.json({ ok: true });
+});
+
+// ── Solicitud de montaje en portamenú Kartia ──
+// Se guarda la carta tal cual la ve el cliente (con estilo y logo), se avisa al equipo con el PDF adjunto
+// y se confirma al cliente. Las solicitudes se atienden desde /admin.
+const AVISOS_EMAIL = (process.env.AVISOS_EMAIL || 'info@kartia.es').split(',').map(e => e.trim()).filter(Boolean);
+
+app.post('/solicitar-montaje', limiteLeads, async (req, res) => {
+  const b = req.body || {};
+  const email = String(b.email || '').trim().toLowerCase().slice(0, 200);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.json({ ok: false, campo: 'email', error: 'Revisa el email.' });
+  const telefono = String(b.telefono || '').replace(/[^\d+ ]/g, '').trim().slice(0, 20);
+  if (!b.carta || !Array.isArray(b.carta.secciones)) return res.json({ ok: false, error: 'Primero crea tu carta.' });
+  const carta = normalizarCarta(b.carta);
+  const estilo = ESTILOS.includes(b.estilo) ? b.estilo : 'sobremesa';
+  const logo = typeof b.logo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(b.logo) && b.logo.length < 2.5 * 1024 * 1024 ? b.logo : null;
+  const platos = carta.secciones.reduce((n, s) => n + s.platos.length, 0);
+  const restaurante = carta.nombre_restaurante || String(b.restaurante || '').slice(0, 120);
+  const { db } = require('./db');
+  if (!db) return res.json({ ok: false, error: 'Ahora mismo no podemos recibir solicitudes. Escríbenos a info@kartia.es.' });
+  const id = require('crypto').randomBytes(9).toString('base64url');
+  db.prepare('INSERT INTO solicitudes (id, email, telefono, restaurante, estilo, platos, datos, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+    .run(id, email, telefono, restaurante, estilo, platos, JSON.stringify({ carta, estilo, logo }), Date.now());
+  enviarLead({ email, origen: 'carta-rapida-montaje', restaurante, estilo, platos, novedades: false, fecha: new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }) });
+  evento('montaje_solicitado', estilo);
+  res.json({ ok: true });
+
+  // Avisos (después de responder: el cliente no espera al PDF)
+  const base = (process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
+  let adjuntos = [];
+  try {
+    const { pdf } = await generarPDF(carta, { estilo, logo, credito: false });
+    adjuntos = [{ nombre: `carta-${slug(restaurante)}.pdf`, contenido: pdf }];
+  } catch (e) { console.error('[MONTAJE] no se pudo generar el PDF:', e.message); }
+  const lineas = [
+    ['Restaurante', restaurante || '(sin nombre)'], ['Email', email], ['Teléfono', telefono || '—'],
+    ['Estilo', estilo], ['Platos', platos], ['Logotipo', logo ? 'Sí (va en el PDF)' : 'No']
+  ];
+  for (const para of AVISOS_EMAIL) {
+    enviarCorreo({
+      para, responderA: email,
+      asunto: `Nueva solicitud de montaje · ${restaurante || email}`,
+      html: plantilla({ titulo: 'Nueva solicitud de montaje en portamenú', texto: lineas.map(([k, v]) => `${k}: ${v}`).join(' · '),
+        boton: 'Ver en la administración', enlace: `${base}/admin#solicitudes`,
+        pie: 'La carta del cliente va adjunta en PDF. Responde a este correo para escribirle directamente. Plazo prometido: 1–2 días laborables.' }),
+      texto: lineas.map(([k, v]) => `${k}: ${v}`).join('\n') + `\n\nAdministración: ${base}/admin#solicitudes\nPlazo prometido al cliente: 1–2 días laborables.`,
+      adjuntos
+    });
+  }
+  enviarCorreo({
+    para: email,
+    asunto: 'Hemos recibido tu carta · Kartia',
+    html: plantilla({ titulo: 'Tu montaje está en marcha', texto: `Hemos recibido tu carta${restaurante ? ' de ' + restaurante : ''}. En 1–2 días laborables te enviamos un montaje de cómo quedaría en un portamenú Kartia, en el material que mejor encaje con tu local. Si tienes prisa o alguna idea en mente, responde a este correo.`,
+      boton: 'Ver portamenús Kartia', enlace: 'https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=email&utm_campaign=montaje',
+      pie: 'Kartia · Portamenús hechos a mano en España desde 2018.' }),
+    texto: `Hemos recibido tu carta. En 1–2 días laborables te enviamos el montaje en un portamenú Kartia. Si tienes prisa, responde a este correo.`,
+    responderA: AVISOS_EMAIL[0]
+  });
 });
 
 app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO_DEMO ? 'demo' : (process.env.STRIPE_SECRET_KEY ? 'stripe' : 'desactivado'), cuentas: CUENTAS_ACTIVAS, datos: persistente ? 'volumen' : 'temporal', listmonk: LISTMONK_ACTIVO, analitica: !!GA4 }));

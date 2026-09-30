@@ -64,6 +64,19 @@ try {
       detalle TEXT
     );
     CREATE INDEX IF NOT EXISTS eventos_tipo ON eventos(tipo, fecha);
+    CREATE TABLE IF NOT EXISTS solicitudes (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      telefono TEXT,
+      restaurante TEXT,
+      estilo TEXT,
+      platos INTEGER,
+      datos TEXT NOT NULL,
+      estado TEXT NOT NULL DEFAULT 'nueva',
+      fecha INTEGER NOT NULL,
+      atendida INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE INDEX IF NOT EXISTS solicitudes_fecha ON solicitudes(fecha DESC);
   `);
   // Columnas nuevas (bases de datos ya creadas): acceso con Google y cuentas sin contraseña propia
   const cols = db.prepare('PRAGMA table_info(usuarios)').all().map(c => c.name);

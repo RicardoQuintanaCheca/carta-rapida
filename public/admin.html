@@ -68,6 +68,10 @@
       <div class="caja"><b>Estilos más usados · 30 días</b><div class="barras" id="estilos"></div></div>
     </div>
 
+    <h2 id="solicitudes">Solicitudes de montaje en portamenú</h2>
+    <div class="tabla"><table><thead><tr><th>Fecha</th><th>Restaurante</th><th>Email</th><th>Teléfono</th><th>Estilo</th><th>Platos</th><th>Carta</th><th>Estado</th></tr></thead><tbody id="solis"></tbody></table></div>
+    <p class="nota">Prometido al cliente: montaje en 1–2 días laborables. Descarga el PDF (con su logo) para hacer el montaje y márcala como atendida al enviarla.</p>
+
     <h2>Clientes</h2>
     <div class="herr"><input id="buscaU" placeholder="Buscar por email…" aria-label="Buscar cliente"><a href="/admin/usuarios.csv">Descargar Excel (CSV)</a></div>
     <div class="tabla"><table><thead><tr><th>Email</th><th>Alta</th><th>Plan</th><th>Hasta</th><th>Cartas</th><th>Última edición</th><th>Novedades</th></tr></thead><tbody id="usuarios"></tbody></table></div>
@@ -123,7 +127,21 @@
       <td>${esc(l.restaurante)}</td><td>${esc(l.estilo)}</td><td class="num">${l.platos || ''}</td><td>${l.novedades ? 'Sí' : 'No'}</td></tr>`).join('')
       : '<tr><td colspan="7" class="vacio">Sin leads todavía.</td></tr>';
   };
-  pintarU(); pintarL();
+  const pendientes = (d.solicitudes || []).filter(x => !x.atendida).length;
+  document.getElementById('kpisNegocio').insertAdjacentHTML('afterbegin', kpi(pendientes, 'Montajes pendientes', pendientes ? '<a href="#solicitudes">Atender →</a>' : 'Todo al día', pendientes > 0));
+  const pintarS = () => {
+    const S = d.solicitudes || [];
+    document.getElementById('solis').innerHTML = S.length ? S.map(x => `<tr${x.atendida ? ' style="opacity:.55"' : ''}><td>${f(x.fecha)}</td><td>${esc(x.restaurante || '—')}</td>
+      <td><a href="mailto:${esc(x.email)}">${esc(x.email)}</a></td><td>${x.telefono ? `<a href="tel:${esc(x.telefono)}">${esc(x.telefono)}</a>` : '—'}</td><td>${esc(x.estilo)}</td><td class="num">${x.platos || ''}</td>
+      <td><a href="/admin/solicitudes/${esc(x.id)}.pdf">PDF</a>${x.conLogo ? ` · <a href="/admin/solicitudes/${esc(x.id)}.logo">Logo</a>` : ''}</td>
+      <td><label><input type="checkbox" data-id="${esc(x.id)}" ${x.atendida ? 'checked' : ''}> Atendida</label></td></tr>`).join('')
+      : '<tr><td colspan="8" class="vacio">Sin solicitudes todavía.</td></tr>';
+    document.querySelectorAll('#solis input[type=checkbox]').forEach(c => c.onchange = async () => {
+      const r2 = await fetch('/admin/solicitudes/' + encodeURIComponent(c.dataset.id) + '/atendida', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ atendida: c.checked }) });
+      if (r2.ok) { const s = S.find(x => x.id === c.dataset.id); s.atendida = c.checked ? 1 : 0; pintarS(); } else { c.checked = !c.checked; alert('No se ha podido guardar.'); }
+    });
+  };
+  pintarS(); pintarU(); pintarL();
   document.getElementById('buscaU').oninput = e => pintarU(e.target.value);
   document.getElementById('buscaL').oninput = e => pintarL(e.target.value);
   document.getElementById('cargando').hidden = true;

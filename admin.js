@@ -157,6 +157,7 @@ r.get('/admin/datos', (req, res) => {
   const serie = (tipo) => Object.fromEntries(Object.entries(periodos).map(([k, d]) => [k, eventos(tipo, d)]));
   const leadsPor = db.prepare('SELECT origen, COUNT(*) AS n FROM leads WHERE fecha >= ? GROUP BY origen ORDER BY n DESC').all(periodos.d30);
   const ultimosLeads = db.prepare('SELECT email, origen, restaurante, estilo, platos, novedades, fecha FROM leads ORDER BY fecha DESC LIMIT 200').all();
+  const solicitudes = db.prepare(`SELECT id, email, telefono, restaurante, estilo, platos, fecha, atendida, (json_extract(datos, '$.logo') IS NOT NULL) AS conLogo FROM solicitudes ORDER BY atendida ASC, fecha DESC LIMIT 200`).all();
   const estilos = db.prepare("SELECT detalle AS estilo, COUNT(*) AS n FROM eventos WHERE tipo = 'carta_generada' AND fecha >= ? GROUP BY detalle ORDER BY n DESC").all(periodos.d30);
   res.json({
     ok: true,
@@ -174,8 +175,40 @@ r.get('/admin/datos', (req, res) => {
       leads: { total: cuenta('SELECT COUNT(*) AS n FROM leads'), d7: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d7), d30: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d30) }
     },
     uso: { cartas: serie('carta_generada'), pdfGratis: serie('pdf_gratis'), pdfPro: serie('pdf_pro') },
-    leadsPor, estilos, usuarios: lista, leads: ultimosLeads
+    leadsPor, estilos, usuarios: lista, leads: ultimosLeads, solicitudes
   });
+});
+
+// Solicitudes de montaje: PDF de la carta tal cual la pidió el cliente (con su logo y sin firma)
+r.get('/admin/solicitudes/:id.pdf', async (req, res) => {
+  if (!db || !esAdmin(req)) return res.status(403).end();
+  const s = db.prepare('SELECT * FROM solicitudes WHERE id = ?').get(String(req.params.id));
+  if (!s) return res.status(404).end();
+  try {
+    const d = JSON.parse(s.datos);
+    const { pdf } = await require('./pdf').generarPDF(d.carta, { estilo: d.estilo, logo: d.logo, credito: false });
+    const nombre = String(s.restaurante || s.email).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'carta';
+    res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="montaje-${nombre}.pdf"`, 'Cache-Control': 'no-store' });
+    res.send(Buffer.from(pdf));
+  } catch (e) {
+    console.error('[ADMIN] PDF de solicitud:', e.message);
+    res.status(500).send('No se ha podido generar el PDF.');
+  }
+});
+r.get('/admin/solicitudes/:id.logo', (req, res) => {
+  if (!db || !esAdmin(req)) return res.status(403).end();
+  const s = db.prepare('SELECT datos FROM solicitudes WHERE id = ?').get(String(req.params.id));
+  const logo = s && JSON.parse(s.datos).logo;
+  const m = logo && logo.match(/^data:(image\/(png|jpeg|webp));base64,(.+)$/);
+  if (!m) return res.status(404).end();
+  res.set({ 'Content-Type': m[1], 'Content-Disposition': `attachment; filename="logo-${req.params.id}.${m[2] === 'jpeg' ? 'jpg' : m[2]}"`, 'Cache-Control': 'no-store' });
+  res.send(Buffer.from(m[3], 'base64'));
+});
+r.post('/admin/solicitudes/:id/atendida', express.json(), (req, res) => {
+  if (!db || !esAdmin(req)) return res.status(403).json({ ok: false });
+  const hecha = (req.body || {}).atendida !== false;
+  const info = db.prepare('UPDATE solicitudes SET atendida = ?, estado = ? WHERE id = ?').run(hecha ? 1 : 0, hecha ? 'atendida' : 'nueva', String(req.params.id));
+  res.json({ ok: !!info.changes });
 });
 
 r.get('/admin/usuarios.csv', (req, res) => {

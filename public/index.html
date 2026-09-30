@@ -1693,7 +1693,8 @@
             <div class="lead-titulo">¿Cómo quedaría esta carta en tus mesas?</div>
             <p class="lead-texto">Te enviamos por email un montaje de tu carta dentro de un portamenú Kartia, en el material que mejor encaje con tu local. Gratis y sin compromiso.</p>
             <form class="lead-form" id="leadForm" onsubmit="pedirMontaje(event)" novalidate>
-              <input class="lead-input" type="email" id="leadEmail" placeholder="tu@restaurante.com" autocomplete="email" required>
+              <input class="lead-input" type="email" id="leadEmail" placeholder="tu@restaurante.com" autocomplete="email" required aria-label="Tu email">
+              <input class="lead-input" type="tel" id="leadTel" placeholder="Teléfono (opcional)" autocomplete="tel" inputmode="tel" maxlength="20" aria-label="Teléfono (opcional)">
               <button class="lead-btn" type="submit" id="leadBtn">Quiero verla</button>
             </form>
             <div class="lead-ok" id="leadOk">Hecho. Te enviamos el montaje en 1–2 días laborables. Si quieres adelantarlo, escríbenos a <a href="mailto:hola@kartia.es" style="color:#C9A961">hola@kartia.es</a>.</div>
@@ -3197,6 +3198,7 @@
     document.getElementById('leadOk').style.display = 'none';
     document.getElementById('leadBtn').disabled = false;
     document.getElementById('leadBtn').textContent = 'Quiero verla';
+    document.getElementById('leadTel').value = '';
 
     // Scroll arriba
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
@@ -3693,12 +3695,16 @@
     const btn = document.getElementById('leadBtn');
     btn.disabled = true; btn.textContent = 'Enviando…';
     try {
-      const res = await fetch('/guardar-email', {
+      // Se envía la carta tal cual la ve el cliente (estilo y logo) para que Kartia pueda hacer el montaje
+      const res = await fetch(cartaActual ? '/solicitar-montaje' : '/guardar-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
+          telefono: document.getElementById('leadTel').value.trim(),
           origen: 'carta-rapida-montaje',
+          carta: cartaActual,
+          logo: logoDataUrl,
           restaurante: cartaActual ? cartaActual.nombre_restaurante : '',
           estilo: estiloActual,
           platos: cartaActual ? cartaActual.secciones.reduce((n, s) => n + s.platos.length, 0) : 0
