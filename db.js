@@ -97,4 +97,34 @@ function evento(tipo, detalle = '') {
   try { db.prepare('INSERT INTO eventos (tipo, fecha, detalle) VALUES (?, ?, ?)').run(tipo, Date.now(), String(detalle).slice(0, 60)); } catch {}
 }
 
-module.exports = { db, motivo, persistente, ARCHIVO, evento };
+// ── Copias de seguridad ──
+// Una copia al día dentro del volumen (carpeta copias/), se guardan las 14 últimas.
+// Protege de un borrado o de un despliegue que estropee datos; NO de perder el volumen entero:
+// para eso, descarga una copia desde /admin (botón «Copia de seguridad») y guárdala fuera.
+const DIR_COPIAS = path.join(DIR_DATOS, 'copias');
+const MAX_COPIAS = 14;
+function copiaA(ruta) {
+  if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
+  db.exec(`VACUUM INTO '${ruta.replace(/'/g, "''")}'`);
+  return ruta;
+}
+function copiaDiaria() {
+  if (!db) return null;
+  try {
+    fs.mkdirSync(DIR_COPIAS, { recursive: true });
+    const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' }); // AAAA-MM-DD
+    const ruta = path.join(DIR_COPIAS, `cartarapida-${hoy}.db`);
+    if (fs.existsSync(ruta)) return ruta;
+    copiaA(ruta);
+    const viejas = fs.readdirSync(DIR_COPIAS).filter(f => /^cartarapida-\d{4}-\d{2}-\d{2}\.db$/.test(f)).sort();
+    viejas.slice(0, Math.max(0, viejas.length - MAX_COPIAS)).forEach(f => fs.unlinkSync(path.join(DIR_COPIAS, f)));
+    console.log(`[COPIA] ${path.basename(ruta)} (${Math.round(fs.statSync(ruta).size / 1024)} KB)`);
+    return ruta;
+  } catch (e) { console.error('[COPIA] falló:', e.message); return null; }
+}
+if (db) {
+  setTimeout(copiaDiaria, 60 * 1000).unref();
+  setInterval(copiaDiaria, 3 * 60 * 60 * 1000).unref();
+}
+
+module.exports = { db, motivo, persistente, ARCHIVO, evento, copiaA, copiaDiaria, DIR_COPIAS };
