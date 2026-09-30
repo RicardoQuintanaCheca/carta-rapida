@@ -33,19 +33,21 @@ function smtp() {
   return transporte;
 }
 
-async function enviarCorreo({ para, asunto, html, texto }) {
+async function enviarCorreo({ para, asunto, html, texto, adjuntos = [], responderA }) {
   if (!CORREO_ACTIVO) return false;
   try {
     if (RESEND) {
       const r = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${RESEND}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: REMITENTE, to: [para], subject: asunto, html, text: texto }),
+        body: JSON.stringify({ from: REMITENTE, to: [para], subject: asunto, html, text: texto, ...(responderA ? { reply_to: responderA } : {}),
+          ...(adjuntos.length ? { attachments: adjuntos.map(a => ({ filename: a.nombre, content: Buffer.from(a.contenido).toString('base64') })) } : {}) }),
         signal: AbortSignal.timeout(10000)
       });
       if (!r.ok) throw new Error(`Resend ${r.status}: ${(await r.text()).slice(0, 200)}`);
     } else {
-      await smtp().sendMail({ from: REMITENTE, to: para, subject: asunto, html, text: texto });
+      await smtp().sendMail({ from: REMITENTE, to: para, subject: asunto, html, text: texto, ...(responderA ? { replyTo: responderA } : {}),
+        attachments: adjuntos.map(a => ({ filename: a.nombre, content: Buffer.from(a.contenido), contentType: a.tipo || 'application/pdf' })) });
     }
     console.log(`[CORREO] enviado «${asunto}» a ${para}`);
     return true;
@@ -64,8 +66,8 @@ function plantilla({ titulo, texto, boton, enlace, pie }) {
 <tr><td style="font-size:14px;font-weight:bold;letter-spacing:1px;color:#C2410C;text-transform:uppercase">Carta Rápida</td></tr>
 <tr><td style="padding-top:14px;font-size:24px;font-weight:bold;line-height:1.25">${esc(titulo)}</td></tr>
 <tr><td style="padding-top:14px;font-size:16px;line-height:1.55;color:#44403C">${esc(texto)}</td></tr>
-<tr><td style="padding-top:26px"><a href="${esc(enlace)}" style="display:inline-block;background:#E2561A;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:16px;padding:14px 26px;border-radius:999px">${esc(boton)}</a></td></tr>
-<tr><td style="padding-top:26px;font-size:13px;line-height:1.5;color:#78716C">${esc(pie)}<br><br>Si el botón no funciona, copia este enlace en el navegador:<br><span style="word-break:break-all">${esc(enlace)}</span></td></tr>
+${enlace ? `<tr><td style="padding-top:26px"><a href="${esc(enlace)}" style="display:inline-block;background:#E2561A;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:16px;padding:14px 26px;border-radius:999px">${esc(boton)}</a></td></tr>` : ''}
+<tr><td style="padding-top:26px;font-size:13px;line-height:1.5;color:#78716C">${esc(pie)}${enlace ? `<br><br>Si el botón no funciona, copia este enlace en el navegador:<br><span style="word-break:break-all">${esc(enlace)}</span>` : ''}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
