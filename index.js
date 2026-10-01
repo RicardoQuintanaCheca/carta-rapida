@@ -193,14 +193,14 @@ const REGLAS_ORDEN_ORIGINAL = `ORDEN DENTRO DE CADA SECCIÓN: respeta EXACTAMENT
 const INSTRUCCION_SIN_DESCRIPCIONES = `DESCRIPCIONES: copia literalmente el texto descriptivo que aparezca bajo cada plato en el original. Si no hay, deja "". No escribas descripciones nuevas.`;
 
 function instruccionEstilo(estilo) {
-  if (estilo === 'sobremesa' || estilo === 'sumi') return `TONO (cocina de autor): sobrio y preciso. Si redactas descripciones, enumera producto y técnica sin adjetivos ("Pichón, remolacha asada, jugo de sus huesos").`;
+  if (estilo === 'sobremesa' || estilo === 'sumi') return `TONO (cocina de autor): sobrio y preciso. Si redactas descripciones, enumera solo producto y técnica que estén escritos en la carta, sin adjetivos.`;
   if (estilo === 'noche' || estilo === 'deco') return `TONO (restaurante de noche, elegante): evocador pero contenido. Si redactas descripciones, frases breves y cuidadas.`;
-  if (estilo === 'brasserie') return `TONO (gran café, brasserie): clásico y generoso. Si redactas descripciones, breves y tradicionales ("Con patatas fritas y salsa bearnesa").`;
+  if (estilo === 'brasserie') return `TONO (gran café, brasserie): clásico y generoso. Si redactas descripciones, breves y tradicionales, solo con lo escrito en la carta.`;
   if (estilo === 'gaceta' || estilo === 'trattoria' || estilo === 'azulejo') return `TONO (casa de comidas con carácter): cercano y apetecible. Si redactas descripciones, breves y tradicionales.`;
   if (estilo === 'ticket' || estilo === 'cartel' || estilo === 'serigrafia') return `TONO (bar moderno): directo, con chispa. Si redactas descripciones, muy cortas: 3 a 7 palabras.`;
   if (estilo === 'editorial' || estilo === 'riviera') return `TONO (local moderno): directo y con carácter. Si redactas descripciones, cortas: 4 a 8 palabras.`;
   if (estilo === 'barra') return `TONO (estilo Barra, taberna contemporánea): directo y concreto. Si redactas descripciones, cortas: 4 a 8 palabras, sin florituras.`;
-  if (estilo === 'autor') return `TONO (estilo Autor, cocina gastronómica): preciso y evocador, sin adornos. Si redactas descripciones, enumera producto y técnica con sobriedad ("Pichón, remolacha asada, jugo de sus huesos").`;
+  if (estilo === 'autor') return `TONO (estilo Autor, cocina gastronómica): preciso y evocador, sin adornos. Si redactas descripciones, enumera con sobriedad solo producto y técnica que estén escritos en la carta.`;
   return `TONO (estilo Mantel, casa de comidas clásica): elegante y cercano, vocabulario de hostelería tradicional. Si redactas descripciones, frases completas y breves.`;
 }
 
@@ -260,8 +260,8 @@ async function redactarDescripciones(carta, { estilo, idioma }) {
       { role: 'system', content: `Eres el redactor de cartas de un restaurante con criterio. Escribe la descripción de cada plato de la lista, en ${nombreIdioma}.
 REGLAS:
 - De 3 a 8 palabras. Todas con un ritmo parecido. Sin punto final. Primera letra en mayúscula.
-- REGLA DE ORO: el restaurante imprime esta carta y sus clientes pueden tener alergias. NUNCA añadas ingredientes, salsas, guarniciones, acompañamientos, técnicas, orígenes ni denominaciones que no estén en el nombre del plato o que no formen parte inequívoca e imprescindible de la receta que ese nombre designa (una tortilla de patatas lleva patata y huevo; unas bravas, salsa brava). Si no puedes escribir nada sin suponer, devuelve texto "".
-- Ejemplos correctos: "Pulpo a la brasa" → "Hecho a la brasa"; "Tortilla de patatas" → "Patata y huevo, al momento"; "Tarta de queso" → "". Incorrecto: "Pulpo a la brasa" → "Con cachelos y pimentón" (inventa guarnición).
+- REGLA DE ORO: el restaurante imprime esta carta y sus clientes pueden tener alergias. Usa SOLO información que esté escrita en la carta: el nombre del plato, su ración y la sección. NUNCA añadas ingredientes, salsas, guarniciones, acompañamientos, técnicas, orígenes, denominaciones, tiempos ni formas de servicio ("al momento", "recién hecho", "de temporada", "para compartir") que no estén escritos. Ante la duda, texto "". Es mejor un plato sin descripción que una descripción que no se puede comprobar.
+- Ejemplos: "Lubina a la sal" → ""; "Tortilla de patatas" → ""; "Tarta de queso" → "". Incorrectos: "Pulpo a la brasa" → "Con cachelos y pimentón" (inventa guarnición); "Tortilla de patatas" → "Patata y huevo, al momento" ("al momento" no está en la carta).
 - NO repitas el nombre del plato ni palabras de su nombre. NO repitas la ración ni el número de unidades o personas.
 - PROHIBIDO usar adjetivos de relleno, en cualquier idioma: delicioso, exquisito, sabroso, cremoso, crujiente, jugoso, tierno, dorado, casero, tradicional, selecto, de calidad, artesano (en inglés: crispy, crunchy, creamy, silky, delicious, tasty, juicy, tender, golden, homemade).
 - Bebidas, vinos, cafés, pan, extras y suplementos: texto "".

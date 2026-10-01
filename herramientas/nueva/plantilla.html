@@ -293,11 +293,12 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
   .ready{right:0}
 }
 @media (max-width:520px){
-  .nav-cta .entrar{display:none}
+  .nav-cta .entrar{font-size:14px}.nav-cta{gap:14px}
   .h-xl{font-size:clamp(40px,11.5vw,56px)}
   .photo{width:46%;top:8%}
   .hero-ctas .btn{flex:1 1 auto}
 }
+@media (max-width:359px){.nav-cta .entrar{display:none}}
 @media (prefers-reduced-motion:reduce){
   .ticker-in{animation:none}
   .btn,.style-list li,.style-list li p{transition:none}
@@ -327,6 +328,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
         <div class="eyebrow">Para restaurantes, bares y hoteles</div>
         <h1 class="h-xl" id="heroTitle">Tu carta, maquetada como en una imprenta.</h1>
         <p class="lead">Hazle una foto a la carta que tienes ahora. En 30 segundos te devolvemos un PDF A4 listo para imprimir, ordenado para vender. Y cuando cambien los precios, lo actualizas en un momento.</p>
+        <p class="n-lead-movil">Haz una foto a tu carta y descárgala en PDF A4, lista para imprimir.</p>
         <div class="hero-ctas">
           <a class="btn btn-accent" href="#prueba" id="empezar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -453,9 +455,9 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
         <h2 class="h-l rv">No solo más bonita. <span class="grey">Pensada para vender.</span></h2>
         <ol class="notes" id="notes">
           <li class="rv"><span class="dot">1</span><div><b>La especialidad, primero</b><p>Abre cada sección: es lo que más se mira.</p></div></li>
-          <li class="rv"><span class="dot">2</span><div><b>El precio no manda</b><p>Junto al plato, sin columna y sin el símbolo €.</p></div></li>
+          <li class="rv"><span class="dot">2</span><div><b>El precio, discreto</b><p>Sin el símbolo €, para que no sea lo primero que se lee.</p></div></li>
           <li class="rv"><span class="dot">3</span><div><b>Pocos destacados</b><p>Como mucho uno por sección. Si todo destaca, nada destaca.</p></div></li>
-          <li class="rv"><span class="dot">4</span><div><b>El orden de una comida</b><p>Entrantes, principales y postres, en el orden en que se piden.</p></div></li>
+          <li class="rv"><span class="dot">4</span><div><b>Tu carta, completa</b><p>Tus secciones y tus platos, tal cual. Ni un plato ni un precio de menos.</p></div></li>
         </ol>
       </div>
       <article class="sheet anno" aria-label="Carta de ejemplo con anotaciones">
