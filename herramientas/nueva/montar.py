@@ -27,6 +27,14 @@ if not INDEXABLE:
     head = head.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, nofollow">')
 head = head.replace('<meta name="theme-color" content="#FF6B35">', '<meta name="theme-color" content="#FFFFFF">')
 head = re.sub(r'<link rel="preload" as="image"[^>]*>\n', '', head)
+# Vista previa al compartir, con la identidad nueva
+for viejo, nuevo in [
+    ('content="Deja Canva: tu carta, lista para imprimir en 30 segundos"', 'content="Tu carta, maquetada como en una imprenta · Carta Rápida"'),
+    ('content="https://cartarapida.kartia.es/og-deja-canva.jpg"', 'content="https://cartarapida.kartia.es/og-portada.jpg"'),
+    ('content="Deja Canva: una carta de restaurante antes y después de pasar por Carta Rápida"', 'content="Una carta de restaurante hecha en Word, antes y después de pasar por Carta Rápida"'),
+]:
+    assert viejo in head, viejo
+    head = head.replace(viejo, nuevo)
 head = re.sub(r'<link href="https://fonts.googleapis.com/css2\?family=Bricolage[^>]*>',
               '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">', head)
 css_viejo = entre(i_style+1, i_fin_style-1)
@@ -36,6 +44,10 @@ scripts_head = entre(i_fin_style+1, i_head_fin-1)
 i_tool = linea('<section class="tool-section" id="herramienta">')
 i_tool_fin = linea('</section>', i_tool)
 tool = entre(i_tool, i_tool_fin)
+# Barra de «app» con los tres pasos, arriba de la tarjeta de la herramienta
+tool = tool.replace('<section class="tool-section" id="herramienta">\n  <div class="wrap">',
+  '<section class="tool-section" id="herramienta">\n  <div class="wrap">\n    <div class="n-app" aria-hidden="true"><span class="n-app-marca">Carta <b>Rápida</b></span><ol class="n-app-pasos"><li data-p="1">Tu carta</li><li data-p="2">Estilo</li><li data-p="3">PDF</li></ol></div>', 1)
+assert 'n-app-pasos' in tool
 # Ajustes plegables: menos fricción
 tool = tool.replace('<div class="t2-card t2-toggles-card">\n        <div class="t2-eyebrow">02 · AJUSTES <span class="t2-eyebrow-nota">· opcional</span></div>',
   '<div class="t2-card t2-toggles-card" id="opciones">\n        <button type="button" class="n-opc" aria-expanded="false" aria-controls="opciones" onclick="nOpciones(this)"><span>Opciones <small>nombre, logotipo, idioma…</small></span><i aria-hidden="true"></i></button>')
@@ -107,7 +119,7 @@ cuerpo = cuerpo[:i_a] + prueba + cuerpo[i_b:]
 
 # Estilos: el botón lleva el estilo elegido a la herramienta
 cuerpo = cuerpo.replace('<a class="btn btn-ink" href="#prueba">Probar con mi carta</a>',
-  '<button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera</span> con mi carta</span></button>')
+  '<button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera · Pro</span> con mi carta</span></button>')
 
 # Pro: llamadas reales
 cuerpo = cuerpo.replace('''          </ul>
@@ -126,7 +138,7 @@ cuerpo = cuerpo.replace('<a class="btn btn-ghost" href="#prueba">Crear mi carta<
 cuerpo = cuerpo.replace('<a class="btn btn-accent" href="#prueba">Probar 7 días gratis</a>',
   '<div class="n-plan-ctas"><button class="btn btn-accent" type="button" onclick="probarPro()">Probar 7 días gratis</button><button class="n-directo" type="button" onclick="hacersePro()">o activa Pro ya</button></div>')
 cuerpo = cuerpo.replace('''<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>3 ajustes por carta</li>''',
-  '''<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Orden que vende y descripciones</li>
+  '''<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Platos fuertes destacados</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>3 ajustes por carta</li>''')
 cuerpo = cuerpo.replace('''      </div>
     </div>
@@ -167,6 +179,7 @@ pie = '''<div class="n-kartia rv">
     <footer class="foot">
       <span>© 2026 Kartia — Gastrotouch Marketing Solutions S.L.</span>
       <nav aria-label="Enlaces">
+        <a href="/panel">Mis cartas</a>
         <a href="https://kartia.es/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=pie">kartia.es</a>
         <a href="https://escandallo.kartia.es">Escandallos</a>
         <a href="mailto:hola@kartia.es">Contacto</a>
@@ -178,6 +191,7 @@ pie = '''<div class="n-kartia rv">
     </footer>'''
 cuerpo = cuerpo[:i_f] + pie + cuerpo[i_g:]
 
+cuerpo += '\n<a class="n-barra" id="nBarra" href="#prueba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>Sube una foto de tu carta</a>'
 html = head + '\n<style>\n' + css_viejo + '\n</style>\n<style>\n/* ═══ Diseño nuevo ═══ */\n' + css_nuevo + '\n/* ═══ Herramienta con el diseño nuevo ═══ */\n' + extra + '\n</style>\n' + scripts_head + '\n</head>\n<body class="n">\n' + cuerpo + '\n' + modal + '\n' + cookies_visor + '\n' + script_viejo + '''
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>

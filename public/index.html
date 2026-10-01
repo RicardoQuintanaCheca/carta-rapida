@@ -13,17 +13,17 @@
 <meta name="google-site-verification" content="7gcd7Za9VdgWriu-mxJw-DraLrb4Cloj-KGuGZI9VkY" />
 
 <!-- Open Graph -->
-<meta property="og:title" content="Deja Canva: tu carta, lista para imprimir en 30 segundos">
+<meta property="og:title" content="Tu carta, maquetada como en una imprenta · Carta Rápida">
 <meta property="og:description" content="Hazle una foto a tu carta y te la devolvemos maquetada como en una imprenta. Sin plantillas, sin teclear platos. Gratis y sin registro.">
 <meta property="og:url" content="https://cartarapida.kartia.es">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="Carta Rápida">
-<meta property="og:image" content="https://cartarapida.kartia.es/og-deja-canva.jpg">
+<meta property="og:image" content="https://cartarapida.kartia.es/og-portada.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Deja Canva: una carta de restaurante antes y después de pasar por Carta Rápida">
-<meta name="twitter:image" content="https://cartarapida.kartia.es/og-deja-canva.jpg">
+<meta property="og:image:alt" content="Una carta de restaurante hecha en Word, antes y después de pasar por Carta Rápida">
+<meta name="twitter:image" content="https://cartarapida.kartia.es/og-portada.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -31,7 +31,7 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Deja Canva: tu carta, lista para imprimir en 30 segundos">
+<meta name="twitter:title" content="Tu carta, maquetada como en una imprenta · Carta Rápida">
 <meta name="twitter:description" content="Hazle una foto a tu carta y en 30 segundos la tienes maquetada como en una imprenta. Gratis y sin registro.">
 
 <!-- Schema.org WebApplication -->
@@ -103,7 +103,7 @@
       "name": "¿Qué es exactamente el \"neuromarketing\"?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Es el estudio de cómo decidimos lo que compramos. En una carta se traduce en cosas muy concretas: la especialidad y los platos de más valor al principio de cada sección, el precio detrás del plato y no en columna (así nadie elige mirando solo precios), sin el símbolo €, y descripciones breves que dan ganas sin exagerar. Todo eso lo aplicamos al maquetar tu carta."
+        "text": "Es el estudio de cómo decidimos lo que compramos. En una carta se traduce en cosas concretas: la especialidad al principio de cada sección, pocos platos destacados, precios sin el símbolo € y una lectura limpia, sin puntos ni rellenos. Eso es lo que aplicamos al maquetar tu carta. No cambiamos tus secciones ni tus platos: los ordenamos dentro de cada sección y los presentamos mejor."
       }
     },
     {
@@ -1782,11 +1782,12 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
   .ready{right:0}
 }
 @media (max-width:520px){
-  .nnav-cta .entrar{display:none}
+  .nnav-cta .entrar{font-size:14px}.nnav-cta{gap:14px}
   .h-xl{font-size:clamp(40px,11.5vw,56px)}
   .photo{width:46%;top:8%}
   .hero-ctas .btn{flex:1 1 auto}
 }
+@media (max-width:359px){.nnav-cta .entrar{display:none}}
 @media (prefers-reduced-motion:reduce){
   .ticker-in{animation:none}
   .btn,.style-list li,.style-list li p{transition:none}
@@ -1988,6 +1989,55 @@ section[id]{scroll-margin-top:80px}
 /* Con una ventana abierta, el fondo no se mueve */
 html:has(body[style*="overflow: hidden"]){overflow:hidden}
 html.lenis-stopped{overflow:clip}
+.n-lead-movil{display:none}
+@media (max-width:900px){.n-lead-movil{display:block;order:2;margin:18px 0 0;font-size:17px;line-height:1.5;color:var(--muted)}}
+/* Descripciones generadas: retiradas (solo se copian las de la carta original) */
+#herramienta .t2-feat-row:has(#descToggle){display:none!important}
+
+/* ═══ La herramienta, protagonista: banda oscura, tarjeta de «app» y subida viva ═══ */
+.n-prueba{background:var(--ink);color:#F4EFE6;position:relative;overflow:clip;padding-bottom:clamp(72px,9vw,128px)}
+.n-prueba::before{content:"";position:absolute;left:50%;top:-20%;width:min(1100px,140vw);aspect-ratio:1;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(204,68,22,.30),rgba(204,68,22,0));pointer-events:none}
+.n-prueba > *{position:relative}
+.n-prueba .eyebrow{color:#FF8A5C}
+.n-prueba .h-l{color:#FFFFFF}
+.n-prueba .grey{color:#A39B91}
+.n-prueba .n-pasos{color:#F4EFE6}
+.n-prueba .n-pasos span{box-shadow:inset 0 0 0 1.5px #F4EFE6}
+#herramienta.tool-section > .wrap{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 50px 120px -30px rgba(0,0,0,.65),0 0 90px -20px rgba(204,68,22,.35)!important;padding-top:0!important;overflow:clip}
+
+/* Barra de app */
+.n-app{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 calc(clamp(18px,3vw,40px) * -1) clamp(18px,2.4vw,28px);padding:14px clamp(18px,3vw,40px);border-bottom:1px solid var(--line);background:#FBFAF8}
+.n-app-marca{font-size:15px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}.n-app-marca b{color:var(--accent);font-weight:800}
+.n-app-pasos{list-style:none;margin:0;padding:0;display:flex;gap:6px;counter-reset:p}
+.n-app-pasos li{counter-increment:p;display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#A39B91;padding:6px 12px 6px 6px;border-radius:8px;transition:color .3s,background-color .3s}
+.n-app-pasos li::before{content:counter(p);width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px;background:var(--soft);color:#A39B91;transition:inherit}
+.n-app-pasos li.on{color:var(--ink);background:var(--soft)}
+.n-app-pasos li.on::before{background:var(--accent);color:#fff}
+.n-app-pasos li.hecho::before{content:"✓";background:var(--ink);color:#fff}
+.n-app-pasos li.hecho{color:var(--ink)}
+
+/* Subida: que se vea que aquí se empieza */
+#herramienta .t2-cta-big{background:#FFF4EE!important;border:0!important;position:relative;isolation:isolate}
+#herramienta .t2-cta-big::after{display:block!important;content:""!important;position:absolute!important;inset:0!important;border-radius:22px!important;pointer-events:none;z-index:-1;
+  background:linear-gradient(90deg,var(--accent) 50%,transparent 0) repeat-x top/16px 2px,linear-gradient(90deg,var(--accent) 50%,transparent 0) repeat-x bottom/16px 2px,linear-gradient(0deg,var(--accent) 50%,transparent 0) repeat-y left/2px 16px,linear-gradient(0deg,var(--accent) 50%,transparent 0) repeat-y right/2px 16px!important;
+  opacity:.55;animation:n-hormigas 1.2s linear infinite;width:auto!important;height:auto!important;top:0!important;right:0!important}
+@keyframes n-hormigas{to{background-position:16px 0,-16px 100%,0 -16px,100% 16px}}
+#herramienta .t2-cta-big:hover{background:#FFEDE3!important}
+#herramienta .t2-cam-ring{background:var(--accent)!important;color:#fff!important;box-shadow:0 12px 28px -10px rgba(204,68,22,.7)!important;position:relative}
+#herramienta .t2-cam-ring::after{content:"";position:absolute;inset:-8px;border-radius:24px;border:2px solid var(--accent);opacity:0;animation:n-latido 2.2s ease-out infinite}
+@keyframes n-latido{0%{transform:scale(.85);opacity:.6}100%{transform:scale(1.25);opacity:0}}
+#herramienta .t2-cta-title{font-size:23px!important}
+@media (prefers-reduced-motion:reduce){#herramienta .t2-cta-big::after,#herramienta .t2-cam-ring::after{animation:none}}
+
+/* Barra fija en móvil hacia la herramienta */
+.n-barra{display:none}
+@media (max-width:900px){
+  .n-barra{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:70;align-items:center;justify-content:center;gap:10px;min-height:54px;border-radius:12px;background:var(--accent);color:#fff;font:700 16px var(--f-ui);text-decoration:none;box-shadow:0 18px 40px -12px rgba(22,19,15,.55);transform:translateY(140%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .n-barra svg{width:20px;height:20px}
+  .n-barra.on{transform:none}
+  .n-app-marca{display:none}
+  .n-app{justify-content:center}
+}
 
 </style>
   <script>
@@ -2035,6 +2085,7 @@ html.lenis-stopped{overflow:clip}
         <div class="eyebrow">Para restaurantes, bares y hoteles</div>
         <h1 class="h-xl" id="heroTitle">Tu carta, maquetada como en una imprenta.</h1>
         <p class="lead">Hazle una foto a la carta que tienes ahora. En 30 segundos te devolvemos un PDF A4 listo para imprimir, ordenado para vender. Y cuando cambien los precios, lo actualizas en un momento.</p>
+        <p class="n-lead-movil">Haz una foto a tu carta y descárgala en PDF A4, lista para imprimir.</p>
         <div class="hero-ctas">
           <a class="btn btn-accent" href="#prueba" id="empezar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -2106,6 +2157,7 @@ html.lenis-stopped{overflow:clip}
     </div>
 <section class="tool-section" id="herramienta">
   <div class="wrap">
+    <div class="n-app" aria-hidden="true"><span class="n-app-marca">Carta <b>Rápida</b></span><ol class="n-app-pasos"><li data-p="1">Tu carta</li><li data-p="2">Estilo</li><li data-p="3">PDF</li></ol></div>
     <!-- SALUDO MASCOTA -->
     <div class="t2-greeting">
       <div style="position:relative;width:40px;height:40px;display:inline-block;flex-shrink:0;">
@@ -2322,13 +2374,13 @@ html.lenis-stopped{overflow:clip}
         <!-- Descripciones -->
         <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Escribiré descripciones breves, sin inventar ingredientes ✍️' : 'Sin descripciones, ¡de acuerdo!')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Breves, solo con lo que lleva el plato · revísalas</div></span>
+          <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Solo con lo que dice tu carta · revísalas antes de imprimir</div></span>
           <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Rentabilidad -->
         <div class="t2-feat-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Pondré primero lo que más te interesa vender ✨' : 'Mantendré el orden de tus platos.')">
           <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span class="t2-pf-label">Ordenar para vender más<div class="t2-pf-sub">La especialidad y los platos de más valor, primero</div></span>
+          <span class="t2-pf-label">Destacar tus platos fuertes<div class="t2-pf-sub">La especialidad y los platos principales, primero en cada sección</div></span>
           <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Traducir -->
@@ -2519,7 +2571,7 @@ html.lenis-stopped{overflow:clip}
             <button type="button" role="tab" aria-selected="false" data-k="gaceta"><b>Gaceta</b><span>Periódico antiguo</span></button>
           </div>
           <p class="pick-note">Y ocho estilos más: Mantel, Barra, Autor, Déco, Trattoria, Cartel, Ticket y Serigrafía.</p>
-          <button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera</span> con mi carta</span></button>
+          <button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera · Pro</span> con mi carta</span></button>
         </div>
       </div>
     </div>
@@ -2532,9 +2584,9 @@ html.lenis-stopped{overflow:clip}
         <h2 class="h-l rv">No solo más bonita. <span class="grey">Pensada para vender.</span></h2>
         <ol class="notes" id="notes">
           <li class="rv"><span class="ndot">1</span><div><b>La especialidad, primero</b><p>Abre cada sección: es lo que más se mira.</p></div></li>
-          <li class="rv"><span class="ndot">2</span><div><b>El precio no manda</b><p>Junto al plato, sin columna y sin el símbolo €.</p></div></li>
+          <li class="rv"><span class="ndot">2</span><div><b>El precio, discreto</b><p>Sin el símbolo €, para que no sea lo primero que se lee.</p></div></li>
           <li class="rv"><span class="ndot">3</span><div><b>Pocos destacados</b><p>Como mucho uno por sección. Si todo destaca, nada destaca.</p></div></li>
-          <li class="rv"><span class="ndot">4</span><div><b>El orden de una comida</b><p>Entrantes, principales y postres, en el orden en que se piden.</p></div></li>
+          <li class="rv"><span class="ndot">4</span><div><b>Tu carta, completa</b><p>Tus secciones y tus platos, tal cual. Ni un plato ni un precio de menos.</p></div></li>
         </ol>
       </div>
       <article class="sheet anno" aria-label="Carta de ejemplo con anotaciones">
@@ -2618,7 +2670,7 @@ html.lenis-stopped{overflow:clip}
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>10 estilos</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>PDF A4 listo para imprimir</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Una firma pequeña al pie</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Orden que vende y descripciones</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Platos fuertes destacados</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>3 ajustes por carta</li>
           </ul>
           <a class="btn btn-ghost" href="#prueba">Hacer mi carta gratis</a>
@@ -2650,7 +2702,7 @@ html.lenis-stopped{overflow:clip}
         <details><summary>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?<i aria-hidden="true"></i></summary><p>Aceptamos JPG, PNG y WEBP, y hasta 5 fotos si tu carta tiene varias páginas. Leemos cartas con reflejos, fotos hechas con prisa e incluso hojas fotocopiadas. Para el mejor resultado: foto de frente, con buena luz y sin cortar los bordes.</p></details>
         <details><summary>¿Cuánto tarda en generar el PDF?<i aria-hidden="true"></i></summary><p>Entre 20 y 40 segundos, según el tamaño de la carta. Después puedes cambiar de estilo y descargar el PDF al momento, sin esperar otra vez.</p></details>
         <details><summary>¿Puedo traducir mi carta a otros idiomas?<i aria-hidden="true"></i></summary><p>Sí, con Carta Pro. Traducimos toda la carta — platos, secciones y descripciones — a inglés, francés, alemán, italiano, portugués o chino, con terminología profesional de hostelería. Puedes probarlo gratis 7 días.</p></details>
-        <details><summary>¿Qué es exactamente el "neuromarketing"?<i aria-hidden="true"></i></summary><p>Es el estudio de cómo decidimos lo que compramos. En una carta se traduce en cosas muy concretas: la especialidad y los platos de más valor al principio de cada sección, el precio detrás del plato y no en columna (así nadie elige mirando solo precios), sin el símbolo €, y descripciones breves que dan ganas sin exagerar. Todo eso lo aplicamos al maquetar tu carta.</p></details>
+        <details><summary>¿Qué es exactamente el "neuromarketing"?<i aria-hidden="true"></i></summary><p>Es el estudio de cómo decidimos lo que compramos. En una carta se traduce en cosas concretas: la especialidad al principio de cada sección, pocos platos destacados, precios sin el símbolo € y una lectura limpia, sin puntos ni rellenos. Eso es lo que aplicamos al maquetar tu carta. No cambiamos tus secciones ni tus platos: los ordenamos dentro de cada sección y los presentamos mejor.</p></details>
         <details><summary>¿Dónde se guardan mis cartas?<i aria-hidden="true"></i></summary><p>Con la versión gratis, en ningún sitio: leemos tu carta, te devolvemos el diseño y no guardamos ni la foto ni el texto. Con Carta Pro, las cartas que tú decidas guardar se quedan en tu panel, solo visibles con tu cuenta, hasta que las borres o borres la cuenta. Nunca vendemos tus datos. Más detalle en la <a href="/legal/privacidad.html">política de privacidad</a>.</p></details>
         <details><summary>¿Por qué no hacerla en Canva o en Word?<i aria-hidden="true"></i></summary><p>Puedes, pero partes de una plantilla vacía: tienes que teclear cada plato y cada precio, cuadrar columnas y volver a exportar cada vez que cambia algo. Aquí partes de la carta que ya tienes: haces una foto y en unos 30 segundos tienes el PDF maquetado. Si luego quieres retocarlo, lo pides con una frase.</p></details>
         <details><summary>¿Puedo imprimirla en casa o llevarla a la imprenta?<i aria-hidden="true"></i></summary><p>Sí, las dos cosas. Todos los estilos van sobre fondo blanco para que salgan bien en una impresora normal, y el PDF es A4 a buena resolución, así que cualquier imprenta o copistería lo puede imprimir tal cual.</p></details>
@@ -2676,20 +2728,19 @@ html.lenis-stopped{overflow:clip}
       <div class="n-seo-in">
   <h2>Por qué el diseño de tu carta importa más de lo que crees</h2>
   <p>La carta de un restaurante es la herramienta de ventas más poderosa que existe en hostelería. Sin embargo, la mayoría de los restaurantes en España llevan años con la misma carta, con el mismo diseño y el mismo orden de platos con el que abrieron. El resultado es una oportunidad de venta desperdiciada en cada servicio.</p>
-  <p>La ingeniería de menús lleva décadas estudiándose en escuelas de hostelería como la de Cornell. Una de sus conclusiones más citadas: cuando los precios aparecen sin el símbolo de moneda, los clientes gastan más. No se trata de subir precios, sino de presentar el contenido de forma inteligente.</p>
+  <p>La ingeniería de menús lleva décadas estudiándose en escuelas de hostelería como la de Cornell. Uno de sus estudios más citados observó que, cuando los precios aparecían sin el símbolo de moneda, los clientes gastaban algo más. No se trata de subir precios, sino de presentar la carta con criterio.</p>
   <h3>Qué es el neuromarketing aplicado a cartas de restaurante</h3>
   <p>El neuromarketing gastronómico es la aplicación de principios de psicología del consumidor al diseño de cartas. Se basa en cómo funciona el cerebro humano cuando lee un menú: qué mira primero, qué recuerda mejor y qué decide pedir en función de cómo está presentada la información.</p>
-  <p>Las técnicas más efectivas incluyen la posición de primacía —los primeros platos de cada sección son los más pedidos—, el efecto ancla de precio —un plato caro al inicio hace que el resto parezca más asequible— y la eliminación del símbolo del euro, que está demostrado que reduce la percepción de coste en el cliente.</p>
-  <h3>El orden de las secciones también vende</h3>
-  <p>Una carta bien diseñada sigue el flujo natural de una comida: entrantes, ensaladas, sopas, arroces y pastas, pescados, carnes, postres. Este orden reduce la fatiga de decisión del cliente y aumenta la probabilidad de que pida más platos. Carta Rápida reorganiza automáticamente las secciones de tu carta siguiendo esta lógica.</p>
+  <p>Las técnicas más efectivas incluyen la posición de primacía —los primeros platos de cada sección son los más pedidos—, el efecto ancla de precio —un plato caro al inicio hace que el resto parezca más asequible— y la eliminación del símbolo del euro, para que el precio no sea lo primero que se lee.</p>
+  <h3>Una carta que se lee de un vistazo</h3>
+  <p>Una carta bien diseñada se lee sin esfuerzo: secciones claras, pocos destacados y una tipografía pensada para el papel. Carta Rápida respeta tus secciones y tus platos tal como los tienes y se encarga de que se lean bien.</p>
   <hr class="seo-divider">
   <h2>Cómo mejorar la carta de tu restaurante sin contratar un diseñador</h2>
   <p>Hasta ahora, rediseñar profesionalmente la carta de un restaurante requería contratar a un diseñador gráfico, esperar días o semanas y pagar un presupuesto que muchos negocios no podían justificar. Y repetir el proceso cada vez que había un cambio de temporada, una subida de precios o un plato nuevo.</p>
   <p>Carta Rápida elimina todas esas barreras. En menos de un minuto, cualquier restaurante, hotel o cafetería puede tener una carta con diseño profesional y neuromarketing aplicado, sin conocimientos técnicos, sin presupuesto y sin esperas.</p>
   <h3>Qué incluye el rediseño</h3>
   <ul>
-    <li><strong>Orden que vende</strong> — la especialidad y los platos de más valor aparecen primero en cada sección.</li>
-    <li><strong>Descripción de platos</strong> — textos elegantes y apetecibles con terminología profesional de hostelería.</li>
+    <li><strong>Platos fuertes destacados</strong> — la especialidad y los platos principales aparecen primero en cada sección.</li>
     <li><strong>15 estilos para imprimir</strong> — de la alta cocina a la taberna, siempre sobre papel blanco.</li>
     <li><strong>Ajustes en texto normal</strong> — pide el cambio como se lo dirías a una persona y se aplica sin volver a subir la carta.</li>
     <li><strong>PDF listo para imprimir</strong> — formato A4, tipografía de imprenta y el nombre de tu restaurante en la cabecera.</li>
@@ -2711,6 +2762,7 @@ html.lenis-stopped{overflow:clip}
     <footer class="foot">
       <span>© 2026 Kartia — Gastrotouch Marketing Solutions S.L.</span>
       <nav aria-label="Enlaces">
+        <a href="/panel">Mis cartas</a>
         <a href="https://kartia.es/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=pie">kartia.es</a>
         <a href="https://escandallo.kartia.es">Escandallos</a>
         <a href="mailto:hola@kartia.es">Contacto</a>
@@ -2724,6 +2776,7 @@ html.lenis-stopped{overflow:clip}
 </main>
 
 
+<a class="n-barra" id="nBarra" href="#prueba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>Sube una foto de tu carta</a>
 <script src="/cuenta.js"></script>
 <!-- EMAIL PARA DESCARGAR -->
 <div class="cu-velo" id="emailVelo" hidden>
@@ -4219,14 +4272,21 @@ function nOpciones(b) {
   const $$ = s => Array.from(document.querySelectorAll(s));
   const NOMBRES = { riviera: 'Riviera', azulejo: 'Azulejo', serigrafia: 'Serigrafía', cartel: 'Cartel', ticket: 'Ticket', gaceta: 'Gaceta', trattoria: 'Trattoria', editorial: 'Editorial', sobremesa: 'Sobremesa', sumi: 'Sumi', brasserie: 'Brasserie', deco: 'Déco', mantel: 'Mantel', barra: 'Barra', autor: 'Autor' };
 
+  const PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo'];
+  function esPro_(k) { return PRO.includes(k) && !(typeof esPro === 'function' && esPro()); }
+  function pintarEstiloElegido(k) {
+    const n = $('#nEstilo'); if (!n || !NOMBRES[k]) return;
+    n.textContent = NOMBRES[k] + (esPro_(k) ? ' · Pro' : '');
+  }
+  window.addEventListener('cuenta', () => { if (typeof estiloActual !== 'undefined') pintarEstiloElegido(estiloActual); });
   // El estilo elegido se ve bajo el botón de la herramienta
   if (typeof selEstilo === 'function') {
     const original = selEstilo;
     window.selEstilo = selEstilo = function (el, estilo) {
       original(el, estilo);
-      const n = $('#nEstilo'); if (n && NOMBRES[estilo]) n.textContent = NOMBRES[estilo];
+      pintarEstiloElegido(estilo);
     };
-    if (typeof estiloActual !== 'undefined' && NOMBRES[estiloActual]) $('#nEstilo').textContent = NOMBRES[estiloActual];
+    if (typeof estiloActual !== 'undefined') pintarEstiloElegido(estiloActual);
   }
 
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
@@ -4254,6 +4314,12 @@ function nOpciones(b) {
         Cuenta.aviso(String(msg).replace(/[✨📸]/gu, '').trim());
         if (typeof cartaActual !== 'undefined' && !cartaActual) ir($('#prueba'));
       }
+    };
+  }
+  // El periodo elegido en Precios (anual/mensual) llega a la ventana de pago
+  if (typeof hacersePro === 'function') {
+    window.hacersePro = hacersePro = function (motivo) {
+      Cuenta.planes({ motivo: typeof motivo === 'string' ? motivo : '', periodo: periodoElegido, antesDePagar: guardarPendiente });
     };
   }
   // «Probar Pro» cuando ya estás en prueba o eres Pro: que haga algo útil
@@ -4295,13 +4361,42 @@ function nOpciones(b) {
   new MutationObserver(marcar).observe(progreso, { attributes: true, attributeFilter: ['style'] });
   marcar();
 
+  // Pasos de la barra de la app: 1 subir · 2 estilo · 3 PDF
+  const pasos = $$('.n-app-pasos li');
+  const marcarPasos = () => {
+    const carta = resultado.style.display !== 'none', leyendo = progreso.style.display !== 'none';
+    const hayFotos = !document.getElementById('mainBtn').disabled;
+    pasos.forEach((li, k) => {
+      const n = k + 1;
+      li.classList.toggle('hecho', carta ? n === 1 : false);
+      li.classList.toggle('on', carta ? n > 1 : (n === 1 && !leyendo) || (leyendo && n === 1) || (hayFotos && n === 1));
+    });
+  };
+  new MutationObserver(marcarPasos).observe(resultado, { attributes: true, attributeFilter: ['style'] });
+  new MutationObserver(marcarPasos).observe(progreso, { attributes: true, attributeFilter: ['style'] });
+  marcarPasos();
+
+  // Barra fija en móvil: aparece al dejar atrás la portada y se va al llegar a la herramienta o al final
+  const barra = $('#nBarra');
+  if (barra && 'IntersectionObserver' in window) {
+    const vistos = new Set();
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => e.isIntersecting ? vistos.add(e.target) : vistos.delete(e.target));
+      const enPortada = vistos.has($('.nhero')), enHerramienta = vistos.has(prueba), enFinal = vistos.has($('.final'));
+      barra.classList.toggle('on', !enPortada && !enHerramienta && !enFinal && resultado.style.display === 'none');
+    }, { threshold: 0.02 });
+    [$('.nhero'), prueba, $('.final')].forEach(el => el && io.observe(el));
+  }
+
   // Barra con filete al bajar
   const nav = $('#nav');
   const marcarNav = () => nav.classList.toggle('scrolled', window.scrollY > 8);
   window.addEventListener('scroll', marcarNav, { passive: true }); marcarNav();
 
   // Precios anual / mensual
+  let periodoElegido = 'ano';
   const pintarPrecio = anual => {
+    periodoElegido = anual ? 'ano' : 'mes';
     $('#tAno').setAttribute('aria-pressed', anual); $('#tMes').setAttribute('aria-pressed', !anual);
     $('#proAmount').textContent = anual ? '9,90 €' : '12,90 €';
     $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido.' : 'Mes a mes, cancela cuando quieras. IVA incluido.';
@@ -4317,14 +4412,21 @@ function nOpciones(b) {
     elegido = k;
     chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
     figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
-    $('#probarEstiloNom').textContent = NOMBRES[k] || k;
+    $('#probarEstiloNom').textContent = (NOMBRES[k] || k) + (esPro_(k) ? ' · Pro' : '');
     if (!auto) { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); }
   };
   chips.forEach(c => c.addEventListener('click', () => { tocado = true; clearInterval(ciclo); elegir(c.dataset.k); }));
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    // Pasa solo una vuelta mientras nadie lo toque; se para al pasar el ratón o al enfocarlo
+    let pasos = 0, encima = false;
+    const picker = $('.picker');
+    ['pointerenter', 'focusin'].forEach(ev => picker.addEventListener(ev, () => { encima = true; }));
+    ['pointerleave', 'focusout'].forEach(ev => picker.addEventListener(ev, () => { encima = false; }));
     new IntersectionObserver(([e]) => {
       clearInterval(ciclo);
       if (e.isIntersecting && !tocado) ciclo = setInterval(() => {
+        if (encima) return;
+        if (++pasos >= chips.length) { clearInterval(ciclo); elegir(chips[0].dataset.k, true); return; }
         const i = chips.findIndex(c => c.getAttribute('aria-selected') === 'true');
         elegir(chips[(i + 1) % chips.length].dataset.k, true);
       }, 2600);
@@ -4405,9 +4507,14 @@ function nOpciones(b) {
       const txt = $('#readyEstilo');
       let i = 0, visible = true, capaZ = 1;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
+      let vueltas = 0, quieta = false, reloj = null;
+      const d = $('#demo');
+      ['pointerenter', 'focusin', 'touchstart'].forEach(ev => d.addEventListener(ev, () => { quieta = true; }, { passive: true }));
+      ['pointerleave', 'focusout'].forEach(ev => d.addEventListener(ev, () => { quieta = false; }));
       const paso = () => {
-        if (!visible || document.hidden) return;
+        if (!visible || document.hidden || quieta) return;
         i = (i + 1) % lista.length;
+        if (i === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
         // la nueva entra por encima; la anterior se quita cuando ya está tapada
         const nueva = imgs[i];
         nueva.style.zIndex = ++capaZ;
@@ -4416,7 +4523,7 @@ function nOpciones(b) {
         txt.textContent = 'Estilo ' + lista[i][1] + ' · 1 página';
         gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
       };
-      setTimeout(() => { paso(); setInterval(paso, 2600); }, 1800);
+      setTimeout(() => { paso(); reloj = setInterval(paso, 2600); }, 1800);
     }
 
     if (window.SplitText && !tarde) {
@@ -4437,6 +4544,7 @@ function nOpciones(b) {
     gsap.to('#photo', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('#sheet', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
 
+    gsap.from('#herramienta > .wrap', { y: 80, scale: .94, autoAlpha: .4, ease: 'none', scrollTrigger: { trigger: '#herramienta', start: 'top 98%', end: 'top 55%', scrub: .6 } });
     $$('.rv').forEach(el => gsap.from(el, {
       autoAlpha: 0, y: 36, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }

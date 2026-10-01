@@ -11,14 +11,21 @@ function nOpciones(b) {
   const $$ = s => Array.from(document.querySelectorAll(s));
   const NOMBRES = { riviera: 'Riviera', azulejo: 'Azulejo', serigrafia: 'Serigrafía', cartel: 'Cartel', ticket: 'Ticket', gaceta: 'Gaceta', trattoria: 'Trattoria', editorial: 'Editorial', sobremesa: 'Sobremesa', sumi: 'Sumi', brasserie: 'Brasserie', deco: 'Déco', mantel: 'Mantel', barra: 'Barra', autor: 'Autor' };
 
+  const PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo'];
+  function esPro_(k) { return PRO.includes(k) && !(typeof esPro === 'function' && esPro()); }
+  function pintarEstiloElegido(k) {
+    const n = $('#nEstilo'); if (!n || !NOMBRES[k]) return;
+    n.textContent = NOMBRES[k] + (esPro_(k) ? ' · Pro' : '');
+  }
+  window.addEventListener('cuenta', () => { if (typeof estiloActual !== 'undefined') pintarEstiloElegido(estiloActual); });
   // El estilo elegido se ve bajo el botón de la herramienta
   if (typeof selEstilo === 'function') {
     const original = selEstilo;
     window.selEstilo = selEstilo = function (el, estilo) {
       original(el, estilo);
-      const n = $('#nEstilo'); if (n && NOMBRES[estilo]) n.textContent = NOMBRES[estilo];
+      pintarEstiloElegido(estilo);
     };
-    if (typeof estiloActual !== 'undefined' && NOMBRES[estiloActual]) $('#nEstilo').textContent = NOMBRES[estiloActual];
+    if (typeof estiloActual !== 'undefined') pintarEstiloElegido(estiloActual);
   }
 
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
@@ -46,6 +53,12 @@ function nOpciones(b) {
         Cuenta.aviso(String(msg).replace(/[✨📸]/gu, '').trim());
         if (typeof cartaActual !== 'undefined' && !cartaActual) ir($('#prueba'));
       }
+    };
+  }
+  // El periodo elegido en Precios (anual/mensual) llega a la ventana de pago
+  if (typeof hacersePro === 'function') {
+    window.hacersePro = hacersePro = function (motivo) {
+      Cuenta.planes({ motivo: typeof motivo === 'string' ? motivo : '', periodo: periodoElegido, antesDePagar: guardarPendiente });
     };
   }
   // «Probar Pro» cuando ya estás en prueba o eres Pro: que haga algo útil
@@ -87,13 +100,42 @@ function nOpciones(b) {
   new MutationObserver(marcar).observe(progreso, { attributes: true, attributeFilter: ['style'] });
   marcar();
 
+  // Pasos de la barra de la app: 1 subir · 2 estilo · 3 PDF
+  const pasos = $$('.n-app-pasos li');
+  const marcarPasos = () => {
+    const carta = resultado.style.display !== 'none', leyendo = progreso.style.display !== 'none';
+    const hayFotos = !document.getElementById('mainBtn').disabled;
+    pasos.forEach((li, k) => {
+      const n = k + 1;
+      li.classList.toggle('hecho', carta ? n === 1 : false);
+      li.classList.toggle('on', carta ? n > 1 : (n === 1 && !leyendo) || (leyendo && n === 1) || (hayFotos && n === 1));
+    });
+  };
+  new MutationObserver(marcarPasos).observe(resultado, { attributes: true, attributeFilter: ['style'] });
+  new MutationObserver(marcarPasos).observe(progreso, { attributes: true, attributeFilter: ['style'] });
+  marcarPasos();
+
+  // Barra fija en móvil: aparece al dejar atrás la portada y se va al llegar a la herramienta o al final
+  const barra = $('#nBarra');
+  if (barra && 'IntersectionObserver' in window) {
+    const vistos = new Set();
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => e.isIntersecting ? vistos.add(e.target) : vistos.delete(e.target));
+      const enPortada = vistos.has($('.nhero')), enHerramienta = vistos.has(prueba), enFinal = vistos.has($('.final'));
+      barra.classList.toggle('on', !enPortada && !enHerramienta && !enFinal && resultado.style.display === 'none');
+    }, { threshold: 0.02 });
+    [$('.nhero'), prueba, $('.final')].forEach(el => el && io.observe(el));
+  }
+
   // Barra con filete al bajar
   const nav = $('#nav');
   const marcarNav = () => nav.classList.toggle('scrolled', window.scrollY > 8);
   window.addEventListener('scroll', marcarNav, { passive: true }); marcarNav();
 
   // Precios anual / mensual
+  let periodoElegido = 'ano';
   const pintarPrecio = anual => {
+    periodoElegido = anual ? 'ano' : 'mes';
     $('#tAno').setAttribute('aria-pressed', anual); $('#tMes').setAttribute('aria-pressed', !anual);
     $('#proAmount').textContent = anual ? '9,90 €' : '12,90 €';
     $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido.' : 'Mes a mes, cancela cuando quieras. IVA incluido.';
@@ -109,14 +151,21 @@ function nOpciones(b) {
     elegido = k;
     chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
     figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
-    $('#probarEstiloNom').textContent = NOMBRES[k] || k;
+    $('#probarEstiloNom').textContent = (NOMBRES[k] || k) + (esPro_(k) ? ' · Pro' : '');
     if (!auto) { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); }
   };
   chips.forEach(c => c.addEventListener('click', () => { tocado = true; clearInterval(ciclo); elegir(c.dataset.k); }));
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    // Pasa solo una vuelta mientras nadie lo toque; se para al pasar el ratón o al enfocarlo
+    let pasos = 0, encima = false;
+    const picker = $('.picker');
+    ['pointerenter', 'focusin'].forEach(ev => picker.addEventListener(ev, () => { encima = true; }));
+    ['pointerleave', 'focusout'].forEach(ev => picker.addEventListener(ev, () => { encima = false; }));
     new IntersectionObserver(([e]) => {
       clearInterval(ciclo);
       if (e.isIntersecting && !tocado) ciclo = setInterval(() => {
+        if (encima) return;
+        if (++pasos >= chips.length) { clearInterval(ciclo); elegir(chips[0].dataset.k, true); return; }
         const i = chips.findIndex(c => c.getAttribute('aria-selected') === 'true');
         elegir(chips[(i + 1) % chips.length].dataset.k, true);
       }, 2600);
@@ -197,9 +246,14 @@ function nOpciones(b) {
       const txt = $('#readyEstilo');
       let i = 0, visible = true, capaZ = 1;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
+      let vueltas = 0, quieta = false, reloj = null;
+      const d = $('#demo');
+      ['pointerenter', 'focusin', 'touchstart'].forEach(ev => d.addEventListener(ev, () => { quieta = true; }, { passive: true }));
+      ['pointerleave', 'focusout'].forEach(ev => d.addEventListener(ev, () => { quieta = false; }));
       const paso = () => {
-        if (!visible || document.hidden) return;
+        if (!visible || document.hidden || quieta) return;
         i = (i + 1) % lista.length;
+        if (i === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
         // la nueva entra por encima; la anterior se quita cuando ya está tapada
         const nueva = imgs[i];
         nueva.style.zIndex = ++capaZ;
@@ -208,7 +262,7 @@ function nOpciones(b) {
         txt.textContent = 'Estilo ' + lista[i][1] + ' · 1 página';
         gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
       };
-      setTimeout(() => { paso(); setInterval(paso, 2600); }, 1800);
+      setTimeout(() => { paso(); reloj = setInterval(paso, 2600); }, 1800);
     }
 
     if (window.SplitText && !tarde) {
@@ -229,6 +283,7 @@ function nOpciones(b) {
     gsap.to('#photo', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('#sheet', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
 
+    gsap.from('#herramienta > .wrap', { y: 80, scale: .94, autoAlpha: .4, ease: 'none', scrollTrigger: { trigger: '#herramienta', start: 'top 98%', end: 'top 55%', scrub: .6 } });
     $$('.rv').forEach(el => gsap.from(el, {
       autoAlpha: 0, y: 36, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }
