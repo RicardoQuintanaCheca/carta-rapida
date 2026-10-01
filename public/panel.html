@@ -101,6 +101,7 @@
   .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .etq { display: block; font-size: 12.5px; font-weight: 600; margin: 0 0 5px; color: #333; }
   .grupo { margin-bottom: 12px; }
+  .cab-nombre, .cab-logo { margin-top: 14px; }
   .segmento { display: inline-flex; background: #F1EFE8; border-radius: 999px; padding: 3px; }
   .segmento button { border: none; background: transparent; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); cursor: pointer; }
   .segmento button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
@@ -365,16 +366,20 @@
           <fieldset id="edFs">
             <section class="bloque">
               <h2 class="bloque-tit">Cabecera</h2>
-              <div class="grupo"><label class="etq" for="fNombre">Nombre del restaurante</label><input class="campo grande" id="fNombre" maxlength="60" value="${esc(c.nombre_restaurante || '')}" data-k="nombre_restaurante"></div>
-              <div class="grupo"><label class="etq" for="fSub">Frase bajo el nombre (opcional)</label><input class="campo" id="fSub" maxlength="90" value="${esc(c.subtitulo || '')}" data-k="subtitulo"></div>
               <div class="etq">Arriba de la carta sale</div>
               <div class="segmento" id="segCab"><button type="button" data-v="nombre">El nombre</button><button type="button" data-v="logo">Tu logotipo</button></div>
+              <div class="cab-nombre" id="cabNombre">
+                <div class="grupo"><label class="etq" for="fNombre">Nombre del restaurante</label><input class="campo grande" id="fNombre" maxlength="60" value="${esc(c.nombre_restaurante || '')}" data-k="nombre_restaurante"></div>
+                <div class="grupo"><label class="etq" for="fSub">Frase bajo el nombre (opcional)</label><input class="campo" id="fSub" maxlength="90" value="${esc(c.subtitulo || '')}" data-k="subtitulo"></div>
+              </div>
+              <div class="cab-logo" id="cabLogo">
               <div class="logo-fila">
                 ${ed.logo ? `<img class="logo-img" src="${ed.logo}" alt="Tu logotipo">` : ''}
                 <label class="btn peq subir-logo">${ed.logo ? 'Cambiar logotipo' : 'Subir logotipo'}<input type="file" accept="image/png,image/jpeg,image/webp" id="fLogo"></label>
                 ${ed.logo ? '<button class="btn peq" type="button" id="quitarLogo">Quitar</button>' : ''}
               </div>
-              <p class="ayuda">PNG con fondo transparente queda mejor. Si no hay logotipo, sale el nombre.</p>
+              <p class="ayuda">PNG con fondo transparente queda mejor.</p>
+              </div>
             </section>
 
             <section class="bloque">
@@ -427,7 +432,12 @@
     document.getElementById('edTitulo').oninput = e => { ed.titulo = e.target.value; cambio(false); };
     app.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { ed.carta[inp.dataset.k] = inp.value; cambio(); });
     const seg = document.getElementById('segCab');
-    const pintarSeg = () => seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (ed.logo && ed.cabecera === 'logo' ? 'logo' : 'nombre')));
+    const pintarSeg = () => {
+      const conLogo = !!(ed.logo && ed.cabecera === 'logo');
+      seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (conLogo ? 'logo' : 'nombre')));
+      document.getElementById('cabNombre').hidden = conLogo;
+      document.getElementById('cabLogo').hidden = !conLogo;
+    };
     seg.querySelectorAll('button').forEach(b => b.onclick = () => {
       if (b.dataset.v === 'logo' && !ed.logo) { document.getElementById('fLogo').click(); return; }
       ed.cabecera = b.dataset.v; pintarSeg(); cambio();

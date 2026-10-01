@@ -383,4 +383,29 @@
   }
 
   window.Cuenta = Cuenta;
+
+  // Ojo para ver u ocultar la contraseña en cualquier campo de contraseña
+  const OJO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const OJO_NO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
+  function ponerOjos(raiz) {
+    (raiz.querySelectorAll ? raiz.querySelectorAll('input[type="password"]:not([data-ojo])') : []).forEach(inp => {
+      inp.dataset.ojo = '1';
+      const caja = document.createElement('span');
+      caja.className = 'cu-clave';
+      inp.parentNode.insertBefore(caja, inp);
+      caja.appendChild(inp);
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'cu-ojo'; b.innerHTML = OJO; b.setAttribute('aria-label', 'Mostrar contraseña');
+      b.onclick = () => {
+        const ver = inp.type === 'password';
+        inp.type = ver ? 'text' : 'password';
+        b.innerHTML = ver ? OJO_NO : OJO;
+        b.setAttribute('aria-label', ver ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        inp.focus();
+      };
+      caja.appendChild(b);
+    });
+  }
+  const vigilar = () => { ponerOjos(document); new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && ponerOjos(n)))).observe(document.body, { childList: true, subtree: true }); };
+  if (document.body) vigilar(); else document.addEventListener('DOMContentLoaded', vigilar);
 })();
