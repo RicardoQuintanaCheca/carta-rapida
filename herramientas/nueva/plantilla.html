@@ -1,0 +1,711 @@
+<title>Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">
+<style>
+/* Concepto: papel blanco de imprenta. La interfaz se calla; la carta es la protagonista y se compone delante del cliente. */
+:root{
+  --paper:#FFFFFF;      /* fondo: papel */
+  --ink:#16130F;        /* tinta: casi negro cálido */
+  --muted:#6E675F;      /* texto secundario */
+  --line:#EAE5DE;       /* filetes y bordes */
+  --soft:#F6F3EE;       /* superficies suaves */
+  --accent:#E8541C;     /* naranja Carta Rápida */
+  --accent-ink:#B4400E; /* naranja para texto pequeño (contraste AA) */
+  --char:#2B2826;       /* carbón de la tarjeta Pro */
+  --f-ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-menu:'Cormorant Garamond','Iowan Old Style',Georgia,serif;
+  --f-menu-sans:'Jost','Futura','Century Gothic',sans-serif;
+  --gut:clamp(18px,4vw,56px);
+  --max:1240px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--f-ui);-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--gut)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink)}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
+.h-xl{font-size:clamp(42px,5.4vw,82px);line-height:1;letter-spacing:-.05em;font-weight:750}
+.h-l2{font-size:clamp(32px,3.8vw,56px);line-height:1.04;letter-spacing:-.045em}
+.h-l{font-size:clamp(34px,4.8vw,68px);line-height:1.02;letter-spacing:-.045em}
+.h-m{font-size:clamp(24px,2.4vw,32px);line-height:1.15;letter-spacing:-.03em}
+.lead{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--muted);max-width:34em;margin:0}
+.grey{color:#B3ABA2}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;border:0;font:600 16px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{background:var(--accent)}
+.btn-accent{background:var(--accent);color:#FFFFFF}
+.btn-accent:hover{background:var(--ink)}
+.btn-ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn svg{width:18px;height:18px}
+
+/* ── Barra ── */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.03em;text-decoration:none}
+.logo{gap:5px}.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:30px;font-size:15px;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{display:flex;align-items:center;gap:18px}
+.nav-cta .btn{min-height:42px;padding:0 18px;font-size:15px}
+.nav-cta .entrar{font-size:15px;font-weight:600;text-decoration:none}
+
+/* ── Hero ── */
+.hero{padding-block:clamp(40px,7vw,96px) clamp(56px,8vw,120px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
+.hero-copy{min-width:0}
+.hero h1{margin-top:22px}
+.hero .lead{margin-top:28px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.hero-trust{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:28px;font-size:14px;color:var(--muted)}
+.hero-trust span{display:inline-flex;align-items:center;gap:8px}
+.hero-trust span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.demo{position:relative;min-width:0;padding:10px 0 0}
+.photo{position:absolute;left:0;top:9%;width:50%;border-radius:10px;overflow:hidden;rotate:-6deg;box-shadow:0 30px 60px -28px rgba(22,19,15,.45);z-index:1}
+.photo img{width:100%;filter:saturate(.85)}
+.scan{position:absolute;left:0;right:0;top:0;height:3px;background:var(--accent);box-shadow:0 0 18px 3px rgba(232,84,28,.55);opacity:0}
+.photo-tag{position:absolute;left:10px;bottom:10px;background:rgba(22,19,15,.82);color:#FFFFFF;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:6px}
+.sheet{position:relative;z-index:2;margin-left:auto;width:min(100%,430px);}
+.demo .sheet{width:66%;}
+.sheet{aspect-ratio:210/297;background:var(--paper);border-radius:3px;box-shadow:0 1px 2px rgba(22,19,15,.06),0 40px 80px -36px rgba(22,19,15,.38),0 0 0 1px rgba(22,19,15,.04);padding:9% 9% 7%;display:flex;flex-direction:column;color:#2A2420;overflow:hidden;container-type:inline-size}
+.m-head{text-align:center}
+.m-name{font:italic 500 13cqi/1 var(--f-menu);letter-spacing:-.01em}
+.m-rule{width:9cqi;height:1px;background:#B9935A;margin:3cqi auto 2.6cqi}
+.m-sub{font:500 2.6cqi/1.4 var(--f-menu-sans);letter-spacing:.32em;text-transform:uppercase;color:#8C7B68}
+.m-body{margin-top:5cqi;display:flex;flex-direction:column;justify-content:space-evenly;flex:1}
+.m-sec-t{text-align:center;font:500 2.4cqi/1 var(--f-menu-sans);letter-spacing:.34em;text-transform:uppercase;color:#8C7B68;margin-bottom:2.4cqi}
+.m-sec-t b{display:block;font:italic 500 5.4cqi/1 var(--f-menu);color:#B9935A;letter-spacing:0;margin-bottom:1.2cqi}
+.m-row{text-align:center;font:500 4.9cqi/1.25 var(--f-menu);margin-bottom:1.5cqi}
+.m-row em{font-style:italic;color:#B9935A;margin-left:6px}
+.m-row small{display:block;font:400 2.7cqi/1.3 var(--f-menu-sans);letter-spacing:.06em;color:#8C7B68;margin-top:2px}
+.m-row .r{font:400 2.4cqi var(--f-menu-sans);letter-spacing:.08em;color:#8C7B68;margin-left:4px}
+.m-foot{text-align:center;font:400 2.4cqi/1.5 var(--f-menu-sans);letter-spacing:.06em;color:#8C7B68}
+.ready{position:absolute;z-index:3;right:-4%;bottom:8%;display:flex;align-items:center;gap:10px;background:var(--ink);color:#FFFFFF;border-radius:14px;padding:12px 16px;font-size:14px;font-weight:600;box-shadow:0 20px 40px -18px rgba(22,19,15,.6)}
+.ready i{width:28px;height:28px;border-radius:8px;background:var(--accent);display:grid;place-items:center;font-style:normal}
+.ready small{display:block;font-weight:500;color:#C9C1B8;font-size:12px}
+.replay{position:relative;margin-top:14px;z-index:3;font:600 13px var(--f-ui);color:var(--muted);background:none;border:0;cursor:pointer;padding:10px 0;min-height:44px;display:inline-flex;align-items:center;gap:6px}
+.replay:hover{color:var(--ink)}
+
+/* ── Franja de estilos ── */
+.ticker{border-block:1px solid var(--line);overflow:hidden;padding-block:22px;white-space:nowrap}
+.ticker-in{display:inline-flex;gap:44px;padding-right:44px;font:italic 500 clamp(24px,2.6vw,34px)/1 var(--f-menu);color:#9A9187;animation:tick 38s linear infinite}
+.ticker-in span:nth-child(odd){font:600 clamp(13px,1.1vw,15px)/2.4 var(--f-ui);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ── Secciones ── */
+.sec{padding-block:clamp(80px,11vw,160px)}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;margin-bottom:clamp(40px,6vw,72px)}
+.sec-head > div{min-width:0;max-width:760px}
+.sec-head h2{margin-top:16px}
+.sec-head .lead{max-width:28em}
+
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,24px)}
+.step{background:var(--soft);border-radius:24px;padding:clamp(24px,2.6vw,34px);display:flex;flex-direction:column;gap:14px;min-height:300px}
+.step-n{font:700 14px var(--f-ui);color:var(--accent-ink);letter-spacing:.06em}
+.step h3{font-size:clamp(22px,2vw,27px);letter-spacing:-.03em}
+.step p{margin:0;color:var(--muted);font-size:16px}
+.step-art{margin-top:auto;height:96px;display:flex;align-items:flex-end;gap:10px}
+.mini{width:62px;aspect-ratio:210/297;background:var(--paper);border-radius:3px;box-shadow:0 10px 24px -14px rgba(22,19,15,.4);padding:8px 7px;display:flex;flex-direction:column;gap:4px}
+.mini i{height:2px;background:#D9D2C8;border-radius:2px}
+.mini i:first-child{width:60%;margin:0 auto 4px;height:4px;background:var(--ink)}
+.mini.alt i:first-child{background:#2142C2;width:80%;margin:0 0 4px}
+.mini.alt2 i:first-child{background:#A23B2A;width:30%}
+.cam{width:62px;height:88px;border-radius:12px;background:var(--ink);padding:6px;display:flex}
+.cam span{flex:1;border-radius:7px;background:repeating-linear-gradient(0deg,#e9e3da 0 3px,#f6f2ec 3px 7px);position:relative}
+.cam span::after{content:"";position:absolute;inset:auto 6px 6px auto;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.pdf{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#FFFFFF;border-radius:10px;padding:10px 12px;font:700 13px var(--f-ui)}
+
+/* ── Estilos fijados ── */
+.styles{position:relative}
+.styles-pin{min-height:100svh;display:flex;align-items:center;padding-block:40px}
+.styles-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center;width:100%}
+.style-list{list-style:none;margin:36px 0 0;padding:0;border-top:1px solid var(--line)}
+.style-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:18px 0;border-bottom:1px solid var(--line);color:#B3ABA2;transition:color .4s}
+.style-list li b{font-size:clamp(22px,2.2vw,30px);letter-spacing:-.035em;font-weight:700}
+.style-list li span{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;align-self:center}
+.style-list li p{grid-column:1 / -1;margin:0;font-size:15px;max-height:0;overflow:hidden;transition:max-height .5s,opacity .4s;opacity:0}
+.style-list li.on{color:var(--ink)}
+.style-list li.on span{color:var(--accent-ink)}
+.style-list li.on p{max-height:60px;opacity:1;color:var(--muted)}
+.stack{position:relative;width:min(100%,480px);margin-inline:auto;aspect-ratio:760/1075}
+.stack figure{position:absolute;inset:0;margin:0;border-radius:4px;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(22,19,15,.06),0 44px 90px -40px rgba(22,19,15,.45);opacity:0}
+.stack figure:first-child{opacity:1}
+.stack img{width:100%;height:100%;object-fit:cover;object-position:top}
+
+
+/* ── Pruébala (herramienta) ── */
+.tool-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.flow{list-style:none;margin:36px 0 0;padding:0;display:flex;flex-direction:column}
+.flow li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.flow li:last-child{border-bottom:1px solid var(--line)}
+.flow li > span{width:32px;height:32px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink);display:grid;place-items:center;font-weight:800;font-size:14px}
+.flow b{font-size:19px;letter-spacing:-.02em}
+.flow p{margin:4px 0 0;color:var(--muted);font-size:15.5px}
+.tool{background:var(--paper);border-radius:28px;box-shadow:0 0 0 1px var(--line),0 40px 80px -48px rgba(22,19,15,.4);padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;gap:16px;min-width:0}
+.tool-top{display:flex;gap:6px;font-size:13px;font-weight:700;color:#B3ABA2}
+.tool-top span{flex:1;padding:10px 0;border-top:3px solid var(--line)}
+.tool-top span.on{color:var(--ink);border-top-color:var(--accent)}
+.drop{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:clamp(28px,4vw,48px) 20px;border-radius:20px;border:2px dashed #D9D1C6;background:var(--soft);cursor:pointer;transition:border-color .2s,background-color .2s}
+.drop:hover{border-color:var(--accent);background:#FDF4EF}
+.drop-ico{width:60px;height:60px;border-radius:18px;background:var(--paper);display:grid;place-items:center;color:var(--accent);box-shadow:0 10px 24px -14px rgba(22,19,15,.35);margin-bottom:6px}
+.drop-ico svg{width:28px;height:28px}
+.drop b{font-size:20px;letter-spacing:-.02em}
+.drop small{color:var(--muted);font-size:14px}
+.drop .btn{margin-top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tool-or{display:flex;align-items:center;gap:12px;color:#B3ABA2;font-size:13px}
+.tool-or::before,.tool-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.tool-ej{width:100%}
+.tool-note{margin:0;text-align:center;font-size:13.5px;color:var(--muted)}
+.tool-msg{margin:0;text-align:center;font-size:13.5px;color:var(--accent-ink);font-weight:600}
+
+/* ── Selector de estilos ── */
+.picker{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,80px);align-items:center}
+.pick-sheet{position:relative;width:min(100%,500px);margin-inline:auto;aspect-ratio:760/1075}
+.pick-sheet figure{position:absolute;inset:0;margin:0;border-radius:4px;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(22,19,15,.06),0 44px 90px -40px rgba(22,19,15,.45);opacity:0;transform:translateY(12px) scale(.985);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.pick-sheet figure.on{opacity:1;transform:none}
+.pick-sheet img{width:100%;height:100%;object-fit:cover;object-position:top}
+.pick-side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chips button{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n e" "d e";align-items:center;column-gap:12px;text-align:left;padding:14px 18px;border-radius:16px;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);font:inherit;color:var(--ink);cursor:pointer;transition:background-color .2s,box-shadow .2s;min-height:44px}
+.chips button b{grid-area:n;font-size:18px;letter-spacing:-.02em}
+.chips button span{grid-area:d;font-size:14px;color:var(--muted)}
+.chips button em{grid-area:e;font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--accent-ink)}
+.chips button:hover{box-shadow:inset 0 0 0 1.5px #CFC6BA}
+.chips button[aria-selected="true"]{background:var(--ink);box-shadow:none;color:var(--paper)}
+.chips button[aria-selected="true"] span{color:#CFC6BB}
+.chips button[aria-selected="true"] em{background:var(--accent);color:#FFFFFF}
+.pick-note{margin:0;font-size:14.5px;color:var(--muted)}
+.pick-side .btn{align-self:flex-start}
+
+/* ── Neuromarketing ── */
+.neuro-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.notes{list-style:none;margin:36px 0 0;padding:0;display:flex;flex-direction:column}
+.notes li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:16px;padding:20px 0;border-top:1px solid var(--line)}
+.notes li:last-child{border-bottom:1px solid var(--line)}
+.dot{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#FFFFFF;display:grid;place-items:center;font:800 14px var(--f-ui)}
+.notes b{display:block;font-size:19px;letter-spacing:-.02em}
+.notes p{margin:4px 0 0;color:var(--muted);font-size:15.5px}
+.sheet.anno{margin-inline:auto}
+.pin-dot{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#FFFFFF;display:grid;place-items:center;font:800 12px var(--f-ui);box-shadow:0 0 0 6px rgba(232,84,28,.16)}
+.hl{position:relative}
+
+/* ── Pro: cambia un precio ── */
+.pro{background:var(--soft);border-radius:clamp(24px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
+.pro-list{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;font-weight:500}
+.pro-list li{display:flex;gap:12px;align-items:flex-start}
+.pro-list svg{flex:none;width:20px;height:20px;margin-top:3px;color:var(--accent)}
+.editor{background:var(--paper);border-radius:20px;box-shadow:0 30px 60px -36px rgba(22,19,15,.45);padding:20px;min-width:0}
+.ed-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.ed-top .saved{color:#1F7A45;display:inline-flex;align-items:center;gap:6px}
+.ed-top .saved::before{content:"";width:7px;height:7px;border-radius:50%;background:#1F7A45}
+.ed-sec{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.ed-row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px;margin-bottom:8px}
+.ed-row div{border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-row .p{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.ed-row.live .p{border-color:var(--accent);box-shadow:0 0 0 4px rgba(232,84,28,.14)}
+.ed-out{margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--soft)}
+.ed-out b{font-size:15px}
+.ed-out small{display:block;color:var(--muted);font-size:13px;font-weight:500}
+.price{display:inline-block;font-variant-numeric:tabular-nums}
+
+/* ── Precios ── */
+.toggle{display:inline-flex;padding:5px;border-radius:999px;background:var(--soft);gap:4px}
+.toggle button{min-height:42px;padding:0 18px;border-radius:999px;border:0;background:none;font:600 15px var(--f-ui);color:var(--muted);cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(22,19,15,.1)}
+.toggle button em{font-style:normal;color:var(--accent-ink);font-size:13px;margin-left:6px}
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.plan{border-radius:28px;padding:clamp(28px,3.4vw,44px);display:flex;flex-direction:column;gap:22px;border:1.5px solid var(--line)}
+.plan-pro{background:var(--char);border-color:var(--char);color:#F4EFE6}
+.plan-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.plan-top b{font-size:22px;letter-spacing:-.03em}
+.tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:999px;background:var(--accent);color:#FFFFFF}
+.amount{font-size:clamp(52px,5.4vw,72px);font-weight:750;letter-spacing:-.055em;line-height:1;font-variant-numeric:tabular-nums}
+.amount small{font-size:18px;font-weight:600;letter-spacing:-.01em;margin-left:4px}
+.plan .cond{margin-top:8px;font-size:15px;color:var(--muted)}
+.plan-pro .cond{color:#CFC6BB}
+.plan ul{list-style:none;margin:0;padding:22px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px;font-weight:500}
+.plan-pro ul{border-top-color:#433E3A}
+.plan li{display:flex;gap:12px}
+.plan li svg{flex:none;width:20px;height:20px;margin-top:2px;color:var(--accent)}
+.plan .btn{margin-top:auto;align-self:flex-start}
+
+/* ── Preguntas ── */
+.faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,96px)}
+.faq details{border-top:1px solid var(--line)}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:22px 0;font-size:clamp(18px,1.5vw,20px);font-weight:650;letter-spacing:-.02em;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);position:relative;transition:transform .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:8px;right:8px;top:13px;height:1.5px;background:var(--ink)}
+.faq summary i::after{transform:rotate(90deg);transition:transform .3s}
+.faq details[open] summary i::after{transform:rotate(0)}
+.faq details p{margin:0 0 24px;color:var(--muted);max-width:40em}
+
+/* ── Final ── */
+.final{background:var(--ink);color:var(--paper);border-radius:clamp(24px,3vw,40px);padding:clamp(48px,8vw,120px) clamp(28px,6vw,96px);position:relative;overflow:hidden}
+.final h2{font-size:clamp(46px,8vw,120px);line-height:.95;letter-spacing:-.055em;font-weight:750}
+.final h2 span{color:var(--accent)}
+.final p{color:#C9C1B8;margin:28px 0 0;font-size:18px;max-width:30em}
+.final .btn{margin-top:40px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;padding-block:40px 56px;font-size:14px;color:var(--muted)}
+.foot nav{display:flex;flex-wrap:wrap;gap:22px}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--ink)}
+
+@media (max-width:900px){
+  .nav-links{display:none}
+  .hero-copy{display:contents}
+  .hero-grid{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .hero .eyebrow{order:1}.hero h1{order:2}.hero-ctas{order:3}.hero-trust{order:4}.demo{order:5;margin-top:40px}.hero .lead{order:6;margin-top:36px}
+  .hero-ctas{margin-top:28px}
+  .styles-pin{min-height:100svh;padding-block:16px}
+  .styles-grid{gap:20px}
+  .styles .h-l{font-size:clamp(28px,8vw,40px)}
+  .style-list li:not(.on){display:none}
+  .style-list{margin-top:16px}
+  .stack{width:auto;height:min(54svh,520px);aspect-ratio:760/1075}
+  .hero-grid,.styles-grid,.neuro-grid,.pro,.faq,.tool-grid,.picker{grid-template-columns:minmax(0,1fr)}
+  .chips{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);margin-inline:calc(var(--gut) * -1);padding-inline:var(--gut);scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none;scroll-snap-align:start;padding:12px 16px}
+  .chips button span{display:none}
+  .pick-sheet{width:min(100%,420px)}
+  .picker{display:flex;flex-direction:column;align-items:stretch}
+  .pick-side{display:contents}
+  .chips{order:1}.pick-sheet{order:2}.pick-note{order:3}.pick-side .btn{order:4}
+  .tool-grid{display:flex;flex-direction:column;align-items:stretch;gap:28px}
+  .tool-copy{display:contents}
+  .tool-copy .eyebrow{order:1;margin-bottom:-14px}.tool-copy h2{order:2}.tool{order:3}.flow{order:4;margin-top:8px}
+  .pick-side .btn{align-self:stretch}
+  .demo{max-width:480px;margin-inline:auto;width:100%}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .step{min-height:0}
+  .plans{grid-template-columns:minmax(0,1fr)}
+  .ready{right:0}
+}
+@media (max-width:520px){
+  .nav-cta .entrar{display:none}
+  .h-xl{font-size:clamp(40px,11.5vw,56px)}
+  .photo{width:46%;top:8%}
+  .hero-ctas .btn{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .ticker-in{animation:none}
+  .btn,.style-list li,.style-list li p{transition:none}
+}
+</style>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Carta Rápida, inicio">Carta<span>Rápida</span></a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#prueba">Pruébala</a>
+      <a href="#estilos">Estilos</a>
+      <a href="#pro">Carta Pro</a>
+      <a href="#precios">Precios</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="entrar" href="#precios">Entrar</a>
+      <a class="btn btn-ink" href="#prueba">Empezar gratis</a>
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Para restaurantes, bares y hoteles</div>
+        <h1 class="h-xl" id="heroTitle">Tu carta, maquetada como en una imprenta.</h1>
+        <p class="lead">Hazle una foto a la carta que tienes ahora. En 30 segundos te devolvemos un PDF A4 listo para imprimir, ordenado para vender. Y cuando cambien los precios, lo actualizas en un momento.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-accent" href="#prueba" id="empezar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>
+            Sube una foto de tu carta
+          </a>
+          <a class="btn btn-ghost" href="#estilos">Ver los estilos</a>
+        </div>
+        <div class="hero-trust"><span>Gratis</span><span>Sin tarjeta</span><span>PDF A4 en 30 segundos</span></div>
+      </div>
+
+      <div class="demo" id="demo" aria-label="Ejemplo: una carta hecha en Word convertida en una carta maquetada">
+        <figure class="photo" id="photo">
+          <img src="{{img:antes}}" alt="Foto de la carta original de Casa Pepe, hecha en un procesador de textos">
+          <div class="scan" id="scan"></div>
+          <figcaption class="photo-tag">Tu foto</figcaption>
+        </figure>
+        <article class="sheet" id="sheet">
+          <header class="m-head">
+            <div class="m-name">Casa Pepe</div>
+            <div class="m-rule"></div>
+            <div class="m-sub">Taberna tradicional · Chamberí</div>
+          </header>
+          <div class="m-body">
+            <section>
+              <div class="m-sec-t"><b>I</b>Para picar</div>
+              <div class="m-row">Jamón ibérico de bellota<span class="r">100 g</span><em>24</em></div>
+              <div class="m-row">Croquetas de cocido<span class="r">8 uds.</span><em>12,50</em></div>
+              <div class="m-row">Patatas bravas<em>6,50</em><small>Salsa brava de la casa</small></div>
+            </section>
+            <section>
+              <div class="m-sec-t"><b>II</b>Del mar</div>
+              <div class="m-row">Pulpo a feira<em>19,50</em><small>Con cachelos y pimentón</small></div>
+              <div class="m-row">Calamares a la andaluza<em>14</em></div>
+            </section>
+            <section>
+              <div class="m-sec-t"><b>III</b>Postres</div>
+              <div class="m-row">Tarta de queso<em>6,50</em></div>
+              <div class="m-row">Arroz con leche<em>5,50</em><small>Requemado</small></div>
+            </section>
+          </div>
+          <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
+        </article>
+        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small>Estilo Sobremesa · 1 página</small></div></div>
+        <button class="replay" id="replay" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ver otra vez</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-in">
+      <span>Alta cocina</span><span>Sobremesa</span><span>Bar de vinos</span><span>Riviera</span><span>Japonés</span><span>Sumi</span><span>Gran café</span><span>Brasserie</span><span>Revista</span><span>Editorial</span><span>Mediterráneo</span><span>Azulejo</span><span>Periódico</span><span>Gaceta</span><span>Taberna</span><span>Barra</span>
+      <span>Alta cocina</span><span>Sobremesa</span><span>Bar de vinos</span><span>Riviera</span><span>Japonés</span><span>Sumi</span><span>Gran café</span><span>Brasserie</span><span>Revista</span><span>Editorial</span><span>Mediterráneo</span><span>Azulejo</span><span>Periódico</span><span>Gaceta</span><span>Taberna</span><span>Barra</span>
+    </div>
+  </div>
+
+  <section class="sec" id="prueba">
+    <div class="wrap tool-grid">
+      <div class="tool-copy">
+        <div class="eyebrow">Pruébala ahora</div>
+        <h2 class="h-l rv">Tu carta en tres pasos. <span class="grey">Sin registrarte.</span></h2>
+        <ol class="flow">
+          <li class="rv"><span>1</span><div><b>Haz una foto a tu carta</b><p>Con el móvil, tal y como la tienes. Hasta cinco páginas.</p></div></li>
+          <li class="rv"><span>2</span><div><b>Elige el estilo de tu local</b><p>Quince diseños para papel blanco. Cambias al instante.</p></div></li>
+          <li class="rv"><span>3</span><div><b>Descarga el PDF e imprime</b><p>A4 listo para la imprenta o tu impresora.</p></div></li>
+        </ol>
+      </div>
+      <div class="tool rv" aria-label="Herramienta para subir tu carta">
+        <div class="tool-top" aria-hidden="true"><span class="on">1 · Tu carta</span><span>2 · Estilo</span><span>3 · PDF</span></div>
+        <label class="drop" for="fotoCarta">
+          <span class="drop-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg></span>
+          <b>Haz una foto o súbela</b>
+          <small>JPG, PNG o WEBP · hasta 5 páginas</small>
+          <span class="btn btn-accent">Elegir fotos</span>
+          <input type="file" id="fotoCarta" accept="image/*" multiple class="sr">
+        </label>
+        <div class="tool-or"><span>o</span></div>
+        <button class="btn btn-ghost tool-ej" type="button" id="usarEjemplo">Probar con una carta de ejemplo</button>
+        <p class="tool-note">Gratis y sin tarjeta. Solo te pedimos el email al descargar.</p>
+        <p class="tool-msg" id="toolMsg" hidden>Esto es una maqueta: en la web real, aquí empieza la lectura de tu carta.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="estilos" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Elige estilo</div>
+          <h2 class="h-l rv">La misma carta, <span class="grey">con el estilo de tu local.</span></h2>
+        </div>
+        <p class="lead rv">Toca un estilo y mira cómo cambia. Puedes cambiarlo cuando quieras, sin volver a empezar.</p>
+      </div>
+      <div class="picker">
+        <div class="pick-sheet" id="pickSheet" aria-live="polite">
+          <figure data-k="riviera" class="on"><img src="{{img:riviera}}" alt="Carta en estilo Riviera"></figure>
+          <figure data-k="sobremesa"><img src="{{img:sobremesa}}" alt="Carta en estilo Sobremesa" loading="lazy"></figure>
+          <figure data-k="sumi"><img src="{{img:sumi}}" alt="Carta en estilo Sumi" loading="lazy"></figure>
+          <figure data-k="brasserie"><img src="{{img:brasserie}}" alt="Carta en estilo Brasserie" loading="lazy"></figure>
+          <figure data-k="editorial"><img src="{{img:editorial}}" alt="Carta en estilo Editorial" loading="lazy"></figure>
+          <figure data-k="azulejo"><img src="{{img:azulejo}}" alt="Carta en estilo Azulejo" loading="lazy"></figure>
+          <figure data-k="gaceta"><img src="{{img:gaceta}}" alt="Carta en estilo Gaceta" loading="lazy"></figure>
+        </div>
+        <div class="pick-side">
+          <div class="chips" role="tablist" aria-label="Estilos de carta" id="chips">
+            <button type="button" role="tab" aria-selected="true" data-k="riviera"><b>Riviera</b><span>Una tinta azul cobalto</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="false" data-k="sobremesa"><b>Sobremesa</b><span>Alta cocina</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="sumi"><b>Sumi</b><span>Japonés, sello rojo</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="false" data-k="brasserie"><b>Brasserie</b><span>Gran café clásico</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="editorial"><b>Editorial</b><span>Como una revista</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="azulejo"><b>Azulejo</b><span>Mediterráneo</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="false" data-k="gaceta"><b>Gaceta</b><span>Periódico antiguo</span></button>
+          </div>
+          <p class="pick-note">Y ocho estilos más: Mantel, Barra, Autor, Déco, Trattoria, Cartel, Ticket y Serigrafía.</p>
+          <a class="btn btn-ink" href="#prueba">Probar con mi carta</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="vender">
+    <div class="wrap neuro-grid">
+      <div>
+        <div class="eyebrow">Ingeniería de menús</div>
+        <h2 class="h-l rv">No solo más bonita. <span class="grey">Pensada para vender.</span></h2>
+        <ol class="notes" id="notes">
+          <li class="rv"><span class="dot">1</span><div><b>La especialidad, primero</b><p>Abre cada sección: es lo que más se mira.</p></div></li>
+          <li class="rv"><span class="dot">2</span><div><b>El precio no manda</b><p>Junto al plato, sin columna y sin el símbolo €.</p></div></li>
+          <li class="rv"><span class="dot">3</span><div><b>Pocos destacados</b><p>Como mucho uno por sección. Si todo destaca, nada destaca.</p></div></li>
+          <li class="rv"><span class="dot">4</span><div><b>El orden de una comida</b><p>Entrantes, principales y postres, en el orden en que se piden.</p></div></li>
+        </ol>
+      </div>
+      <article class="sheet anno" aria-label="Carta de ejemplo con anotaciones">
+        <header class="m-head">
+          <div class="m-name">Casa Pepe</div>
+          <div class="m-rule"></div>
+          <div class="m-sub">Taberna tradicional · Chamberí</div>
+        </header>
+        <div class="m-body">
+          <section class="hl">
+            <span class="pin-dot" style="left:-6%;top:-4px">4</span>
+            <div class="m-sec-t"><b>I</b>Para picar</div>
+            <div class="m-row hl"><span class="pin-dot" style="left:2%;top:-2px">1</span>Jamón ibérico de bellota<span class="r">100 g</span><em>24</em></div>
+            <div class="m-row hl">Croquetas de cocido<span class="r">8 uds.</span><em>12,50</em><span class="pin-dot" style="right:2%;top:-2px">2</span></div>
+            <div class="m-row">Patatas bravas<em>6,50</em><small>Salsa brava de la casa</small></div>
+          </section>
+          <section>
+            <div class="m-sec-t"><b>II</b>Del mar</div>
+            <div class="m-row hl"><span class="pin-dot" style="left:6%;top:4px">3</span>Pulpo a feira<em>19,50</em><small style="color:#B9935A;letter-spacing:.2em;text-transform:uppercase">Recomendado</small></div>
+            <div class="m-row">Calamares a la andaluza<em>14</em></div>
+          </section>
+          <section>
+            <div class="m-sec-t"><b>III</b>Postres</div>
+            <div class="m-row">Tarta de queso<em>6,50</em></div>
+            <div class="m-row">Arroz con leche<em>5,50</em><small>Requemado</small></div>
+          </section>
+        </div>
+        <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec" id="pro" style="padding-top:0">
+    <div class="wrap">
+      <div class="pro" id="proBox">
+        <div>
+          <div class="eyebrow">Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">Sube un precio. <span class="grey">Imprime en cinco segundos.</span></h2>
+          <ul class="pro-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Tus cartas guardadas, editables como una hoja.</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Sin firma y con tu logotipo.</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Traducida a inglés, francés, alemán, italiano, portugués o chino.</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Los quince estilos, también Riviera, Sumi y Azulejo.</li>
+          </ul>
+        </div>
+        <div class="editor" aria-label="Ejemplo del editor de Carta Pro">
+          <div class="ed-top"><span>Casa Pepe · Carta de invierno</span><span class="saved" id="saved">Guardado</span></div>
+          <div class="ed-sec">Para picar</div>
+          <div class="ed-row"><div>Jamón ibérico de bellota</div><div class="p">24</div></div>
+          <div class="ed-row live" id="liveRow"><div>Croquetas de cocido</div><div class="p"><span class="price" id="edPrice">12,50</span></div></div>
+          <div class="ed-row"><div>Patatas bravas</div><div class="p">6,50</div></div>
+          <div class="ed-sec">Del mar</div>
+          <div class="ed-row"><div>Pulpo a feira</div><div class="p">19,50</div></div>
+          <div class="ed-out"><div><b>carta-casa-pepe.pdf</b><small id="edOut">Actualizado hace un momento</small></div><span class="btn btn-ink" style="min-height:42px;padding:0 16px;font-size:14px">Descargar</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="precios" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Precios</div>
+          <h2 class="h-l rv">Empieza gratis. <span class="grey">Hazte Pro cuando la quieras tuya.</span></h2>
+        </div>
+        <div class="toggle" role="group" aria-label="Forma de pago de Carta Pro">
+          <button type="button" id="tAno" aria-pressed="true">Anual<em>−36 €</em></button>
+          <button type="button" id="tMes" aria-pressed="false">Mensual</button>
+        </div>
+      </div>
+      <div class="plans">
+        <article class="plan rv">
+          <div class="plan-top"><b>Gratis</b></div>
+          <div><div class="amount">0 €</div><div class="cond">Solo tu email para descargar.</div></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>10 estilos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>PDF A4 listo para imprimir</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Una firma pequeña al pie</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>3 ajustes por carta</li>
+          </ul>
+          <a class="btn btn-ghost" href="#prueba">Crear mi carta</a>
+        </article>
+        <article class="plan plan-pro rv">
+          <div class="plan-top"><b>Carta Pro</b><span class="tag">7 días gratis</span></div>
+          <div><div class="amount"><span id="proAmount">9,90 €</span><small>/mes</small></div><div class="cond" id="proCond">Con el plan anual: 118,80 € al año. IVA incluido.</div></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Los 15 estilos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Sin firma y con tu logotipo</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Panel para guardar y editar tus cartas</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Traducción a 6 idiomas y ajustes ilimitados</li>
+          </ul>
+          <a class="btn btn-accent" href="#prueba">Probar 7 días gratis</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap faq">
+      <div>
+        <div class="eyebrow">Preguntas</div>
+        <h2 class="h-l" style="margin-top:16px">Lo que nos preguntáis <span class="grey">antes de empezar.</span></h2>
+      </div>
+      <div>
+        <details open><summary>¿De verdad es gratis?<i aria-hidden="true"></i></summary><p>Sí. Tu carta rediseñada en PDF A4 con 10 estilos, a cambio de tu email y con una firma pequeña al pie. Carta Pro es para quien quiere guardarla, editarla y quitar la firma.</p></details>
+        <details><summary>¿Y si la foto no es buena?<i aria-hidden="true"></i></summary><p>Basta con una foto de frente y con luz. Si algo no se lee bien, lo corriges en la propia carta antes de descargar, o pegas el texto directamente.</p></details>
+        <details><summary>¿Se pierde algún plato o precio?<i aria-hidden="true"></i></summary><p>Respetamos las secciones y los platos de tu carta tal y como están. Aun así, revisa siempre platos, precios y alérgenos antes de imprimir.</p></details>
+        <details><summary>¿Puedo cancelar Carta Pro?<i aria-hidden="true"></i></summary><p>Cuando quieras, desde tu panel y en un clic. Sigues teniendo Pro hasta el final del periodo pagado.</p></details>
+        <details><summary>¿Y el portamenú?<i aria-hidden="true"></i></summary><p>Carta Rápida es de Kartia, taller español que fabrica portamenús a mano desde 2018. Si quieres, te enviamos un montaje de tu carta en uno de nuestros portamenús.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="final">
+      <h2 class="rv">Deja de maquetar.<br><span>Empieza a vender.</span></h2>
+      <p>Una foto de tu carta y en 30 segundos tienes el PDF. Gratis y sin tarjeta.</p>
+      <a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a>
+    </div>
+    <footer class="foot">
+      <span>Carta Rápida es de <a href="https://kartia.es" style="text-decoration:underline">Kartia</a>, portamenús hechos a mano en España.</span>
+      <nav aria-label="Legal"><a href="#legal">Aviso legal</a><a href="#privacidad">Privacidad</a><a href="#cookies">Cookies</a><a href="#condiciones">Condiciones</a></nav>
+    </footer>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+
+  // Barra con filete al bajar
+  const nav = $('#nav');
+  const marcarNav = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', marcarNav, { passive: true }); marcarNav();
+
+  // Precios anual / mensual
+  const pintarPrecio = anual => {
+    $('#tAno').setAttribute('aria-pressed', anual); $('#tMes').setAttribute('aria-pressed', !anual);
+    $('#proAmount').textContent = anual ? '9,90 €' : '12,90 €';
+    $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido.' : 'Mes a mes, cancela cuando quieras. IVA incluido.';
+  };
+  $('#tAno').addEventListener('click', () => pintarPrecio(true));
+  $('#tMes').addEventListener('click', () => pintarPrecio(false));
+
+
+  // ── Selector de estilos (funciona también sin animaciones) ──
+  const chips = $$('#chips button');
+  const figuras = $$('#pickSheet figure');
+  let tocado = false, ciclo = null;
+  const elegir = (k, auto) => {
+    chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
+    figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
+    if (!auto) { const c = chips.find(x => x.dataset.k === k); if (c && c.scrollIntoView && window.innerWidth < 900) c.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' }); }
+  };
+  chips.forEach(c => c.addEventListener('click', () => { tocado = true; clearInterval(ciclo); elegir(c.dataset.k); }));
+  // Mientras nadie toque, los estilos van pasando solos cuando el bloque está a la vista
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      clearInterval(ciclo);
+      if (e.isIntersecting && !tocado) ciclo = setInterval(() => {
+        const i = chips.findIndex(c => c.getAttribute('aria-selected') === 'true');
+        elegir(chips[(i + 1) % chips.length].dataset.k, true);
+      }, 2600);
+    }, { threshold: .5 }).observe($('#pickSheet'));
+  }
+  // Maqueta de la herramienta
+  const aviso = () => { $('#toolMsg').hidden = false; };
+  $('#fotoCarta').addEventListener('change', aviso);
+  $('#usarEjemplo').addEventListener('click', () => { aviso(); document.querySelector('#estilos').scrollIntoView({ behavior: 'smooth' }); });
+
+  const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (quieto || !window.gsap) return; // Sin animaciones: la página ya está completa
+
+  gsap.registerPlugin(ScrollTrigger);
+  if (window.SplitText) gsap.registerPlugin(SplitText);
+
+  // Scroll suave
+  if (window.Lenis) {
+    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const id = a.getAttribute('href'); const el = id.length > 1 && document.querySelector(id);
+      if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: -72 }); }
+    }));
+  }
+
+  // ── Portada: el titular entra por líneas y la carta se compone sola ──
+  const demo = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+  const filas = $$('#sheet .m-head > *, #sheet .m-sec-t, #sheet .m-row, #sheet .m-foot');
+  demo
+    .set('#ready', { autoAlpha: 0, y: 16 })
+    .set(filas, { autoAlpha: 0, y: 10 })
+    .set('#sheet', { autoAlpha: 0, y: 30, rotate: 2 })
+    .set('#scan', { top: '0%', autoAlpha: 0 })
+    .fromTo('#photo', { autoAlpha: 0, x: -30, rotate: -10 }, { autoAlpha: 1, x: 0, rotate: -6, duration: .8 })
+    .to('#scan', { autoAlpha: 1, duration: .2 }, '-=.1')
+    .to('#scan', { top: '100%', duration: 1.3, ease: 'power1.inOut' })
+    .to('#scan', { autoAlpha: 0, duration: .2 })
+    .to('#sheet', { autoAlpha: 1, y: 0, rotate: 0, duration: .9 }, '-=.5')
+    .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
+    .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
+    .add(() => { $('#replay').hidden = false; });
+  $('#replay').addEventListener('click', () => { $('#replay').hidden = true; demo.restart(); });
+
+  if (window.SplitText) {
+    const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });
+    gsap.from(st.lines, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: .09, delay: .1 });
+  }
+  gsap.from('.hero .eyebrow, .hero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 18, duration: .8, ease: 'power3.out', stagger: .08, delay: .35 });
+  demo.play(0).delay(.4);
+
+  // La carta de la portada se inclina un poco con el ratón (solo ordenador)
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const d = $('#demo');
+    const rx = gsap.quickTo('#sheet', 'rotationY', { duration: .8, ease: 'power3' });
+    const ry = gsap.quickTo('#sheet', 'rotationX', { duration: .8, ease: 'power3' });
+    gsap.set('#demo', { perspective: 900 });
+    d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 10); ry(-((e.clientY - r.top) / r.height - .5) * 8); });
+    d.addEventListener('pointerleave', () => { rx(0); ry(0); });
+  }
+  // Al bajar, la foto se queda atrás y la carta sube un poco (profundidad)
+  gsap.to('#photo', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('#sheet', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  // ── Apariciones suaves ──
+  $$('.rv').forEach(el => gsap.from(el, {
+    autoAlpha: 0, y: 36, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+  }));
+
+  // ── Notas de ingeniería de menús: los puntos laten al aparecer ──
+  gsap.from('.anno .pin-dot', { scale: 0, duration: .6, ease: 'back.out(2.2)', stagger: .18, scrollTrigger: { trigger: '.anno', start: 'top 70%', once: true } });
+
+  // ── Pro: el precio sube y el PDF se rehace ──
+  const precio = { v: 12.5 };
+  const fmt = v => v.toFixed(2).replace('.', ',');
+  gsap.timeline({ scrollTrigger: { trigger: '#proBox', start: 'top 65%', once: true } })
+    .to(precio, { v: 13.5, duration: 1.2, ease: 'power2.inOut', delay: .4, onUpdate: () => { $('#edPrice').textContent = fmt(precio.v); } })
+    .add(() => { $('#saved').textContent = 'Guardando…'; })
+    .add(() => { $('#saved').textContent = 'Guardado'; $('#edOut').textContent = 'PDF actualizado · 13,50 €'; }, '+=.7')
+    .from('.ed-out', { scale: .97, duration: .5, ease: 'back.out(2)' }, '<');
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+})();
+</script>
