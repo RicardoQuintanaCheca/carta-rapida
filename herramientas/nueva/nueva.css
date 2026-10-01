@@ -242,3 +242,5 @@ html.lenis-stopped{overflow:clip}
   .n-app-marca{display:none}
   .n-app{justify-content:center}
 }
+.nnav-cta .btn{white-space:nowrap}
+@media (max-width:420px){.nnav-cta .n-largo{display:none}}
