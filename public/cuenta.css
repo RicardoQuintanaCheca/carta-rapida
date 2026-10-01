@@ -70,3 +70,10 @@
 .cu-google-nota a { color: #C2410C; }
 .cu-o { display: flex; align-items: center; gap: 12px; margin: 16px 0 4px; color: #8A8580; font-size: 12.5px; }
 .cu-o::before, .cu-o::after { content: ""; flex: 1; height: 1px; background: #E7E2DA; }
+
+/* Ojo para ver la contraseña */
+.cu-clave { position: relative; display: block; }
+.cu-clave input { padding-right: 52px !important; }
+.cu-ojo { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border: 0; background: none; border-radius: 10px; color: #6E675F; cursor: pointer; display: grid; place-items: center; }
+.cu-ojo:hover { color: #16130F; background: rgba(22,19,15,.05); }
+.cu-ojo svg { width: 20px; height: 20px; }

@@ -4010,9 +4010,11 @@ html.lenis-stopped{overflow:clip}
     n.classList.toggle('vacio', !n.value.trim() && (!conLogo || !esPro()));
     document.getElementById('cabeceraModo').classList.toggle('on', !!logoDataUrl);
     document.querySelectorAll('#cabeceraModo button').forEach(b => b.classList.toggle('on', b.dataset.modo === (conLogo ? 'logo' : 'nombre')));
+    // Con el logotipo arriba, el nombre y la frase no pintan nada: se esconden
+    n.style.display = sub.style.display = conLogo ? 'none' : '';
     const aviso = document.getElementById('cabeceraAviso');
     aviso.textContent = conLogo
-      ? (esPro() ? 'Arriba sale tu logotipo. El nombre se usa si cambias a «Nombre».' : 'Estás viendo tu logo: es de Carta Pro. En la versión gratis sale tu nombre' + (n.value.trim() ? '.' : ': escríbelo aquí.'))
+      ? (esPro() ? 'Arriba sale tu logotipo.' : 'Estás viendo tu logotipo, que es de Carta Pro. En la versión gratis sale el nombre: pulsa «Nombre» para revisarlo.')
       : (!n.value.trim() ? 'No hemos encontrado el nombre en tu carta. Escríbelo y aparece al momento.' : 'Cambia el nombre cuando quieras: gratis y al momento.');
   }
 
