@@ -454,6 +454,8 @@ app.use(rutasCuenta({
 app.use(rutasAdmin);
 
 // Panel del cliente (Mis cartas)
+// Diseño nuevo en pruebas (sin indexar) hasta que pase a la portada
+app.get(['/nueva', '/nueva/'], (req, res) => { res.set({ 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex, nofollow' }); res.sendFile(require('path').join(__dirname, 'public', 'nueva.html')); });
 app.get(['/panel', '/panel/'], (req, res) => { res.set('Cache-Control', 'no-cache'); res.sendFile(require('path').join(__dirname, 'public', 'panel.html')); });
 
 app.post('/guardar-email', limiteLeads, async (req, res) => {
