@@ -22,7 +22,7 @@ function nOpciones(b) {
   }
 
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
-  if (window.innerWidth >= 1024) nOpciones($('.n-opc'));
+  nOpciones($('.n-opc'));
 
   // «Pegar texto» abre las opciones, que es donde está la caja de texto
   const td = $('#textoDrop');
@@ -107,7 +107,7 @@ function nOpciones(b) {
   // ── Animaciones (si se pueden cargar) ──
   window.addEventListener('DOMContentLoaded', () => {
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (quieto || !window.gsap) { $('#replay') && ($('#replay').hidden = true); return; }
+    if (quieto || !window.gsap) return;
     document.documentElement.classList.add('anim');
     gsap.registerPlugin(ScrollTrigger);
     if (window.SplitText) gsap.registerPlugin(SplitText);
@@ -141,8 +141,30 @@ function nOpciones(b) {
       .to('#sheet', { autoAlpha: 1, y: 0, rotate: 0, duration: .9 }, '-=.5')
       .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
       .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
-      .add(() => { $('#replay').hidden = false; });
-    $('#replay').addEventListener('click', () => { $('#replay').hidden = true; demo.restart(); });
+      .add(() => ciclarPortada());
+    // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
+    function ciclarPortada() {
+      const lista = [['riviera', 'Riviera'], ['gaceta', 'Gaceta'], ['sumi', 'Sumi'], ['brasserie', 'Brasserie'], ['azulejo', 'Azulejo'], ['editorial', 'Editorial']];
+      const capa = $('#sheetAlt');
+      const imgs = lista.map(([k, n]) => { const im = new Image(); im.src = '/carta/grande-' + k + '.webp'; im.alt = ''; im.decoding = 'async'; capa.appendChild(im); return im; });
+      const txt = $('#readyEstilo');
+      let i = -1, visible = true, capaZ = 1;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
+      const paso = () => {
+        if (!visible || document.hidden) return;
+        i = (i + 1) % (lista.length + 1); // la última vuelta enseña otra vez Sobremesa
+        if (i < lista.length) {
+          // la nueva entra por encima; la anterior se quita cuando ya está tapada
+          const nueva = imgs[i];
+          nueva.style.zIndex = ++capaZ;
+          nueva.classList.add('on');
+          setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
+        } else imgs.forEach(im => im.classList.remove('on'));
+        txt.textContent = 'Estilo ' + (i < lista.length ? lista[i][1] : 'Sobremesa') + ' · 1 página';
+        gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
+      };
+      setTimeout(() => { paso(); setInterval(paso, 2600); }, 1800);
+    }
 
     if (window.SplitText) {
       const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });

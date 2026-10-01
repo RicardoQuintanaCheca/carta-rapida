@@ -1524,7 +1524,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .h-m{font-size:clamp(24px,2.4vw,32px);line-height:1.15;letter-spacing:-.03em}
 .lead{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--muted);max-width:34em;margin:0}
 .grey{color:#B3ABA2}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;border:0;font:600 16px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:10px;border:0;font:600 16px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
 .btn:hover{transform:translateY(-2px)}
 .btn-ink{background:var(--ink);color:var(--paper)}
 .btn-ink:hover{background:var(--accent)}
@@ -1664,7 +1664,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .pick-sheet img{width:100%;height:100%;object-fit:cover;object-position:top}
 .pick-side{display:flex;flex-direction:column;gap:22px;min-width:0}
 .chips{display:flex;flex-direction:column;gap:8px}
-.chips button{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n e" "d e";align-items:center;column-gap:12px;text-align:left;padding:14px 18px;border-radius:16px;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);font:inherit;color:var(--ink);cursor:pointer;transition:background-color .2s,box-shadow .2s;min-height:44px}
+.chips button{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n e" "d e";align-items:center;column-gap:12px;text-align:left;padding:14px 18px;border-radius:12px;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);font:inherit;color:var(--ink);cursor:pointer;transition:background-color .2s,box-shadow .2s;min-height:44px}
 .chips button b{grid-area:n;font-size:18px;letter-spacing:-.02em}
 .chips button span{grid-area:d;font-size:14px;color:var(--muted)}
 .chips button em{grid-area:e;font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--accent-ink)}
@@ -1707,8 +1707,8 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .price{display:inline-block;font-variant-numeric:tabular-nums}
 
 /* ── Precios ── */
-.toggle{display:inline-flex;padding:5px;border-radius:999px;background:var(--soft);gap:4px}
-.toggle button{min-height:42px;padding:0 18px;border-radius:999px;border:0;background:none;font:600 15px var(--f-ui);color:var(--muted);cursor:pointer}
+.toggle{display:inline-flex;padding:5px;border-radius:12px;background:var(--soft);gap:4px}
+.toggle button{min-height:42px;padding:0 18px;border-radius:8px;border:0;background:none;font:600 15px var(--f-ui);color:var(--muted);cursor:pointer}
 .toggle button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(22,19,15,.1)}
 .toggle button em{font-style:normal;color:var(--accent-ink);font-size:13px;margin-left:6px}
 .plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -1827,17 +1827,17 @@ body.n .nnav{z-index:60}
 #herramienta .t2-alt:hover{border-color:var(--ink)!important;transform:none!important}
 #herramienta .t2-alt-icn{background:var(--soft)!important;color:var(--ink)!important;border-radius:10px!important}
 #herramienta .t2-alt-label{font-size:14.5px!important;font-weight:600!important;color:var(--ink)!important}
-#herramienta .t2-main-btn{background:var(--accent)!important;color:#fff!important;border:0!important;border-radius:999px!important;box-shadow:none!important;min-height:58px;font-size:17px!important;font-weight:700!important;letter-spacing:-.01em!important;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+#herramienta .t2-main-btn{background:var(--accent)!important;color:#fff!important;border:0!important;border-radius:10px!important;box-shadow:none!important;min-height:58px;font-size:17px!important;font-weight:700!important;letter-spacing:-.01em!important;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
 #herramienta .t2-main-btn:hover:not(:disabled){transform:translateY(-2px)!important;background:var(--ink)!important;box-shadow:none!important}
 #herramienta .t2-main-btn:disabled{background:var(--soft)!important;color:#A39B91!important;border:0!important}
 #herramienta .t2-microcopy{font-size:13.5px!important;color:var(--muted)!important;letter-spacing:0!important;text-transform:none!important}
 #herramienta .t2-microcopy b{color:var(--ink)}
 #herramienta .t2-microcopy span{color:#A39B91}
-#herramienta .ejemplo-btn{border:1.5px solid var(--line)!important;border-radius:999px!important;color:var(--ink)!important;font-size:14.5px!important;padding:13px 16px!important;min-height:48px}
+#herramienta .ejemplo-btn{border:1.5px solid var(--line)!important;border-radius:10px!important;color:var(--ink)!important;font-size:14.5px!important;padding:13px 16px!important;min-height:48px}
 #herramienta .ejemplo-btn b{color:var(--ink)!important;font-weight:700}
 #herramienta .ejemplo-btn:hover{border-color:var(--ink)!important}
 #herramienta .fotos-preview{border-radius:20px!important;border-color:var(--line)!important;background:var(--soft)!important}
-#herramienta .fotos-add-btn,#herramienta .add-camara-btn{border-radius:999px!important;border:1.5px solid var(--line)!important;background:var(--paper)!important;color:var(--ink)!important;box-shadow:none!important}
+#herramienta .fotos-add-btn,#herramienta .add-camara-btn{border-radius:10px!important;border:1.5px solid var(--line)!important;background:var(--paper)!important;color:var(--ink)!important;box-shadow:none!important}
 #herramienta .fotos-ok{background:var(--accent)!important}
 
 /* Opciones plegables */
@@ -1877,7 +1877,7 @@ body.n .nnav{z-index:60}
 
 /* Resultado */
 #herramienta .vista-marco{background:var(--soft)!important;border:0!important;border-radius:22px!important}
-#herramienta .vista-ampliar{border:1.5px solid var(--line)!important;border-radius:999px!important;background:var(--paper)!important;color:var(--ink)!important;font-size:13.5px!important;font-weight:600!important}
+#herramienta .vista-ampliar{border:1.5px solid var(--line)!important;border-radius:10px!important;background:var(--paper)!important;color:var(--ink)!important;font-size:13.5px!important;font-weight:600!important}
 #herramienta .res-info{font-size:12.5px!important;letter-spacing:.06em!important;color:var(--muted)!important}
 #herramienta .res-estilo{font-size:14px!important;font-weight:600!important;color:var(--muted)!important;box-shadow:inset 0 0 0 1.5px var(--line)!important;margin-right:2px}
 #herramienta .res-estilo.on{background:var(--ink)!important;color:#fff!important;box-shadow:none!important}
@@ -1885,14 +1885,14 @@ body.n .nnav{z-index:60}
 #herramienta .res-mini.on{border-color:var(--ink)!important;box-shadow:0 0 0 1.5px var(--ink)!important}
 #herramienta .rm-nom{font-size:12px!important;font-weight:600!important;color:var(--ink)!important}
 #herramienta .cabecera-caja{border:1.5px solid var(--line)!important;border-radius:20px!important;background:var(--paper)!important;box-shadow:none!important}
-#herramienta .cabecera-modo button{border-radius:999px!important;font-weight:600!important}
+#herramienta .cabecera-modo button{border-radius:10px!important;font-weight:600!important}
 #herramienta .cabecera-modo button.on{background:var(--ink)!important;color:#fff!important}
 #herramienta .cabecera-aviso{font-size:13px!important;color:var(--muted)!important}
 #herramienta .dl-principal{background:var(--accent)!important;color:#fff!important;border:0!important;box-shadow:none!important;min-height:58px;font-size:17px!important;font-weight:700!important;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
 #herramienta .dl-principal:hover:not(:disabled){transform:translateY(-2px)!important;background:var(--ink)!important}
 #herramienta .dl-nota{font-size:13px!important;color:var(--muted)!important}
 #herramienta .dl-revisa{background:var(--soft)!important;border:0!important;color:var(--muted)!important;border-radius:12px!important;font-size:13px!important}
-#herramienta .guardar-btn{border:1.5px solid var(--line)!important;border-radius:999px!important;box-shadow:none!important;background:var(--paper)!important;color:var(--ink)!important;font-size:15.5px!important;font-weight:650!important;min-height:52px}
+#herramienta .guardar-btn{border:1.5px solid var(--line)!important;border-radius:10px!important;box-shadow:none!important;background:var(--paper)!important;color:var(--ink)!important;font-size:15.5px!important;font-weight:650!important;min-height:52px}
 #herramienta .guardar-btn:hover{border-color:var(--ink)!important;transform:none!important}
 #herramienta .guardar-nota{font-size:13px!important;color:var(--muted)!important}
 #herramienta .plan-estado{background:var(--soft)!important;border:0!important;color:var(--ink)!important;border-radius:14px!important}
@@ -1906,20 +1906,20 @@ body.n .nnav{z-index:60}
 #herramienta .pro-caja .pro-lista b{color:#fff!important}
 #herramienta .pro-caja .pro-lista li::before{border-color:var(--accent)!important}
 #herramienta .pro-caja .pro-motivo{background:rgba(232,84,28,.16)!important;color:#FFD9C4!important}
-#herramienta .pro-caja .pro-btn{background:var(--accent)!important;box-shadow:none!important;border-radius:999px!important;font-size:17px!important;font-weight:700!important;min-height:54px}
+#herramienta .pro-caja .pro-btn{background:var(--accent)!important;box-shadow:none!important;border-radius:10px!important;font-size:17px!important;font-weight:700!important;min-height:54px}
 #herramienta .pro-caja .pro-btn:hover{background:#fff!important;color:var(--ink)!important}
 #herramienta .pro-caja .pro-prueba-btn{color:#F4EFE6!important;text-decoration:underline;text-underline-offset:3px;font-weight:600!important}
 #herramienta .pro-caja .pro-garantia{color:#A9A097!important}
 #herramienta .ajuste-wrap{background:var(--soft)!important;border:0!important;border-radius:20px!important;box-shadow:none!important}
 #herramienta .ajuste-label{font-size:14px!important;font-weight:600!important;color:var(--ink)!important}
 #herramienta .ajuste-textarea{border:1.5px solid var(--line)!important;border-radius:12px!important;background:var(--paper)!important;font-size:15px!important}
-#herramienta .rehacer-btn{border-radius:999px!important;border:1.5px solid var(--ink)!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;min-height:46px}
+#herramienta .rehacer-btn{border-radius:10px!important;border:1.5px solid var(--ink)!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;min-height:46px}
 #herramienta .tool-cta{background:var(--ink)!important;border-radius:22px!important}
 #herramienta .lead-eyebrow{color:#FF8A5C!important;font-size:12px!important;letter-spacing:.14em!important;font-weight:700!important}
 #herramienta .lead-titulo{font-size:22px!important;font-weight:750!important;letter-spacing:-.03em!important}
 #herramienta .lead-input{border-radius:12px!important}
-#herramienta .lead-btn{background:var(--accent)!important;border-radius:999px!important;box-shadow:none!important;font-weight:700!important}
-#herramienta .nueva-carta-btn{border:1.5px solid var(--line)!important;border-radius:999px!important;color:var(--ink)!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;font-weight:600!important;min-height:48px}
+#herramienta .lead-btn{background:var(--accent)!important;border-radius:10px!important;box-shadow:none!important;font-weight:700!important}
+#herramienta .nueva-carta-btn{border:1.5px solid var(--line)!important;border-radius:10px!important;color:var(--ink)!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;font-weight:600!important;min-height:48px}
 @media (min-width:1024px){
   #herramienta .res-col-vista{position:sticky;top:96px}
 }
@@ -1929,7 +1929,7 @@ body.n .cu-caja{border:0!important;border-radius:26px!important;box-shadow:0 40p
 body.n .cu-caja *{font-family:var(--f-ui)!important}
 body.n .cu-titulo{font-weight:750!important;letter-spacing:-.035em!important}
 body.n .cu-eyebrow{color:var(--accent-ink)!important;font-size:12px!important;letter-spacing:.14em!important;font-weight:700!important}
-body.n .cu-btn{background:var(--accent)!important;border:0!important;box-shadow:none!important;border-radius:999px!important;font-weight:700!important;min-height:54px}
+body.n .cu-btn{background:var(--accent)!important;border:0!important;box-shadow:none!important;border-radius:10px!important;font-weight:700!important;min-height:54px}
 body.n .cu-btn:hover{background:var(--ink)!important}
 body.n .cu-campo input{border:1.5px solid var(--line)!important;border-radius:12px!important}
 body.n .cu-campo input:focus{border-color:var(--ink)!important}
@@ -1937,7 +1937,7 @@ body.n .cu-plan{border:1.5px solid var(--line)!important;border-radius:18px!impo
 body.n .cu-plan.on{border-color:var(--ink)!important;box-shadow:0 0 0 1.5px var(--ink)!important}
 body.n .cookies-aviso{font-family:var(--f-ui)!important;border-radius:20px!important;border:0!important;box-shadow:0 0 0 1px var(--line),0 24px 60px -24px rgba(22,19,15,.4)!important}
 body.n .cookies-aviso *{font-family:var(--f-ui)!important}
-body.n .cookies-botones button{border-radius:999px!important}
+body.n .cookies-botones button{border-radius:10px!important}
 body.n .cookies-botones .si{background:var(--ink)!important;border-color:var(--ink)!important;color:#fff!important}
 body.n .visor-caja *{font-family:var(--f-ui)}
 
@@ -1975,6 +1975,14 @@ body.n .visor-caja *{font-family:var(--f-ui)}
   #herramienta.tool-section > .wrap{border-radius:22px;padding:16px}
 }
 .n-prueba{padding-top:clamp(64px,8vw,120px)}
+
+/* Portada: la hoja va cambiando de estilo */
+.sheet-alt{position:absolute;inset:0;pointer-events:none}
+.sheet-alt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .7s ease}
+.sheet-alt img.on{opacity:1}
+.n-pasos span{border-radius:8px}
+#herramienta .res-estilo,#herramienta .cabecera-modo button{border-radius:8px!important}
+#herramienta .cabecera-modo{border-radius:10px!important}
 
 </style>
   <script>
@@ -2063,9 +2071,9 @@ body.n .visor-caja *{font-family:var(--f-ui)}
             </section>
           </div>
           <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
+          <div class="sheet-alt" id="sheetAlt" aria-hidden="true"></div>
         </article>
-        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small>Estilo Sobremesa · 1 página</small></div></div>
-        <button class="replay" id="replay" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ver otra vez</button>
+        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Sobremesa · 1 página</small></div></div>
       </div>
     </div>
   </section>
@@ -4221,7 +4229,7 @@ function nOpciones(b) {
   }
 
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
-  if (window.innerWidth >= 1024) nOpciones($('.n-opc'));
+  nOpciones($('.n-opc'));
 
   // «Pegar texto» abre las opciones, que es donde está la caja de texto
   const td = $('#textoDrop');
@@ -4306,7 +4314,7 @@ function nOpciones(b) {
   // ── Animaciones (si se pueden cargar) ──
   window.addEventListener('DOMContentLoaded', () => {
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (quieto || !window.gsap) { $('#replay') && ($('#replay').hidden = true); return; }
+    if (quieto || !window.gsap) return;
     document.documentElement.classList.add('anim');
     gsap.registerPlugin(ScrollTrigger);
     if (window.SplitText) gsap.registerPlugin(SplitText);
@@ -4340,8 +4348,30 @@ function nOpciones(b) {
       .to('#sheet', { autoAlpha: 1, y: 0, rotate: 0, duration: .9 }, '-=.5')
       .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
       .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
-      .add(() => { $('#replay').hidden = false; });
-    $('#replay').addEventListener('click', () => { $('#replay').hidden = true; demo.restart(); });
+      .add(() => ciclarPortada());
+    // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
+    function ciclarPortada() {
+      const lista = [['riviera', 'Riviera'], ['gaceta', 'Gaceta'], ['sumi', 'Sumi'], ['brasserie', 'Brasserie'], ['azulejo', 'Azulejo'], ['editorial', 'Editorial']];
+      const capa = $('#sheetAlt');
+      const imgs = lista.map(([k, n]) => { const im = new Image(); im.src = '/carta/grande-' + k + '.webp'; im.alt = ''; im.decoding = 'async'; capa.appendChild(im); return im; });
+      const txt = $('#readyEstilo');
+      let i = -1, visible = true, capaZ = 1;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
+      const paso = () => {
+        if (!visible || document.hidden) return;
+        i = (i + 1) % (lista.length + 1); // la última vuelta enseña otra vez Sobremesa
+        if (i < lista.length) {
+          // la nueva entra por encima; la anterior se quita cuando ya está tapada
+          const nueva = imgs[i];
+          nueva.style.zIndex = ++capaZ;
+          nueva.classList.add('on');
+          setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
+        } else imgs.forEach(im => im.classList.remove('on'));
+        txt.textContent = 'Estilo ' + (i < lista.length ? lista[i][1] : 'Sobremesa') + ' · 1 página';
+        gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
+      };
+      setTimeout(() => { paso(); setInterval(paso, 2600); }, 1800);
+    }
 
     if (window.SplitText) {
       const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });

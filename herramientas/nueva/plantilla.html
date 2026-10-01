@@ -35,7 +35,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .h-m{font-size:clamp(24px,2.4vw,32px);line-height:1.15;letter-spacing:-.03em}
 .lead{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--muted);max-width:34em;margin:0}
 .grey{color:#B3ABA2}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;border:0;font:600 16px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:10px;border:0;font:600 16px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
 .btn:hover{transform:translateY(-2px)}
 .btn-ink{background:var(--ink);color:var(--paper)}
 .btn-ink:hover{background:var(--accent)}
@@ -175,7 +175,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .pick-sheet img{width:100%;height:100%;object-fit:cover;object-position:top}
 .pick-side{display:flex;flex-direction:column;gap:22px;min-width:0}
 .chips{display:flex;flex-direction:column;gap:8px}
-.chips button{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n e" "d e";align-items:center;column-gap:12px;text-align:left;padding:14px 18px;border-radius:16px;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);font:inherit;color:var(--ink);cursor:pointer;transition:background-color .2s,box-shadow .2s;min-height:44px}
+.chips button{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n e" "d e";align-items:center;column-gap:12px;text-align:left;padding:14px 18px;border-radius:12px;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);font:inherit;color:var(--ink);cursor:pointer;transition:background-color .2s,box-shadow .2s;min-height:44px}
 .chips button b{grid-area:n;font-size:18px;letter-spacing:-.02em}
 .chips button span{grid-area:d;font-size:14px;color:var(--muted)}
 .chips button em{grid-area:e;font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--accent-ink)}
@@ -218,8 +218,8 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .price{display:inline-block;font-variant-numeric:tabular-nums}
 
 /* ── Precios ── */
-.toggle{display:inline-flex;padding:5px;border-radius:999px;background:var(--soft);gap:4px}
-.toggle button{min-height:42px;padding:0 18px;border-radius:999px;border:0;background:none;font:600 15px var(--f-ui);color:var(--muted);cursor:pointer}
+.toggle{display:inline-flex;padding:5px;border-radius:12px;background:var(--soft);gap:4px}
+.toggle button{min-height:42px;padding:0 18px;border-radius:8px;border:0;background:none;font:600 15px var(--f-ui);color:var(--muted);cursor:pointer}
 .toggle button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(22,19,15,.1)}
 .toggle button em{font-style:normal;color:var(--accent-ink);font-size:13px;margin-left:6px}
 .plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -368,9 +368,9 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
             </section>
           </div>
           <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
+          <div class="sheet-alt" id="sheetAlt" aria-hidden="true"></div>
         </article>
-        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small>Estilo Sobremesa · 1 página</small></div></div>
-        <button class="replay" id="replay" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ver otra vez</button>
+        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Sobremesa · 1 página</small></div></div>
       </div>
     </div>
   </section>
