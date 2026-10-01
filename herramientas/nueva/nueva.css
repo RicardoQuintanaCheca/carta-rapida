@@ -10,8 +10,6 @@ body.n .nnav{z-index:60}
 .n-pasos span{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink);display:grid;place-items:center;font-size:13px;font-weight:800}
 .n-prueba .sec-head{margin-bottom:clamp(28px,4vw,48px)}
 .n-prueba{scroll-margin-top:76px}
-.n-prueba.con-carta .sec-head,.n-prueba.procesando .sec-head{display:none}
-.n-prueba.con-carta,.n-prueba.procesando{padding-top:clamp(24px,4vw,48px)}
 
 /* ── Herramienta: misma lógica, aspecto nuevo ── */
 #herramienta.tool-section{background:none;padding:0 var(--gut);max-width:var(--max);margin:0 auto;scroll-margin-top:90px}
@@ -37,7 +35,7 @@ body.n .nnav{z-index:60}
 #herramienta .t2-main-btn:disabled{background:var(--soft)!important;color:#A39B91!important;border:0!important}
 #herramienta .t2-microcopy{font-size:13.5px!important;color:var(--muted)!important;letter-spacing:0!important;text-transform:none!important}
 #herramienta .t2-microcopy b{color:var(--ink)}
-#herramienta .t2-microcopy span{color:#A39B91}
+#herramienta .t2-microcopy span{color:var(--muted)}
 #herramienta .ejemplo-btn{border:1.5px solid var(--line)!important;border-radius:10px!important;color:var(--ink)!important;font-size:14.5px!important;padding:13px 16px!important;min-height:48px}
 #herramienta .ejemplo-btn b{color:var(--ink)!important;font-weight:700}
 #herramienta .ejemplo-btn:hover{border-color:var(--ink)!important}
@@ -188,3 +186,10 @@ body.n .visor-caja *{font-family:var(--f-ui)}
 .n-pasos span{border-radius:8px}
 #herramienta .res-estilo,#herramienta .cabecera-modo button{border-radius:8px!important}
 #herramienta .cabecera-modo{border-radius:10px!important}
+
+/* Destinos de desplazamiento por debajo de la barra fija */
+section[id]{scroll-margin-top:80px}
+#herramienta,#msgResult,#progressBarWrap,#proCaja,#uploadGrid{scroll-margin-top:90px}
+/* Con una ventana abierta, el fondo no se mueve */
+html:has(body[style*="overflow: hidden"]){overflow:hidden}
+html.lenis-stopped{overflow:clip}
