@@ -2,10 +2,11 @@
 import re, sys, pathlib
 AQUI = pathlib.Path(__file__).parent
 REPO = AQUI.parent.parent / 'public'
-SALIDA = sys.argv[1] if len(sys.argv) > 1 else 'nueva.html'
+SALIDA = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
 INDEXABLE = SALIDA == 'index.html'
 
-idx = (REPO / 'index.html.orig' if (REPO / 'index.html.orig').exists() else REPO / 'index.html').read_text()
+# portada-fuente.html es la portada anterior: de ella salen la cabecera SEO, el HTML y el JS de la herramienta
+idx = (AQUI / 'portada-fuente.html').read_text()
 proto = (AQUI / 'plantilla.html').read_text()
 L = idx.split('\n')
 
@@ -76,7 +77,8 @@ extra = (AQUI / 'nueva.css').read_text()
 
 # Imágenes reales
 cuerpo = cuerpo.replace('{{img:antes}}', '/ejemplo/antes-640.webp')
-cuerpo = re.sub(r'\{\{img:(\w+)\}\}', lambda m: '/carta/grande-' + m.group(1) + '.webp', cuerpo)
+# Estilos: la misma carta de ejemplo (Casa Pepe) compuesta con el motor real
+cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', lambda m: 'src="/ejemplo/portada-%s.webp" srcset="/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w" sizes="(max-width: 900px) 92vw, 500px"' % ((m.group(1),) * 3), cuerpo)
 
 # Barra: enlaces reales
 cuerpo = cuerpo.replace('<a class="nlogo" href="#inicio"', '<a class="nlogo" href="/"')
@@ -105,7 +107,7 @@ cuerpo = cuerpo[:i_a] + prueba + cuerpo[i_b:]
 
 # Estilos: el botón lleva el estilo elegido a la herramienta
 cuerpo = cuerpo.replace('<a class="btn btn-ink" href="#prueba">Probar con mi carta</a>',
-  '<button class="btn btn-ink" type="button" id="probarEstilo">Probar <span id="probarEstiloNom">Riviera</span> con mi carta</button>')
+  '<button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera</span> con mi carta</span></button>')
 
 # Pro: llamadas reales
 cuerpo = cuerpo.replace('''          </ul>

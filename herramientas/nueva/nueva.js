@@ -24,6 +24,41 @@ function nOpciones(b) {
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
   nOpciones($('.n-opc'));
 
+  // «Pegar texto» siempre abre las opciones, aunque se hayan cerrado
+  if (typeof abrirTexto === 'function') {
+    const abrir = abrirTexto;
+    window.abrirTexto = abrirTexto = function () {
+      if (!$('#opciones').classList.contains('abierta')) nOpciones($('.n-opc'));
+      return abrir.apply(this, arguments);
+    };
+  }
+  // Las filas de opciones y «Pegar texto» también funcionan con teclado
+  $$('#herramienta .t2-feat-row, #herramienta .t2-alt[onclick]').forEach(el => {
+    el.setAttribute('role', 'button'); el.tabIndex = 0;
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+  });
+  // La burbuja de la mascota ya no se ve: los mensajes importantes salen como aviso
+  if (typeof updateToolBubble === 'function') {
+    const burbuja = updateToolBubble;
+    window.updateToolBubble = updateToolBubble = function (msg) {
+      burbuja(msg);
+      if (/Prueba activada|Hola de nuevo/.test(msg) && window.Cuenta && Cuenta.aviso) {
+        Cuenta.aviso(String(msg).replace(/[✨📸]/gu, '').trim());
+        if (typeof cartaActual !== 'undefined' && !cartaActual) ir($('#prueba'));
+      }
+    };
+  }
+  // «Probar Pro» cuando ya estás en prueba o eres Pro: que haga algo útil
+  if (typeof probarPro === 'function') {
+    const probar = probarPro;
+    window.probarPro = probarPro = function (motivo) {
+      const c = window.Cuenta && Cuenta.estado;
+      if (c && c.plan === 'prueba') return hacersePro(motivo);
+      if (c && c.plan === 'pro') { location.href = '/panel'; return; }
+      return probar(motivo);
+    };
+  }
+
   // «Pegar texto» abre las opciones, que es donde está la caja de texto
   const td = $('#textoDrop');
   new MutationObserver(() => {
@@ -39,8 +74,13 @@ function nOpciones(b) {
   const prueba = $('#prueba');
   const resultado = $('#msgResult');
   const progreso = $('#progressBarWrap');
+  let habiaCarta = false;
   const marcar = () => {
-    prueba.classList.toggle('con-carta', resultado.style.display !== 'none');
+    const hay = resultado.style.display !== 'none';
+    // Al salir la carta, el formulario de arriba se oculta y todo sube: se vuelve a encuadrar
+    if (hay && !habiaCarta) setTimeout(() => { const r = resultado.getBoundingClientRect().top; if (r < 70 || r > innerHeight * .5) ir(resultado); }, 700);
+    habiaCarta = hay;
+    prueba.classList.toggle('con-carta', hay);
     prueba.classList.toggle('procesando', progreso.style.display !== 'none');
   };
   new MutationObserver(marcar).observe(resultado, { attributes: true, attributeFilter: ['style'] });
@@ -87,7 +127,7 @@ function nOpciones(b) {
   let lenis = null;
   const ir = (el) => {
     if (!el) return;
-    if (lenis) lenis.scrollTo(el, { offset: -76 });
+    if (lenis) lenis.scrollTo(el, { offset: 0 });
     else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: 'smooth' });
   };
   window.irHerramienta = e => { if (e) e.preventDefault(); ir($('#prueba')); };
@@ -107,7 +147,9 @@ function nOpciones(b) {
   // ── Animaciones (si se pueden cargar) ──
   window.addEventListener('DOMContentLoaded', () => {
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (quieto || !window.gsap) return;
+    if (quieto || !window.gsap || !window.ScrollTrigger) return;
+    // Si las animaciones llegan tarde (red lenta), no se rehace la portada que ya se ve
+    const tarde = performance.now() > 1500;
     document.documentElement.classList.add('anim');
     gsap.registerPlugin(ScrollTrigger);
     if (window.SplitText) gsap.registerPlugin(SplitText);
@@ -144,34 +186,37 @@ function nOpciones(b) {
       .add(() => ciclarPortada());
     // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
     function ciclarPortada() {
-      const lista = [['riviera', 'Riviera'], ['gaceta', 'Gaceta'], ['sumi', 'Sumi'], ['brasserie', 'Brasserie'], ['azulejo', 'Azulejo'], ['editorial', 'Editorial']];
+      const lista = [['riviera', 'Riviera'], ['serigrafia', 'Serigrafía'], ['cartel', 'Cartel'], ['sumi', 'Sumi'], ['azulejo', 'Azulejo'], ['gaceta', 'Gaceta'], ['sobremesa', 'Sobremesa']];
       const capa = $('#sheetAlt');
-      const imgs = lista.map(([k, n]) => { const im = new Image(); im.src = '/carta/grande-' + k + '.webp'; im.alt = ''; im.decoding = 'async'; capa.appendChild(im); return im; });
+      const imgs = lista.map(([k], n) => {
+        if (n === 0) return capa.querySelector('img'); // Riviera ya está en la página
+        const im = new Image(); im.alt = ''; im.decoding = 'async';
+        im.sizes = '(max-width: 900px) 70vw, 430px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
+        capa.appendChild(im); return im;
+      });
       const txt = $('#readyEstilo');
-      let i = -1, visible = true, capaZ = 1;
+      let i = 0, visible = true, capaZ = 1;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
       const paso = () => {
         if (!visible || document.hidden) return;
-        i = (i + 1) % (lista.length + 1); // la última vuelta enseña otra vez Sobremesa
-        if (i < lista.length) {
-          // la nueva entra por encima; la anterior se quita cuando ya está tapada
-          const nueva = imgs[i];
-          nueva.style.zIndex = ++capaZ;
-          nueva.classList.add('on');
-          setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
-        } else imgs.forEach(im => im.classList.remove('on'));
-        txt.textContent = 'Estilo ' + (i < lista.length ? lista[i][1] : 'Sobremesa') + ' · 1 página';
+        i = (i + 1) % lista.length;
+        // la nueva entra por encima; la anterior se quita cuando ya está tapada
+        const nueva = imgs[i];
+        nueva.style.zIndex = ++capaZ;
+        nueva.classList.add('on');
+        setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
+        txt.textContent = 'Estilo ' + lista[i][1] + ' · 1 página';
         gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
       };
       setTimeout(() => { paso(); setInterval(paso, 2600); }, 1800);
     }
 
-    if (window.SplitText) {
+    if (window.SplitText && !tarde) {
       const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });
       gsap.from(st.lines, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: .09, delay: .1 });
     }
-    gsap.from('.nhero .eyebrow, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 18, duration: .8, ease: 'power3.out', stagger: .08, delay: .35 });
-    demo.play(0).delay(.4);
+    if (!tarde) gsap.from('.nhero .eyebrow, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 18, duration: .8, ease: 'power3.out', stagger: .08, delay: .35 });
+    if (tarde) { demo.progress(1); } else demo.play(0).delay(.4);
 
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       const d = $('#demo');
@@ -198,8 +243,6 @@ function nOpciones(b) {
       .add(() => { $('#saved').textContent = 'Guardado'; $('#edOut').textContent = 'PDF actualizado · 13,50 €'; }, '+=.7')
       .from('.ed-out', { scale: .97, duration: .5, ease: 'back.out(2)' }, '<');
 
-    // Cuando la herramienta cambia de tamaño (carta lista), se recalculan las animaciones
-    new ResizeObserver(() => ScrollTrigger.refresh()).observe($('#prueba'));
     window.addEventListener('load', () => ScrollTrigger.refresh());
   });
 })();
