@@ -238,16 +238,16 @@ function nOpciones(b) {
     demo
       .set('#ready', { autoAlpha: 0, y: 16 })
       .set(filas, { autoAlpha: 0, y: 10 })
-      .set('#sheet', { autoAlpha: 0, y: 30, rotate: 2 })
+      .set('#sheet', { autoAlpha: 0, y: 30, rotate: 7 })
       .set('#scan', { top: '0%', autoAlpha: 0 })
-      .fromTo('#photo', { autoAlpha: 0, x: -30, rotate: -10 }, { autoAlpha: 1, x: 0, rotate: -6, duration: .8 })
+      .fromTo('#photo', { autoAlpha: 0, x: -30, rotate: -10 }, { autoAlpha: 1, x: 0, rotate: -9, duration: .8 })
       .to('#scan', { autoAlpha: 1, duration: .2 }, '-=.1')
       .to('#scan', { top: '100%', duration: 1.3, ease: 'power1.inOut' })
       .to('#scan', { autoAlpha: 0, duration: .2 })
-      .to('#sheet', { autoAlpha: 1, y: 0, rotate: 0, duration: .9 }, '-=.5')
+      .to('#sheet', { autoAlpha: 1, y: 0, rotate: 4, duration: .9 }, '-=.5')
       .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
       .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
-      .add(() => ciclarPortada());
+      .add(() => { ciclarPortada(); escena(); });
     // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
     function ciclarPortada() {
       const lista = [['riviera', 'Riviera'], ['serigrafia', 'Serigrafía'], ['cartel', 'Cartel'], ['sumi', 'Sumi'], ['azulejo', 'Azulejo'], ['gaceta', 'Gaceta'], ['sobremesa', 'Sobremesa']];
@@ -295,8 +295,17 @@ function nOpciones(b) {
       d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 10); ry(-((e.clientY - r.top) / r.height - .5) * 8); });
       d.addEventListener('pointerleave', () => { rx(0); ry(0); });
     }
-    gsap.to('#photo', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('#sheet', { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.nhero', start: 'top top', end: 'bottom top', scrub: true } });
+    // Al bajar: la foto se aparta y la carta se endereza y crece hasta el centro
+    let escenaHecha = false;
+    function escena() {
+      if (escenaHecha) return; escenaHecha = true;
+      const movil = window.innerWidth < 900;
+      const st = { trigger: '#demo', start: movil ? 'top 40%' : 'top 12%', end: movil ? 'bottom 30%' : 'bottom 40%', scrub: .6 };
+      gsap.fromTo('#photo', { xPercent: 0, rotate: -9, autoAlpha: 1 }, { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', immediateRender: false, scrollTrigger: st });
+      gsap.fromTo('#sheet', { xPercent: 0, rotate: 4, scale: 1 }, { xPercent: movil ? -20 : -28, rotate: 0, scale: movil ? 1.08 : 1.14, ease: 'none', immediateRender: false, scrollTrigger: st });
+      gsap.fromTo('#ready', { xPercent: 0 }, { xPercent: movil ? 0 : -40, ease: 'none', immediateRender: false, scrollTrigger: st });
+      gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
+    }
 
     gsap.from('#herramienta > .wrap', { y: 80, scale: .94, autoAlpha: .4, ease: 'none', scrollTrigger: { trigger: '#herramienta', start: 'top 98%', end: 'top 55%', scrub: .6 } });
     $$('.rv').forEach(el => gsap.from(el, {

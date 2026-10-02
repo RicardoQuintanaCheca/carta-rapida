@@ -36,7 +36,7 @@ for viejo, nuevo in [
     assert viejo in head, viejo
     head = head.replace(viejo, nuevo)
 head = re.sub(r'<link href="https://fonts.googleapis.com/css2\?family=Bricolage[^>]*>',
-              '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">', head)
+              '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">', head)
 css_viejo = entre(i_style+1, i_fin_style-1)
 scripts_head = entre(i_fin_style+1, i_head_fin-1)
 

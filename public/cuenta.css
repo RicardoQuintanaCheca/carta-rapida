@@ -74,51 +74,51 @@
 /* Ojo para ver la contraseña */
 .cu-clave { position: relative; display: block; }
 .cu-clave input { padding-right: 52px !important; }
-.cu-ojo { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border: 0; background: none; border-radius: 10px; color: #6E675F; cursor: pointer; display: grid; place-items: center; }
-.cu-ojo:hover { color: #16130F; background: rgba(22,19,15,.05); }
+.cu-ojo { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border: 0; background: none; border-radius: 10px; color: #6C6C72; cursor: pointer; display: grid; place-items: center; }
+.cu-ojo:hover { color: #0C0C0D; background: rgba(12,12,13,.05); }
 .cu-ojo svg { width: 20px; height: 20px; }
 
-/* ═══ Identidad nueva (igual que la portada): papel blanco, Manrope, un solo acento ═══ */
-.cu-velo { background: rgba(22,19,15,.55); backdrop-filter: blur(4px); }
-.cu-caja, .cu-caja button, .cu-caja input, .cu-aviso { font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif; }
-.cu-caja { border: none; border-radius: 22px; box-shadow: 0 40px 100px -30px rgba(22,19,15,.5); color: #16130F; padding: 30px 28px 26px; }
-.cu-cerrar { border-radius: 10px; background: #F6F3EE; color: #16130F; }
-.cu-cerrar:hover { background: #16130F; color: #fff; }
-.cu-eyebrow { font-family: inherit; font-size: 13px; letter-spacing: 0; text-transform: none; font-weight: 700; color: #B4400E; margin-bottom: 8px; }
+/* ═══ Identidad nueva (igual que la portada): papel blanco, 'Bricolage Grotesque', un solo acento ═══ */
+.cu-velo { background: rgba(12,12,13,.55); backdrop-filter: blur(4px); }
+.cu-caja, .cu-caja button, .cu-caja input, .cu-aviso { font-family: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.cu-caja { border: none; border-radius: 22px; box-shadow: 0 40px 100px -30px rgba(12,12,13,.5); color: #0C0C0D; padding: 30px 28px 26px; }
+.cu-cerrar { border-radius: 10px; background: #F3F3F5; color: #0C0C0D; }
+.cu-cerrar:hover { background: #0C0C0D; color: #fff; }
+.cu-eyebrow { font-family: inherit; font-size: 13px; letter-spacing: 0; text-transform: none; font-weight: 700; color: #C93A0E; margin-bottom: 8px; }
 .cu-titulo { font-family: inherit; font-weight: 750; font-size: 28px; letter-spacing: -.035em; line-height: 1.08; margin: 0 0 10px; text-wrap: balance; }
-.cu-sub { color: #6E675F; font-size: 15px; }
+.cu-sub { color: #6C6C72; font-size: 15px; }
 .cu-motivo { background: #FDF1EA; border: none; color: #8A300B; border-radius: 10px; }
-.cu-tabs { background: #F6F3EE; border-radius: 10px; padding: 4px; gap: 2px; }
-.cu-tabs button { border-radius: 7px; font: 600 14.5px 'Manrope', system-ui, sans-serif; color: #6E675F; }
-.cu-tabs button.on { background: #16130F; color: #fff; box-shadow: none; }
+.cu-tabs { background: #F3F3F5; border-radius: 10px; padding: 4px; gap: 2px; }
+.cu-tabs button { border-radius: 7px; font: 600 14.5px 'Bricolage Grotesque', system-ui, sans-serif; color: #6C6C72; }
+.cu-tabs button.on { background: #0C0C0D; color: #fff; box-shadow: none; }
 .cu-campo span { font-size: 13.5px; }
-.cu-campo input { border: none; box-shadow: inset 0 0 0 1.5px #EAE5DE; border-radius: 10px; font: 15.5px 'Manrope', system-ui, sans-serif; color: #16130F; }
-.cu-campo input:focus { box-shadow: inset 0 0 0 1.5px #16130F, 0 0 0 4px rgba(22,19,15,.06); }
+.cu-campo input { border: none; box-shadow: inset 0 0 0 1.5px #E6E6EA; border-radius: 10px; font: 15.5px 'Bricolage Grotesque', system-ui, sans-serif; color: #0C0C0D; }
+.cu-campo input:focus { box-shadow: inset 0 0 0 1.5px #0C0C0D, 0 0 0 4px rgba(12,12,13,.06); }
 .cu-campo input.error { box-shadow: inset 0 0 0 1.5px #B3261E; background: #FDF3F2; }
-.cu-check { color: #6E675F; font-size: 13.5px; }
-.cu-check input { accent-color: #CC4416; }
-.cu-check a, .cu-pie a, .cu-enlace, .cu-google-nota a { color: #B4400E; }
+.cu-check { color: #6C6C72; font-size: 13.5px; }
+.cu-check input { accent-color: #FF4A1C; }
+.cu-check a, .cu-pie a, .cu-enlace, .cu-google-nota a { color: #C93A0E; }
 .cu-check.error, .cu-error { color: #B3261E; }
-.cu-btn { border-radius: 10px; background: #CC4416; font: 700 17px 'Manrope', system-ui, sans-serif; letter-spacing: -.01em; min-height: 54px; padding: 0 20px; box-shadow: none; transition: background-color .2s; }
-.cu-btn:hover:not(:disabled) { transform: none; box-shadow: none; background: #16130F; }
+.cu-btn { border-radius: 10px; background: #FF4A1C; font: 700 17px 'Bricolage Grotesque', system-ui, sans-serif; letter-spacing: -.01em; min-height: 54px; padding: 0 20px; box-shadow: none; transition: background-color .2s; }
+.cu-btn:hover:not(:disabled) { transform: none; box-shadow: none; background: #0C0C0D; }
 .cu-btn:active:not(:disabled) { transform: none; box-shadow: none; }
-.cu-btn.secundario { background: #fff; color: #16130F; border: none; box-shadow: inset 0 0 0 1.5px #EAE5DE; font-size: 16px; }
-.cu-btn.secundario:hover:not(:disabled) { background: #fff; box-shadow: inset 0 0 0 1.5px #16130F; }
-.cu-pie, .cu-seguro, .cu-google-nota { color: #6E675F; font-size: 13px; }
-.cu-plan { border: none; box-shadow: inset 0 0 0 1.5px #EAE5DE; border-radius: 14px; color: #16130F; }
+.cu-btn.secundario { background: #fff; color: #0C0C0D; border: none; box-shadow: inset 0 0 0 1.5px #E6E6EA; font-size: 16px; }
+.cu-btn.secundario:hover:not(:disabled) { background: #fff; box-shadow: inset 0 0 0 1.5px #0C0C0D; }
+.cu-pie, .cu-seguro, .cu-google-nota { color: #6C6C72; font-size: 13px; }
+.cu-plan { border: none; box-shadow: inset 0 0 0 1.5px #E6E6EA; border-radius: 14px; color: #0C0C0D; }
 .cu-plan:hover { box-shadow: inset 0 0 0 1.5px #CFC6BA; }
-.cu-plan.on { box-shadow: inset 0 0 0 2px #16130F; background: #fff; }
-.cu-plan-nombre { font-family: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 700; color: #6E675F; }
+.cu-plan.on { box-shadow: inset 0 0 0 2px #0C0C0D; background: #fff; }
+.cu-plan-nombre { font-family: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 700; color: #6C6C72; }
 .cu-plan-precio { font-family: inherit; font-weight: 750; font-size: 32px; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
-.cu-plan-precio small, .cu-plan-nota { color: #6E675F; }
-.cu-ahorro { background: #CC4416; border-radius: 6px; font: 700 12px 'Manrope', system-ui, sans-serif; }
+.cu-plan-precio small, .cu-plan-nota { color: #6C6C72; }
+.cu-ahorro { background: #FF4A1C; border-radius: 6px; font: 700 12px 'Bricolage Grotesque', system-ui, sans-serif; }
 .cu-lista li { padding-left: 26px; font-size: 14.5px; }
-.cu-lista li::before { content: ""; background: none; border-radius: 0; width: 11px; height: 6px; left: 3px; top: 6px; border-left: 2.5px solid #CC4416; border-bottom: 2.5px solid #CC4416; transform: rotate(-45deg); }
+.cu-lista li::before { content: ""; background: none; border-radius: 0; width: 11px; height: 6px; left: 3px; top: 6px; border-left: 2.5px solid #FF4A1C; border-bottom: 2.5px solid #FF4A1C; transform: rotate(-45deg); }
 .cu-ok-icono { border-radius: 14px; background: #1F7A45; }
-.cu-aviso { background: #16130F; border-radius: 10px; font: 600 14.5px 'Manrope', system-ui, sans-serif; box-shadow: 0 20px 40px -14px rgba(22,19,15,.6); }
+.cu-aviso { background: #0C0C0D; border-radius: 10px; font: 600 14.5px 'Bricolage Grotesque', system-ui, sans-serif; box-shadow: 0 20px 40px -14px rgba(12,12,13,.6); }
 .cu-aviso a { color: #FF9D73; }
 .cu-o { color: #8F877E; }
-.cu-o::before, .cu-o::after { background: #EAE5DE; }
+.cu-o::before, .cu-o::after { background: #E6E6EA; }
 @media (max-width: 520px) { .cu-caja { padding: 26px 20px 22px; border-radius: 18px; } .cu-titulo { font-size: 25px; } }
 
 .cu-velo { overscroll-behavior: contain; }
