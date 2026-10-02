@@ -127,6 +127,21 @@ function nOpciones(b) {
     [$('.nhero'), prueba, $('.final')].forEach(el => el && io.observe(el));
   }
 
+  // En móvil, con la carta ya hecha, el botón de descargar va siempre a mano (abajo) mientras el de la página no se ve
+  const bajar = $('#nDescarga'), dl = $('#dlBtn'), dlTxt = $('#dlTexto');
+  if (bajar && dl && 'IntersectionObserver' in window) {
+    let dlVisible = false, enHerramienta = false;
+    const pintarBajar = () => {
+      $('#nDescargaTxt').textContent = dlTxt.textContent;
+      bajar.classList.toggle('on', resultado.style.display !== 'none' && enHerramienta && !dlVisible);
+    };
+    new IntersectionObserver(([e]) => { dlVisible = e.isIntersecting; pintarBajar(); }).observe(dl);
+    new IntersectionObserver(([e]) => { enHerramienta = e.isIntersecting; pintarBajar(); }, { threshold: 0.02 }).observe($('#herramienta'));
+    new MutationObserver(pintarBajar).observe(dlTxt, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(pintarBajar).observe(resultado, { attributes: true, attributeFilter: ['style'] });
+    bajar.addEventListener('click', () => { if (typeof medir === 'function') medir('descarga_barra_movil'); descargar(); });
+  }
+
   // Barra con filete al bajar
   const nav = $('#nav');
   const marcarNav = () => nav.classList.toggle('scrolled', window.scrollY > 8);

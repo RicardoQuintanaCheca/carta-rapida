@@ -260,3 +260,9 @@ html.lenis-stopped{overflow:clip}
 .n-saltar{position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;text-decoration:none;transition:top .2s}
 .n-saltar:focus{top:12px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Móvil: descargar siempre a mano con la carta hecha; y las barras de abajo no se pisan con el aviso de cookies */
+.n-descarga{border:0;cursor:pointer;width:auto}
+body:has(#cookiesAviso.on) .n-barra{display:none!important}
+body:has(.cu-velo:not([hidden])) .n-barra{display:none!important}
+#herramienta .dl-principal,#herramienta .t2-main-btn,#herramienta .pro-caja .pro-btn,#herramienta .lead-btn{border-radius:10px!important}

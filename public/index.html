@@ -2057,6 +2057,12 @@ html.lenis-stopped{overflow:clip}
 .n-saltar:focus{top:12px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+/* Móvil: descargar siempre a mano con la carta hecha; y las barras de abajo no se pisan con el aviso de cookies */
+.n-descarga{border:0;cursor:pointer;width:auto}
+body:has(#cookiesAviso.on) .n-barra{display:none!important}
+body:has(.cu-velo:not([hidden])) .n-barra{display:none!important}
+#herramienta .dl-principal,#herramienta .t2-main-btn,#herramienta .pro-caja .pro-btn,#herramienta .lead-btn{border-radius:10px!important}
+
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -2812,6 +2818,7 @@ html.lenis-stopped{overflow:clip}
 
 
 <a class="n-barra" id="nBarra" href="#prueba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>Sube una foto de tu carta</a>
+<button class="n-barra n-descarga" id="nDescarga" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="nDescargaTxt">Descargar PDF</span></button>
 <script src="/cuenta.js"></script>
 <!-- EMAIL PARA DESCARGAR -->
 <div class="cu-velo" id="emailVelo" hidden>
@@ -4423,6 +4430,21 @@ function nOpciones(b) {
       barra.classList.toggle('on', !enPortada && !enHerramienta && !enFinal && resultado.style.display === 'none');
     }, { threshold: 0.02 });
     [$('.nhero'), prueba, $('.final')].forEach(el => el && io.observe(el));
+  }
+
+  // En móvil, con la carta ya hecha, el botón de descargar va siempre a mano (abajo) mientras el de la página no se ve
+  const bajar = $('#nDescarga'), dl = $('#dlBtn'), dlTxt = $('#dlTexto');
+  if (bajar && dl && 'IntersectionObserver' in window) {
+    let dlVisible = false, enHerramienta = false;
+    const pintarBajar = () => {
+      $('#nDescargaTxt').textContent = dlTxt.textContent;
+      bajar.classList.toggle('on', resultado.style.display !== 'none' && enHerramienta && !dlVisible);
+    };
+    new IntersectionObserver(([e]) => { dlVisible = e.isIntersecting; pintarBajar(); }).observe(dl);
+    new IntersectionObserver(([e]) => { enHerramienta = e.isIntersecting; pintarBajar(); }, { threshold: 0.02 }).observe($('#herramienta'));
+    new MutationObserver(pintarBajar).observe(dlTxt, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(pintarBajar).observe(resultado, { attributes: true, attributeFilter: ['style'] });
+    bajar.addEventListener('click', () => { if (typeof medir === 'function') medir('descarga_barra_movil'); descargar(); });
   }
 
   // Barra con filete al bajar
