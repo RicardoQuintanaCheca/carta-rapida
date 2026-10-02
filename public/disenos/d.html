@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta D · Riviera — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* D · Riviera: la web vestida como el estilo de carta más llamativo. Una sola tinta cobalto sobre blanco, minúsculas redondas, etiquetas en píldora. */
+:root{--bl:#FFFFFF;--azul:#1F3FD6;--azul-s:#EEF1FF;--tinta:#0F1533;--gris:#5B617A;--d:'Unbounded',system-ui,sans-serif;--t:'DM Sans',system-ui,sans-serif;--m:clamp(18px,4vw,56px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bl);color:var(--azul);font:400 17px/1.55 var(--t);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:16px;height:72px;padding:0 var(--m);border-bottom:2px solid var(--azul)}
+.marca{font:700 19px/1 var(--d);text-transform:lowercase;letter-spacing:-.04em;text-decoration:none}
+.cab nav{display:flex;gap:8px;font-size:14.5px;font-weight:600}.cab nav a{text-decoration:none;padding:7px 14px;border-radius:999px}.cab nav a:hover{background:var(--azul-s)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 30px;border-radius:999px;border:0;cursor:pointer;font:600 15px/1 var(--d);text-transform:lowercase;letter-spacing:-.02em;text-decoration:none;background:var(--azul);color:#fff;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.b:hover{transform:translateY(-3px);background:var(--tinta)}
+.b.linea{background:#fff;color:var(--azul);box-shadow:inset 0 0 0 2px var(--azul)}.b.linea:hover{background:var(--azul-s)}
+.b.peq{min-height:44px;padding:0 20px;font-size:13px}
+.portada{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(24px,4vw,72px);align-items:center;padding:clamp(34px,6vw,90px) var(--m) clamp(48px,7vw,110px)}
+.pildora{display:inline-block;background:var(--azul);color:#fff;font:600 13px/1 var(--d);text-transform:lowercase;padding:9px 16px;border-radius:999px}
+h1{margin:clamp(18px,2.4vw,30px) 0 0;font:800 clamp(46px,8.4vw,150px)/.92 var(--d);letter-spacing:-.075em;text-transform:lowercase;text-wrap:balance}
+.entrada{font-size:clamp(18px,1.55vw,22px);max-width:28em;margin:clamp(22px,3vw,38px) 0 0;color:var(--tinta)}
+.acc{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.datos{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.datos span{font:500 13px/1 var(--d);text-transform:lowercase;padding:9px 14px;border-radius:999px;background:var(--azul-s)}
+.hoja-caja{position:relative;justify-self:center;width:min(100%,430px)}
+.hoja-caja::before{content:"";position:absolute;inset:-7% -9%;background:var(--azul);border-radius:44% 56% 48% 52%/52% 46% 54% 48%;animation:mancha 16s ease-in-out infinite alternate}
+@keyframes mancha{to{border-radius:56% 44% 52% 48%/46% 54% 46% 54%;rotate:8deg}}
+.hoja-caja [data-hoja]{rotate:-4deg;border-radius:6px;box-shadow:0 40px 80px -40px rgba(15,21,51,.7)}
+.cinta{border-block:2px solid var(--azul);overflow:hidden;white-space:nowrap;padding:14px 0}
+.cinta div{display:inline-flex;gap:12px;padding-right:12px;animation:corre 40s linear infinite}
+.cinta span{font:600 15px/1 var(--d);text-transform:lowercase;padding:10px 18px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--azul)}
+.cinta span:nth-child(3n){background:var(--azul);color:#fff}
+@keyframes corre{to{transform:translateX(-50%)}}
+.taller{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(26px,5vw,80px);padding:clamp(54px,8vw,130px) var(--m);align-items:center}
+h2{margin:0;font:800 clamp(36px,5.6vw,92px)/.95 var(--d);letter-spacing:-.07em;text-transform:lowercase;text-wrap:balance}
+.pasos{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:10px;counter-reset:p}
+.pasos li{counter-increment:p;display:flex;align-items:center;gap:14px;font-size:18px;color:var(--tinta);font-weight:500}
+.pasos li::before{content:counter(p);flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:var(--azul);color:#fff;font:700 15px/1 var(--d)}
+.app{background:var(--azul);border-radius:36px;padding:clamp(14px,2vw,24px)}
+.subir{display:grid;place-items:center;gap:10px;text-align:center;padding:clamp(34px,6vw,72px) 18px;border-radius:24px;background:#fff;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.subir:hover{transform:scale(.985)}
+.subir b{font:800 clamp(24px,3vw,40px)/1 var(--d);letter-spacing:-.06em;text-transform:lowercase}
+.subir > span:not(.b):not(.ic){color:var(--gris);font-size:15px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fila a{display:grid;place-items:center;min-height:54px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;text-decoration:none;font:500 13.5px var(--d);text-transform:lowercase}
+.fila a:hover{background:rgba(255,255,255,.26)}
+.cierre{background:var(--azul);color:#fff;padding:clamp(54px,9vw,140px) var(--m);border-radius:clamp(28px,5vw,72px) clamp(28px,5vw,72px) 0 0}
+.cierre h2{font-size:clamp(40px,8.6vw,150px)}
+.cierre .b{background:#fff;color:var(--azul);margin-top:34px}
+.entra > *{opacity:0;transform:translateY(26px);animation:entra .9s cubic-bezier(.2,.8,.2,1) forwards}
+.entra > :nth-child(2){animation-delay:.1s}.entra > :nth-child(3){animation-delay:.2s}.entra > :nth-child(4){animation-delay:.3s}.entra > :nth-child(5){animation-delay:.4s}
+.hoja-caja{opacity:0;animation:entra 1s .3s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes entra{to{opacity:1;transform:none}}
+@media (max-width:860px){.cab nav{display:none}.portada,.taller{grid-template-columns:minmax(0,1fr)}.hoja-caja{width:min(74%,340px);margin-top:20px}.fila{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.entra > *,.hoja-caja{opacity:1;transform:none}}
+</style></head><body>
+<header class="cab"><a class="marca" href="#">carta rápida</a><nav><a href="#taller">pruébala</a><a href="#">estilos</a><a href="#">carta pro</a><a href="#">precios</a></nav><a class="b peq" href="#taller">empezar gratis</a></header>
+<section class="portada">
+  <div class="entra">
+    <span class="pildora">para restaurantes, bares y hoteles</span>
+    <h1>tu carta, como de imprenta</h1>
+    <p class="entrada">Hazle una foto a la carta que tienes. En 30 segundos la tienes maquetada, en PDF A4, lista para imprimir.</p>
+    <div class="acc"><a class="b" href="#taller">sube una foto de tu carta</a><a class="b linea" href="#">ver los 15 estilos</a></div>
+    <div class="datos"><span>gratis</span><span>sin tarjeta</span><span>pdf a4 en 30 s</span></div>
+  </div>
+  <div class="hoja-caja"><div data-hoja></div></div>
+</section>
+<div class="cinta" aria-hidden="true"><div><span>riviera</span><span>sobremesa</span><span>serigrafía</span><span>cartel</span><span>sumi</span><span>gaceta</span><span>brasserie</span><span>azulejo</span><span>editorial</span><span>trattoria</span><span>ticket</span><span>déco</span><span>riviera</span><span>sobremesa</span><span>serigrafía</span><span>cartel</span><span>sumi</span><span>gaceta</span><span>brasserie</span><span>azulejo</span><span>editorial</span><span>trattoria</span><span>ticket</span><span>déco</span></div></div>
+<section class="taller" id="taller">
+  <div><h2>tres pasos, sin registrarte</h2>
+    <ol class="pasos"><li>Haz una foto a tu carta</li><li>Elige el estilo de tu local</li><li>Descarga el PDF e imprime</li></ol></div>
+  <div class="app">
+    <label class="subir"><b>deja aquí tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span><span class="b" style="margin-top:10px">elegir fotos</span></label>
+    <div class="fila"><a href="#">pegar el texto</a><a href="#">probar con un ejemplo</a></div>
+  </div>
+</section>
+<section class="cierre"><h2>deja de maquetar, empieza a vender</h2><a class="b" href="#taller">sube una foto de tu carta</a></section>
+<script src="/disenos/comun.js"></script>
+</body></html>

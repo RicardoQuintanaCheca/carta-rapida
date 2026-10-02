@@ -54,7 +54,7 @@ h2{font:400 clamp(38px,5.4vw,84px)/.95 var(--d);letter-spacing:-.03em;margin:0;t
 .subir{display:grid;place-items:center;text-align:center;gap:10px;padding:clamp(30px,5vw,60px) 20px;border:1.5px dashed var(--tinta);cursor:pointer;transition:background-color .2s}
 .subir:hover{background:#F7F4EF}
 .subir b{font:italic 500 clamp(26px,3vw,36px)/1.05 var(--d)}
-.subir span{color:var(--gris);font-size:14.5px}
+.subir > span:not(.b):not(.ic){color:var(--gris);font-size:14.5px}
 .fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .cierre{background:var(--tinta);color:#fff;padding:clamp(56px,9vw,140px) var(--m)}
 .cierre h2{color:#fff;font-size:clamp(46px,9vw,150px)}.cierre h2 i{color:#F2B8A8}
