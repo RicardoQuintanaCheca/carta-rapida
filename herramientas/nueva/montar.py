@@ -192,6 +192,7 @@ pie = '''<div class="n-kartia rv">
 cuerpo = cuerpo[:i_f] + pie + cuerpo[i_g:]
 
 cuerpo += '\n<a class="n-barra" id="nBarra" href="#prueba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg>Sube una foto de tu carta</a>'
+cuerpo += '\n<button class="n-barra n-descarga" id="nDescarga" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="nDescargaTxt">Descargar PDF</span></button>'
 html = head + '\n<style>\n' + css_viejo + '\n</style>\n<style>\n/* ═══ Diseño nuevo ═══ */\n' + css_nuevo + '\n/* ═══ Herramienta con el diseño nuevo ═══ */\n' + extra + '\n</style>\n' + scripts_head + '\n</head>\n<body class="n">\n' + cuerpo + '\n' + modal + '\n' + cookies_visor + '\n' + script_viejo + '''
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>

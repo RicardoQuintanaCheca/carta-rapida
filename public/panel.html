@@ -70,7 +70,7 @@
   .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
   /* Cada carta guardada: la hoja sobre la mesa */
   .tarjeta { display: flex; flex-direction: column; }
-  .tarjeta-img { aspect-ratio: 210 / 190; background-color: var(--suave); background-position: center 18px; background-size: 78% auto; background-repeat: no-repeat; border-radius: 14px; cursor: pointer; transition: background-color .2s, background-position .35s cubic-bezier(.2,.8,.2,1); }
+  .tarjeta-img { aspect-ratio: 210 / 235; background-color: var(--suave); background-position: center 18px; background-size: 78% auto; background-repeat: no-repeat; border-radius: 14px; cursor: pointer; transition: background-color .2s, background-position .35s cubic-bezier(.2,.8,.2,1); }
   .tarjeta:hover .tarjeta-img { background-color: #EFEAE2; }
   .tarjeta-img { position: relative; overflow: hidden; }
   .tarjeta-img iframe { position: absolute; top: 18px; border: 0; pointer-events: none; transform-origin: top left; opacity: 0; transition: opacity .35s ease, translate .35s cubic-bezier(.2,.8,.2,1); }
@@ -182,7 +182,8 @@
     .barra-in { padding: 0 16px; height: 60px; gap: 8px; }
     .pestanas { top: 60px; }
     .plan-pill { display: none; }
-    .ed-titulo { font-size: 22px; }
+    .ed-titulo { font-size: 22px; order: 3; flex-basis: 100%; }
+    .guardado { margin-left: auto; }
     .plato { grid-template-columns: minmax(0, 1fr) 82px; }
     .plato .acciones { grid-row: auto; grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
     .plato .desc, .plato .mas-datos { grid-column: 1 / -1; }
@@ -192,6 +193,17 @@
     .bloque { padding: 22px 0; }
     .seccion { padding: 12px; }
   }
+  /* Con el dedo: zonas de toque de 44 px como mínimo */
+  @media (pointer: coarse) {
+    .mini-btn { width: 44px; height: 44px; font-size: 16px; }
+    .icono-btn { width: 44px; height: 44px; flex-basis: 44px; }
+    .menu-cuenta > button { width: 44px; height: 44px; }
+    .btn.peq { min-height: 44px; }
+    .servicio { grid-template-columns: 1fr 96px 44px; }
+    .segmento button { padding: 11px 16px; }
+  }
+  .menu-lista { max-width: calc(100vw - 24px); }
+  .campo, .ed-titulo { scroll-margin-top: 150px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
