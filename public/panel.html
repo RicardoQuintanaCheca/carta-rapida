@@ -71,7 +71,11 @@
   /* Cada carta guardada: la hoja sobre la mesa */
   .tarjeta { display: flex; flex-direction: column; }
   .tarjeta-img { aspect-ratio: 210 / 190; background-color: var(--suave); background-position: center 18px; background-size: 78% auto; background-repeat: no-repeat; border-radius: 14px; cursor: pointer; transition: background-color .2s, background-position .35s cubic-bezier(.2,.8,.2,1); }
-  .tarjeta:hover .tarjeta-img { background-color: #EFEAE2; background-position: center 10px; }
+  .tarjeta:hover .tarjeta-img { background-color: #EFEAE2; }
+  .tarjeta-img { position: relative; overflow: hidden; }
+  .tarjeta-img iframe { position: absolute; top: 18px; border: 0; pointer-events: none; transform-origin: top left; opacity: 0; transition: opacity .35s ease, top .35s cubic-bezier(.2,.8,.2,1); }
+  .tarjeta-img.lista iframe { opacity: 1; }
+  .tarjeta:hover .tarjeta-img iframe { top: 10px; }
   .tarjeta-cuerpo { padding: 14px 2px 0; display: flex; flex-direction: column; gap: 3px; flex: 1; }
   .tarjeta-tit { font-weight: 700; font-size: 17px; letter-spacing: -.02em; line-height: 1.25; }
   .tarjeta-meta { font-size: 13.5px; color: var(--gris); }
@@ -310,7 +314,7 @@
       ${avisoPlanHTML()}
       ${n ? `<div class="rejilla">${cartas.map(c => `
         <article class="tarjeta">
-          <div class="tarjeta-img" style="background-image:url(/carta/muestra-${esc(c.estilo)}.webp)" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
+          <div class="tarjeta-img" data-id="${esc(c.id)}" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
           <div class="tarjeta-cuerpo">
             <div class="tarjeta-tit">${esc(c.titulo)}</div>
             <div class="tarjeta-meta">${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
@@ -324,6 +328,30 @@
         <a class="nueva-tarjeta" href="/#herramienta"><span class="mas">+</span>Nueva carta<small>Sube una foto y la guardas aquí</small></a>
       </div>` : `<div class="vacio"><h2>Tu primera carta, en 30 segundos</h2><p>Hazle una foto a tu carta, elige estilo y pulsa «Guardar en mis cartas». Aparecerá aquí para editarla cuando quieras.</p><a class="btn primario" href="/#herramienta">Hacer mi carta</a></div>`}`;
     app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') el.click(); }));
+    miniaturas();
+  }
+
+  // Miniatura real: cada tarjeta compone su propia carta (con el mismo motor del PDF) cuando entra en pantalla
+  function miniaturas() {
+    const ANCHO = 794, ALTO = 1123;
+    const cargar = async el => {
+      const d = await Cuenta.api('/cartas/' + el.dataset.id);
+      if (!d.ok || !el.isConnected) return;
+      const f = document.createElement('iframe');
+      f.src = '/carta/vista.html'; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.setAttribute('scrolling', 'no');
+      const escala = () => { const s = el.clientWidth * .78 / ANCHO; f.style.transform = 'scale(' + s + ')'; f.style.left = (el.clientWidth * .11) + 'px'; };
+      f.style.width = ANCHO + 'px'; f.style.height = ALTO + 'px';
+      el.appendChild(f); escala();
+      new ResizeObserver(escala).observe(el);
+      const oir = e => {
+        if (e.origin !== location.origin || e.source !== f.contentWindow || !e.data) return;
+        if (e.data.tipo === 'vista-lista') f.contentWindow.postMessage({ tipo: 'componer', id: 1, carta: d.carta, estilo: d.estilo, logo: d.logo && d.cabecera === 'logo' ? d.logo : null, credito: false }, location.origin);
+        if (e.data.tipo === 'compuesta') { el.classList.add('lista'); removeEventListener('message', oir); }
+      };
+      addEventListener('message', oir);
+    };
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); cargar(e.target); } }), { rootMargin: '200px' });
+    app.querySelectorAll('.tarjeta-img[data-id]').forEach(el => io.observe(el));
   }
 
   async function duplicar(id) {
