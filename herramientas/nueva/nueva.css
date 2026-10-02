@@ -244,3 +244,14 @@ html.lenis-stopped{overflow:clip}
 }
 .nnav-cta .btn{white-space:nowrap}
 @media (max-width:420px){.nnav-cta .n-largo{display:none}}
+/* Selector con los 15 estilos: dos columnas compactas en ordenador */
+@media (min-width:901px){
+  .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .chips button{padding:11px 14px;border-radius:10px;min-height:0}
+  .chips button b{font-size:16px}
+  .chips button span{font-size:13px}
+  .chips button em{font-size:10px;padding:4px 7px}
+  .picker{align-items:start}
+  .pick-sheet{position:sticky;top:96px}
+}
+.nnav-cta .btn{gap:0}

@@ -2040,6 +2040,17 @@ html.lenis-stopped{overflow:clip}
 }
 .nnav-cta .btn{white-space:nowrap}
 @media (max-width:420px){.nnav-cta .n-largo{display:none}}
+/* Selector con los 15 estilos: dos columnas compactas en ordenador */
+@media (min-width:901px){
+  .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .chips button{padding:11px 14px;border-radius:10px;min-height:0}
+  .chips button b{font-size:16px}
+  .chips button span{font-size:13px}
+  .chips button em{font-size:10px;padding:4px 7px}
+  .picker{align-items:start}
+  .pick-sheet{position:sticky;top:96px}
+}
+.nnav-cta .btn{gap:0}
 
 </style>
   <script>
@@ -2550,29 +2561,45 @@ html.lenis-stopped{overflow:clip}
           <div class="eyebrow">Elige estilo</div>
           <h2 class="h-l rv">La misma carta, <span class="grey">con el estilo de tu local.</span></h2>
         </div>
-        <p class="lead rv">Toca un estilo y mira cómo cambia. Puedes cambiarlo cuando quieras, sin volver a empezar.</p>
+        <p class="lead rv">Los quince estilos, con la misma carta. Toca uno y mira cómo cambia.</p>
       </div>
       <div class="picker">
         <div class="pick-sheet" id="pickSheet" aria-live="polite">
           <figure data-k="riviera" class="on"><img src="/ejemplo/portada-riviera.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Riviera"></figure>
           <figure data-k="sobremesa"><img src="/ejemplo/portada-sobremesa.webp" srcset="/ejemplo/portada-sobremesa-640.webp 640w, /ejemplo/portada-sobremesa.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Sobremesa" loading="lazy"></figure>
-          <figure data-k="sumi"><img src="/ejemplo/portada-sumi.webp" srcset="/ejemplo/portada-sumi-640.webp 640w, /ejemplo/portada-sumi.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Sumi" loading="lazy"></figure>
+          <figure data-k="serigrafia"><img src="/ejemplo/portada-serigrafia.webp" srcset="/ejemplo/portada-serigrafia-640.webp 640w, /ejemplo/portada-serigrafia.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Serigrafía" loading="lazy"></figure>
+          <figure data-k="gaceta"><img src="/ejemplo/portada-gaceta.webp" srcset="/ejemplo/portada-gaceta-640.webp 640w, /ejemplo/portada-gaceta.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Gaceta" loading="lazy"></figure>
+          <figure data-k="cartel"><img src="/ejemplo/portada-cartel.webp" srcset="/ejemplo/portada-cartel-640.webp 640w, /ejemplo/portada-cartel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Cartel" loading="lazy"></figure>
           <figure data-k="brasserie"><img src="/ejemplo/portada-brasserie.webp" srcset="/ejemplo/portada-brasserie-640.webp 640w, /ejemplo/portada-brasserie.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Brasserie" loading="lazy"></figure>
+          <figure data-k="sumi"><img src="/ejemplo/portada-sumi.webp" srcset="/ejemplo/portada-sumi-640.webp 640w, /ejemplo/portada-sumi.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Sumi" loading="lazy"></figure>
           <figure data-k="editorial"><img src="/ejemplo/portada-editorial.webp" srcset="/ejemplo/portada-editorial-640.webp 640w, /ejemplo/portada-editorial.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Editorial" loading="lazy"></figure>
           <figure data-k="azulejo"><img src="/ejemplo/portada-azulejo.webp" srcset="/ejemplo/portada-azulejo-640.webp 640w, /ejemplo/portada-azulejo.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Azulejo" loading="lazy"></figure>
-          <figure data-k="gaceta"><img src="/ejemplo/portada-gaceta.webp" srcset="/ejemplo/portada-gaceta-640.webp 640w, /ejemplo/portada-gaceta.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Gaceta" loading="lazy"></figure>
+          <figure data-k="trattoria"><img src="/ejemplo/portada-trattoria.webp" srcset="/ejemplo/portada-trattoria-640.webp 640w, /ejemplo/portada-trattoria.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Trattoria" loading="lazy"></figure>
+          <figure data-k="ticket"><img src="/ejemplo/portada-ticket.webp" srcset="/ejemplo/portada-ticket-640.webp 640w, /ejemplo/portada-ticket.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Ticket" loading="lazy"></figure>
+          <figure data-k="deco"><img src="/ejemplo/portada-deco.webp" srcset="/ejemplo/portada-deco-640.webp 640w, /ejemplo/portada-deco.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Déco" loading="lazy"></figure>
+          <figure data-k="mantel"><img src="/ejemplo/portada-mantel.webp" srcset="/ejemplo/portada-mantel-640.webp 640w, /ejemplo/portada-mantel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Mantel" loading="lazy"></figure>
+          <figure data-k="barra"><img src="/ejemplo/portada-barra.webp" srcset="/ejemplo/portada-barra-640.webp 640w, /ejemplo/portada-barra.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Barra" loading="lazy"></figure>
+          <figure data-k="autor"><img src="/ejemplo/portada-autor.webp" srcset="/ejemplo/portada-autor-640.webp 640w, /ejemplo/portada-autor.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Autor" loading="lazy"></figure>
         </div>
         <div class="pick-side">
           <div class="chips" role="tablist" aria-label="Estilos de carta" id="chips">
-            <button type="button" role="tab" aria-selected="true" data-k="riviera"><b>Riviera</b><span>Una tinta azul cobalto</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="true" data-k="riviera"><b>Riviera</b><span>Atrevido, una tinta</span><em>Pro</em></button>
             <button type="button" role="tab" aria-selected="false" data-k="sobremesa"><b>Sobremesa</b><span>Alta cocina</span></button>
-            <button type="button" role="tab" aria-selected="false" data-k="sumi"><b>Sumi</b><span>Japonés, sello rojo</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="false" data-k="serigrafia"><b>Serigrafía</b><span>Dos tintas</span><em>Pro</em></button>
+            <button type="button" role="tab" aria-selected="false" data-k="gaceta"><b>Gaceta</b><span>Periódico antiguo</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="cartel"><b>Cartel</b><span>Como un póster</span><em>Pro</em></button>
             <button type="button" role="tab" aria-selected="false" data-k="brasserie"><b>Brasserie</b><span>Gran café clásico</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="sumi"><b>Sumi</b><span>Japonés, sello rojo</span><em>Pro</em></button>
             <button type="button" role="tab" aria-selected="false" data-k="editorial"><b>Editorial</b><span>Como una revista</span></button>
             <button type="button" role="tab" aria-selected="false" data-k="azulejo"><b>Azulejo</b><span>Mediterráneo</span><em>Pro</em></button>
-            <button type="button" role="tab" aria-selected="false" data-k="gaceta"><b>Gaceta</b><span>Periódico antiguo</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="trattoria"><b>Trattoria</b><span>Casa italiana</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="ticket"><b>Ticket</b><span>Bar de vinos</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="deco"><b>Déco</b><span>Años veinte</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="mantel"><b>Mantel</b><span>Casa de comidas</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="barra"><b>Barra</b><span>Taberna</span></button>
+            <button type="button" role="tab" aria-selected="false" data-k="autor"><b>Autor</b><span>Gastronómico</span></button>
           </div>
-          <p class="pick-note">Y ocho estilos más: Mantel, Barra, Autor, Déco, Trattoria, Cartel, Ticket y Serigrafía.</p>
+          <p class="pick-note">Quince estilos: diez gratis y cinco de Carta Pro, que puedes probar 7 días sin tarjeta.</p>
           <button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera · Pro</span> con mi carta</span></button>
         </div>
       </div>
@@ -4417,7 +4444,7 @@ function nOpciones(b) {
     chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
     figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
     $('#probarEstiloNom').textContent = (NOMBRES[k] || k) + (esPro_(k) ? ' · Pro' : '');
-    if (!auto) { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); }
+    { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); } // en móvil la fila acompaña al estilo activo
   };
   chips.forEach(c => c.addEventListener('click', () => { tocado = true; clearInterval(ciclo); elegir(c.dataset.k); }));
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {

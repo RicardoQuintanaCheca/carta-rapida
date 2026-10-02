@@ -152,7 +152,7 @@ function nOpciones(b) {
     chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
     figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
     $('#probarEstiloNom').textContent = (NOMBRES[k] || k) + (esPro_(k) ? ' · Pro' : '');
-    if (!auto) { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); }
+    { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); } // en móvil la fila acompaña al estilo activo
   };
   chips.forEach(c => c.addEventListener('click', () => { tocado = true; clearInterval(ciclo); elegir(c.dataset.k); }));
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
