@@ -2052,6 +2052,11 @@ html.lenis-stopped{overflow:clip}
 }
 .nnav-cta .btn{gap:0}
 
+/* Accesibilidad: saltar al contenido, menos movimiento si el sistema lo pide, y el fondo quieto con ventanas */
+.n-saltar{position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;text-decoration:none;transition:top .2s}
+.n-saltar:focus{top:12px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -2075,6 +2080,7 @@ html.lenis-stopped{overflow:clip}
 <body class="n">
 
 
+<a class="n-saltar" href="#inicio">Saltar al contenido</a>
 <header class="nnav" id="nav">
   <div class="nwrap">
     <a class="nlogo" href="/" aria-label="Carta Rápida, inicio">Carta<span>Rápida</span></a>
@@ -2142,7 +2148,7 @@ html.lenis-stopped{overflow:clip}
           <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
           <div class="sheet-alt" id="sheetAlt"><img class="on" src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 70vw, 430px" alt="Carta de Casa Pepe maquetada en estilo Riviera" fetchpriority="high" width="900" height="1273"></div>
         </article>
-        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Riviera · 1 página</small></div></div>
+        <div class="ready" id="ready"><i aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Riviera · 1 página</small></div></div>
       </div>
     </div>
   </section>
@@ -2190,7 +2196,7 @@ html.lenis-stopped{overflow:clip}
       </div>
       <div class="msg" id="msgStatus" style="display:none">
         <div class="avatar">K</div>
-        <div class="bubble" id="statusText"></div>
+        <div class="bubble" id="statusText" role="status"></div>
       </div>
       <div class="msg" id="msgResult" style="display:none">
         <div class="res-layout">
@@ -2232,21 +2238,21 @@ html.lenis-stopped{overflow:clip}
               <button type="button" data-modo="nombre" onclick="cambiarCabecera('nombre')">Nombre</button>
               <button type="button" data-modo="logo" onclick="cambiarCabecera('logo')">Logotipo · Pro</button>
             </div>
-            <input class="campo-txt nombre" id="resNombre" type="text" maxlength="60" placeholder="Escribe el nombre de tu restaurante" oninput="editarCabecera()" aria-label="Nombre del restaurante">
+            <input class="campo-txt nombre" id="resNombre" type="text" maxlength="60" autocomplete="organization" placeholder="Escribe el nombre de tu restaurante" oninput="editarCabecera()" aria-label="Nombre del restaurante">
             <input class="campo-txt" id="resSubtitulo" type="text" maxlength="90" placeholder="Frase bajo el nombre (opcional)" oninput="editarCabecera()" aria-label="Frase bajo el nombre">
-            <div class="cabecera-aviso" id="cabeceraAviso">Cambia el nombre cuando quieras: gratis y al momento.</div>
+            <div class="cabecera-aviso" id="cabeceraAviso" aria-live="polite">Cambia el nombre cuando quieras: gratis y al momento.</div>
           </div>
           <div class="actions" id="actions">
             <div class="plan-estado" id="planEstado" role="status"></div>
             <button class="dl-principal" id="dlBtn" onclick="descargar()" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span id="dlTexto">Descargar PDF</span>
             </button>
             <div class="dl-nota" id="dlNota">A4 listo para imprimir · sin registro · puedes cambiar de estilo y volver a descargar</div>
             <div class="dl-revisa">Antes de imprimir, revisa platos, precios y alérgenos.</div>
 
             <button class="guardar-btn" id="guardarBtn" onclick="guardarEnPanel()" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
               <span id="guardarTexto">Guardar en mis cartas</span><span class="pro-pill">Pro</span>
             </button>
             <div class="guardar-nota" id="guardarNota">Guárdala y cambia platos y precios cuando quieras, sin volver a empezar.</div>
@@ -2269,11 +2275,11 @@ html.lenis-stopped{overflow:clip}
           <div class="ajuste-wrap" id="ajusteWrap">
             <div class="ajuste-inner">
               <div class="ajuste-label">¿Algo no está bien? Indícame el ajuste:</div>
-              <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, traduce al inglés..." oninput="checkAjuste(this)"></textarea>
+              <textarea class="ajuste-textarea" id="ajusteTxt" placeholder="Ej: pon los postres al final, traduce al inglés…" oninput="checkAjuste(this)"></textarea>
             </div>
             <div class="ajuste-footer">
               <button class="rehacer-btn" id="rehacerBtn" onclick="rehacer()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 REHACER CON ESTE AJUSTE
               </button>
               <div class="ajuste-cuenta" id="ajusteCuenta"></div>
@@ -2311,7 +2317,7 @@ html.lenis-stopped{overflow:clip}
         <div class="t2-cta-big">
           <input type="file" accept="image/*" capture="environment" aria-label="Hacer una foto de tu carta" onchange="handleFiles(this)">
           <div class="t2-cam-ring">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
           <div class="t2-cta-title"><span class="solo-tactil">Hacer foto ahora</span><span class="solo-raton">Arrastra aquí tu carta</span></div>
           <div class="t2-cta-sub"><span class="solo-tactil">Fotografía tu carta · o sube desde galería</span><span class="solo-raton">o haz clic para elegir las fotos · JPG, PNG o WEBP</span></div>
@@ -2319,11 +2325,11 @@ html.lenis-stopped{overflow:clip}
         <div class="t2-alt-row">
           <div class="t2-alt">
             <input type="file" accept="image/*" multiple aria-label="Subir imágenes de tu carta" onchange="handleFiles(this)">
-            <div class="t2-alt-icn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+            <div class="t2-alt-icn"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
             <div class="t2-alt-label">Subir imágenes</div>
           </div>
           <div class="t2-alt" onclick="abrirTexto()">
-            <div class="t2-alt-icn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg></div>
+            <div class="t2-alt-icn"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg></div>
             <div class="t2-alt-label">Pegar texto</div>
           </div>
         </div>
@@ -2332,24 +2338,24 @@ html.lenis-stopped{overflow:clip}
       <div class="fotos-preview" id="fotosPreview">
         <div class="fotos-cab">
           <span class="fotos-tit"><span class="fotos-ok">✓</span><span id="fotosTit">Carta subida</span></span>
-          <span class="fotos-count" id="fotosCount"></span>
+          <span class="fotos-count" id="fotosCount" aria-live="polite"></span>
         </div>
         <div class="fotos-grid" id="fotosContainer"></div>
         <div class="fotos-acciones">
           <label class="fotos-add-btn" id="fotosAddBtn">
             <input type="file" accept="image/*" multiple aria-label="Añadir más páginas" onchange="addMoreFiles(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             Añadir otra página
           </label>
           <label class="add-camara-btn" id="addCamaraBtn">
             <input type="file" accept="image/*" capture="environment" aria-label="Añadir otra página con la cámara" onchange="addMoreFiles(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
             Con la cámara
           </label>
         </div>
         <p class="fotos-pista"><span class="solo-raton">También puedes arrastrar más fotos aquí. </span>Hasta 5 páginas por carta.</p>
       </div>
-      <div id="uploadError"></div>
+      <div id="uploadError" role="alert"></div>
 
       <button class="t2-main-btn" id="mainBtn" onclick="run()" disabled>
         Sube una foto primero
@@ -2368,14 +2374,14 @@ html.lenis-stopped{overflow:clip}
         </div>
         <!-- Logo -->
         <div class="t2-feat-row" onclick="toggleLogo(); updateToolBubble(logoActivo ? '¡Perfecto! Sube tu logo ↓' : '¡Entendido! Sin logo.')">
-          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="t2-pf-label">Añadir logotipo<span class="pro-pill">Pro</span><div class="t2-pf-sub">Limpiamos el fondo · PNG, JPG o PDF · pruébalo gratis</div></span>
           <div class="toggle-wrap" id="logoToggle"><div class="toggle-dot"></div></div>
         </div>
         <div class="logo-drop" id="logoDrop">
           <div class="logo-drop-zone">
             <input type="file" accept="image/png,image/jpeg,image/webp,application/pdf" aria-label="Subir tu logotipo" onchange="handleLogo(this)">
-            <div class="logo-drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
+            <div class="logo-drop-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
             <div><div class="opcion-texto">Sube tu logotipo</div><div class="opcion-subtexto">JPG, PNG o PDF · fondo limpio automático</div></div>
           </div>
         </div>
@@ -2386,21 +2392,21 @@ html.lenis-stopped{overflow:clip}
         </div>
         <!-- Descripciones -->
         <div class="t2-feat-row" onclick="toggleDesc(); updateToolBubble(descActivo ? 'Escribiré descripciones breves, sin inventar ingredientes ✍️' : 'Sin descripciones, ¡de acuerdo!')">
-          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="t2-pf-label">Escribir descripciones<div class="t2-pf-sub">Solo con lo que dice tu carta · revísalas antes de imprimir</div></span>
           <div class="toggle-wrap" id="descToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Rentabilidad -->
         <div class="t2-feat-row" onclick="toggleNeuro(); updateToolBubble(neuroActivo ? 'Pondré primero lo que más te interesa vender ✨' : 'Mantendré el orden de tus platos.')">
-          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="t2-pf-label">Destacar tus platos fuertes<div class="t2-pf-sub">La especialidad y los platos principales, primero en cada sección</div></span>
           <div class="toggle-wrap on" id="neuroToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Traducir -->
         <div class="t2-feat-row" onclick="toggleTraducir(); updateToolBubble(tradActivo ? '¿A qué idioma? Elige abajo ↓' : 'Solo en español, ¡perfecto!')">
-          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="t2-pf-label">Traducir la carta<span class="pro-pill">Pro</span><div class="t2-pf-sub">Todos los platos y secciones · pruébalo gratis</div></span>
-          <svg class="t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg aria-hidden="true" class="t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           <div class="toggle-wrap" id="tradToggle"><div class="toggle-dot"></div></div>
         </div>
         <div class="idioma-zone t2-idioma-zone" id="idiomaZone">
@@ -2415,12 +2421,12 @@ html.lenis-stopped{overflow:clip}
         </div>
         <!-- Texto accordion -->
         <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
-          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
           <span class="t2-pf-label">Pegar texto de la carta<div class="t2-pf-sub">Si ya tienes el texto en digital</div></span>
-          <svg class="opcion-arrow t2-pf-chev" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg aria-hidden="true" class="opcion-arrow t2-pf-chev" id="textoArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="texto-drop" id="textoDrop">
-          <textarea id="txt" placeholder="Pega aquí el texto de tu carta..." oninput="onTextInput(this)"></textarea>
+          <textarea id="txt" placeholder="Pega aquí el texto de tu carta…" oninput="onTextInput(this)"></textarea>
         </div>
       </div>
       <div class="t2-card t2-style-section">
@@ -2430,80 +2436,80 @@ html.lenis-stopped{overflow:clip}
         <div class="t2-scard-grid">
           <button class="seg-btn t2-scard riviera" onclick="selEstilo(this,'riviera')" type="button">
             <span class="t2-recomendado">Recomendado</span>
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Riviera" style="background-image:url('/carta/muestra-riviera.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Riviera</span><span class="t2-scard-mood">Atrevido</span></div>
           </button>
           <button class="seg-btn t2-scard azulejo" onclick="selEstilo(this,'azulejo')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Azulejo" style="background-image:url('/carta/muestra-azulejo.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Azulejo</span><span class="t2-scard-mood">Mediterráneo</span></div>
           </button>
           <button class="seg-btn t2-scard serigrafia" onclick="selEstilo(this,'serigrafia')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Serigrafía" style="background-image:url('/carta/muestra-serigrafia.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Serigrafía</span><span class="t2-scard-mood">Dos tintas</span></div>
           </button>
           <button class="seg-btn t2-scard cartel" onclick="selEstilo(this,'cartel')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Cartel" style="background-image:url('/carta/muestra-cartel.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Cartel</span><span class="t2-scard-mood">Póster</span></div>
           </button>
           <button class="seg-btn t2-scard ticket" onclick="selEstilo(this,'ticket')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Ticket" style="background-image:url('/carta/muestra-ticket.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Ticket</span><span class="t2-scard-mood">Bar de vinos</span></div>
           </button>
           <button class="seg-btn t2-scard gaceta" onclick="selEstilo(this,'gaceta')" type="button">
             <span class="t2-recomendado">Recomendado</span>
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Gaceta" style="background-image:url('/carta/muestra-gaceta.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Gaceta</span><span class="t2-scard-mood">Periódico</span></div>
           </button>
           <button class="seg-btn t2-scard trattoria" onclick="selEstilo(this,'trattoria')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Trattoria" style="background-image:url('/carta/muestra-trattoria.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Trattoria</span><span class="t2-scard-mood">Casa italiana</span></div>
           </button>
           <button class="seg-btn t2-scard editorial" onclick="selEstilo(this,'editorial')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Editorial" style="background-image:url('/carta/muestra-editorial.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Editorial</span><span class="t2-scard-mood">Revista</span></div>
           </button>
           <button class="seg-btn t2-scard sobremesa on" onclick="selEstilo(this,'sobremesa')" type="button">
             <span class="t2-recomendado">Recomendado</span>
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sobremesa" style="background-image:url('/carta/muestra-sobremesa.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Sobremesa</span><span class="t2-scard-mood">Alta cocina</span></div>
           </button>
           <button class="seg-btn t2-scard sumi" onclick="selEstilo(this,'sumi')" type="button">
             <span class="t2-recomendado">Recomendado</span>
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Sumi" style="background-image:url('/carta/muestra-sumi.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Sumi</span><span class="t2-scard-mood">Japonés</span></div>
           </button>
           <button class="seg-btn t2-scard brasserie" onclick="selEstilo(this,'brasserie')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Brasserie" style="background-image:url('/carta/muestra-brasserie.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Brasserie</span><span class="t2-scard-mood">Gran café</span></div>
           </button>
           <button class="seg-btn t2-scard deco" onclick="selEstilo(this,'deco')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Déco" style="background-image:url('/carta/muestra-deco.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Déco</span><span class="t2-scard-mood">Años 20</span></div>
           </button>
           <button class="seg-btn t2-scard mantel" onclick="selEstilo(this,'mantel')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Mantel" style="background-image:url('/carta/muestra-mantel.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Mantel</span><span class="t2-scard-mood">Clásico</span></div>
           </button>
           <button class="seg-btn t2-scard barra" onclick="selEstilo(this,'barra')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Barra" style="background-image:url('/carta/muestra-barra.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Barra</span><span class="t2-scard-mood">Taberna</span></div>
           </button>
           <button class="seg-btn t2-scard autor" onclick="selEstilo(this,'autor')" type="button">
-            <span class="t2-scard-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="t2-scard-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div class="t2-style-preview" role="img" aria-label="Ejemplo de carta en estilo Autor" style="background-image:url('/carta/muestra-autor.webp')"></div>
             <div class="t2-scard-label"><span class="t2-scard-name">Autor</span><span class="t2-scard-mood">Gastronómico</span></div>
           </button>
@@ -2517,7 +2523,7 @@ html.lenis-stopped{overflow:clip}
         <div class="mascota-area">
           <div class="bubble" id="progressBubble">
             <span class="bubble-emoji" id="progressEmoji">👀</span>
-            <span class="bubble-text" id="progressBubbleText">Mirando...</span>
+            <span class="bubble-text" id="progressBubbleText">Mirando…</span>
           </div>
           <img src="/mascota/kart-feliz.webp" alt="" class="mascota-kart mascota-procesado" onerror="this.style.display='none'" draggable="false">
           <div class="sparkles">
@@ -2540,7 +2546,7 @@ html.lenis-stopped{overflow:clip}
           <div class="timeline-pill" data-step="5"></div>
         </div>
         <div class="indicador">
-          <span class="paso-counter" id="progressCounter">Paso 1 de 6</span>
+          <span class="paso-counter" id="progressCounter" role="status">Paso 1 de 6</span>
           <span class="separador-punto"></span>
           <span class="procesando-label">
             <span class="punto-pulsante"></span> Procesando
@@ -2565,21 +2571,21 @@ html.lenis-stopped{overflow:clip}
       </div>
       <div class="picker">
         <div class="pick-sheet" id="pickSheet" aria-live="polite">
-          <figure data-k="riviera" class="on"><img src="/ejemplo/portada-riviera.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Riviera"></figure>
-          <figure data-k="sobremesa"><img src="/ejemplo/portada-sobremesa.webp" srcset="/ejemplo/portada-sobremesa-640.webp 640w, /ejemplo/portada-sobremesa.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Sobremesa" loading="lazy"></figure>
-          <figure data-k="serigrafia"><img src="/ejemplo/portada-serigrafia.webp" srcset="/ejemplo/portada-serigrafia-640.webp 640w, /ejemplo/portada-serigrafia.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Serigrafía" loading="lazy"></figure>
-          <figure data-k="gaceta"><img src="/ejemplo/portada-gaceta.webp" srcset="/ejemplo/portada-gaceta-640.webp 640w, /ejemplo/portada-gaceta.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Gaceta" loading="lazy"></figure>
-          <figure data-k="cartel"><img src="/ejemplo/portada-cartel.webp" srcset="/ejemplo/portada-cartel-640.webp 640w, /ejemplo/portada-cartel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Cartel" loading="lazy"></figure>
-          <figure data-k="brasserie"><img src="/ejemplo/portada-brasserie.webp" srcset="/ejemplo/portada-brasserie-640.webp 640w, /ejemplo/portada-brasserie.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Brasserie" loading="lazy"></figure>
-          <figure data-k="sumi"><img src="/ejemplo/portada-sumi.webp" srcset="/ejemplo/portada-sumi-640.webp 640w, /ejemplo/portada-sumi.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Sumi" loading="lazy"></figure>
-          <figure data-k="editorial"><img src="/ejemplo/portada-editorial.webp" srcset="/ejemplo/portada-editorial-640.webp 640w, /ejemplo/portada-editorial.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Editorial" loading="lazy"></figure>
-          <figure data-k="azulejo"><img src="/ejemplo/portada-azulejo.webp" srcset="/ejemplo/portada-azulejo-640.webp 640w, /ejemplo/portada-azulejo.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Azulejo" loading="lazy"></figure>
-          <figure data-k="trattoria"><img src="/ejemplo/portada-trattoria.webp" srcset="/ejemplo/portada-trattoria-640.webp 640w, /ejemplo/portada-trattoria.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Trattoria" loading="lazy"></figure>
-          <figure data-k="ticket"><img src="/ejemplo/portada-ticket.webp" srcset="/ejemplo/portada-ticket-640.webp 640w, /ejemplo/portada-ticket.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Ticket" loading="lazy"></figure>
-          <figure data-k="deco"><img src="/ejemplo/portada-deco.webp" srcset="/ejemplo/portada-deco-640.webp 640w, /ejemplo/portada-deco.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Déco" loading="lazy"></figure>
-          <figure data-k="mantel"><img src="/ejemplo/portada-mantel.webp" srcset="/ejemplo/portada-mantel-640.webp 640w, /ejemplo/portada-mantel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Mantel" loading="lazy"></figure>
-          <figure data-k="barra"><img src="/ejemplo/portada-barra.webp" srcset="/ejemplo/portada-barra-640.webp 640w, /ejemplo/portada-barra.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Barra" loading="lazy"></figure>
-          <figure data-k="autor"><img src="/ejemplo/portada-autor.webp" srcset="/ejemplo/portada-autor-640.webp 640w, /ejemplo/portada-autor.webp 900w" sizes="(max-width: 900px) 92vw, 500px" alt="Carta en estilo Autor" loading="lazy"></figure>
+          <figure data-k="riviera" class="on"><img src="/ejemplo/portada-riviera.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Riviera"></figure>
+          <figure data-k="sobremesa"><img src="/ejemplo/portada-sobremesa.webp" srcset="/ejemplo/portada-sobremesa-640.webp 640w, /ejemplo/portada-sobremesa.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Sobremesa" loading="lazy"></figure>
+          <figure data-k="serigrafia"><img src="/ejemplo/portada-serigrafia.webp" srcset="/ejemplo/portada-serigrafia-640.webp 640w, /ejemplo/portada-serigrafia.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Serigrafía" loading="lazy"></figure>
+          <figure data-k="gaceta"><img src="/ejemplo/portada-gaceta.webp" srcset="/ejemplo/portada-gaceta-640.webp 640w, /ejemplo/portada-gaceta.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Gaceta" loading="lazy"></figure>
+          <figure data-k="cartel"><img src="/ejemplo/portada-cartel.webp" srcset="/ejemplo/portada-cartel-640.webp 640w, /ejemplo/portada-cartel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Cartel" loading="lazy"></figure>
+          <figure data-k="brasserie"><img src="/ejemplo/portada-brasserie.webp" srcset="/ejemplo/portada-brasserie-640.webp 640w, /ejemplo/portada-brasserie.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Brasserie" loading="lazy"></figure>
+          <figure data-k="sumi"><img src="/ejemplo/portada-sumi.webp" srcset="/ejemplo/portada-sumi-640.webp 640w, /ejemplo/portada-sumi.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Sumi" loading="lazy"></figure>
+          <figure data-k="editorial"><img src="/ejemplo/portada-editorial.webp" srcset="/ejemplo/portada-editorial-640.webp 640w, /ejemplo/portada-editorial.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Editorial" loading="lazy"></figure>
+          <figure data-k="azulejo"><img src="/ejemplo/portada-azulejo.webp" srcset="/ejemplo/portada-azulejo-640.webp 640w, /ejemplo/portada-azulejo.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Azulejo" loading="lazy"></figure>
+          <figure data-k="trattoria"><img src="/ejemplo/portada-trattoria.webp" srcset="/ejemplo/portada-trattoria-640.webp 640w, /ejemplo/portada-trattoria.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Trattoria" loading="lazy"></figure>
+          <figure data-k="ticket"><img src="/ejemplo/portada-ticket.webp" srcset="/ejemplo/portada-ticket-640.webp 640w, /ejemplo/portada-ticket.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Ticket" loading="lazy"></figure>
+          <figure data-k="deco"><img src="/ejemplo/portada-deco.webp" srcset="/ejemplo/portada-deco-640.webp 640w, /ejemplo/portada-deco.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Déco" loading="lazy"></figure>
+          <figure data-k="mantel"><img src="/ejemplo/portada-mantel.webp" srcset="/ejemplo/portada-mantel-640.webp 640w, /ejemplo/portada-mantel.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Mantel" loading="lazy"></figure>
+          <figure data-k="barra"><img src="/ejemplo/portada-barra.webp" srcset="/ejemplo/portada-barra-640.webp 640w, /ejemplo/portada-barra.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Barra" loading="lazy"></figure>
+          <figure data-k="autor"><img src="/ejemplo/portada-autor.webp" srcset="/ejemplo/portada-autor-640.webp 640w, /ejemplo/portada-autor.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Autor" loading="lazy"></figure>
         </div>
         <div class="pick-side">
           <div class="chips" role="tablist" aria-label="Estilos de carta" id="chips">
@@ -2815,7 +2821,7 @@ html.lenis-stopped{overflow:clip}
     <h2 class="cu-titulo" id="emailTit">¿A qué email te la asociamos?</h2>
     <p class="cu-sub">Descárgala gratis al momento. Solo te escribiremos si tienes algo pendiente con tu carta o si tú lo pides abajo.</p>
     <form id="emailForm" novalidate>
-      <label class="cu-campo"><span>Tu email</span><input type="email" id="emailDescarga" autocomplete="email" placeholder="tu@restaurante.com"></label>
+      <label class="cu-campo"><span>Tu email</span><input type="email" id="emailDescarga" autocomplete="email" spellcheck="false" placeholder="tu@restaurante.com"></label>
       <label class="cu-check"><input type="checkbox" id="emailNovedades"> <span>Quiero recibir ideas para vender más con mi carta (como mucho, dos al mes).</span></label>
       <button class="cu-btn" type="submit" id="emailBtn">Descargar mi carta gratis</button>
       <p class="cu-error" id="emailError" role="alert"></p>
@@ -3013,7 +3019,7 @@ html.lenis-stopped{overflow:clip}
   /* ── Visor: ver cada estilo en grande ── */
   const visor = { i: 0, lista: [] };
   (function prepararVisor() {
-    const ojo = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+    const ojo = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
     document.querySelectorAll('.t2-scard-grid .t2-scard').forEach((card, i) => {
       const estilo = ESTILOS_VALIDOS.find(e => card.classList.contains(e));
       if (!estilo) return;
@@ -3230,7 +3236,7 @@ html.lenis-stopped{overflow:clip}
         <img class="foto-thumb" src="${f.dataUrl}" alt="Página ${i + 1} de tu carta">
         <span class="foto-num">Pág. ${i + 1}</span>
         <button type="button" class="foto-remove" onclick="removePhoto(${i})" aria-label="Quitar la página ${i + 1}" title="Quitar esta página">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>
       </div>`).join('') + Array.from({ length: fotosCargando }, () => `
       <div class="foto-item cargando"><span class="foto-spin"></span><span class="foto-num">Subiendo…</span></div>`).join('');
@@ -3428,7 +3434,7 @@ html.lenis-stopped{overflow:clip}
     } else if (estado === 'listo') {
       eyebrow.textContent = 'A4 · LISTO PARA IMPRIMIR' + (logoDataUrl ? ' · CON TU LOGO' : '');
       titulo.textContent = 'Tu PDF está listo.';
-      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar PDF';
+      btn.innerHTML = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar PDF';
       btn.disabled = false;
     }
   }
@@ -3597,7 +3603,7 @@ html.lenis-stopped{overflow:clip}
     if (!esPro() && ajustesUsados >= AJUSTES_GRATIS) { mostrarPro('Has usado los 3 ajustes gratis de esta carta. Con Carta Pro son ilimitados.'); return; }
     const btn = document.getElementById('rehacerBtn');
     btn.classList.remove('activo');
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACIENDO…`;
+    btn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACIENDO…`;
     document.getElementById('msgStatus').style.display = 'none';
     document.getElementById('msgTyping').style.display = 'flex';
     startCountdown(10); scroll();
@@ -3605,11 +3611,11 @@ html.lenis-stopped{overflow:clip}
       const res = await fetch('/rehacer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carta: cartaActual, ajuste }) });
       const data = await res.json();
       stopCountdown();
-      if (!data.ok && data.pro) { stopCountdown(); ajustesUsados = AJUSTES_GRATIS; setEstado('listo'); pintarPlan(); btn.classList.add('activo'); btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`; mostrarPro(data.error); return; }
+      if (!data.ok && data.pro) { stopCountdown(); ajustesUsados = AJUSTES_GRATIS; setEstado('listo'); pintarPlan(); btn.classList.add('activo'); btn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`; mostrarPro(data.error); return; }
       if (!data.ok) throw new Error(data.error || 'Ha habido un problema al aplicar el ajuste. Inténtalo de nuevo.');
       document.getElementById('ajusteTxt').value = '';
       if (!esPro()) ajustesUsados++;
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
+      btn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
       mostrarCarta(data.carta);
     } catch (err) {
       stopCountdown();
@@ -3620,7 +3626,7 @@ html.lenis-stopped{overflow:clip}
       setEstado('listo');
       status(mensajeError);
       btn.classList.add('activo');
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
+      btn.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> REHACER CON ESTE AJUSTE`;
     }
   }
 
@@ -3838,7 +3844,7 @@ html.lenis-stopped{overflow:clip}
   (function () {
     const velo = document.createElement('div');
     velo.className = 'drop-velo';
-    velo.innerHTML = '<div class="drop-caja"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg><b>Suelta aquí tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span></div>';
+    velo.innerHTML = '<div class="drop-caja"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg><b>Suelta aquí tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span></div>';
     document.body.appendChild(velo);
     let capas = 0;
     const conArchivos = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');

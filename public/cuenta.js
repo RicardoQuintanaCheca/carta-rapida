@@ -408,4 +408,18 @@
   }
   const vigilar = () => { ponerOjos(document); new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && ponerOjos(n)))).observe(document.body, { childList: true, subtree: true }); };
   if (document.body) vigilar(); else document.addEventListener('DOMContentLoaded', vigilar);
+
+  // Con una ventana abierta, el tabulador da vueltas dentro de ella
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const velos = Array.from(document.querySelectorAll('.cu-velo:not([hidden])'));
+    const caja = velos.length && velos[velos.length - 1];
+    if (!caja) return;
+    const focos = Array.from(caja.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea, select, [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
+    if (!focos.length) return;
+    const primero = focos[0], ultimo = focos[focos.length - 1];
+    if (!caja.contains(document.activeElement)) { e.preventDefault(); primero.focus(); }
+    else if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+    else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+  });
 })();

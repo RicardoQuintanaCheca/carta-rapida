@@ -90,7 +90,7 @@ extra = (AQUI / 'nueva.css').read_text()
 # Imágenes reales
 cuerpo = cuerpo.replace('{{img:antes}}', '/ejemplo/antes-640.webp')
 # Estilos: la misma carta de ejemplo (Casa Pepe) compuesta con el motor real
-cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', lambda m: 'src="/ejemplo/portada-%s.webp" srcset="/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w" sizes="(max-width: 900px) 92vw, 500px"' % ((m.group(1),) * 3), cuerpo)
+cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', lambda m: 'src="/ejemplo/portada-%s.webp" srcset="/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273"' % ((m.group(1),) * 3), cuerpo)
 
 # Barra: enlaces reales
 cuerpo = cuerpo.replace('<a class="nlogo" href="#inicio"', '<a class="nlogo" href="/"')
@@ -203,5 +203,7 @@ html = head + '\n<style>\n' + css_viejo + '\n</style>\n<style>\n/* ═══ Dis
 </body>
 </html>
 '''
+# Los iconos son decorativos: que los lectores de pantalla no los lean
+html = re.sub(r'<svg(?![^>]*aria-hidden)', '<svg aria-hidden="true"', html)
 (REPO / SALIDA).write_text(html)
 print(SALIDA, len(html)//1024, 'KB ·', len(faqs), 'preguntas')
