@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta B2 · Bricolage — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* B · Producto: una sola familia (Archivo) llevada al extremo en ancho y peso; la foto se convierte en carta al hacer scroll. */
+:root{--bl:#FFFFFF;--ng:#0C0C0D;--gr:#6C6C72;--li:#E6E6EA;--su:#F3F3F5;--na:#FF4A1C;--f:'Bricolage Grotesque',system-ui,sans-serif;--m:clamp(18px,4vw,56px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bl);color:var(--ng);font:400 17px/1.55 var(--f);font-stretch:100%;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.cab{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px;padding:0 var(--m);background:rgba(255,255,255,.82);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5)}
+.marca{font-weight:800;font-stretch:112%;font-size:18px;letter-spacing:-.02em;text-decoration:none}.marca i{font-style:normal;color:var(--na)}
+.cab nav{display:flex;gap:6px;background:var(--su);padding:5px;border-radius:999px;font-size:14.5px;font-weight:500}
+.cab nav a{text-decoration:none;padding:8px 16px;border-radius:999px;color:var(--gr)}.cab nav a:hover{background:#fff;color:var(--ng)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:14px;border:0;cursor:pointer;font:650 16px var(--f);text-decoration:none;background:var(--ng);color:#fff;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .2s}
+.b:hover{transform:translateY(-2px);background:var(--na)}
+.b.na{background:var(--na)}.b.na:hover{background:var(--ng)}
+.b.peq{min-height:42px;padding:0 18px;font-size:15px;border-radius:12px}
+/* Escena de portada */
+.escena{position:relative;padding:clamp(28px,5vw,64px) var(--m) 0;text-align:center}
+h1{margin:0;font-weight:700;font-size:clamp(52px,12.4vw,226px);line-height:.86;letter-spacing:-.055em;text-wrap:balance}
+h1 span{display:block}
+h1 .l2{color:var(--na)}
+.sub{max-width:30em;margin:clamp(20px,2.6vw,34px) auto 0;font-size:clamp(17px,1.5vw,21px);color:var(--gr)}
+.acc{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:26px}
+.mesa{position:relative;width:min(100%,1100px);margin:clamp(30px,5vw,64px) auto 0;height:clamp(420px,62vw,760px)}
+.foto{position:absolute;left:50%;top:6%;width:min(40%,330px);translate:-118% 0;rotate:-9deg;border-radius:12px;overflow:hidden;box-shadow:0 40px 80px -36px rgba(0,0,0,.5)}
+.foto img{display:block;width:100%}
+.hoja{position:absolute;left:50%;top:0;width:min(58%,480px);translate:-22% 0;rotate:4deg;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,.06),0 60px 120px -50px rgba(0,0,0,.5)}
+.chip{position:absolute;z-index:3;left:50%;top:10%;translate:150% 0;display:flex;align-items:center;gap:10px;background:var(--ng);color:#fff;border-radius:14px;padding:12px 16px;font-size:14px;font-weight:650;text-align:left;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--na);box-shadow:0 0 0 5px rgba(255,74,28,.25)}
+.chip small{display:block;font-weight:500;color:#A9A9B2;font-size:12.5px}
+/* Cifras */
+.cifras{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--li);border-block:1px solid var(--li);margin-top:clamp(40px,6vw,90px)}
+.cifras div{background:#fff;padding:clamp(22px,3vw,44px) var(--m)}
+.cifras b{display:block;font-weight:700;font-stretch:125%;font-size:clamp(40px,6vw,96px);line-height:.9;letter-spacing:-.05em}
+.cifras span{color:var(--gr);font-size:15px}
+/* Herramienta */
+.zona{background:var(--ng);color:#fff;padding:clamp(60px,9vw,150px) var(--m);position:relative;overflow:clip}
+.zona::before{content:"";position:absolute;left:50%;top:0;width:min(1200px,150vw);aspect-ratio:1;translate:-50% -45%;background:radial-gradient(closest-side,rgba(255,74,28,.42),transparent);pointer-events:none}
+.zona > *{position:relative}
+h2{margin:0;font-weight:700;font-stretch:120%;font-size:clamp(38px,7vw,120px);line-height:.9;letter-spacing:-.05em;text-wrap:balance}
+h2 em{font-style:normal;color:#7C7C86}
+.app{max-width:1000px;margin:clamp(30px,5vw,64px) auto 0;background:#fff;color:var(--ng);border-radius:26px;padding:clamp(16px,2.4vw,30px);box-shadow:0 60px 140px -40px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08)}
+.app-barra{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 4px 16px;font-size:14px;font-weight:650}
+.pasos{display:flex;gap:6px}.pasos span{padding:7px 12px;border-radius:999px;background:var(--su);color:var(--gr)}.pasos span.on{background:var(--ng);color:#fff}
+.subir{display:grid;place-items:center;gap:8px;text-align:center;padding:clamp(34px,6vw,76px) 20px;border-radius:18px;background:var(--su);cursor:pointer;transition:background-color .2s;position:relative;overflow:hidden}
+.subir:hover{background:#FFEFE9}
+.subir .ic{width:68px;height:68px;border-radius:20px;background:var(--na);display:grid;place-items:center;color:#fff;box-shadow:0 16px 36px -12px rgba(255,74,28,.8)}
+.subir b{font-weight:800;font-stretch:112%;font-size:clamp(22px,2.6vw,32px);letter-spacing:-.03em;margin-top:8px}
+.subir > span:not(.b):not(.ic){color:var(--gr);font-size:14.5px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fila a{display:grid;place-items:center;min-height:52px;border-radius:14px;box-shadow:inset 0 0 0 1.5px var(--li);text-decoration:none;font-weight:600;font-size:15px}
+.fila a:hover{box-shadow:inset 0 0 0 1.5px var(--ng)}
+.cierre{padding:clamp(60px,10vw,160px) var(--m);text-align:center}
+.cierre h2 em{color:var(--na)}
+.entra{opacity:0;transform:translateY(26px);animation:entra 1s cubic-bezier(.2,.8,.2,1) forwards}
+.d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.34s}.d4{animation-delay:.5s}
+@keyframes entra{to{opacity:1;transform:none}}
+@media (max-width:860px){.cab nav{display:none}.mesa{height:clamp(380px,112vw,600px)}.foto{width:46%;translate:-112% 0}.hoja{width:64%;translate:-30% 0}.chip{top:auto;bottom:6%;translate:-50% 0}.cifras{grid-template-columns:1fr}.fila{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.entra{opacity:1;transform:none}}
+</style></head><body>
+<header class="cab"><a class="marca" href="#">Carta <i>Rápida</i></a><nav><a href="#zona">Pruébala</a><a href="#">Estilos</a><a href="#">Carta Pro</a><a href="#">Precios</a></nav><a class="b peq" href="#zona">Empezar gratis</a></header>
+<section class="escena">
+  <h1><span class="l1 entra">De una foto</span><span class="l2 entra d1">a tu carta.</span></h1>
+  <p class="sub entra d2">Hazle una foto a la carta que tienes. En 30 segundos la tienes maquetada como en una imprenta, en PDF A4.</p>
+  <div class="acc entra d3"><a class="b na" href="#zona">Sube una foto de tu carta</a><a class="b" style="background:var(--su);color:var(--ng)" href="#">Ver los 15 estilos</a></div>
+  <div class="mesa entra d4" id="mesa">
+    <figure class="foto" id="foto" style="margin:0"><img src="/ejemplo/antes-640.webp" alt="La carta original, hecha en Word"></figure>
+    <div class="hoja" id="hoja" data-hoja="#estiloB"></div>
+    <div class="chip" id="chip"><i></i><div>PDF A4 listo<small>Estilo <span id="estiloB">Riviera</span></small></div></div>
+  </div>
+</section>
+<section class="cifras"><div><b>30 s</b><span>de la foto al PDF</span></div><div><b>15</b><span>estilos de imprenta</span></div><div><b>0</b><span>platos que teclear</span></div></section>
+<section class="zona" id="zona">
+  <h2 style="text-align:center">Pruébala ahora. <em>Sin registrarte.</em></h2>
+  <div class="app">
+    <div class="app-barra"><span>Carta Rápida</span><div class="pasos"><span class="on">1 Tu carta</span><span>2 Estilo</span><span>3 PDF</span></div></div>
+    <label class="subir"><span class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg></span><b>Haz una foto a tu carta</b><span>o arrástrala aquí · JPG, PNG o WEBP · hasta 5 páginas</span></label>
+    <div class="fila"><a href="#">Pegar el texto</a><a href="#">Probar con un ejemplo</a></div>
+  </div>
+</section>
+<section class="cierre"><h2>Deja de maquetar. <em>Empieza a vender.</em></h2><div class="acc" style="margin-top:34px"><a class="b na" href="#zona">Sube una foto de tu carta</a></div></section>
+<script src="/disenos/comun.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+// Al bajar: la foto se aparta y la carta se endereza y crece hasta ocupar el centro
+if (window.gsap && window.ScrollTrigger && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  gsap.registerPlugin(ScrollTrigger);
+  const st = { trigger: '#mesa', start: 'top 75%', end: 'bottom 55%', scrub: .6 };
+  gsap.to('#foto', { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', scrollTrigger: st });
+  gsap.to('#hoja', { xPercent: -28, rotate: 0, scale: 1.14, ease: 'none', scrollTrigger: st });
+  gsap.to('#chip', { xPercent: -40, ease: 'none', scrollTrigger: st });
+  gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 85%', once: true } });
+  gsap.from('.app', { y: 90, scale: .92, ease: 'none', scrollTrigger: { trigger: '.app', start: 'top 100%', end: 'top 55%', scrub: .6 } });
+}
+</script>
+</body></html>
