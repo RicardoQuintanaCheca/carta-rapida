@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
 <link rel="stylesheet" href="/cuenta.css">
 <style>
-  :root { --ink: #16130F; --cta: #CC4416; --coral: #CC4416; --crema: #FFFFFF; --linea: #EAE5DE; --gris: #6E675F; --tinta-coral: #B4400E; --suave: #F6F3EE; --f: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  :root { color-scheme: light; --ink: #16130F; --cta: #CC4416; --coral: #CC4416; --crema: #FFFFFF; --linea: #EAE5DE; --gris: #6E675F; --tinta-coral: #B4400E; --suave: #F6F3EE; --f: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif; }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body { background: #fff; color: var(--ink); font-family: var(--f); font-size: 15.5px; line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
@@ -73,9 +73,9 @@
   .tarjeta-img { aspect-ratio: 210 / 190; background-color: var(--suave); background-position: center 18px; background-size: 78% auto; background-repeat: no-repeat; border-radius: 14px; cursor: pointer; transition: background-color .2s, background-position .35s cubic-bezier(.2,.8,.2,1); }
   .tarjeta:hover .tarjeta-img { background-color: #EFEAE2; }
   .tarjeta-img { position: relative; overflow: hidden; }
-  .tarjeta-img iframe { position: absolute; top: 18px; border: 0; pointer-events: none; transform-origin: top left; opacity: 0; transition: opacity .35s ease, top .35s cubic-bezier(.2,.8,.2,1); }
+  .tarjeta-img iframe { position: absolute; top: 18px; border: 0; pointer-events: none; transform-origin: top left; opacity: 0; transition: opacity .35s ease, translate .35s cubic-bezier(.2,.8,.2,1); }
   .tarjeta-img.lista iframe { opacity: 1; }
-  .tarjeta:hover .tarjeta-img iframe { top: 10px; }
+  .tarjeta:hover .tarjeta-img iframe { translate: 0 -8px; }
   .tarjeta-cuerpo { padding: 14px 2px 0; display: flex; flex-direction: column; gap: 3px; flex: 1; }
   .tarjeta-tit { font-weight: 700; font-size: 17px; letter-spacing: -.02em; line-height: 1.25; }
   .tarjeta-meta { font-size: 13.5px; color: var(--gris); }
@@ -156,7 +156,7 @@
 
   .vista-cab { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
   .vista-info { font-size: 13.5px; color: var(--gris); flex: 1; }
-  .vista-marco { position: relative; background: var(--suave); border-radius: 18px; padding: 22px; overflow: hidden; max-height: calc(100vh - 230px); overflow-y: auto; }
+  .vista-marco { position: relative; background: var(--suave); border-radius: 18px; padding: 22px; overflow: hidden; max-height: calc(100vh - 230px); overflow-y: auto; overscroll-behavior: contain; }
   .vista-escala { margin: 0 auto; position: relative; }
   .vista-escala iframe { border: 0; transform-origin: top left; display: block; background: transparent; }
   .vista-cargando { position: absolute; top: 12px; right: 14px; font-size: 12.5px; font-weight: 600; background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 8px; display: none; }
@@ -220,7 +220,7 @@
 </header>
 
 <main class="envoltura" id="app">
-  <div class="cargando-pag">Cargando…</div>
+  <div class="cargando-pag" role="status">Cargando…</div>
 </main>
 
 <script src="/cuenta.js"></script>
@@ -303,7 +303,7 @@
 
   async function pintarLista() {
     ed = null;
-    app.innerHTML = '<div class="cargando-pag">Cargando tus cartas…</div>';
+    app.innerHTML = '<div class="cargando-pag" role="status">Cargando tus cartas…</div>';
     const d = await Cuenta.api('/cartas');
     if (d.status === 401) { Cuenta.poner(null); return; }
     const cartas = d.cartas || [];
@@ -327,7 +327,7 @@
         </article>`).join('')}
         <a class="nueva-tarjeta" href="/#herramienta"><span class="mas">+</span>Nueva carta<small>Sube una foto y la guardas aquí</small></a>
       </div>` : `<div class="vacio"><h2>Tu primera carta, en 30 segundos</h2><p>Hazle una foto a tu carta, elige estilo y pulsa «Guardar en mis cartas». Aparecerá aquí para editarla cuando quieras.</p><a class="btn primario" href="/#herramienta">Hacer mi carta</a></div>`}`;
-    app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') el.click(); }));
+    app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } }));
     miniaturas();
   }
 
@@ -375,7 +375,7 @@
 
   // ── Editor ──
   async function abrirEditor(id) {
-    app.innerHTML = '<div class="cargando-pag">Abriendo tu carta…</div>';
+    app.innerHTML = '<div class="cargando-pag" role="status">Abriendo tu carta…</div>';
     const d = await Cuenta.api('/cartas/' + id);
     if (!d.ok) { Cuenta.aviso(d.error || 'No encontramos esa carta.'); location.hash = ''; return; }
     const carta = d.carta;
@@ -397,7 +397,7 @@
       <div class="ed-barra">
         <button class="volver" type="button" onclick="location.hash=''">← Mis cartas</button>
         <input class="ed-titulo" id="edTitulo" value="${esc(ed.titulo)}" maxlength="80" aria-label="Nombre de esta carta en tu panel">
-        <span class="guardado" id="guardado">Guardado</span>
+        <span class="guardado" id="guardado" role="status">Guardado</span>
       </div>
       <div id="bloqueo"></div>
       <div class="pestanas"><div class="segmento"><button type="button" class="on" data-p="form">Editar</button><button type="button" data-p="vista">Ver carta</button></div></div>
@@ -452,8 +452,8 @@
         </div>
 
         <div class="ed-vista">
-          <div class="vista-cab"><span class="vista-info" id="vistaInfo">Componiendo…</span></div>
-          <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando">Actualizando…</div></div>
+          <div class="vista-cab"><span class="vista-info" id="vistaInfo" aria-live="polite">Componiendo…</span></div>
+          <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
           <button class="btn primario descargar" type="button" id="descargar">Descargar PDF</button>
           <div class="nota-vista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
         </div>
@@ -474,7 +474,7 @@
     const seg = document.getElementById('segCab');
     const pintarSeg = () => {
       const conLogo = !!(ed.logo && ed.cabecera === 'logo');
-      seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === (conLogo ? 'logo' : 'nombre')));
+      seg.querySelectorAll('button').forEach(b => { const on = b.dataset.v === (conLogo ? 'logo' : 'nombre'); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
       document.getElementById('cabNombre').hidden = conLogo;
       document.getElementById('cabLogo').hidden = !conLogo;
     };
@@ -523,18 +523,18 @@
       <div class="seccion" data-si="${si}">
         <div class="seccion-cab">
           <input class="campo grande" data-s="nombre" value="${esc(s.nombre)}" placeholder="Nombre de la sección (Entrantes, Carnes…)" maxlength="80" aria-label="Nombre de la sección">
-          <button class="mini-btn" type="button" data-acc="s-arriba" title="Subir sección" ${si === 0 ? 'disabled' : ''}>↑</button>
-          <button class="mini-btn" type="button" data-acc="s-abajo" title="Bajar sección" ${si === S.length - 1 ? 'disabled' : ''}>↓</button>
-          <button class="mini-btn rojo" type="button" data-acc="s-borrar" title="Borrar sección">✕</button>
+          <button class="mini-btn" type="button" data-acc="s-arriba" title="Subir sección" aria-label="Subir sección" ${si === 0 ? 'disabled' : ''}>↑</button>
+          <button class="mini-btn" type="button" data-acc="s-abajo" title="Bajar sección" aria-label="Bajar sección" ${si === S.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="mini-btn rojo" type="button" data-acc="s-borrar" title="Borrar sección" aria-label="Borrar sección">✕</button>
         </div>
         ${(s.platos || []).map((p, pi) => `
           <div class="plato" data-pi="${pi}">
             <input class="campo nombre" data-p="nombre" value="${esc(p.nombre)}" placeholder="Plato" maxlength="120" aria-label="Nombre del plato">
             <input class="campo precio" data-p="precio" value="${esc(p.precio)}" placeholder="Precio" maxlength="20" inputmode="decimal" aria-label="Precio">
             <div class="acciones">
-              <button class="mini-btn" type="button" data-acc="p-arriba" title="Subir" ${pi === 0 ? 'disabled' : ''}>↑</button>
-              <button class="mini-btn" type="button" data-acc="p-abajo" title="Bajar" ${pi === s.platos.length - 1 ? 'disabled' : ''}>↓</button>
-              <button class="mini-btn rojo" type="button" data-acc="p-borrar" title="Quitar plato">✕</button>
+              <button class="mini-btn" type="button" data-acc="p-arriba" title="Subir" aria-label="Subir" ${pi === 0 ? 'disabled' : ''}>↑</button>
+              <button class="mini-btn" type="button" data-acc="p-abajo" title="Bajar" aria-label="Bajar" ${pi === s.platos.length - 1 ? 'disabled' : ''}>↓</button>
+              <button class="mini-btn rojo" type="button" data-acc="p-borrar" title="Quitar plato" aria-label="Quitar plato">✕</button>
             </div>
             <input class="campo desc" data-p="descripcion" value="${esc(p.descripcion)}" placeholder="Descripción (opcional)" maxlength="200" aria-label="Descripción">
             <div class="mas-datos">
@@ -583,7 +583,7 @@
     cont.innerHTML = V.map((s, i) => `<div class="servicio" data-i="${i}">
       <input class="campo" data-v="nombre" value="${esc(s.nombre)}" placeholder="Pan y cubierto" maxlength="60" aria-label="Concepto">
       <input class="campo precio" data-v="precio" value="${esc(s.precio)}" placeholder="Precio" maxlength="20" inputmode="decimal" aria-label="Precio">
-      <button class="mini-btn rojo" type="button" title="Quitar">✕</button></div>`).join('');
+      <button class="mini-btn rojo" type="button" title="Quitar" aria-label="Quitar">✕</button></div>`).join('');
     cont.querySelectorAll('.servicio').forEach(el => {
       const i = +el.dataset.i;
       el.querySelectorAll('[data-v]').forEach(inp => inp.oninput = () => { V[i][inp.dataset.v] = inp.value; cambio(); });

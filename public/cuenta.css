@@ -120,3 +120,5 @@
 .cu-o { color: #8F877E; }
 .cu-o::before, .cu-o::after { background: #EAE5DE; }
 @media (max-width: 520px) { .cu-caja { padding: 26px 20px 22px; border-radius: 18px; } .cu-titulo { font-size: 25px; } }
+
+.cu-velo { overscroll-behavior: contain; }
