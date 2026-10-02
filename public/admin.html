@@ -8,41 +8,42 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  :root { --tinta: #0E0E0E; --crema: #FAF7F2; --linea: #E8E1D6; --gris: #6E6E6E; --cta: #E2561A; --coral-texto: #C2410C; --verde: #2E7D32; }
-  body { margin: 0; background: var(--crema); color: var(--tinta); font-family: 'Inter', system-ui, sans-serif; font-size: 14.5px; }
+  :root { --tinta: #16130F; --crema: #FFFFFF; --linea: #EAE5DE; --gris: #6E675F; --cta: #CC4416; --coral-texto: #B4400E; --verde: #1F7A45; --suave: #F6F3EE; }
+  body { margin: 0; background: var(--crema); color: var(--tinta); font-family: 'Manrope', system-ui, sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
   .barra { background: var(--tinta); color: #fff; }
   .barra-in { max-width: 1320px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .barra b { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; }
-  .barra span { font: 600 11px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #FFB38A; }
+  .barra b { font-weight: 800; font-size: 19px; letter-spacing: -.03em; }
+  .barra span { font-weight: 600; font-size: 14px; color: #FF9D73; }
   .barra .hueco { flex: 1; }
-  .barra a { color: #fff; font-size: 13.5px; text-decoration: none; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 7px 13px; }
+  .barra a { color: #fff; font-size: 13.5px; text-decoration: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); border-radius: 8px; padding: 8px 13px; font-weight: 600; }
   .barra a:hover { background: #fff; color: var(--tinta); }
   main { max-width: 1320px; margin: 0 auto; padding: 24px 20px 70px; }
-  h2 { font: 600 11px 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--coral-texto); margin: 30px 0 12px; }
+  h2 { font-size: 21px; font-weight: 750; letter-spacing: -.03em; color: var(--tinta); margin: 44px 0 14px; padding-top: 24px; border-top: 1px solid var(--linea); }
   .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-  .kpi { background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; }
-  .kpi.clave { border: 2px solid var(--tinta); box-shadow: 0 4px 0 var(--tinta); }
-  .kpi b { display: block; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -.02em; line-height: 1.1; }
+  .kpi { background: var(--suave); border-radius: 12px; padding: 16px 18px; }
+  .kpi.clave { background: var(--tinta); color: #fff; } .kpi.clave span, .kpi.clave small { color: #CFC6BB; }
+  .kpi b { display: block; font-weight: 750; font-size: 34px; letter-spacing: -.045em; line-height: 1.1; font-variant-numeric: tabular-nums; }
   .kpi span { font-size: 12.5px; color: var(--gris); }
   .kpi small { display: block; font-size: 12px; color: var(--gris); margin-top: 4px; }
   .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .caja { background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; overflow: auto; }
+  .caja { background: #fff; box-shadow: inset 0 0 0 1px var(--linea); border-radius: 12px; padding: 16px 18px; overflow: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  th { text-align: left; font: 600 10.5px 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--gris); padding: 8px 10px; border-bottom: 1.5px solid var(--linea); white-space: nowrap; position: sticky; top: 0; background: #fff; }
-  td { padding: 9px 10px; border-bottom: 1px solid #F1ECE4; vertical-align: top; }
+  th { text-align: left; font-weight: 700; font-size: 13px; color: var(--gris); padding: 8px 10px; border-bottom: 1.5px solid var(--linea); white-space: nowrap; position: sticky; top: 0; background: #fff; }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; }
   td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  tr:hover td { background: #FFFBF7; }
-  .tabla { max-height: 520px; overflow: auto; background: #fff; border: 1.5px solid var(--linea); border-radius: 16px; }
-  .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .pill.pro { background: #E7F5E8; color: var(--verde); }
-  .pill.prueba { background: #FFF1E8; color: var(--coral-texto); }
-  .pill.gratis { background: #F1EFE8; color: var(--gris); }
+  tr:hover td { background: var(--suave); }
+  .tabla { max-height: 520px; overflow: auto; background: #fff; box-shadow: inset 0 0 0 1px var(--linea); border-radius: 12px; }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .pill.pro { background: #EAF3EC; color: var(--verde); }
+  .pill.prueba { background: #FDF1EA; color: var(--coral-texto); }
+  .pill.gratis { background: var(--suave); color: var(--gris); }
   .herr { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
-  .herr input { flex: 1; min-width: 200px; padding: 10px 12px; border: 1.5px solid var(--linea); border-radius: 10px; font: 14px 'Inter', sans-serif; }
-  .herr a { font-weight: 600; color: var(--tinta); border: 1.5px solid var(--tinta); border-radius: 999px; padding: 8px 14px; text-decoration: none; font-size: 13px; white-space: nowrap; }
+  .herr input { flex: 1; min-width: 200px; padding: 10px 12px; border: none; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 10px; font: 15px 'Manrope', sans-serif; outline: none; }
+  .herr input:focus { box-shadow: inset 0 0 0 1.5px var(--tinta); }
+  .herr a { font-weight: 600; color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 10px; padding: 9px 14px; text-decoration: none; font-size: 13px; white-space: nowrap; }
   .herr a:hover { background: var(--tinta); color: #fff; }
   .barras div { display: grid; grid-template-columns: 110px 1fr 40px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
   .barras i { display: block; height: 10px; border-radius: 99px; background: var(--cta); min-width: 3px; }

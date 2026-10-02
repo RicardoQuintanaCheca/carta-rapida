@@ -44,12 +44,13 @@ function esAdmin(req) {
 function paginaCodigo(email) {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Verificación · Administración</title>
-<style>body{margin:0;font-family:Inter,system-ui,sans-serif;background:#FAF7F2;color:#0E0E0E;display:grid;place-items:center;min-height:100vh;padding:16px;box-sizing:border-box}
-.c{background:#fff;max-width:420px;width:100%;border-radius:18px;padding:28px;border:1.5px solid #E8E1D6}
-h1{font-size:22px;margin:0 0 8px}p{color:#555;font-size:14.5px;line-height:1.5;margin:0 0 16px}
-input{width:100%;box-sizing:border-box;font-size:28px;letter-spacing:.4em;text-align:center;padding:12px;border:1.5px solid #E8E1D6;border-radius:12px;font-variant-numeric:tabular-nums}
-button{width:100%;margin-top:12px;padding:14px;border:0;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:#0E0E0E;color:#fff}
-button.sec{background:#fff;color:#0E0E0E;border:1.5px solid #0E0E0E}.m{min-height:20px;font-size:13.5px;margin-top:10px}.m.err{color:#B42318}.m.ok{color:#2E7D32}</style></head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
+<style>body{margin:0;font-family:Manrope,system-ui,sans-serif;background:#F6F3EE;color:#16130F;display:grid;place-items:center;min-height:100vh;padding:16px;box-sizing:border-box}
+.c{background:#fff;max-width:440px;width:100%;border-radius:18px;padding:34px 30px;box-shadow:0 40px 80px -40px rgba(22,19,15,.35)}
+h1{font-size:28px;letter-spacing:-.035em;font-weight:750;line-height:1.1;margin:0 0 10px}p{color:#6E675F;font-size:14.5px;line-height:1.5;margin:0 0 16px}
+input{width:100%;box-sizing:border-box;font-size:28px;letter-spacing:.4em;text-align:center;padding:12px;border:0;box-shadow:inset 0 0 0 1.5px #EAE5DE;border-radius:10px;font-variant-numeric:tabular-nums;font-family:inherit;font-weight:700;outline:none}input:focus{box-shadow:inset 0 0 0 1.5px #16130F}
+button{width:100%;margin-top:12px;min-height:52px;border:0;border-radius:10px;font:700 16px Manrope,system-ui,sans-serif;cursor:pointer;background:#CC4416;color:#fff}
+button.sec{background:#fff;color:#16130F;box-shadow:inset 0 0 0 1.5px #EAE5DE}.m{min-height:20px;font-size:13.5px;margin-top:10px}.m.err{color:#B3261E}.m.ok{color:#1F7A45}</style></head>
 <body><div class="c"><h1>Verifica que eres tú</h1>
 <p>Para entrar en la administración te enviamos un código de 6 cifras a <b>${esc(email)}</b>. Caduca en ${MIN_CODIGO} minutos.</p>
 <button type="button" class="sec" id="enviar">Enviarme el código</button>

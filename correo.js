@@ -62,15 +62,18 @@ async function enviarCorreo({ para, asunto, html, texto, adjuntos = [], responde
 // Plantilla sencilla, fondo blanco, un botón naranja
 function plantilla({ titulo, texto, boton, enlace, pie }) {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  return `<!doctype html><html lang="es"><body style="margin:0;background:#FAF7F2;font-family:Arial,Helvetica,sans-serif;color:#1C1917">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F2;padding:32px 12px"><tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#FFFFFF;border-radius:16px;padding:36px 32px">
-<tr><td style="font-size:14px;font-weight:bold;letter-spacing:1px;color:#C2410C;text-transform:uppercase">Carta Rápida</td></tr>
-<tr><td style="padding-top:14px;font-size:24px;font-weight:bold;line-height:1.25">${esc(titulo)}</td></tr>
-<tr><td style="padding-top:14px;font-size:16px;line-height:1.55;color:#44403C">${esc(texto)}</td></tr>
-${enlace ? `<tr><td style="padding-top:26px"><a href="${esc(enlace)}" style="display:inline-block;background:#E2561A;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:16px;padding:14px 26px;border-radius:999px">${esc(boton)}</a></td></tr>` : ''}
-<tr><td style="padding-top:26px;font-size:13px;line-height:1.5;color:#78716C">${esc(pie)}${enlace ? `<br><br>Si el botón no funciona, copia este enlace en el navegador:<br><span style="word-break:break-all">${esc(enlace)}</span>` : ''}</td></tr>
-</table></td></tr></table></body></html>`;
+  const F = "font-family:Manrope,'Helvetica Neue',Helvetica,Arial,sans-serif";
+  return `<!doctype html><html lang="es"><body style="margin:0;background:#F6F3EE;${F};color:#16130F">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F6F3EE;padding:36px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:540px;background:#FFFFFF;border-radius:14px;padding:40px 36px">
+<tr><td style="${F};font-size:19px;font-weight:800;letter-spacing:-0.5px;color:#16130F">Carta <span style="color:#CC4416">Rápida</span></td></tr>
+<tr><td style="${F};padding-top:28px;font-size:28px;font-weight:bold;line-height:1.15;letter-spacing:-0.8px">${esc(titulo)}</td></tr>
+<tr><td style="${F};padding-top:14px;font-size:16.5px;line-height:1.6;color:#6E675F">${esc(texto)}</td></tr>
+${enlace ? `<tr><td style="padding-top:28px"><a href="${esc(enlace)}" style="${F};display:inline-block;background:#CC4416;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:16px;padding:16px 26px;border-radius:10px">${esc(boton)}</a></td></tr>` : ''}
+<tr><td style="${F};padding-top:30px;margin-top:30px;font-size:13.5px;line-height:1.55;color:#6E675F"><div style="border-top:1px solid #EAE5DE;padding-top:20px">${esc(pie)}${enlace ? `<br><br>Si el botón no funciona, copia este enlace en el navegador:<br><span style="word-break:break-all;color:#B4400E">${esc(enlace)}</span>` : ''}</div></td></tr>
+</table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:540px"><tr><td style="${F};padding:18px 8px 0;font-size:12.5px;line-height:1.5;color:#8F877E">Carta Rápida es de Kartia, portamenús hechos a mano en España · cartarapida.kartia.es</td></tr></table>
+</td></tr></table></body></html>`;
 }
 
 module.exports = { enviarCorreo, plantilla, CORREO_ACTIVO };
