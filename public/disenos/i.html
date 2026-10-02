@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta I · Escaparate — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Geist:wght@300..600&family=Geist+Mono:wght@400..500&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* I · Escaparate: Carta Rápida como un pequeño taller tipográfico de barrio.
+   Marca con voz propia (hueso cálido, tinta profunda, un rojo editorial puntual).
+   Las cartas son la obra; la marca es el marco que las deja respirar. */
+
+@property --p-val{syntax:'<number>';inherits:true;initial-value:0}
+
+:root{
+  --bone:#F7F6F3;--paper:#FBFBFA;--ink:#1A1816;--mute:#78736B;
+  --line:#EAE7E0;--line-fuerte:#D7D3CB;
+  --acento:#9F2F2D;--acento-bg:#FDEBEC;
+  --serif:'Fraunces','Instrument Serif','Lyon Text',serif;
+  --sans:'Geist','SF Pro Display','Helvetica Neue',system-ui,sans-serif;
+  --mono:'Geist Mono','SF Mono','JetBrains Mono',monospace;
+  --m:clamp(20px,4.5vw,64px);
+  --w:min(1240px, calc(100% - 2 * var(--m)));
+  --r:12px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--bone);color:var(--ink);font:400 16.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit}
+img{display:block;max-width:100%}
+
+/* Luz ambiental cálida fija, muy sutil */
+body::after{
+  content:"";position:fixed;inset:-10% -10% auto -10%;height:70vh;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 60% at 72% 28%,rgba(255,230,195,0.045),transparent 62%),
+    radial-gradient(50% 50% at 12% 60%,rgba(159,47,45,0.025),transparent 70%);
+}
+
+/* ====== HEADER ====== */
+.cab{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  height:72px;padding:0 var(--m);
+  background:color-mix(in srgb, var(--bone) 86%, transparent);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid transparent;transition:border-color .3s var(--ease);
+}
+.cab.pegado{border-color:var(--line)}
+.marca{display:inline-flex;align-items:baseline;gap:12px;font:450 20px/1 var(--serif);letter-spacing:-.015em;text-decoration:none;font-variation-settings:"opsz" 36}
+.marca::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--ink);display:inline-block;transform:translateY(1px)}
+.marca small{font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.cab nav{display:flex;gap:30px;font-size:14px}
+.cab nav a{text-decoration:none;color:var(--mute);transition:color .2s}
+.cab nav a:hover{color:var(--ink)}
+
+/* ====== BOTONES ====== */
+.b{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:50px;padding:0 24px;border-radius:6px;border:0;cursor:pointer;
+  font:500 15px var(--sans);text-decoration:none;white-space:nowrap;
+  background:var(--ink);color:#fff;
+  transition:background-color .2s var(--ease),transform .15s var(--ease);
+}
+.b:hover{background:#2A2724}
+.b:active{transform:scale(.98)}
+.b.linea{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-fuerte)}
+.b.linea:hover{background:var(--ink);color:#fff;box-shadow:none}
+.b.peq{min-height:40px;padding:0 16px;font-size:13.5px}
+.b .fl{display:inline-block;transition:transform .25s var(--ease)}
+.b:hover .fl{transform:translateX(3px)}
+
+/* ====== HERO ====== */
+.hero{
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  gap:clamp(30px,5vw,80px);align-items:center;
+  max-width:var(--w);margin:0 auto;padding:clamp(30px,5vw,70px) 0 clamp(50px,7vw,100px);
+}
+.ante{display:inline-flex;align-items:center;gap:10px;font:500 11.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ante::before{content:"";width:18px;height:1px;background:var(--mute)}
+h1{
+  margin:22px 0 0;
+  font:300 clamp(52px,8vw,124px)/.95 var(--serif);
+  letter-spacing:-.035em;font-variation-settings:"opsz" 144;
+  text-wrap:balance;
+}
+h1 em,h2 em{font-style:italic;color:var(--mute);font-weight:300}
+.entrada{font-size:clamp(16px,1.3vw,19px);max-width:30em;margin:clamp(22px,2.5vw,30px) 0 0;color:#403D37}
+.acc{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;align-items:center}
+.nota{font:450 13px/1 var(--mono);letter-spacing:.04em;color:var(--mute);margin:16px 0 0}
+
+/* Escaparate del hero: carta flotando con pila de hojas detrás */
+.escaparate{position:relative;isolation:isolate;padding:clamp(30px,4vw,56px) clamp(10px,2vw,30px) 36px}
+.escaparate::before,.escaparate::after{
+  content:"";position:absolute;top:14px;bottom:14px;border-radius:6px;z-index:-1;
+  box-shadow:0 1px 2px rgba(0,0,0,.03);
+}
+.escaparate::before{left:4%;right:28%;background:#F1EEE7;transform:rotate(-3.2deg)}
+.escaparate::after{left:28%;right:4%;background:#EDEAE2;transform:rotate(3.2deg)}
+.hoja{
+  aspect-ratio:210/297;max-width:min(360px,100%);margin:0 auto;
+  border-radius:4px;background:#fff;position:relative;z-index:1;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 30px 60px -30px rgba(26,24,22,.16);
+}
+.estilo-pill{
+  position:absolute;left:50%;bottom:4px;transform:translateX(-50%);z-index:3;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:9999px;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 24px -10px rgba(0,0,0,.14);
+  font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+}
+.estilo-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acento)}
+
+/* ====== CINTA (meta datos técnicos) ====== */
+.cinta{
+  margin:0 var(--m);padding:16px 0;overflow:hidden;white-space:nowrap;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+}
+.cinta ul{display:inline-flex;gap:48px;margin:0;padding:0;list-style:none;animation:deslizar 72s linear infinite;padding-right:48px}
+.cinta li{display:inline-flex;align-items:center;gap:14px}
+.cinta li::after{content:"";display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--line-fuerte);margin-left:48px}
+.cinta:hover ul{animation-play-state:paused}
+@keyframes deslizar{to{transform:translateX(-50%)}}
+
+/* ====== TRANSFORMACIÓN (pin con progreso de scroll) ====== */
+.transform{margin-top:clamp(40px,6vw,80px)}
+.transform-pin{position:relative;height:300vh}
+.transform-pin > .pin{
+  position:sticky;top:0;height:100vh;overflow:hidden;background:var(--paper);
+  display:grid;place-items:center;
+}
+.transform-pin > .pin::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(55% 45% at 22% 78%,rgba(159,47,45,0.04),transparent 65%),
+    radial-gradient(55% 45% at 82% 18%,rgba(255,230,195,0.09),transparent 70%);
+}
+.transform-head{position:absolute;top:clamp(28px,5vw,56px);left:0;right:0;z-index:3;text-align:center;padding:0 var(--m)}
+.transform-head h2{margin:14px auto 0;max-width:18ch;font:300 clamp(32px,4.4vw,60px)/1.02 var(--serif);letter-spacing:-.025em;font-variation-settings:"opsz" 144;text-wrap:balance}
+.transform-head p{color:var(--mute);font-size:14.5px;margin:12px 0 0}
+.escena{position:relative;width:100%;height:100%;z-index:1}
+.pieza{position:absolute;top:50%;left:50%;transform-origin:center;will-change:transform,opacity}
+.pieza img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6px;background:#fff}
+.pieza.antes{
+  width:clamp(240px,30vw,400px);aspect-ratio:3/4;
+  --p:var(--p-val,0);
+  --tx:calc(-50% + var(--p) * -58vw);
+  --ty:calc(-50% + var(--p) * -10vh);
+  --rot:calc(-2deg + var(--p) * -14deg);
+  --sc:calc(1 - var(--p) * .55);
+  --op:calc(1 - var(--p) * 1.05);
+  transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(var(--sc));
+  opacity:var(--op);
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 40px 60px -30px rgba(0,0,0,.14);
+}
+.pieza.antes img{filter:contrast(.95) saturate(.82)}
+.pieza.antes figcaption{
+  position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);
+  font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);
+}
+.pieza.despues{
+  width:clamp(220px,28vw,380px);aspect-ratio:210/297;
+  --p:var(--p-val,0);
+  --tx:calc(-50% + (1 - var(--p)) * 56vw);
+  --ty:calc(-50% + (1 - var(--p)) * 7vh);
+  --rot:calc((1 - var(--p)) * 9deg);
+  --sc:calc(.6 + var(--p) * .42);
+  transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(var(--sc));
+  box-shadow:0 2px 4px rgba(0,0,0,.03),0 60px 100px -40px rgba(26,24,22,.2);
+  background:#fff;
+}
+.marca-impresa{
+  position:absolute;left:50%;bottom:clamp(28px,5vw,56px);transform:translateX(-50%);z-index:3;
+  display:inline-flex;align-items:center;gap:12px;
+  padding:11px 18px;border-radius:9999px;
+  background:color-mix(in srgb, #fff 78%, transparent);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:inset 0 0 0 1px var(--line),0 1px 2px rgba(0,0,0,.04);
+  font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);
+  opacity:0;transition:opacity .5s var(--ease);
+}
+.transform-pin.listo .marca-impresa{opacity:1}
+
+/* ====== GALERÍA (bento asimétrico) ====== */
+.galeria{max-width:var(--w);margin:clamp(70px,10vw,140px) auto 0}
+.galeria-cab{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end;margin-bottom:clamp(28px,3vw,40px)}
+.galeria-cab h2{margin:0;font:300 clamp(36px,5vw,72px)/1 var(--serif);letter-spacing:-.03em;font-variation-settings:"opsz" 144;text-wrap:balance}
+.bento{display:grid;gap:14px;grid-template-columns:repeat(12,1fr);grid-auto-rows:min(14vw,180px)}
+.pza{position:relative;overflow:hidden;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .2s var(--ease)}
+.pza:hover{box-shadow:inset 0 0 0 1px var(--line-fuerte),0 2px 8px rgba(0,0,0,.03)}
+.pza img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .6s var(--ease)}
+.pza:hover img{transform:scale(1.02)}
+.pza figcaption{
+  position:absolute;left:12px;bottom:12px;z-index:2;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 11px;border-radius:9999px;
+  background:color-mix(in srgb, #fff 92%, transparent);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+}
+.pza figcaption::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acento)}
+.pza:nth-child(1){grid-column:1/span 5;grid-row:span 3}
+.pza:nth-child(2){grid-column:6/span 4;grid-row:span 2}
+.pza:nth-child(3){grid-column:10/span 3;grid-row:span 2}
+.pza:nth-child(4){grid-column:6/span 3;grid-row:span 2}
+.pza:nth-child(5){grid-column:9/span 4;grid-row:span 3}
+.pza:nth-child(6){grid-column:1/span 4;grid-row:span 2}
+.pza:nth-child(7){grid-column:5/span 4;grid-row:span 2}
+
+/* ====== PASOS ====== */
+.pasos-sec{max-width:var(--w);margin:clamp(70px,10vw,140px) auto 0;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(30px,6vw,100px);align-items:start}
+.pasos-sec h2{margin:0;font:300 clamp(36px,5vw,72px)/1 var(--serif);letter-spacing:-.03em;font-variation-settings:"opsz" 144;text-wrap:balance}
+.pasos{list-style:none;margin:0;padding:0;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:70px 1fr;align-items:baseline;padding:22px 0;border-top:1px solid var(--line)}
+.pasos li:last-child{border-bottom:1px solid var(--line)}
+.pasos li::before{content:"0" counter(p);font:450 13px/1 var(--mono);letter-spacing:.14em;color:var(--mute)}
+.pasos li b{display:block;font:400 22px/1.15 var(--serif);font-variation-settings:"opsz" 36;letter-spacing:-.01em;margin-bottom:6px}
+.pasos li span{color:var(--mute);font-size:14.5px}
+
+/* ====== SUBIR ====== */
+.subir-sec{max-width:var(--w);margin:clamp(70px,10vw,140px) auto 0}
+.app{background:var(--paper);border-radius:12px;padding:clamp(16px,2vw,24px);box-shadow:inset 0 0 0 1px var(--line)}
+.ventana{display:flex;align-items:center;gap:7px;padding:4px 4px 14px}
+.ventana span{width:10px;height:10px;border-radius:50%;background:#E6E3DD}
+.ventana small{margin-left:auto;font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.subir{display:grid;place-items:center;gap:10px;text-align:center;padding:clamp(44px,7vw,96px) 20px;border-radius:10px;border:1px dashed var(--line-fuerte);background:#fff;cursor:pointer;transition:border-color .2s,background-color .2s}
+.subir:hover{border-color:var(--ink);background:#FBFBFA}
+.subir b{font:400 clamp(26px,3vw,38px)/1.1 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.02em}
+.subir > span:not(.b){color:var(--mute);font-size:14px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.fila a{display:grid;place-items:center;min-height:50px;border-radius:8px;background:#fff;text-decoration:none;font-weight:500;font-size:14.5px;box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .2s}
+.fila a:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+
+/* ====== PARA QUIÉN ====== */
+.quien{max-width:var(--w);margin:clamp(70px,10vw,140px) auto 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tarjeta{padding:clamp(22px,2.5vw,32px);border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;gap:12px;min-height:230px}
+.tarjeta h3{margin:0;font:400 22px/1.15 var(--serif);font-variation-settings:"opsz" 36;letter-spacing:-.01em}
+.tarjeta > p{margin:0;color:var(--mute);font-size:14.5px}
+.tarjeta .cita{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--mute)}
+.tarjeta .cita b{font-weight:500;color:var(--ink)}
+.tag{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;padding:6px 11px;border-radius:9999px;background:var(--acento-bg);color:var(--acento);font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+
+/* ====== CIERRE ====== */
+.cierre{max-width:var(--w);margin:clamp(80px,12vw,160px) auto 0;padding:clamp(50px,8vw,110px) 0;text-align:center;border-top:1px solid var(--line)}
+.cierre h2{margin:0 auto;max-width:14ch;font:300 clamp(44px,7vw,112px)/.98 var(--serif);letter-spacing:-.035em;font-variation-settings:"opsz" 144;text-wrap:balance}
+.cierre .acc{justify-content:center;margin-top:36px}
+
+/* ====== FOOTER ====== */
+.pie{max-width:var(--w);margin:60px auto 0;padding:30px 0 90px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center;color:var(--mute);font-size:13px;border-top:1px solid var(--line)}
+.pie nav{display:flex;gap:22px;flex-wrap:wrap}
+.pie a{text-decoration:none}
+.pie a:hover{color:var(--ink)}
+
+/* ====== ENTRADAS AL VIEWPORT ====== */
+.entra{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.entra.vista{opacity:1;transform:none}
+.entra.d1{transition-delay:.08s}.entra.d2{transition-delay:.16s}.entra.d3{transition-delay:.24s}.entra.d4{transition-delay:.32s}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width:980px){
+  .cab nav{display:none}
+  .hero{grid-template-columns:1fr;gap:40px}
+  .escaparate{order:-1}
+  .pasos-sec,.quien{grid-template-columns:1fr}
+  .bento{grid-template-columns:repeat(6,1fr);grid-auto-rows:min(30vw,220px)}
+  .pza:nth-child(1){grid-column:1/span 6;grid-row:span 2}
+  .pza:nth-child(2){grid-column:1/span 3;grid-row:span 2}
+  .pza:nth-child(3){grid-column:4/span 3;grid-row:span 2}
+  .pza:nth-child(4){grid-column:1/span 3;grid-row:span 2}
+  .pza:nth-child(5){grid-column:4/span 3;grid-row:span 2}
+  .pza:nth-child(6){grid-column:1/span 3;grid-row:span 2}
+  .pza:nth-child(7){grid-column:4/span 3;grid-row:span 2}
+  .transform-pin{height:220vh}
+  .pieza.antes{--tx:calc(-50% + var(--p) * -68vw)}
+  .pieza.despues{--tx:calc(-50% + (1 - var(--p)) * 66vw)}
+}
+@media (max-width:620px){
+  .galeria-cab{grid-template-columns:1fr}
+  .galeria-cab .b{justify-self:start}
+  .marca small{display:none}
+  .pie{padding-bottom:120px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,::before,::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .entra{opacity:1;transform:none}
+  .pieza.antes{--p:1;opacity:0}
+  .pieza.despues{--p:1}
+}
+</style></head>
+<body>
+
+<header class="cab">
+  <a class="marca" href="#"><span>Carta Rápida</span><small>Taller tipográfico</small></a>
+  <nav>
+    <a href="#transformacion">Cómo funciona</a>
+    <a href="#estilos">Estilos</a>
+    <a href="#empezar">Pruébala</a>
+    <a href="#">Carta Pro</a>
+  </nav>
+  <a class="b peq" href="#empezar">Empezar</a>
+</header>
+
+<section class="hero">
+  <div>
+    <span class="ante entra">Para restaurantes, bares y hoteles</span>
+    <h1 class="entra d1">Tu carta impresa,<br><em>con oficio.</em></h1>
+    <p class="entrada entra d2">Hazle una foto a la carta que ya tienes. En 30 segundos la devolvemos maquetada en PDF A4, lista para la imprenta de la esquina.</p>
+    <div class="acc entra d3">
+      <a class="b" href="#empezar">Sube una foto de tu carta <span class="fl">&rarr;</span></a>
+      <a class="b linea" href="#estilos">Ver los 15 estilos</a>
+    </div>
+    <p class="nota entra d3">Gratis y sin tarjeta. El PDF se descarga en tu dispositivo.</p>
+  </div>
+  <div class="escaparate entra d2">
+    <div class="hoja" data-hoja="#estilo-actual" aria-label="Carta de ejemplo rotando por estilos"></div>
+    <span class="estilo-pill">Estilo <span id="estilo-actual">Riviera</span></span>
+  </div>
+</section>
+
+<div class="cinta" aria-hidden="true">
+  <ul>
+    <li>DIN A4</li><li>300 dpi</li><li>CMYK</li><li>Lista para imprenta</li><li>Sin registro</li><li>Edita y vuelve a descargar</li><li>15 estilos tipográficos</li>
+    <li>DIN A4</li><li>300 dpi</li><li>CMYK</li><li>Lista para imprenta</li><li>Sin registro</li><li>Edita y vuelve a descargar</li><li>15 estilos tipográficos</li>
+  </ul>
+</div>
+
+<section class="transform" id="transformacion">
+  <div class="transform-pin" data-pin>
+    <div class="pin">
+      <div class="transform-head">
+        <span class="ante">La transformación</span>
+        <h2>De la foto arrugada <em>a la hoja de imprenta.</em></h2>
+        <p>Un gesto. 30 segundos. La misma carta, maquetada.</p>
+      </div>
+      <div class="escena">
+        <figure class="pieza antes">
+          <img src="/ejemplo/antes-640.webp" alt="Foto de una carta de restaurante escrita a mano, arrugada">
+          <figcaption>La foto que mandaste</figcaption>
+        </figure>
+        <figure class="pieza despues">
+          <img src="/ejemplo/despues-riviera-640.webp" alt="Carta de restaurante maquetada en estilo Riviera">
+        </figure>
+      </div>
+      <span class="marca-impresa">Lista para imprenta</span>
+    </div>
+  </div>
+</section>
+
+<section class="galeria" id="estilos">
+  <div class="galeria-cab">
+    <h2 class="entra">Quince imprentas<br>en una sola <em>página.</em></h2>
+    <a class="b linea entra d1" href="#empezar">Probar con una foto</a>
+  </div>
+  <div class="bento">
+    <figure class="pza entra"><img src="/ejemplo/portada-riviera-640.webp" alt="Carta en estilo Riviera" loading="lazy"><figcaption>Riviera</figcaption></figure>
+    <figure class="pza entra d1"><img src="/ejemplo/portada-sumi-640.webp" alt="Carta en estilo Sumi" loading="lazy"><figcaption>Sumi</figcaption></figure>
+    <figure class="pza entra d2"><img src="/ejemplo/portada-gaceta-640.webp" alt="Carta en estilo Gaceta" loading="lazy"><figcaption>Gaceta</figcaption></figure>
+    <figure class="pza entra d1"><img src="/ejemplo/portada-brasserie-640.webp" alt="Carta en estilo Brasserie" loading="lazy"><figcaption>Brasserie</figcaption></figure>
+    <figure class="pza entra d2"><img src="/ejemplo/portada-sobremesa-640.webp" alt="Carta en estilo Sobremesa" loading="lazy"><figcaption>Sobremesa</figcaption></figure>
+    <figure class="pza entra d3"><img src="/ejemplo/portada-editorial-640.webp" alt="Carta en estilo Editorial" loading="lazy"><figcaption>Editorial</figcaption></figure>
+    <figure class="pza entra d4"><img src="/ejemplo/portada-deco-640.webp" alt="Carta en estilo Deco" loading="lazy"><figcaption>Deco</figcaption></figure>
+  </div>
+</section>
+
+<section class="pasos-sec" id="como">
+  <h2 class="entra">Tres pasos.<br><em>Sin registrarte.</em></h2>
+  <ol class="pasos entra d1">
+    <li><b>Haz una foto</b><span>A la carta que ya tienes, aunque esté arrugada. También vale pegar el texto.</span></li>
+    <li><b>Elige el estilo</b><span>Quince maquetaciones distintas, cada una pensada para un tipo de local.</span></li>
+    <li><b>Descarga el PDF</b><span>DIN A4 a 300 dpi. Lo llevas a la imprenta de la esquina y en veinte minutos lo tienes impreso.</span></li>
+  </ol>
+</section>
+
+<section class="subir-sec" id="empezar">
+  <div class="app entra">
+    <div class="ventana" aria-hidden="true"><span></span><span></span><span></span><small>cartarapida.es &middot; nueva carta</small></div>
+    <label class="subir">
+      <b>Deja aquí la foto de tu carta</b>
+      <span>JPG, PNG o WEBP &middot; hasta 5 páginas &middot; 10 MB</span>
+      <span class="b" style="margin-top:14px">Elegir fotos <span class="fl">&rarr;</span></span>
+    </label>
+    <div class="fila">
+      <a href="#">Pegar el texto</a>
+      <a href="#">Probar con un ejemplo</a>
+    </div>
+  </div>
+</section>
+
+<section class="quien">
+  <article class="tarjeta entra">
+    <span class="tag">Restaurantes</span>
+    <h3>Para cuando la carta de los lunes ya no es la de los viernes.</h3>
+    <p>Cambia dos platos, descarga y vuelve a imprimir. En diez minutos.</p>
+    <p class="cita"><b>Casa Pepe, Oviedo</b> &middot; menú del día actualizado cada semana</p>
+  </article>
+  <article class="tarjeta entra d1">
+    <span class="tag">Bares</span>
+    <h3>Para la pizarra que nadie lee desde la mesa del fondo.</h3>
+    <p>Pasa de la tiza a una hoja A4 y colócala en cada mesa.</p>
+    <p class="cita"><b>Bar La Dársena, Málaga</b> &middot; tapas rotativas los fines de semana</p>
+  </article>
+  <article class="tarjeta entra d2">
+    <span class="tag">Hoteles</span>
+    <h3>Para que room service y desayuno hablen el mismo idioma.</h3>
+    <p>Dos cartas, un solo estilo y el mismo acabado que la papelería del hotel.</p>
+    <p class="cita"><b>Hotel Marola, Lanzarote</b> &middot; desayuno y bar de piscina</p>
+  </article>
+</section>
+
+<section class="cierre">
+  <h2>Deja de maquetar.<br><em>Empieza a servir.</em></h2>
+  <div class="acc">
+    <a class="b" href="#empezar">Sube una foto de tu carta <span class="fl">&rarr;</span></a>
+    <a class="b linea" href="#estilos">Ver los 15 estilos</a>
+  </div>
+</section>
+
+<footer class="pie">
+  <div>Carta Rápida &middot; Taller tipográfico &middot; Oviedo</div>
+  <nav>
+    <a href="#">Precios</a>
+    <a href="#">Carta Pro</a>
+    <a href="#">Imprentas aliadas</a>
+    <a href="#">Aviso legal</a>
+  </nav>
+</footer>
+
+<script>
+(function(){
+  // Header: borde fino cuando ya no estás arriba del todo
+  const cab=document.querySelector('.cab');
+  const sentinela=document.createElement('div');
+  sentinela.setAttribute('aria-hidden','true');
+  sentinela.style.cssText='position:absolute;top:0;left:0;height:1px;width:1px';
+  document.body.prepend(sentinela);
+  new IntersectionObserver(([e])=>cab.classList.toggle('pegado',!e.isIntersecting),{threshold:0}).observe(sentinela);
+
+  // Entradas al viewport
+  const io=new IntersectionObserver((ents)=>{
+    ents.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vista');io.unobserve(e.target)}});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.entra').forEach(el=>io.observe(el));
+
+  // Animación de la transformación: progreso 0→1 según scroll dentro del pin
+  const pin=document.querySelector('[data-pin]');
+  const sinMovimiento=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(pin && !sinMovimiento){
+    let activo=false,ticking=false;
+    const actualiza=()=>{
+      ticking=false;
+      if(!activo)return;
+      const r=pin.getBoundingClientRect();
+      const total=pin.offsetHeight-window.innerHeight;
+      const p=Math.max(0,Math.min(1,-r.top/total));
+      pin.style.setProperty('--p-val',p.toFixed(4));
+      pin.classList.toggle('listo',p>.86);
+    };
+    const planifica=()=>{if(!ticking){ticking=true;requestAnimationFrame(actualiza)}};
+    new IntersectionObserver(([e])=>{activo=e.isIntersecting;if(activo)planifica()},{threshold:0}).observe(pin);
+    window.addEventListener('scroll',planifica,{passive:true});
+    window.addEventListener('resize',planifica);
+    actualiza();
+  }else if(pin){
+    pin.style.setProperty('--p-val',1);
+    pin.classList.add('listo');
+  }
+})();
+</script>
+<script src="/disenos/comun.js"></script>
+</body></html>
