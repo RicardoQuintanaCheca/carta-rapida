@@ -157,7 +157,7 @@
       const crear = modo === 'crear';
       caja.querySelector('#cuTit').textContent = crear ? (op.titulo || 'Prueba Carta Pro 7 días gratis') : 'Entra en tu cuenta';
       caja.querySelector('#cuSub').textContent = crear
-        ? 'Sin tarjeta. Tus cartas guardadas en tu panel, editables cuando cambien los precios, con tu logo, sin firma, traducidas y con los 15 estilos. Si no te convence, no pasa nada: sigues con la versión gratis.'
+        ? 'Sin tarjeta. Tus cartas guardadas en tu panel, editables cuando cambien los precios, con tu logo, sin firma, traducidas y con los 20 estilos. Si no te convence, no pasa nada: sigues con la versión gratis.'
         : 'Tus cartas guardadas te esperan en tu panel.';
       caja.querySelector('#cuClaveTxt').textContent = crear ? 'Crea una contraseña (mínimo 8 caracteres)' : 'Contraseña';
       f.clave.autocomplete = crear ? 'new-password' : 'current-password';
@@ -320,7 +320,7 @@
       </div>
       <ul class="cu-lista">
         <li><b>Panel con tus cartas</b>: cambia platos y precios y descarga al momento</li>
-        <li><b>Los 15 estilos</b>, también Riviera, Sumi, Cartel, Serigrafía y Azulejo</li>
+        <li><b>Los 20 estilos</b>, también Riviera, Sumi, Cartel, Serigrafía y Azulejo</li>
         <li><b>Tu logotipo</b> y <b>sin la firma</b> de Carta Rápida</li>
         <li><b>Traducida</b> a inglés, francés, alemán, italiano, portugués o chino</li>
         <li><b>Cambios ilimitados</b> con una frase: «sube las croquetas a 13»</li>

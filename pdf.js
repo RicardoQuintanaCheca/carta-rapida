@@ -86,7 +86,7 @@ async function obtenerNavegador() {
   return navegador;
 }
 
-const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia']);
+const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia', 'bloque', 'marinero', 'brunch', 'vermut', 'pizarra']);
 
 async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';

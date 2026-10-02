@@ -27,7 +27,7 @@ const PLANES = {
   ano: { precio: 118.8, texto: '118,80 € al año (9,90 € al mes)', env: 'STRIPE_PRICE_ANO_V2', defecto: 'price_1ULMryRZgd5ArTbXxjBE6TeN' }
 };
 // Estilos solo para Pro (se pueden ver con tu carta, pero el PDF pide Pro)
-const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo'];
+const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
 
 const CLAVE_STRIPE = process.env.STRIPE_SECRET_KEY || '';
 const MODO_DEMO = !CLAVE_STRIPE && process.env.PAGOS_DEMO === 'si';
