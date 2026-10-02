@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta G · Galería — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* G · Galería: la web es la sala y las cartas son la obra. Marca neutra (serif fina, tinta y piedra); el único color lo ponen las cartas. */
+:root{--f:#F5F3EF;--bl:#FFFFFF;--tinta:#15140F;--gris:#77736B;--linea:#DFDBD3;--d:'Instrument Serif','Times New Roman',serif;--t:'Instrument Sans',system-ui,sans-serif;--m:clamp(20px,4.5vw,64px)}
+*{box-sizing:border-box}body{margin:0;background:var(--f);color:var(--tinta);font:400 17px/1.6 var(--t);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:16px;height:76px;padding:0 var(--m)}
+.marca{font:400 27px/1 var(--d);text-decoration:none;white-space:nowrap}.marca i{color:var(--gris)}
+.cab nav{display:flex;gap:34px;font-size:14.5px}.cab nav a{text-decoration:none;color:var(--gris);transition:color .2s}.cab nav a:hover{color:var(--tinta)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:999px;border:0;cursor:pointer;font:500 15.5px var(--t);text-decoration:none;white-space:nowrap;background:var(--tinta);color:#fff;transition:transform .3s cubic-bezier(.2,.8,.2,1),background-color .25s}
+.b:hover{transform:translateY(-2px);background:#3A382F}
+.b.linea{background:none;color:var(--tinta);box-shadow:inset 0 0 0 1px var(--tinta)}.b.linea:hover{background:var(--tinta);color:#fff}
+.b.peq{min-height:42px;padding:0 20px;font-size:14px}
+.portada{text-align:center;padding:clamp(28px,3.4vw,52px) var(--m) 0}
+.ante{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+h1{margin:18px auto 0;font:400 clamp(50px,8.4vw,136px)/.95 var(--d);letter-spacing:-.025em;max-width:11em;text-wrap:balance}
+h1 i,h2 i{color:var(--gris)}
+.entrada{font-size:clamp(17px,1.4vw,20px);max-width:30em;margin:clamp(20px,2.4vw,30px) auto 0;color:#45423B}
+.acc{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:28px}
+.nota{font-size:13.5px;color:var(--gris);margin-top:16px}
+/* Abanico de cartas */
+.abanico{position:relative;height:clamp(300px,40vw,580px);margin-top:clamp(28px,3vw,44px);overflow:hidden}
+.abanico img{position:absolute;left:50%;top:8%;width:clamp(170px,23vw,340px);aspect-ratio:210/297;object-fit:cover;object-position:top;background:#fff;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 40px 70px -40px rgba(30,25,10,.45);translate:calc(-50% + var(--x)) var(--y);rotate:var(--r);transition:translate .6s cubic-bezier(.2,.8,.2,1),rotate .6s cubic-bezier(.2,.8,.2,1);animation:abre 1.3s cubic-bezier(.2,.8,.2,1) backwards}
+.abanico img:hover{translate:calc(-50% + var(--x)) calc(var(--y) - 22px);rotate:0deg;z-index:9}
+@keyframes abre{from{translate:-50% 60%;rotate:0deg;opacity:0}}
+.sala{background:var(--bl);padding:clamp(60px,9vw,140px) var(--m);display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(30px,6vw,100px);align-items:center}
+h2{margin:0;font:400 clamp(40px,5.6vw,88px)/.98 var(--d);letter-spacing:-.02em;text-wrap:balance}
+.pasos{list-style:none;margin:34px 0 0;padding:0;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:48px 1fr;align-items:baseline;padding:16px 0;border-top:1px solid var(--linea)}
+.pasos li::before{content:counter(p);font:italic 400 26px/1 var(--d);color:var(--gris)}
+.app{background:var(--f);border-radius:22px;padding:clamp(14px,2vw,24px)}
+.subir{display:grid;place-items:center;gap:8px;text-align:center;padding:clamp(40px,6vw,80px) 20px;border-radius:14px;background:var(--bl);border:1px dashed #B9B4AA;cursor:pointer;transition:border-color .2s}
+.subir:hover{border-color:var(--tinta)}
+.subir b{font:400 clamp(28px,3vw,42px)/1.05 var(--d)}
+.subir > span:not(.b){color:var(--gris);font-size:14.5px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fila a{display:grid;place-items:center;min-height:52px;border-radius:999px;background:var(--bl);text-decoration:none;font-weight:500;font-size:15px;transition:background-color .2s,color .2s}.fila a:hover{background:var(--tinta);color:#fff}
+.cierre{text-align:center;padding:clamp(70px,11vw,170px) var(--m)}
+.cierre h2{font-size:clamp(46px,8vw,128px);max-width:12em;margin:0 auto}
+.entra{opacity:0;transform:translateY(18px);animation:entra 1s cubic-bezier(.2,.8,.2,1) forwards}.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
+@keyframes entra{to{opacity:1;transform:none}}
+@media (max-width:860px){.cab nav{display:none}.sala{grid-template-columns:minmax(0,1fr)}.fila{grid-template-columns:1fr}.abanico{height:clamp(300px,84vw,460px)}.abanico img{width:44vw}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.entra{opacity:1;transform:none}}
+</style></head><body>
+<header class="cab"><a class="marca" href="#">Carta <i>Rápida</i></a><nav><a href="#sala">Pruébala</a><a href="#">Estilos</a><a href="#">Carta Pro</a><a href="#">Precios</a></nav><a class="b peq" href="#sala">Empezar gratis</a></header>
+<section class="portada">
+  <div class="ante entra">Para restaurantes, bares y hoteles</div>
+  <h1 class="entra d1">Tu carta, <i>como de imprenta.</i></h1>
+  <p class="entrada entra d2">Hazle una foto a la carta que tienes. En 30 segundos la tienes maquetada, en PDF A4, lista para imprimir.</p>
+  <div class="acc entra d3"><a class="b" href="#sala">Sube una foto de tu carta</a><a class="b linea" href="#">Ver los 15 estilos</a></div>
+  <p class="nota entra d3">Gratis y sin tarjeta.</p>
+  <div class="abanico" aria-label="Cinco cartas de ejemplo en distintos estilos">
+    <img src="/ejemplo/portada-gaceta-640.webp" alt="" style="--x:-88%;--y:16%;--r:-13deg;animation-delay:.5s">
+    <img src="/ejemplo/portada-sumi-640.webp" alt="" style="--x:-46%;--y:5%;--r:-6.5deg;animation-delay:.42s">
+    <img src="/ejemplo/portada-brasserie-640.webp" alt="" style="--x:88%;--y:16%;--r:13deg;animation-delay:.5s">
+    <img src="/ejemplo/portada-sobremesa-640.webp" alt="" style="--x:46%;--y:5%;--r:6.5deg;animation-delay:.42s">
+    <img src="/ejemplo/portada-editorial-640.webp" alt="Carta de ejemplo maquetada" style="--x:0%;--y:0%;--r:0deg;animation-delay:.34s">
+  </div>
+</section>
+<section class="sala" id="sala">
+  <div><h2>Tres pasos. <i>Sin registrarte.</i></h2>
+    <ol class="pasos"><li>Haz una foto a tu carta</li><li>Elige el estilo de tu local</li><li>Descarga el PDF e imprime</li></ol></div>
+  <div class="app">
+    <label class="subir"><b>Deja aquí la foto de tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span><span class="b" style="margin-top:14px">Elegir fotos</span></label>
+    <div class="fila"><a href="#">Pegar el texto</a><a href="#">Probar con un ejemplo</a></div>
+  </div>
+</section>
+<section class="cierre"><h2>Deja de maquetar. <i>Empieza a vender.</i></h2><div class="acc" style="margin-top:36px"><a class="b" href="#sala">Sube una foto de tu carta</a></div></section>
+<script src="/disenos/comun.js"></script>
+</body></html>
