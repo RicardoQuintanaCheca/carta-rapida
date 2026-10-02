@@ -12,6 +12,6 @@
   const p = location.pathname.replace(/\/$/, '').split('/').pop().replace('.html', '');
   const barra = document.createElement('nav');
   barra.className = 'elige'; barra.setAttribute('aria-label', 'Propuestas de diseño');
-  barra.innerHTML = [['a', 'A', 'Imprenta'], ['b', 'B', 'Producto'], ['c', 'C', 'Cartel'], ['d', 'D', 'Riviera'], ['e', 'E', 'Dos tintas'], ['f', 'F', 'Titular'], ['g', 'G', 'Galería'], ['h', 'H', 'Noche']].map(([k, l, n]) => `<a href="/disenos/${k}.html"${k === p ? ' aria-current="page"' : ''} title="${n}">${l}<span> · ${n}</span></a>`).join('');
+  barra.innerHTML = [['a', 'A', 'Imprenta'], ['b', 'B', 'Producto'], ['c', 'C', 'Cartel'], ['d', 'D', 'Riviera'], ['e', 'E', 'Dos tintas'], ['f', 'F', 'Titular'], ['g', 'G', 'Galería'], ['h', 'H', 'Noche'], ['i', 'I', 'Escaparate']].map(([k, l, n]) => `<a href="/disenos/${k}.html"${k === p ? ' aria-current="page"' : ''} title="${n}">${l}<span> · ${n}</span></a>`).join('');
   document.body.appendChild(barra);
 })();
