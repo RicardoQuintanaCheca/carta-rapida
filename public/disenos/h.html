@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta H · Noche — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* H · Noche: fondo oscuro de escaparate; las cartas blancas son lo único iluminado. Una sola familia (Geist), fina y grande. */
+:root{--f:#0D0E10;--f2:#16181B;--bl:#F4F2EE;--gris:#8D9096;--linea:#26292E;--t:'Geist',system-ui,sans-serif;--m:clamp(20px,4.5vw,64px)}
+*{box-sizing:border-box}body{margin:0;background:var(--f);color:var(--bl);font:400 17px/1.6 var(--t);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:16px;height:76px;padding:0 var(--m)}
+.marca{font-weight:600;font-size:17px;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}.marca i{font-style:normal;color:var(--gris)}
+.cab nav{display:flex;gap:34px;font-size:14.5px}.cab nav a{text-decoration:none;color:var(--gris);transition:color .2s}.cab nav a:hover{color:var(--bl)}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:12px;border:0;cursor:pointer;font:500 15.5px var(--t);text-decoration:none;white-space:nowrap;background:var(--bl);color:#0D0E10;transition:transform .3s cubic-bezier(.2,.8,.2,1),background-color .25s}
+.b:hover{transform:translateY(-2px);background:#fff}
+.b.linea{background:none;color:var(--bl);box-shadow:inset 0 0 0 1px #3A3E45}.b.linea:hover{box-shadow:inset 0 0 0 1px var(--bl);background:none}
+.b.peq{min-height:42px;padding:0 18px;font-size:14px;border-radius:10px}
+.portada{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,70px);align-items:center;padding:clamp(20px,3vw,40px) 0 clamp(50px,7vw,100px) var(--m);min-height:min(820px,calc(100vh - 76px))}
+.ante{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+h1{margin:20px 0 0;font-weight:300;font-size:clamp(46px,6.6vw,112px);line-height:.98;letter-spacing:-.045em;text-wrap:balance}
+h1 em,h2 em{font-style:normal;color:var(--gris)}
+.entrada{font-size:clamp(17px,1.4vw,20px);max-width:27em;margin:clamp(22px,2.6vw,34px) 0 0;color:#B9BCC2}
+.acc{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.nota{font-size:13.5px;color:var(--gris);margin-top:16px}
+/* Pasarela: dos columnas de cartas que suben y bajan despacio */
+.pasarela{position:relative;height:min(760px,calc(100vh - 110px));overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-right:var(--m);-webkit-mask:linear-gradient(#0000,#000 14%,#000 86%,#0000);mask:linear-gradient(#0000,#000 14%,#000 86%,#0000)}
+.pasarela::before{content:"";position:absolute;inset:20% 10%;background:radial-gradient(closest-side,rgba(255,244,220,.16),transparent);pointer-events:none}
+.col{display:flex;flex-direction:column;gap:18px;animation:sube 46s linear infinite}
+.col.b2{animation-name:baja}
+.col img{display:block;width:100%;aspect-ratio:210/297;object-fit:cover;object-position:top;background:#fff;border-radius:4px}
+@keyframes sube{to{transform:translateY(calc(-50% - 9px))}}@keyframes baja{from{transform:translateY(calc(-50% - 9px))}}
+.pasarela:hover .col{animation-play-state:paused}
+.sala{border-top:1px solid var(--linea);padding:clamp(60px,9vw,140px) var(--m);display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(30px,6vw,100px);align-items:center}
+h2{margin:0;font-weight:300;font-size:clamp(38px,5vw,80px);line-height:1;letter-spacing:-.04em;text-wrap:balance}
+.pasos{list-style:none;margin:34px 0 0;padding:0;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:48px 1fr;padding:16px 0;border-top:1px solid var(--linea);color:#D5D7DB}
+.pasos li::before{content:"0" counter(p);color:var(--gris);font-size:14px;line-height:1.9}
+.app{background:var(--f2);border-radius:22px;padding:clamp(14px,2vw,24px);box-shadow:inset 0 0 0 1px var(--linea),0 60px 120px -60px #000}
+.subir{display:grid;place-items:center;gap:8px;text-align:center;padding:clamp(40px,6vw,80px) 20px;border-radius:14px;border:1px dashed #454A52;cursor:pointer;transition:border-color .2s,background-color .2s}
+.subir:hover{border-color:var(--bl);background:rgba(255,255,255,.03)}
+.subir b{font-weight:400;font-size:clamp(24px,2.6vw,36px);line-height:1.1;letter-spacing:-.03em}
+.subir > span:not(.b){color:var(--gris);font-size:14.5px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fila a{display:grid;place-items:center;min-height:52px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--linea);text-decoration:none;font-weight:500;font-size:15px;transition:box-shadow .2s}.fila a:hover{box-shadow:inset 0 0 0 1px var(--bl)}
+.cierre{border-top:1px solid var(--linea);text-align:center;padding:clamp(70px,11vw,170px) var(--m)}
+.cierre h2{font-size:clamp(42px,7.4vw,120px);max-width:11em;margin:0 auto}
+.entra{opacity:0;transform:translateY(18px);animation:entra 1s cubic-bezier(.2,.8,.2,1) forwards}.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
+@keyframes entra{to{opacity:1;transform:none}}
+@media (max-width:860px){.cab nav{display:none}.portada{grid-template-columns:minmax(0,1fr);padding-right:var(--m);min-height:0}.pasarela{height:440px;padding-right:0;margin-top:14px}.sala{grid-template-columns:minmax(0,1fr)}.fila{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.entra{opacity:1;transform:none}}
+</style></head><body>
+<header class="cab"><a class="marca" href="#">Carta <i>Rápida</i></a><nav><a href="#sala">Pruébala</a><a href="#">Estilos</a><a href="#">Carta Pro</a><a href="#">Precios</a></nav><a class="b peq" href="#sala">Empezar gratis</a></header>
+<section class="portada">
+  <div>
+    <div class="ante entra">Para restaurantes, bares y hoteles</div>
+    <h1 class="entra d1">Tu carta, <em>como de imprenta.</em></h1>
+    <p class="entrada entra d2">Hazle una foto a la carta que tienes. En 30 segundos la tienes maquetada, en PDF A4, lista para imprimir.</p>
+    <div class="acc entra d3"><a class="b" href="#sala">Sube una foto de tu carta</a><a class="b linea" href="#">Ver los 15 estilos</a></div>
+    <p class="nota entra d3">Gratis y sin tarjeta.</p>
+  </div>
+  <div class="pasarela" aria-label="Cartas de ejemplo en distintos estilos">
+    <div class="col"><img src="/ejemplo/portada-editorial-640.webp" alt="Carta de ejemplo maquetada"><img src="/ejemplo/portada-sumi-640.webp" alt=""><img src="/ejemplo/portada-brasserie-640.webp" alt=""><img src="/ejemplo/portada-editorial-640.webp" alt=""><img src="/ejemplo/portada-sumi-640.webp" alt=""><img src="/ejemplo/portada-brasserie-640.webp" alt=""></div>
+    <div class="col b2"><img src="/ejemplo/portada-gaceta-640.webp" alt=""><img src="/ejemplo/portada-sobremesa-640.webp" alt=""><img src="/ejemplo/portada-deco-640.webp" alt=""><img src="/ejemplo/portada-gaceta-640.webp" alt=""><img src="/ejemplo/portada-sobremesa-640.webp" alt=""><img src="/ejemplo/portada-deco-640.webp" alt=""></div>
+  </div>
+</section>
+<section class="sala" id="sala">
+  <div><h2>Tres pasos. <em>Sin registrarte.</em></h2>
+    <ol class="pasos"><li>Haz una foto a tu carta</li><li>Elige el estilo de tu local</li><li>Descarga el PDF e imprime</li></ol></div>
+  <div class="app">
+    <label class="subir"><b>Deja aquí la foto de tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span><span class="b" style="margin-top:14px">Elegir fotos</span></label>
+    <div class="fila"><a href="#">Pegar el texto</a><a href="#">Probar con un ejemplo</a></div>
+  </div>
+</section>
+<section class="cierre"><h2>Deja de maquetar. <em>Empieza a vender.</em></h2><div class="acc" style="justify-content:center;margin-top:36px"><a class="b" href="#sala">Sube una foto de tu carta</a></div></section>
+<script src="/disenos/comun.js"></script>
+</body></html>
