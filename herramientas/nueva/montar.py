@@ -104,7 +104,7 @@ prueba = '''<section class="sec n-prueba" id="prueba">
       <div class="sec-head">
         <div>
           <div class="eyebrow">Pruébala ahora</div>
-          <h2 class="h-l rv">Tu carta en tres pasos. <span class="grey">Sin registrarte.</span></h2>
+          <h2 class="h-l rv">Tres pasos. <span class="grey">Ninguno es «aprende a diseñar».</span></h2>
         </div>
         <ol class="n-pasos rv">
           <li><span>1</span>Haz una foto a tu carta</li>

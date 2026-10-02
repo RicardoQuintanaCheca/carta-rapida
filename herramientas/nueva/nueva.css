@@ -305,3 +305,12 @@ body.n .n-lead-movil{display:none}
 body.n .nhero .lead{display:block}
 body.n .n-largo{margin-left:.28em}
 body.n .photo{right:auto;bottom:auto}
+/* Copy nuevo */
+body.n .golpe{margin:clamp(22px,2.8vw,36px) auto 0;font-size:clamp(20px,2vw,28px);font-weight:650;letter-spacing:-.03em;line-height:1.2}
+body.n .nhero .golpe + .lead{margin-top:12px;max-width:33em}
+.domingo{padding-block:clamp(72px,10vw,150px)}
+.domingo h2{max-width:13em}
+.domingo-txt{margin:clamp(28px,4vw,52px) 0 0 auto;max-width:34em;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:#3A3A40}
+.domingo-txt p{margin:0 0 1em}
+.domingo-txt b{color:var(--ink);font-weight:700}
+.pro-golpe{margin:16px 0 0;color:var(--muted);font-size:17px;line-height:1.5;max-width:28em}
