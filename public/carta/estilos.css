@@ -534,3 +534,138 @@
   .pagina { contain: strict; }
   .pagina:last-child { break-after: auto; }
 }
+
+/* ============================================================
+   BLOQUE — hamburguesería, street food: bloques negros y precio subrayado en amarillo
+   ============================================================ */
+.est-bloque { --tinta: #111111; --acento: #FFD400; --suave: #55554F; --linea: #111111; --papel: #FFFFFF; }
+.est-bloque .pagina { font-family: 'Archivo', sans-serif; padding: 14mm 14mm 12mm; }
+.est-bloque .cab { border-bottom: 4pt solid var(--tinta); padding-bottom: 4mm; margin-bottom: calc(8mm * min(var(--k), 1.1)); display: flex; align-items: flex-end; justify-content: space-between; gap: 6mm; }
+.est-bloque .cab-nombre { font-family: 'Anton', sans-serif; font-size: min(calc(84pt * min(var(--k), 1.06)), calc(1500pt / var(--letras))); line-height: .9; text-transform: uppercase; letter-spacing: .005em; }
+.est-bloque .cab-logo { max-height: 28mm; max-width: 100mm; }
+.est-bloque .cab-sub { max-width: 46mm; text-align: right; font-weight: 800; font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; line-height: 1.35; background: var(--acento); padding: 1.6mm 2.4mm; }
+.est-bloque .cols-2 .cuerpo { column-gap: 10mm; }
+.est-bloque .sec-t { background: var(--tinta); color: #fff; font-family: 'Anton', sans-serif; font-weight: 400; font-size: calc(17pt * var(--k)); line-height: 1; text-transform: uppercase; letter-spacing: .04em; padding: calc(4.5pt * var(--k)) calc(7pt * var(--k)) calc(3.5pt * var(--k)); margin-bottom: calc(5pt * var(--k)); }
+.est-bloque .pl { margin-top: calc(6.5pt * var(--k)); }
+.est-bloque .pl-n { font-weight: 800; font-size: calc(10.4pt * var(--k)); line-height: 1.2; text-transform: uppercase; letter-spacing: .01em; }
+.est-bloque .pl-p { font-family: 'Anton', sans-serif; font-size: calc(13pt * var(--k)); background: linear-gradient(transparent 52%, var(--acento) 0); padding: 0 1.2mm; }
+.est-bloque .pl-d { font-weight: 500; font-size: calc(9pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-bloque .pl-r { text-transform: none; }
+.est-bloque .pl-a { font-size: calc(6.8pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; }
+.est-bloque .pl-etq { display: inline-block; font-weight: 800; font-size: calc(6.6pt * var(--k)); letter-spacing: .12em; text-transform: uppercase; background: var(--acento); padding: 1.4pt 4pt; }
+.est-bloque .pie { border-top: 4pt solid var(--tinta); padding-top: 2.8mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-bloque .pie-serv { font-size: 8.8pt; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.est-bloque .pie-serv span + span { margin-left: 5mm; }
+.est-bloque .pie-serv b { margin-left: 2mm; background: var(--acento); padding: 0 1mm; }
+.est-bloque .pie-nota { font-size: 7pt; color: var(--suave); max-width: 110mm; text-align: right; line-height: 1.35; }
+.est-bloque .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ============================================================
+   MARINERO — marisquería, chiringuito, arrocería: rayas azul marino y letra de rótulo
+   ============================================================ */
+.est-marinero { --tinta: #14305E; --acento: #D9432F; --suave: #5A6B8C; --linea: #14305E; --papel: #FFFFFF; }
+.est-marinero .pagina { font-family: 'Figtree', sans-serif; padding: 25mm 18mm 23mm; }
+.est-marinero .pagina::before, .est-marinero .pagina::after { content: ''; position: absolute; left: 0; right: 0; height: 11mm; background: repeating-linear-gradient(var(--tinta) 0 1.6mm, transparent 1.6mm 3.13mm); }
+.est-marinero .pagina::before { top: 7mm; }
+.est-marinero .pagina::after { bottom: 7mm; }
+.est-marinero .cab { text-align: center; margin-bottom: calc(8mm * min(var(--k), 1.1)); }
+.est-marinero .cab-nombre { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: min(calc(54pt * min(var(--k), 1.1)), calc(820pt / var(--letras))); line-height: 1; text-transform: uppercase; letter-spacing: .03em; }
+.est-marinero .cab-logo { max-height: 24mm; max-width: 80mm; }
+.est-marinero .cab-sub { display: inline-block; margin-top: 3mm; font-weight: 600; font-size: 8pt; letter-spacing: .26em; padding: 1.4mm 3mm 1.4mm 3.26mm; text-transform: uppercase; color: #fff; background: var(--acento); }
+.est-marinero .cols-2 .cuerpo { column-gap: 13mm; }
+.est-marinero .sec-t { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(15pt * var(--k)); line-height: 1.05; text-transform: uppercase; letter-spacing: .08em; padding-bottom: calc(3.5pt * var(--k)); margin-bottom: calc(4pt * var(--k)); border-bottom: 1pt solid var(--tinta); position: relative; }
+.est-marinero .sec-t::after { content: ''; position: absolute; left: 0; bottom: -2.6pt; width: 14mm; border-bottom: 2.4pt solid var(--acento); }
+.est-marinero .pl { margin-top: calc(6pt * var(--k)); }
+.est-marinero .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-marinero .pl-p { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(11.4pt * var(--k)); color: var(--acento); }
+.est-marinero .pl-d { font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-marinero .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-marinero .pl-etq { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(7.6pt * var(--k)); letter-spacing: .12em; text-transform: uppercase; color: var(--acento); }
+.est-marinero .pie { text-align: center; padding-top: 3mm; }
+.est-marinero .pie-serv { font-size: 9.2pt; font-weight: 600; margin-bottom: 1.6mm; }
+.est-marinero .pie-serv span + span { margin-left: 6mm; }
+.est-marinero .pie-serv b { color: var(--acento); margin-left: .5em; }
+.est-marinero .pie-nota { font-size: 7.6pt; color: var(--suave); max-width: 130mm; margin: 0 auto; line-height: 1.35; }
+
+/* ============================================================
+   BRUNCH — cafetería de especialidad: letra redonda y rotulador pastel
+   ============================================================ */
+.est-brunch { --tinta: #3A2C27; --acento: #E2674A; --suave: #7C6A63; --linea: #3A2C27; --papel: #FFFFFF; --pastel: #FFD9C7; }
+.est-brunch .pagina { font-family: 'Figtree', sans-serif; padding: 16mm 17mm 13mm; }
+.est-brunch .cab { position: relative; margin-bottom: calc(10mm * min(var(--k), 1.1)); }
+.est-brunch .br-sol { position: absolute; right: -30mm; top: -34mm; width: 78mm; height: 78mm; border-radius: 50%; background: #FCE9A9; }
+.est-brunch .cab-nombre { position: relative; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: min(calc(66pt * min(var(--k), 1.08)), calc(980pt / var(--letras))); line-height: .95; letter-spacing: -.02em; }
+.est-brunch .cab-logo { position: relative; max-height: 26mm; max-width: 100mm; }
+.est-brunch .cab-sub { position: relative; display: inline-block; margin-top: 3.4mm; font-weight: 600; font-size: 9pt; background: var(--pastel); border-radius: 99px; padding: 1.4mm 3.6mm; }
+.est-brunch .cols-2 .cuerpo { column-gap: 12mm; }
+.est-brunch .sec:nth-of-type(4n+2) { --pastel: #CFEBDD; }
+.est-brunch .sec:nth-of-type(4n+3) { --pastel: #FCE9A9; }
+.est-brunch .sec:nth-of-type(4n+4) { --pastel: #E3D9F6; }
+.est-brunch .sec-t { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: calc(17pt * var(--k)); line-height: 1.1; margin-bottom: calc(4pt * var(--k)); }
+.est-brunch .sec-t span { background: linear-gradient(transparent 45%, var(--pastel) 0); padding: 0 1.6mm; margin-left: -1.6mm; }
+.est-brunch .pl { margin-top: calc(6pt * var(--k)); }
+.est-brunch .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-brunch .pl-p { font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: calc(11pt * var(--k)); color: var(--acento); }
+.est-brunch .pl-d { font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-brunch .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-brunch .pl-etq { display: inline-block; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: calc(7.6pt * var(--k)); background: var(--pastel); border-radius: 99px; padding: 1.6pt 5pt; }
+.est-brunch .pie { border-top: 1.2pt dashed var(--tinta); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-brunch .pie-serv { font-size: 9pt; font-weight: 600; }
+.est-brunch .pie-serv span + span { margin-left: 5mm; }
+.est-brunch .pie-serv b { color: var(--acento); margin-left: 2mm; }
+.est-brunch .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
+.est-brunch .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ============================================================
+   VERMUT — vermutería, bar de tapas con solera: etiqueta antigua en verde y granate
+   ============================================================ */
+.est-vermut { --tinta: #1F4A3A; --acento: #8A1C2B; --suave: #5C7268; --linea: #1F4A3A; --papel: #FFFFFF; }
+.est-vermut .pagina { font-family: 'Libre Franklin', sans-serif; padding: 16mm 18mm 13mm; }
+.est-vermut .cab { text-align: center; margin-bottom: calc(8mm * min(var(--k), 1.1)); }
+.est-vermut .vm-etq { display: inline-block; min-width: 96mm; max-width: 100%; border: 1.6pt solid var(--tinta); outline: .6pt solid var(--tinta); outline-offset: 1.6mm; border-radius: 5mm; padding: 4.4mm 9mm 4.6mm; margin: 2mm 0; }
+.est-vermut .vm-over { display: block; font-weight: 600; font-size: 7pt; letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; color: var(--acento); margin-bottom: 1.6mm; }
+.est-vermut .cab-nombre { font-family: 'Abril Fatface', serif; font-size: min(calc(46pt * min(var(--k), 1.1)), calc(640pt / var(--letras))); line-height: 1; text-transform: uppercase; letter-spacing: .02em; }
+.est-vermut .cab-logo { max-height: 24mm; max-width: 80mm; }
+.est-vermut .cab-sub { margin-top: 2mm; font-family: 'Playfair Display', serif; font-style: italic; font-size: 10pt; color: var(--acento); }
+.est-vermut .cols-2 .cuerpo { column-gap: 13mm; }
+.est-vermut .sec-t { display: flex; align-items: center; gap: 3mm; font-family: 'Abril Fatface', serif; font-weight: 400; font-size: calc(15pt * var(--k)); line-height: 1.05; color: var(--acento); margin-bottom: calc(4pt * var(--k)); }
+.est-vermut .sec-t::before, .est-vermut .sec-t::after { content: ''; flex: 1; height: 2.4pt; border-block: .6pt solid var(--tinta); }
+.est-vermut .pl { margin-top: calc(6pt * var(--k)); }
+.est-vermut .pl-n { font-weight: 600; font-size: calc(10pt * var(--k)); line-height: 1.25; }
+.est-vermut .pl-g { display: block; flex: 1 1 4mm; min-width: 4mm; border-bottom: .8pt dotted var(--tinta); transform: translateY(-.25em); }
+.est-vermut .pl-n { flex: 0 1 auto; }
+.est-vermut .pl-l { column-gap: 2mm; }
+.est-vermut .pl-p { font-family: 'Abril Fatface', serif; font-size: calc(10.6pt * var(--k)); color: var(--acento); }
+.est-vermut .pl-d { font-family: 'Playfair Display', serif; font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-vermut .pl-a { font-size: calc(6.8pt * var(--k)); color: var(--suave); }
+.est-vermut .pl-etq { font-family: 'Playfair Display', serif; font-style: italic; font-size: calc(8.6pt * var(--k)); color: var(--acento); }
+.est-vermut .pie { text-align: center; padding-top: 3mm; border-top: 2.4pt double var(--tinta); }
+.est-vermut .pie-serv { font-size: 9pt; font-weight: 600; margin-bottom: 1.6mm; }
+.est-vermut .pie-serv span + span { margin-left: 6mm; }
+.est-vermut .pie-serv b { color: var(--acento); margin-left: .5em; }
+.est-vermut .pie-nota { font-family: 'Playfair Display', serif; font-style: italic; font-size: 7.8pt; color: var(--suave); max-width: 130mm; margin: 0 auto; line-height: 1.35; }
+
+/* ============================================================
+   PIZARRA — menú del día, bar de barrio cuidado: títulos a mano y subrayado de rotulador
+   ============================================================ */
+.est-pizarra { --tinta: #1D1D1B; --acento: #E5482B; --suave: #66645E; --linea: #1D1D1B; --papel: #FFFFFF; }
+.est-pizarra .pagina { font-family: 'Karla', sans-serif; padding: 15mm 17mm 13mm; }
+.est-pizarra .cab { margin-bottom: calc(9mm * min(var(--k), 1.1)); }
+.est-pizarra .cab-nombre { display: inline-block; font-family: 'Caveat', cursive; font-weight: 700; font-size: min(calc(82pt * min(var(--k), 1.08)), calc(1150pt / var(--letras))); line-height: .82; transform: rotate(-2.2deg); transform-origin: left bottom; padding: 0 2mm 1.5mm 0; border-bottom: 2.6pt solid var(--acento); border-radius: 0 0 60% 8% / 0 0 5mm 2mm; }
+.est-pizarra .cab-logo { max-height: 26mm; max-width: 100mm; }
+.est-pizarra .cab-sub { margin-top: 4.5mm; font-weight: 600; font-size: 8.4pt; letter-spacing: .2em; text-transform: uppercase; color: var(--suave); }
+.est-pizarra .cols-2 .cuerpo { column-gap: 12mm; }
+.est-pizarra .sec-t { font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(24pt * var(--k)); line-height: .95; margin-bottom: calc(3pt * var(--k)); }
+.est-pizarra .sec-t span { display: inline-block; padding: 0 1.5mm .6mm 0; border-bottom: 1.6pt solid var(--tinta); border-radius: 0 0 50% 10% / 0 0 2.4mm 1mm; transform: rotate(-1deg); transform-origin: left bottom; }
+.est-pizarra .pl { margin-top: calc(6pt * var(--k)); }
+.est-pizarra .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-pizarra .pl-p { font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(15pt * var(--k)); line-height: .8; color: var(--acento); }
+.est-pizarra .pl-d { font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-pizarra .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-pizarra .pl-etq { display: inline-block; font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(11pt * var(--k)); line-height: 1; color: var(--acento); border: 1pt solid var(--acento); border-radius: 50% 45% 55% 48%; padding: .6pt 5pt 1.4pt; transform: rotate(-3deg); }
+.est-pizarra .pie { border-top: 1.6pt solid var(--tinta); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-pizarra .pie-serv { font-size: 9pt; font-weight: 600; }
+.est-pizarra .pie-serv span + span { margin-left: 5mm; }
+.est-pizarra .pie-serv b { font-family: 'Caveat', cursive; font-size: 13pt; color: var(--acento); margin-left: 2mm; }
+.est-pizarra .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
+.est-pizarra .pie-credito { flex-basis: 100%; margin-top: 0; }

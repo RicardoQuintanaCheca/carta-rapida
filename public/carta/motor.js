@@ -223,6 +223,38 @@
       cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}<div class="cab-lado">${c.subtitulo ? `<span>${esc(c.subtitulo)}</span>` : ''}</div></header>`,
       seccion: s => `<section class="sec"><h2 class="sec-t"><span>${esc(sinGritos(s.nombre))}</span></h2>${s.platos.map(platoComun).join('')}</section>`,
       plato: platoComun
+    },
+
+    /* ----- Colección por tipo de local ----- */
+    bloque: {
+      nombre: 'Bloque',
+      fuentes: ['400 1em "Anton"', '500 1em "Archivo"', '600 1em "Archivo"', '800 1em "Archivo"', 'italic 400 1em "Archivo"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    marinero: {
+      nombre: 'Marinero',
+      fuentes: ['700 1em "Zilla Slab"', '500 1em "Zilla Slab"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"', 'italic 400 1em "Figtree"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    brunch: {
+      nombre: 'Brunch',
+      fuentes: ['600 1em "Fredoka"', '500 1em "Fredoka"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"'],
+      cabecera: (c, logo) => `<header class="cab"><i class="br-sol"></i>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    vermut: {
+      nombre: 'Vermut',
+      fuentes: ['400 1em "Abril Fatface"', '500 1em "Libre Franklin"', '600 1em "Libre Franklin"', 'italic 400 1em "Playfair Display"'],
+      cabecera: (c, logo) => `<header class="cab"><div class="vm-etq"><span class="vm-over">${esc(t('carta'))}</span>${nombreOLogo(c, logo)}${subtit(c)}</div></header>`,
+      seccion: secBasica, plato: platoComun
+    },
+    pizarra: {
+      nombre: 'Pizarra',
+      fuentes: ['700 1em "Caveat"', '400 1em "Karla"', '600 1em "Karla"', 'italic 400 1em "Karla"'],
+      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      seccion: secBasica, plato: platoComun
     }
   };
 
