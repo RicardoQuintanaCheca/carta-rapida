@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Propuesta A · Imprenta — Carta Rápida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400..700&display=swap">
+<link rel="stylesheet" href="/disenos/comun.css">
+<style>
+/* A · Imprenta: la web como una prueba de imprenta. Bodoni (el tipo de las imprentas), marcas de corte, tira de color. */
+:root{--papel:#FFFFFF;--tinta:#111010;--gris:#6B6660;--filete:#DCD7CF;--rojo:#C8321E;--d:'Bodoni Moda','Didot',serif;--t:'Hanken Grotesk',system-ui,sans-serif;--m:clamp(18px,4.5vw,64px)}
+*{box-sizing:border-box}body{margin:0;background:var(--papel);color:var(--tinta);font:400 17px/1.6 var(--t);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.cab{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px var(--m);border-bottom:1px solid var(--tinta)}
+.marca{font:italic 600 26px/1 var(--d);letter-spacing:-.01em;text-decoration:none}
+.cab nav{display:flex;gap:26px;font-size:15px}.cab nav a{text-decoration:none;color:var(--gris)}.cab nav a:hover{color:var(--tinta)}
+.cab .entrar{font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--rojo);padding-bottom:2px}
+.folio{display:flex;justify-content:space-between;gap:12px;padding:8px var(--m);font-size:12.5px;color:var(--gris);border-bottom:1px solid var(--filete)}
+.portada{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,5vw,88px);align-items:center;padding:clamp(36px,6vw,96px) var(--m) clamp(56px,7vw,110px)}
+h1{font:400 clamp(52px,8.6vw,148px)/.9 var(--d);letter-spacing:-.035em;margin:0;text-wrap:balance}
+h1 i{font-weight:500}
+.entrada{font-size:clamp(18px,1.6vw,22px);line-height:1.5;max-width:30em;margin:clamp(22px,3vw,40px) 0 0;color:#2E2B28}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(24px,3vw,40px);align-items:center}
+.b{display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 28px;font:600 16.5px var(--t);text-decoration:none;border:0;cursor:pointer;background:var(--tinta);color:#fff;border-radius:0;transition:background-color .2s}
+.b:hover{background:var(--rojo)}
+.b.linea{background:none;color:var(--tinta);box-shadow:inset 0 0 0 1.5px var(--tinta)}.b.linea:hover{background:var(--tinta);color:#fff}
+.nota{font-size:14px;color:var(--gris);margin-top:16px}
+/* La hoja con marcas de corte y tira de color, como sale de máquina */
+.prueba{position:relative;padding:34px;justify-self:center;width:min(100%,460px)}
+.prueba [data-hoja]{box-shadow:0 30px 70px -40px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.06)}
+.corte{position:absolute;width:22px;height:22px;pointer-events:none}
+.corte::before,.corte::after{content:"";position:absolute;background:var(--tinta)}
+.corte::before{width:1px;height:16px}.corte::after{height:1px;width:16px}
+.c1{left:8px;top:8px}.c1::before{right:0;top:0}.c1::after{left:0;bottom:0}
+.c2{right:8px;top:8px}.c2::before{left:0;top:0}.c2::after{right:0;bottom:0}
+.c3{left:8px;bottom:8px}.c3::before{right:0;bottom:0}.c3::after{left:0;top:0}
+.c4{right:8px;bottom:8px}.c4::before{left:0;bottom:0}.c4::after{right:0;top:0}
+.tira{position:absolute;left:34px;bottom:10px;display:flex;gap:0}.tira i{width:16px;height:9px}
+.pie-prueba{position:absolute;right:34px;bottom:6px;font:italic 500 14px var(--d);color:var(--gris)}
+.pie-prueba b{font-style:normal;font:600 12px var(--t);color:var(--tinta);margin-left:6px}
+/* Franja de estilos, compuesta como un muestrario de tipos */
+.muestrario{border-block:1px solid var(--tinta);padding:20px 0;overflow:hidden;white-space:nowrap}
+.muestrario div{display:inline-flex;gap:38px;padding-right:38px;animation:corre 46s linear infinite;font:italic 400 clamp(26px,3vw,40px)/1 var(--d)}
+.muestrario span:nth-child(even){font:500 13px/3 var(--t);color:var(--rojo)}
+@keyframes corre{to{transform:translateX(-50%)}}
+/* Herramienta: hoja de pedido */
+.taller{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,88px);padding:clamp(56px,8vw,130px) var(--m);align-items:start}
+h2{font:400 clamp(38px,5.4vw,84px)/.95 var(--d);letter-spacing:-.03em;margin:0;text-wrap:balance}
+.pasos{list-style:none;margin:32px 0 0;padding:0;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:54px 1fr;padding:16px 0;border-top:1px solid var(--filete);font-size:17px}
+.pasos li::before{content:counter(p,upper-roman);font:italic 500 26px/1 var(--d);color:var(--rojo)}
+.pedido{border:1.5px solid var(--tinta);padding:clamp(18px,2.6vw,36px);background:#fff;position:relative}
+.pedido::before{content:"";position:absolute;inset:6px;border:1px solid var(--filete);pointer-events:none}
+.pedido > *{position:relative}
+.pedido-cab{display:flex;justify-content:space-between;font-size:13px;color:var(--gris);padding-bottom:14px;border-bottom:1px solid var(--tinta);margin-bottom:18px}
+.subir{display:grid;place-items:center;text-align:center;gap:10px;padding:clamp(30px,5vw,60px) 20px;border:1.5px dashed var(--tinta);cursor:pointer;transition:background-color .2s}
+.subir:hover{background:#F7F4EF}
+.subir b{font:italic 500 clamp(26px,3vw,36px)/1.05 var(--d)}
+.subir span{color:var(--gris);font-size:14.5px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.cierre{background:var(--tinta);color:#fff;padding:clamp(56px,9vw,140px) var(--m)}
+.cierre h2{color:#fff;font-size:clamp(46px,9vw,150px)}.cierre h2 i{color:#F2B8A8}
+.cierre .b{background:#fff;color:var(--tinta);margin-top:36px}.cierre .b:hover{background:var(--rojo);color:#fff}
+.entra > *{opacity:0;transform:translateY(22px);animation:entra .9s cubic-bezier(.2,.8,.2,1) forwards}
+.entra > :nth-child(2){animation-delay:.12s}.entra > :nth-child(3){animation-delay:.24s}.entra > :nth-child(4){animation-delay:.36s}
+.prueba{opacity:0;animation:entra 1.1s .3s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes entra{to{opacity:1;transform:none}}
+@media (max-width:860px){.cab nav{display:none}.portada,.taller{grid-template-columns:minmax(0,1fr)}.prueba{padding:26px}.fila{grid-template-columns:1fr}.folio span:last-child{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.entra > *,.prueba{opacity:1;transform:none}}
+</style></head><body>
+<header class="cab"><a class="marca" href="#">Carta Rápida</a><nav><a href="#taller">Pruébala</a><a href="#">Estilos</a><a href="#">Carta Pro</a><a href="#">Precios</a></nav><a class="entrar" href="#">Entrar</a></header>
+<div class="folio"><span>Para restaurantes, bares y hoteles</span><span>Quince estilos · PDF A4 · Hecho en Madrid por Kartia</span></div>
+<section class="portada">
+  <div class="entra">
+    <h1>Tu carta, <i>como de imprenta.</i></h1>
+    <p class="entrada">Hazle una foto a la carta que tienes. En treinta segundos te la devolvemos compuesta, lista para imprimir en A4.</p>
+    <div class="acciones"><a class="b" href="#taller">Sube una foto de tu carta</a><a class="b linea" href="#">Ver los quince estilos</a></div>
+    <p class="nota">Gratis y sin tarjeta.</p>
+  </div>
+  <div class="prueba"><i class="corte c1"></i><i class="corte c2"></i><i class="corte c3"></i><i class="corte c4"></i>
+    <div data-hoja="#estiloA"></div>
+    <div class="tira" aria-hidden="true"><i style="background:#00A0D6"></i><i style="background:#D6007F"></i><i style="background:#FFD800"></i><i style="background:#111"></i><i style="background:#C8321E"></i></div>
+    <div class="pie-prueba">Estilo<b id="estiloA">Riviera</b></div>
+  </div>
+</section>
+<div class="muestrario" aria-hidden="true"><div><span>Atrevido</span><span>Riviera</span><span>Alta cocina</span><span>Sobremesa</span><span>Dos tintas</span><span>Serigrafía</span><span>Periódico</span><span>Gaceta</span><span>Japonés</span><span>Sumi</span><span>Gran café</span><span>Brasserie</span><span>Atrevido</span><span>Riviera</span><span>Alta cocina</span><span>Sobremesa</span><span>Dos tintas</span><span>Serigrafía</span><span>Periódico</span><span>Gaceta</span><span>Japonés</span><span>Sumi</span><span>Gran café</span><span>Brasserie</span></div></div>
+<section class="taller" id="taller">
+  <div><h2>Tres pasos. <i>Sin registrarte.</i></h2>
+    <ol class="pasos"><li>Haz una foto a tu carta</li><li>Elige el estilo de tu local</li><li>Descarga el PDF e imprime</li></ol></div>
+  <div class="pedido">
+    <div class="pedido-cab"><span>Hoja de trabajo</span><span>Nº 1 · Tu carta</span></div>
+    <label class="subir"><b>Deja aquí la foto de tu carta</b><span>JPG, PNG o WEBP · hasta 5 páginas</span><span class="b" style="margin-top:10px">Elegir fotos</span></label>
+    <div class="fila"><a class="b linea" href="#">Pegar el texto</a><a class="b linea" href="#">Probar con un ejemplo</a></div>
+  </div>
+</section>
+<section class="cierre"><h2>Deja de maquetar. <i>Empieza a vender.</i></h2><a class="b" href="#taller">Sube una foto de tu carta</a></section>
+<script src="/disenos/comun.js"></script>
+</body></html>
