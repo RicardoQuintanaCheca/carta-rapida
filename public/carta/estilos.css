@@ -669,3 +669,55 @@
 .est-pizarra .pie-serv b { font-family: 'Caveat', cursive; font-size: 13pt; color: var(--acento); margin-left: 2mm; }
 .est-pizarra .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
 .est-pizarra .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ───── Segunda pasada: más carácter gráfico en la colección por tipo de local ───── */
+/* BLOQUE: cabecera en negro a sangre y franja de cuadros de diner */
+.est-bloque .pagina { padding: 0 14mm 15mm; }
+.est-bloque .cab { margin: 0 -14mm calc(9mm * min(var(--k), 1.1)); padding: 13mm 14mm 11mm; background: var(--tinta); color: #fff; border-bottom: 0; position: relative; }
+.est-bloque .cab::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5mm; background: conic-gradient(#fff 25%, #111 0 50%, #fff 0 75%, #111 0) 0 0 / 5mm 5mm; }
+.est-bloque .cab-nombre { color: #fff; font-size: min(calc(92pt * min(var(--k), 1.06)), calc(1560pt / var(--letras))); }
+.est-bloque .cab-logo { mix-blend-mode: normal; background: #fff; padding: 2mm; }
+.est-bloque .cab-sub { color: var(--tinta); transform: rotate(-4deg); margin-bottom: 4mm; }
+.est-bloque .sec-t { display: flex; align-items: stretch; padding: 0; }
+.est-bloque .sec-t::before { content: ''; flex: 0 0 3.4mm; background: var(--acento); }
+.est-bloque .sec-t span { padding: calc(4.5pt * var(--k)) calc(7pt * var(--k)) calc(3.5pt * var(--k)); }
+.est-bloque .pagina::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5mm; background: conic-gradient(#fff 25%, #111 0 50%, #fff 0 75%, #111 0) 0 0 / 5mm 5mm; }
+
+/* MARINERO: salvavidas, olas y rayas */
+.est-marinero .ma-aro { display: block; width: 15mm; height: 15mm; margin: 0 auto 3.4mm; border-radius: 50%; background: repeating-conic-gradient(from 22.5deg, var(--acento) 0 45deg, #E9EDF5 0 90deg); -webkit-mask: radial-gradient(closest-side, transparent 54%, #000 56%); mask: radial-gradient(closest-side, transparent 54%, #000 56%); }
+.est-marinero .ma-ola { height: 2.4mm; margin: 4.6mm auto 0; width: 62mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%2314305E' stroke-width='1.5'/%3E%3C/svg%3E") 0 50% / 6mm 2mm repeat-x; }
+.est-marinero .sec-t { border-bottom: 0; padding-bottom: calc(6pt * var(--k)); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%2314305E' stroke-width='1.5'/%3E%3C/svg%3E") 0 100% / 6mm 2mm repeat-x; }
+.est-marinero .sec-t::after { display: none; }
+.est-marinero .pie { padding-top: 4.4mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%23D9432F' stroke-width='1.5'/%3E%3C/svg%3E") 50% 0 / 6mm 2mm repeat-x; }
+
+/* BRUNCH: formas de papel recortado y títulos en pastilla */
+.est-brunch .br-sol { right: -32mm; top: -36mm; width: 84mm; height: 84mm; }
+.est-brunch .br-aro { position: absolute; right: -40mm; top: -44mm; width: 100mm; height: 100mm; border-radius: 50%; border: 1.4pt dashed var(--tinta); opacity: .55; }
+.est-brunch .pagina::before { content: ''; position: absolute; left: -30mm; bottom: -34mm; width: 62mm; height: 62mm; border-radius: 50%; background: #CFEBDD; }
+.est-brunch .pagina::after { content: ''; position: absolute; left: 24mm; bottom: -19mm; width: 30mm; height: 30mm; border-radius: 50%; background: #FFD9C7; }
+.est-brunch .cuerpo, .est-brunch .pie { position: relative; z-index: 1; }
+.est-brunch .sec-t span { display: inline-block; background: var(--pastel); border-radius: 99px; padding: calc(2.4pt * var(--k)) calc(9pt * var(--k)) calc(3pt * var(--k)); margin-left: calc(-4pt * var(--k)); }
+.est-brunch .pie { border-top: 0; padding: 3mm 0 0 50mm; }
+
+/* VERMUT: marco de etiqueta, rombos y cinta */
+.est-vermut .pagina { padding: 20mm 21mm 17mm; }
+.est-vermut .pagina::before { content: ''; position: absolute; inset: 7mm; border: 1.8pt solid var(--tinta); border-radius: 7mm; pointer-events: none; }
+.est-vermut .pagina::after { content: ''; position: absolute; inset: 8.8mm; border: .6pt solid var(--tinta); border-radius: 5.4mm; pointer-events: none; }
+.est-vermut .vm-etq { border: 0; outline: 0; padding: 0 6mm; margin: 0; min-width: 0; }
+.est-vermut .vm-over { display: flex; align-items: center; justify-content: center; gap: 3mm; margin-bottom: 2.6mm; }
+.est-vermut .vm-over i { width: 2.2mm; height: 2.2mm; background: var(--acento); transform: rotate(45deg); }
+.est-vermut .vm-over::before, .est-vermut .vm-over::after { content: ''; width: 16mm; border-top: .8pt solid var(--tinta); }
+.est-vermut .cab-nombre { font-size: min(calc(58pt * min(var(--k), 1.1)), calc(800pt / var(--letras))); letter-spacing: .03em; }
+.est-vermut .vm-cinta { margin-top: 3.4mm; }
+.est-vermut .vm-cinta span { display: inline-block; background: var(--acento); color: #fff; font-family: 'Playfair Display', serif; font-style: italic; font-size: 10pt; padding: 1.5mm 8mm 1.9mm; clip-path: polygon(0 0, 100% 0, calc(100% - 3mm) 50%, 100% 100%, 0 100%, 3mm 50%); }
+.est-vermut .sec-t { font-size: calc(16pt * var(--k)); }
+
+/* PIZARRA: rotulador, garabatos y marco a mano */
+.est-pizarra .pagina::before { content: ''; position: absolute; inset: 7mm; border: 1.3pt solid var(--tinta); border-radius: 2mm 5mm 3mm 6mm / 5mm 2mm 6mm 3mm; transform: rotate(-.35deg); pointer-events: none; }
+.est-pizarra .pagina::after { content: ''; position: absolute; inset: 7.6mm 6.6mm 6.8mm 7.4mm; border: .7pt solid var(--tinta); border-radius: 4mm 2mm 6mm 3mm / 2mm 6mm 3mm 5mm; transform: rotate(.3deg); opacity: .7; pointer-events: none; }
+.est-pizarra .pagina { padding: 19mm 20mm 16mm; }
+.est-pizarra .cab { position: relative; }
+.est-pizarra .pz-estrella { position: absolute; right: 2mm; top: 0; width: 17mm; height: 17mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 L31 55 M7 17 L54 44 M53 15 L8 45 M5 31 L56 29' fill='none' stroke='%23E5482B' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E") 50% / contain no-repeat; transform: rotate(8deg); }
+.est-pizarra .cab-nombre { border-bottom: 0; border-radius: 0; padding: 0 3mm 5.4mm 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='16' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C40 3 70 12 110 7 S170 5 197 8 M20 13 C70 9 120 14 180 11' fill='none' stroke='%23E5482B' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") 0 100% / 100% 5mm no-repeat; }
+.est-pizarra .sec-t span { border-bottom: 0; border-radius: 0; padding: 0 2mm 2.2mm 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C18 2 30 8 46 5 S78 3 92 6 S110 4 118 5' fill='none' stroke='%231D1D1B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 0 100% / 100% 2.6mm no-repeat; }
+.est-pizarra .pie { border-top: 0; padding-top: 4.4mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C18 2 30 8 46 5 S78 3 92 6 S110 4 118 5' fill='none' stroke='%231D1D1B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 100% 2.6mm no-repeat; }

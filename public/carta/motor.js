@@ -235,25 +235,25 @@
     marinero: {
       nombre: 'Marinero',
       fuentes: ['700 1em "Zilla Slab"', '500 1em "Zilla Slab"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"', 'italic 400 1em "Figtree"'],
-      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      cabecera: (c, logo) => `<header class="cab"><i class="ma-aro"></i>${nombreOLogo(c, logo)}${subtit(c)}<div class="ma-ola"></div></header>`,
       seccion: secBasica, plato: platoComun
     },
     brunch: {
       nombre: 'Brunch',
       fuentes: ['600 1em "Fredoka"', '500 1em "Fredoka"', '400 1em "Figtree"', '500 1em "Figtree"', '600 1em "Figtree"'],
-      cabecera: (c, logo) => `<header class="cab"><i class="br-sol"></i>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      cabecera: (c, logo) => `<header class="cab"><i class="br-sol"></i><i class="br-aro"></i>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
       seccion: secBasica, plato: platoComun
     },
     vermut: {
       nombre: 'Vermut',
       fuentes: ['400 1em "Abril Fatface"', '500 1em "Libre Franklin"', '600 1em "Libre Franklin"', 'italic 400 1em "Playfair Display"'],
-      cabecera: (c, logo) => `<header class="cab"><div class="vm-etq"><span class="vm-over">${esc(t('carta'))}</span>${nombreOLogo(c, logo)}${subtit(c)}</div></header>`,
+      cabecera: (c, logo) => `<header class="cab"><div class="vm-etq"><span class="vm-over"><i></i>${esc(t('carta'))}<i></i></span>${nombreOLogo(c, logo)}</div>${c.subtitulo ? `<div class="vm-cinta"><span>${esc(c.subtitulo)}</span></div>` : ''}</header>`,
       seccion: secBasica, plato: platoComun
     },
     pizarra: {
       nombre: 'Pizarra',
       fuentes: ['700 1em "Caveat"', '400 1em "Karla"', '600 1em "Karla"', 'italic 400 1em "Karla"'],
-      cabecera: (c, logo) => `<header class="cab">${nombreOLogo(c, logo)}${subtit(c)}</header>`,
+      cabecera: (c, logo) => `<header class="cab"><i class="pz-estrella"></i>${nombreOLogo(c, logo)}${subtit(c)}</header>`,
       seccion: secBasica, plato: platoComun
     }
   };
