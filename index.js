@@ -8,7 +8,7 @@ const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
 const rutasAdmin = require('./admin');
-const { enviarCorreo, plantilla } = require('./correo');
+const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
 const app = express();
 app.set('trust proxy', true);
@@ -71,6 +71,46 @@ function crearLimite(porHora, porDia, mensajeHora, mensajeDia) {
     registro.set(ip, marcas);
     next();
   };
+}
+
+// === USO DE LA IA POR PERSONA ===
+// Leer una carta es lo único que cuesta dinero. Se cuenta por cuenta (si hay sesión) o por navegador,
+// con un tope por conexión como red de seguridad. Gratis: 2 cartas cada 30 días. Prueba: 5. Pro: 30.
+const { db: dbUso } = require('./db');
+const { leerCookie } = require('./cuentas');
+const DIA_MS = 24 * 60 * 60 * 1000;
+const LECTURAS = { gratis: 2, prueba: 5, pro: 30 };
+const LECTURAS_IP_DIA = 4;
+if (dbUso) dbUso.exec('CREATE TABLE IF NOT EXISTS uso (quien TEXT NOT NULL, tipo TEXT NOT NULL, fecha INTEGER NOT NULL); CREATE INDEX IF NOT EXISTS uso_quien ON uso(quien, tipo, fecha);');
+const usados = (quien, tipo, desde) => dbUso ? dbUso.prepare('SELECT COUNT(*) n FROM uso WHERE quien = ? AND tipo = ? AND fecha > ?').get(quien, tipo, desde).n : 0;
+const anotarUso = (quien, tipo) => { try { if (dbUso) dbUso.prepare('INSERT INTO uso (quien, tipo, fecha) VALUES (?, ?, ?)').run(quien, tipo, Date.now()); } catch (e) {} };
+if (dbUso) setInterval(() => { try { dbUso.prepare('DELETE FROM uso WHERE fecha < ?').run(Date.now() - 40 * DIA_MS); } catch (e) {} }, 6 * 60 * 60 * 1000).unref();
+
+// Quién lee: la cuenta si hay sesión; si no, un identificador guardado en el navegador
+function quienLee(req, res, plan) {
+  if (plan.usuario) return 'u:' + plan.usuario.id;
+  let b = leerCookie(req, 'cr_b');
+  if (!/^[A-Za-z0-9_-]{16,40}$/.test(b)) {
+    b = require('crypto').randomBytes(15).toString('base64url');
+    res.append('Set-Cookie', `cr_b=${b}; Path=/; Max-Age=${400 * 24 * 3600}; SameSite=Lax; HttpOnly${req.secure ? '; Secure' : ''}`);
+  }
+  return 'b:' + b;
+}
+// Devuelve null si puede leer otra carta, o el mensaje para mostrarle
+function topeLectura(req, plan, quien) {
+  if (!dbUso) return null;
+  const ahora = Date.now();
+  const tipo = plan.plan === 'pro' ? 'pro' : plan.plan === 'prueba' ? 'prueba' : plan.plan === 'gratis' ? 'gratis' : 'pro';
+  const n = usados(quien, 'lectura', ahora - (tipo === 'prueba' ? 8 : 30) * DIA_MS);
+  if (n >= LECTURAS[tipo]) {
+    if (tipo === 'pro') return { error: 'Has llegado al máximo de 30 cartas nuevas este mes. Puedes seguir editando y descargando las que ya tienes guardadas.' };
+    if (tipo === 'prueba') return { pro: true, error: 'Has usado las 5 cartas de tu prueba. Activa Carta Pro para seguir creando cartas nuevas.' };
+    return { pro: true, error: 'Ya has hecho tus 2 cartas gratis de este mes. Con Carta Pro creas, guardas y editas las que necesites: pruébala gratis 7 días.' };
+  }
+  if (tipo === 'gratis' && usados('ip:' + (req.ip || '?'), 'lectura', ahora - DIA_MS) >= LECTURAS_IP_DIA) {
+    return { pro: true, error: 'Desde esta conexión ya se han hecho varias cartas hoy. Vuelve mañana o pruébalo con Carta Pro, gratis 7 días.' };
+  }
+  return null;
 }
 
 const limiteProcesar = crearLimite(30, 100,
@@ -306,6 +346,11 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
     const idioma = IDIOMAS[req.body.idioma] ? req.body.idioma : 'es';
     const estilo = ESTILOS.includes(req.body.estilo) ? req.body.estilo : 'mantel';
 
+    const planLee = await planDe(req);
+    const quien = quienLee(req, res, planLee);
+    const tope = topeLectura(req, planLee, quien);
+    if (tope) { console.warn(`[LIMITE] lectura ${quien} · ${planLee.plan}`); return res.json({ ok: false, limite: true, ...tope }); }
+
     const archivos = req.files || [];
     const fotos = archivos.filter(f => f.fieldname.startsWith('foto'));
     const logoFile = archivos.find(f => f.fieldname === 'logo');
@@ -351,6 +396,8 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
     console.log(`[PROCESAR] ok · ${carta.secciones.length} secciones · ${platos} platos · "${carta.nombre_restaurante}"`);
     if (!platos) return res.json({ ok: false, error: 'No hemos encontrado platos en la imagen. Prueba con una foto más nítida y de frente.' });
 
+    anotarUso(quien, 'lectura');
+    if (planLee.plan === 'gratis') anotarUso('ip:' + (req.ip || '?'), 'lectura');
     evento('carta_generada', estilo);
     res.json({ ok: true, carta, logo });
   } catch (error) {
@@ -415,6 +462,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
     // Logo, sin firma, traducción y estilos Pro son de Carta Pro (o de la prueba de 7 días)
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
+    let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {
       if (String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
@@ -427,6 +475,11 @@ app.post('/pdf', limitePDF, async (req, res) => {
       if (!plan.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ ok: false, email: true, error: 'Déjanos tu email para descargar la carta.' });
       }
+      destino = plan.email || email;
+      // Como mucho 6 envíos al día a la misma dirección: nadie puede usar esto para llenar un buzón ajeno
+      if (CORREO_ACTIVO && usados('e:' + destino, 'envio', Date.now() - DIA_MS) >= 6) {
+        return res.status(429).json({ ok: false, error: 'Ya te hemos enviado varias cartas hoy a ese email. Revisa tu bandeja (y el correo no deseado).' });
+      }
     }
 
     const t0 = Date.now();
@@ -438,6 +491,28 @@ app.post('/pdf', limitePDF, async (req, res) => {
       'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}.pdf"`,
       'Cache-Control': 'no-store'
     });
+    // Versión gratis: la carta se envía al email (así el email es de verdad). Si el correo falla, se descarga igual.
+    if (!pro && destino && CORREO_ACTIVO) {
+      const nombreArchivo = `carta-${slug(limpia.nombre_restaurante)}.pdf`;
+      const enviado = await enviarCorreo({
+        para: destino,
+        asunto: `Tu carta${limpia.nombre_restaurante ? ' de ' + limpia.nombre_restaurante : ''}, lista para imprimir`,
+        html: plantilla({
+          titulo: 'Aquí tienes tu carta',
+          texto: 'Va adjunta en PDF, en A4, lista para imprimir. Si mañana cambian los precios, con Carta Pro la editas y la vuelves a descargar sin empezar de cero.',
+          boton: 'Probar Carta Pro 7 días gratis', enlace: 'https://cartarapida.kartia.es/#pro',
+          pie: 'Te escribimos porque has pedido tu carta en Carta Rápida. Si no has sido tú, ignora este correo.'
+        }),
+        texto: 'Aquí tienes tu carta, adjunta en PDF A4 y lista para imprimir. Carta Rápida · cartarapida.kartia.es',
+        adjuntos: [{ nombre: nombreArchivo, contenido: Buffer.from(pdf) }]
+      });
+      if (enviado) {
+        anotarUso('e:' + destino, 'envio');
+        evento('pdf_gratis', estiloFinal);
+        res.removeHeader('Content-Disposition'); res.type('application/json');
+        return res.json({ ok: true, enviado: true, email: destino });
+      }
+    }
     evento(pro ? 'pdf_pro' : 'pdf_gratis', estiloFinal);
     res.send(Buffer.from(pdf));
   } catch (error) {

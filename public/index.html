@@ -71,7 +71,7 @@
       "name": "¿Es realmente gratis? ¿Dónde está la trampa?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 12 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 20 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta."
+        "text": "La versión gratis es gratis de verdad: hasta dos cartas al mes, rediseñadas en PDF A4 con 12 estilos; te las enviamos a tu email, con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 20 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta."
       }
     },
     {
@@ -2843,7 +2843,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       <div class="plans">
         <article class="plan rv">
           <div class="plan-top"><b>Gratis</b></div>
-          <div><div class="amount">0 €</div><div class="cond">Solo tu email para descargar.</div></div>
+          <div><div class="amount">0 €</div><div class="cond">Te la enviamos a tu email.</div></div>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>12 estilos</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>PDF A4 listo para imprimir</li>
@@ -2876,7 +2876,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
         <h2 class="h-l" style="margin-top:16px">Lo que nos preguntáis <span class="grey">antes de empezar.</span></h2>
       </div>
       <div>
-        <details open><summary>¿Es realmente gratis? ¿Dónde está la trampa?<i aria-hidden="true"></i></summary><p>La versión gratis es gratis de verdad: tu carta rediseñada en PDF A4 con 12 estilos, a cambio solo de tu email y con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 20 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta.</p></details>
+        <details open><summary>¿Es realmente gratis? ¿Dónde está la trampa?<i aria-hidden="true"></i></summary><p>La versión gratis es gratis de verdad: hasta dos cartas al mes, rediseñadas en PDF A4 con 12 estilos; te las enviamos a tu email, con una firma pequeña al pie. Si la quieres guardar y editar cuando cambien los precios, sin firma, con tu logo, traducida o con los 20 estilos, está Carta Pro: 9,90 € al mes con el plan anual (12,90 € si vas mes a mes), y puedes probarla 7 días gratis sin tarjeta.</p></details>
         <details><summary>¿Qué formatos acepta? ¿Y si solo tengo una foto borrosa?<i aria-hidden="true"></i></summary><p>Aceptamos JPG, PNG y WEBP, y hasta 5 fotos si tu carta tiene varias páginas. Leemos cartas con reflejos, fotos hechas con prisa e incluso hojas fotocopiadas. Para el mejor resultado: foto de frente, con buena luz y sin cortar los bordes.</p></details>
         <details><summary>¿Cuánto tarda en generar el PDF?<i aria-hidden="true"></i></summary><p>Entre 20 y 40 segundos, según el tamaño de la carta. Después puedes cambiar de estilo y descargar el PDF al momento, sin esperar otra vez.</p></details>
         <details><summary>¿Puedo traducir mi carta a otros idiomas?<i aria-hidden="true"></i></summary><p>Sí, con Carta Pro. Traducimos toda la carta — platos, secciones y descripciones — a inglés, francés, alemán, italiano, portugués o chino, con terminología profesional de hostelería. Puedes probarlo gratis 7 días.</p></details>
@@ -2962,15 +2962,26 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   <div class="cu-caja" role="dialog" aria-modal="true" aria-labelledby="emailTit">
     <button class="cu-cerrar" type="button" aria-label="Cerrar" onclick="cerrarEmail()">×</button>
     <div class="cu-eyebrow">Tu carta está lista</div>
-    <h2 class="cu-titulo" id="emailTit">¿A qué email te la asociamos?</h2>
-    <p class="cu-sub">Descárgala gratis al momento. Solo te escribiremos si tienes algo pendiente con tu carta o si tú lo pides abajo.</p>
+    <h2 class="cu-titulo" id="emailTit">¿A qué email te la enviamos?</h2>
+    <p class="cu-sub">Te llega en un minuto, en PDF y lista para imprimir. Solo te escribiremos por tu carta o si tú lo pides abajo.</p>
     <form id="emailForm" novalidate>
       <label class="cu-campo"><span>Tu email</span><input type="email" id="emailDescarga" autocomplete="email" spellcheck="false" placeholder="tu@restaurante.com"></label>
       <label class="cu-check"><input type="checkbox" id="emailNovedades"> <span>Quiero recibir ideas para vender más con mi carta (como mucho, dos al mes).</span></label>
-      <button class="cu-btn" type="submit" id="emailBtn">Descargar mi carta gratis</button>
+      <button class="cu-btn" type="submit" id="emailBtn">Enviarme mi carta gratis</button>
       <p class="cu-error" id="emailError" role="alert"></p>
     </form>
     <p class="cu-pie">Al descargar aceptas la <a href="/legal/privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Nada de spam.<br>¿La quieres sin firma y guardada? <button type="button" class="cu-enlace" onclick="cerrarEmail(); probarPro();">Prueba Pro 7 días gratis</button></p>
+  </div>
+</div>
+
+<div class="cu-velo" id="enviadaVelo" hidden>
+  <div class="cu-caja" role="dialog" aria-modal="true" aria-labelledby="enviadaTit">
+    <button class="cu-cerrar" type="button" aria-label="Cerrar" onclick="cerrarEnviada()">×</button>
+    <div class="cu-eyebrow">Enviada</div>
+    <h2 class="cu-titulo" id="enviadaTit">Mira tu correo</h2>
+    <p class="cu-sub">Te hemos enviado la carta en PDF a <b id="enviadaEmail"></b>. Suele tardar menos de un minuto. Si no la ves, mira en el correo no deseado.</p>
+    <button class="cu-btn" type="button" onclick="cerrarEnviada()">Entendido</button>
+    <p class="cu-pie">¿Te has equivocado de email? <button type="button" class="cu-enlace" onclick="otroEmail()">Enviarla a otro</button><br>¿La quieres sin firma, con tu logo y editable? <button type="button" class="cu-enlace" onclick="cerrarEnviada(); mostrarPro()">Prueba Carta Pro 7 días gratis</button></p>
   </div>
 </div>
 
@@ -3721,6 +3732,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       const res = await fetch('/procesar', { method: 'POST', body: formData });
       const data = await res.json();
       stopCountdown();
+      if (!data.ok && data.limite && data.pro) setTimeout(() => mostrarPro(data.error), 400);
       if (!data.ok) throw new Error(data.error || 'Ha habido un problema. Inténtalo de nuevo.');
       medir('carta_generada', { fotos: filesList.length, estilo: estiloActual });
       cartaGuardadaId = null;
@@ -3905,6 +3917,18 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
         try { d = await res.json(); if (d.error) msg = d.error; } catch (e) {}
         if (res.status === 402) { if (licencia) olvidarLicencia(); if (window.Cuenta) await Cuenta.cargar(); pintarPlan(); renderVista(); mostrarPro(msg); return; }
         throw new Error(msg);
+      }
+      if ((res.headers.get('Content-Type') || '').includes('json')) {
+        const d = await res.json();
+        if (d.enviado) {
+          document.getElementById('enviadaEmail').textContent = d.email;
+          document.getElementById('enviadaVelo').hidden = false;
+          document.body.style.overflow = 'hidden';
+          updateToolBubble('Te la hemos enviado por email 📬');
+          medir('pdf_descargado', { plan: planActual(), estilo: estiloActual, via: 'email' });
+          return;
+        }
+        throw new Error(d.error || 'No hemos podido generar el PDF. Inténtalo de nuevo.');
       }
       const blob = await res.blob();
       const nombre = (res.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
@@ -4296,6 +4320,9 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
     pintarPlan();
     return true;
   }
+
+  function cerrarEnviada() { document.getElementById('enviadaVelo').hidden = true; document.body.style.overflow = ''; }
+  function otroEmail() { cerrarEnviada(); almacen.guardar('cr_email', ''); document.getElementById('emailDescarga').value = ''; descargar(); }
 
   // ── Email para descargar la versión gratis ──
   let emailPendiente = null;
