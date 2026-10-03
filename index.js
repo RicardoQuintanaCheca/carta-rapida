@@ -4,11 +4,11 @@ const compression = require('compression');
 const multer = require('multer');
 const OpenAI = require('openai');
 const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
-const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente } = require('./cuentas');
+const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
 const rutasAdmin = require('./admin');
-const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
+const { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO } = require('./correo');
 
 const app = express();
 app.set('trust proxy', true);
@@ -100,7 +100,7 @@ function quienLee(req, res, plan) {
 function topeLectura(req, plan, quien) {
   if (!dbUso) return null;
   const ahora = Date.now();
-  const tipo = plan.plan === 'pro' ? 'pro' : plan.plan === 'prueba' ? 'prueba' : plan.plan === 'gratis' ? 'gratis' : 'pro';
+  const tipo = plan.plan === 'gratis' ? 'gratis' : (plan.plan === 'prueba' || !plan.usuario) ? 'prueba' : 'pro';
   const n = usados(quien, 'lectura', ahora - (tipo === 'prueba' ? 8 : 30) * DIA_MS);
   if (n >= LECTURAS[tipo]) {
     if (tipo === 'pro') return { error: 'Has llegado al máximo de 30 cartas nuevas este mes. Puedes seguir editando y descargando las que ya tienes guardadas.' };
@@ -446,6 +446,26 @@ ${REGLAS_CAMPOS}`;
   }
 });
 
+// Imagen de la carta para el correo: se guarda un mes y se sirve en /v/<id>.jpg
+const DIR_VISTAS = require('path').join(process.env.DATA_DIR || require('path').join(__dirname, 'datos'), 'vistas');
+try { require('fs').mkdirSync(DIR_VISTAS, { recursive: true }); } catch (e) {}
+function guardarVista(buf) {
+  if (!buf) return '';
+  try {
+    const id = require('crypto').randomBytes(12).toString('base64url');
+    require('fs').writeFileSync(require('path').join(DIR_VISTAS, id + '.jpg'), buf);
+    return `https://cartarapida.kartia.es/v/${id}.jpg`;
+  } catch (e) { return ''; }
+}
+app.get('/v/:id.jpg', (req, res) => {
+  if (!/^[A-Za-z0-9_-]{10,24}$/.test(req.params.id)) return res.status(404).end();
+  res.set('Cache-Control', 'public, max-age=2592000').sendFile(require('path').join(DIR_VISTAS, req.params.id + '.jpg'), e => { if (e && !res.headersSent) res.status(404).end(); });
+});
+setInterval(() => {
+  try { const fs = require('fs'); for (const f of fs.readdirSync(DIR_VISTAS)) { const r = require('path').join(DIR_VISTAS, f); if (Date.now() - fs.statSync(r).mtimeMs > 35 * DIA_MS) fs.unlinkSync(r); } } catch (e) {}
+}, 12 * 60 * 60 * 1000).unref();
+const NOMBRE_ESTILO = { mantel: 'Mantel', barra: 'Barra', autor: 'Autor', noche: 'Medianoche', sobremesa: 'Sobremesa', brasserie: 'Brasserie', editorial: 'Editorial', sumi: 'Sumi', riviera: 'Riviera', deco: 'Déco', azulejo: 'Azulejo', trattoria: 'Trattoria', cartel: 'Cartel', ticket: 'Ticket', gaceta: 'Gaceta', serigrafia: 'Serigrafía', bloque: 'Bloque', marinero: 'Marinero', brunch: 'Brunch', vermut: 'Vermut', pizarra: 'Pizarra' };
+
 function slug(s) {
   return String(s || 'carta').normalize('NFD').replace(/[̀-ͯ]/g, '')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'carta';
@@ -483,7 +503,8 @@ app.post('/pdf', limitePDF, async (req, res) => {
     }
 
     const t0 = Date.now();
-    const { pdf, info } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro });
+    const porCorreo = !pro && destino && CORREO_ACTIVO;
+    const { pdf, info, vista } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro, conVista: !!porCorreo });
     console.log(`[PDF] ${estiloFinal} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${plan.plan} · ${Date.now() - t0} ms`);
 
     res.set({
@@ -492,17 +513,13 @@ app.post('/pdf', limitePDF, async (req, res) => {
       'Cache-Control': 'no-store'
     });
     // Versión gratis: la carta se envía al email (así el email es de verdad). Si el correo falla, se descarga igual.
-    if (!pro && destino && CORREO_ACTIVO) {
+    if (porCorreo) {
       const nombreArchivo = `carta-${slug(limpia.nombre_restaurante)}.pdf`;
+      const imagen = guardarVista(vista);
       const enviado = await enviarCorreo({
         para: destino,
         asunto: `Tu carta${limpia.nombre_restaurante ? ' de ' + limpia.nombre_restaurante : ''}, lista para imprimir`,
-        html: plantilla({
-          titulo: 'Aquí tienes tu carta',
-          texto: 'Va adjunta en PDF, en A4, lista para imprimir. Si mañana cambian los precios, con Carta Pro la editas y la vuelves a descargar sin empezar de cero.',
-          boton: 'Probar Carta Pro 7 días gratis', enlace: 'https://cartarapida.kartia.es/#pro',
-          pie: 'Te escribimos porque has pedido tu carta en Carta Rápida. Si no has sido tú, ignora este correo.'
-        }),
+        html: plantillaCarta({ restaurante: limpia.nombre_restaurante, estilo: NOMBRE_ESTILO[estiloFinal] || estiloFinal, imagen, conPase: PASE_ACTIVO }),
         texto: 'Aquí tienes tu carta, adjunta en PDF A4 y lista para imprimir. Carta Rápida · cartarapida.kartia.es',
         adjuntos: [{ nombre: nombreArchivo, contenido: Buffer.from(pdf) }]
       });

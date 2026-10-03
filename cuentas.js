@@ -94,6 +94,13 @@ function leerLicencia(token) {
   } catch { return null; }
 }
 
+// ── Pase de 7 días (pago único de 15 €): funciones Pro al descargar, sin cuenta ni suscripción ──
+const PASE = { precio: 15, dias: 7, env: 'STRIPE_PRICE_PASE', defecto: 'price_1UMYSJRZgd5ArTbXwFE2whqX' };
+function crearLicencia(email, hasta) {
+  const datos = Buffer.from(JSON.stringify({ p: 'pro', e: email || '', x: hasta })).toString('base64url');
+  return datos + '.' + firmar(datos);
+}
+
 // ── Estado del plan ──
 const SUB_VIVA = ['active', 'trialing', 'past_due'];
 function planDeUsuario(u, ahora = Date.now()) {
@@ -481,6 +488,60 @@ function crearRutas({ limite, limiteCuenta }) {
     }
   });
 
+  // Pase de 7 días: no hace falta cuenta. Se paga una vez y se recibe una licencia firmada que caduca sola.
+  r.post('/pase/crear', limite, async (req, res) => {
+    const origen = origenDe(req);
+    const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 200);
+    try {
+      if (!PAGOS_ACTIVOS) return res.json({ ok: false, error: 'El pago estará disponible en unos minutos.' });
+      if (MODO_DEMO) return res.json({ ok: true, url: `${origen}/?pase=demo_${crypto.randomBytes(9).toString('base64url')}` });
+      const sesion = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{ quantity: 1, price: process.env[PASE.env] || PASE.defecto }],
+        locale: 'es',
+        ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? { customer_email: email } : {}),
+        billing_address_collection: 'auto',
+        invoice_creation: { enabled: true },
+        custom_text: { submit: { message: 'Pago único: no se renueva. Tienes 7 días con todas las funciones de Carta Pro al descargar. Empieza ya: al activarlo renuncias al desistimiento.' } },
+        metadata: { origen: 'carta-rapida', tipo: 'pase' },
+        success_url: `${origen}/?pase={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origen}/?pase=cancelado`
+      });
+      res.json({ ok: true, url: sesion.url });
+    } catch (e) {
+      console.error('[PASE] no se pudo crear:', e.message);
+      res.json({ ok: false, error: 'No hemos podido abrir el pago. Inténtalo de nuevo en un momento.' });
+    }
+  });
+  const pasesVistos = new Set();
+  r.post('/pase/confirmar', limite, async (req, res) => {
+    const id = String((req.body || {}).sesion || '').replace(/[^\w-]/g, '').slice(0, 200);
+    if (!id) return res.json({ ok: false, error: 'Falta el pago.' });
+    try {
+      if (id.startsWith('demo_')) {
+        if (!MODO_DEMO) return res.json({ ok: false, error: 'Pago no válido.' });
+        const hasta = Date.now() + PASE.dias * DIA;
+        return res.json({ ok: true, licencia: crearLicencia('', hasta), caduca: hasta });
+      }
+      if (!stripe) return res.json({ ok: false, error: 'Pago no válido.' });
+      const s = await stripe.checkout.sessions.retrieve(id);
+      if ((s.metadata || {}).tipo !== 'pase' || s.payment_status !== 'paid') return res.json({ ok: false, error: 'El pago no se ha completado.' });
+      // Los 7 días cuentan desde el pago: volver a abrir el enlace no los alarga
+      const hasta = s.created * 1000 + PASE.dias * DIA;
+      if (hasta < Date.now()) return res.json({ ok: false, error: 'Este pase ya ha caducado.' });
+      const email = (s.customer_details && s.customer_details.email) || s.customer_email || '';
+      if (!pasesVistos.has(id)) {
+        pasesVistos.add(id);
+        console.log(`PAGO: ${JSON.stringify({ email, pase: id, importe: (s.amount_total || 0) / 100, fecha: ahoraMadrid() })}`);
+        enviarLead({ email, origen: 'carta-rapida-pase', restaurante: '', estilo: '', platos: 0, fecha: ahoraMadrid(), pago: (s.amount_total || 0) / 100 });
+      }
+      res.json({ ok: true, licencia: crearLicencia(email, hasta), caduca: hasta, email });
+    } catch (e) {
+      console.error('[PASE] no se pudo confirmar:', e.message);
+      res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@kartia.es y lo activamos a mano.' });
+    }
+  });
+
   // Pantalla de pago simulado (solo en local con PAGOS_DEMO=si)
   r.get('/pago/demo', (req, res) => {
     if (!MODO_DEMO) return res.redirect('/');
@@ -596,4 +657,4 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
   return r;
 }
 
-module.exports = { ADMINS, crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente };
+module.exports = { ADMINS, crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO: PAGOS_ACTIVOS };

@@ -88,7 +88,7 @@ async function obtenerNavegador() {
 
 const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia', 'bloque', 'marinero', 'brunch', 'vermut', 'pizarra']);
 
-async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true } = {}) {
+async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true, conVista = false } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
   const nav = await obtenerNavegador();
   const contexto = await nav.newContext();
@@ -112,9 +112,13 @@ async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = tru
       if (logo) await new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = logo; window.__logo = i; });
       return MotorCarta.componer(document.getElementById('d'), carta, { estilo, logo, credito });
     }, { carta, estilo, logo, credito });
+    let vista = null;
+    if (conVista) {
+      try { const hoja = await pagina.$('.pagina'); if (hoja) vista = await hoja.screenshot({ type: 'jpeg', quality: 82 }); } catch (e) {}
+    }
     await pagina.emulateMedia({ media: 'print' });
     const pdf = await pagina.pdf({ preferCSSPageSize: true, printBackground: true });
-    return { pdf, info };
+    return { pdf, info, vista };
   } finally {
     await contexto.close();
   }
