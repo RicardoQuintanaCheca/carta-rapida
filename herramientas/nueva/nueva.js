@@ -213,7 +213,9 @@ function nOpciones(b) {
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (quieto || !window.gsap || !window.ScrollTrigger) return;
     // Si las animaciones llegan tarde (red lenta), no se rehace la portada que ya se ve
-    const tarde = performance.now() > 1500;
+    // Quien ya ha visto la portada en esta sesión no vuelve a esperar la entrada
+    let vista = false; try { vista = sessionStorage.getItem('cr-vista') === '1'; sessionStorage.setItem('cr-vista', '1'); } catch (e) {}
+    const tarde = vista || performance.now() > 1500;
     document.documentElement.classList.add('anim');
     gsap.registerPlugin(ScrollTrigger);
     if (window.SplitText) gsap.registerPlugin(SplitText);
@@ -292,13 +294,12 @@ function nOpciones(b) {
       const rx = gsap.quickTo('#sheet', 'rotationY', { duration: .8, ease: 'power3' });
       const ry = gsap.quickTo('#sheet', 'rotationX', { duration: .8, ease: 'power3' });
       gsap.set('#demo', { perspective: 900 });
-      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 10); ry(-((e.clientY - r.top) / r.height - .5) * 8); });
+      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 6); ry(-((e.clientY - r.top) / r.height - .5) * 4); });
       d.addEventListener('pointerleave', () => { rx(0); ry(0); });
     }
     // Al bajar: la foto se aparta y la carta se endereza y crece hasta el centro
-    let escenaHecha = false;
     function escena() {
-      if (escenaHecha) return; escenaHecha = true;
+      if (escena.hecha) return; escena.hecha = true;
       const movil = window.innerWidth < 900;
       const st = { trigger: '#demo', start: movil ? 'top 40%' : 'top 12%', end: movil ? 'bottom 30%' : 'bottom 40%', scrub: .6 };
       gsap.fromTo('#photo', { xPercent: 0, rotate: -9, autoAlpha: 1 }, { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', immediateRender: false, scrollTrigger: st });
@@ -307,12 +308,12 @@ function nOpciones(b) {
       gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
     }
 
-    gsap.from('#herramienta > .wrap', { y: 80, scale: .94, autoAlpha: .4, ease: 'none', scrollTrigger: { trigger: '#herramienta', start: 'top 98%', end: 'top 55%', scrub: .6 } });
+    gsap.from('#herramienta > .wrap', { y: 40, autoAlpha: 0, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: '#herramienta', start: 'top 92%', once: true } });
     $$('.rv').forEach(el => gsap.from(el, {
       autoAlpha: 0, y: 36, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }
     }));
-    gsap.from('.anno .pin-dot', { scale: 0, duration: .6, ease: 'back.out(2.2)', stagger: .18, scrollTrigger: { trigger: '.anno', start: 'top 70%', once: true } });
+    gsap.from('.anno .pin-dot', { scale: .85, autoAlpha: 0, duration: .4, ease: 'power3.out', stagger: .07, scrollTrigger: { trigger: '.anno', start: 'top 70%', once: true } });
 
     const precio = { v: 12.5 };
     const fmt = v => v.toFixed(2).replace('.', ',');
@@ -320,7 +321,7 @@ function nOpciones(b) {
       .to(precio, { v: 13.5, duration: 1.2, ease: 'power2.inOut', delay: .4, onUpdate: () => { $('#edPrice').textContent = fmt(precio.v); } })
       .add(() => { $('#saved').textContent = 'Guardando…'; })
       .add(() => { $('#saved').textContent = 'Guardado'; $('#edOut').textContent = 'PDF actualizado · 13,50 €'; }, '+=.7')
-      .from('.ed-out', { scale: .97, duration: .5, ease: 'back.out(2)' }, '<');
+      .from('.ed-out', { scale: .98, duration: .4, ease: 'power3.out' }, '<');
 
     window.addEventListener('load', () => ScrollTrigger.refresh());
   });

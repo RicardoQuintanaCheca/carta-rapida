@@ -2024,7 +2024,7 @@ html.lenis-stopped{overflow:clip}
 @keyframes n-hormigas{to{background-position:16px 0,-16px 100%,0 -16px,100% 16px}}
 #herramienta .t2-cta-big:hover{background:#FFEDE3!important}
 #herramienta .t2-cam-ring{background:var(--accent)!important;color:#fff!important;box-shadow:0 12px 28px -10px rgba(255,74,28,.7)!important;position:relative}
-#herramienta .t2-cam-ring::after{content:"";position:absolute;inset:-8px;border-radius:24px;border:2px solid var(--accent);opacity:0;animation:n-latido 2.2s ease-out infinite}
+#herramienta .t2-cam-ring::after{content:"";position:absolute;inset:-8px;border-radius:24px;border:2px solid var(--accent);opacity:0;animation:n-latido 2.2s ease-out 3}
 @keyframes n-latido{0%{transform:scale(.85);opacity:.6}100%{transform:scale(1.25);opacity:0}}
 #herramienta .t2-cta-title{font-size:23px!important}
 @media (prefers-reduced-motion:reduce){#herramienta .t2-cta-big::after,#herramienta .t2-cam-ring::after{animation:none}}
@@ -2110,6 +2110,17 @@ body.n .nhero .golpe + .lead{margin-top:12px;max-width:33em}
 .domingo-txt p{margin:0 0 1em}
 .domingo-txt b{color:var(--ink);font-weight:700}
 .pro-golpe{margin:16px 0 0;color:var(--muted);font-size:17px;line-height:1.5;max-width:28em}
+/* Revisión de animaciones: respuesta al pulsar, hover solo con ratón, preguntas que se abren suaves */
+body.n .btn{transition:transform .18s cubic-bezier(.23,1,.32,1),background-color .2s ease}
+body.n .btn:hover{transform:none}
+@media (hover:hover) and (pointer:fine){body.n .btn:hover{transform:translateY(-2px)}}
+body.n .btn:active, body.n .chips button:active, body.n .toggle button:active, #herramienta .t2-main-btn:active, body.n .dl-principal:active{transform:scale(.97);transition-duration:.12s}
+@supports (interpolate-size:allow-keywords){
+  .faq details{interpolate-size:allow-keywords}
+  .faq details::details-content{height:0;opacity:0;overflow:clip;transition:height .3s cubic-bezier(.23,1,.32,1),opacity .24s ease-out,content-visibility .3s allow-discrete}
+  .faq details[open]::details-content{height:auto;opacity:1}
+}
+@media (prefers-reduced-motion:reduce){body.n .btn,body.n .btn:active{transition:none;transform:none}.faq details::details-content{transition:none}}
 
 </style>
   <script>
@@ -4621,7 +4632,9 @@ function nOpciones(b) {
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (quieto || !window.gsap || !window.ScrollTrigger) return;
     // Si las animaciones llegan tarde (red lenta), no se rehace la portada que ya se ve
-    const tarde = performance.now() > 1500;
+    // Quien ya ha visto la portada en esta sesión no vuelve a esperar la entrada
+    let vista = false; try { vista = sessionStorage.getItem('cr-vista') === '1'; sessionStorage.setItem('cr-vista', '1'); } catch (e) {}
+    const tarde = vista || performance.now() > 1500;
     document.documentElement.classList.add('anim');
     gsap.registerPlugin(ScrollTrigger);
     if (window.SplitText) gsap.registerPlugin(SplitText);
@@ -4700,13 +4713,12 @@ function nOpciones(b) {
       const rx = gsap.quickTo('#sheet', 'rotationY', { duration: .8, ease: 'power3' });
       const ry = gsap.quickTo('#sheet', 'rotationX', { duration: .8, ease: 'power3' });
       gsap.set('#demo', { perspective: 900 });
-      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 10); ry(-((e.clientY - r.top) / r.height - .5) * 8); });
+      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 6); ry(-((e.clientY - r.top) / r.height - .5) * 4); });
       d.addEventListener('pointerleave', () => { rx(0); ry(0); });
     }
     // Al bajar: la foto se aparta y la carta se endereza y crece hasta el centro
-    let escenaHecha = false;
     function escena() {
-      if (escenaHecha) return; escenaHecha = true;
+      if (escena.hecha) return; escena.hecha = true;
       const movil = window.innerWidth < 900;
       const st = { trigger: '#demo', start: movil ? 'top 40%' : 'top 12%', end: movil ? 'bottom 30%' : 'bottom 40%', scrub: .6 };
       gsap.fromTo('#photo', { xPercent: 0, rotate: -9, autoAlpha: 1 }, { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', immediateRender: false, scrollTrigger: st });
@@ -4715,12 +4727,12 @@ function nOpciones(b) {
       gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
     }
 
-    gsap.from('#herramienta > .wrap', { y: 80, scale: .94, autoAlpha: .4, ease: 'none', scrollTrigger: { trigger: '#herramienta', start: 'top 98%', end: 'top 55%', scrub: .6 } });
+    gsap.from('#herramienta > .wrap', { y: 40, autoAlpha: 0, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: '#herramienta', start: 'top 92%', once: true } });
     $$('.rv').forEach(el => gsap.from(el, {
       autoAlpha: 0, y: 36, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }
     }));
-    gsap.from('.anno .pin-dot', { scale: 0, duration: .6, ease: 'back.out(2.2)', stagger: .18, scrollTrigger: { trigger: '.anno', start: 'top 70%', once: true } });
+    gsap.from('.anno .pin-dot', { scale: .85, autoAlpha: 0, duration: .4, ease: 'power3.out', stagger: .07, scrollTrigger: { trigger: '.anno', start: 'top 70%', once: true } });
 
     const precio = { v: 12.5 };
     const fmt = v => v.toFixed(2).replace('.', ',');
@@ -4728,7 +4740,7 @@ function nOpciones(b) {
       .to(precio, { v: 13.5, duration: 1.2, ease: 'power2.inOut', delay: .4, onUpdate: () => { $('#edPrice').textContent = fmt(precio.v); } })
       .add(() => { $('#saved').textContent = 'Guardando…'; })
       .add(() => { $('#saved').textContent = 'Guardado'; $('#edOut').textContent = 'PDF actualizado · 13,50 €'; }, '+=.7')
-      .from('.ed-out', { scale: .97, duration: .5, ease: 'back.out(2)' }, '<');
+      .from('.ed-out', { scale: .98, duration: .4, ease: 'power3.out' }, '<');
 
     window.addEventListener('load', () => ScrollTrigger.refresh());
   });
