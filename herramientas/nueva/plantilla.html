@@ -340,40 +340,12 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
         <div class="hero-trust"><span>Gratis</span><span>Sin tarjeta</span><span>PDF A4 en 30 segundos</span></div>
       </div>
 
-      <div class="demo" id="demo" aria-label="Ejemplo: una carta hecha en Word convertida en una carta maquetada">
-        <figure class="photo" id="photo">
-          <img src="{{img:antes}}" alt="Foto de la carta original de Casa Pepe, hecha en un procesador de textos">
-          <div class="scan" id="scan"></div>
-          <figcaption class="photo-tag">Tu foto</figcaption>
-        </figure>
-        <article class="sheet" id="sheet">
-          <header class="m-head">
-            <div class="m-name">Casa Pepe</div>
-            <div class="m-rule"></div>
-            <div class="m-sub">Taberna tradicional · Chamberí</div>
-          </header>
-          <div class="m-body">
-            <section>
-              <div class="m-sec-t"><b>I</b>Para picar</div>
-              <div class="m-row">Jamón ibérico de bellota<span class="r">100 g</span><em>24</em></div>
-              <div class="m-row">Croquetas de cocido<span class="r">8 uds.</span><em>12,50</em></div>
-              <div class="m-row">Patatas bravas<em>6,50</em><small>Salsa brava de la casa</small></div>
-            </section>
-            <section>
-              <div class="m-sec-t"><b>II</b>Del mar</div>
-              <div class="m-row">Pulpo a feira<em>19,50</em><small>Con cachelos y pimentón</small></div>
-              <div class="m-row">Calamares a la andaluza<em>14</em></div>
-            </section>
-            <section>
-              <div class="m-sec-t"><b>III</b>Postres</div>
-              <div class="m-row">Tarta de queso<em>6,50</em></div>
-              <div class="m-row">Arroz con leche<em>5,50</em><small>Requemado</small></div>
-            </section>
-          </div>
-          <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
-          <div class="sheet-alt" id="sheetAlt"><img class="on" src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 70vw, 430px" alt="Carta de Casa Pepe maquetada en estilo Riviera" fetchpriority="high" width="900" height="1273"></div>
-        </article>
-        <div class="ready" id="ready"><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Riviera · 1 página</small></div></div>
+      <div class="esc" id="demo" aria-label="Carta de ejemplo de Casa Pepe en varios estilos">
+        <div class="esc-pila">
+          <div class="esc-hoja" id="escHoja"><img class="on" src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 72vw, 440px" alt="Carta de Casa Pepe maquetada en estilo Riviera" fetchpriority="high" width="900" height="1273"></div>
+          <div class="esc-rotulo"><i></i>Estilo <span id="escNombre">Riviera</span></div>
+        </div>
+        <div class="esc-puntos" id="escPuntos" role="group" aria-label="Estilo de la carta de ejemplo"></div>
       </div>
     </div>
   </section>

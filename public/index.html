@@ -2126,6 +2126,42 @@ body.n .btn:active, body.n .chips button:active, body.n .toggle button:active, #
 html,body.n{overscroll-behavior-x:none}
 @media (max-width:900px){body.n .nhero{overflow:hidden}body.n .photo{left:0}body.n .domingo,body.n .cifras{overflow:hidden}}
 
+/* ═══ Portada «Escaparate»: texto a la izquierda, la carta de ejemplo a la derecha cambiando de estilo ═══ */
+body.n .nhero{text-align:left;padding-block:clamp(24px,4vw,56px) 0;overflow:visible}
+body.n .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,80px);align-items:center}
+body.n .nhero .h-xl{font-size:clamp(50px,7.6vw,128px);line-height:.88}
+body.n .golpe{margin:clamp(20px,2.4vw,32px) 0 0}
+body.n .nhero .lead, body.n .nhero .golpe + .lead{margin:12px 0 0;max-width:32em}
+body.n .hero-ctas{justify-content:flex-start;margin-top:28px}
+body.n .hero-trust{justify-content:flex-start;margin-top:22px}
+.esc{min-width:0}
+.esc-pila{position:relative;width:min(100%,440px);margin-inline:auto}
+.esc-pila::before,.esc-pila::after{content:"";position:absolute;inset:0;border-radius:6px;background:#fff;box-shadow:0 0 0 1px rgba(12,12,13,.07),0 30px 60px -40px rgba(12,12,13,.35)}
+.esc-pila::before{transform:translate(-7%,2%) rotate(-7deg)}
+.esc-pila::after{transform:translate(6%,1%) rotate(5deg)}
+.esc-hoja{position:relative;z-index:1;aspect-ratio:210/297;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(12,12,13,.06),0 40px 80px -36px rgba(12,12,13,.4),0 0 0 1px rgba(12,12,13,.04)}
+.esc-hoja img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .28s ease-out}
+.esc-hoja img.on{opacity:1}
+.esc-rotulo{position:absolute;z-index:2;left:50%;bottom:-18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.esc-rotulo i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.esc-puntos{display:flex;justify-content:center;gap:6px;margin-top:40px}
+.esc-puntos button{width:28px;height:28px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
+.esc-puntos button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line);transition:background-color .15s ease-out,transform .15s cubic-bezier(.23,1,.32,1)}
+.esc-puntos button[aria-pressed="true"]::before{background:var(--ink);transform:scale(1.3)}
+@media (max-width:900px){
+  body.n .nhero{text-align:center;overflow:hidden}
+  body.n .hero-grid{grid-template-columns:minmax(0,1fr)}
+  body.n .golpe{margin-inline:auto}
+  body.n .nhero .lead, body.n .nhero .golpe + .lead{margin-inline:auto}
+  body.n .hero-ctas,body.n .hero-trust{justify-content:center}
+  .esc{order:9;margin-top:10px;padding-bottom:6px}
+  .esc-pila{width:min(72%,330px)}
+}
+@media (prefers-reduced-motion:reduce){.esc-hoja img{transition:none}}
+@media (max-width:900px){
+  body.n .nhero h1{order:1}body.n .nhero .golpe{order:2;margin-top:18px}body.n .nhero .lead,body.n .nhero .golpe + .lead{order:3;margin-top:10px}body.n .hero-ctas{order:4;margin-top:24px}body.n .hero-trust{order:5;margin-top:18px}
+}
+
 </style>
   <script>
     // pdf.js solo se descarga si alguien sube un logo en PDF
@@ -2184,40 +2220,12 @@ html,body.n{overscroll-behavior-x:none}
         <div class="hero-trust"><span>Gratis</span><span>Sin tarjeta</span><span>PDF A4 en 30 segundos</span></div>
       </div>
 
-      <div class="demo" id="demo" aria-label="Ejemplo: una carta hecha en Word convertida en una carta maquetada">
-        <figure class="photo" id="photo">
-          <img src="/ejemplo/antes-640.webp" alt="Foto de la carta original de Casa Pepe, hecha en un procesador de textos">
-          <div class="scan" id="scan"></div>
-          <figcaption class="photo-tag">Tu foto</figcaption>
-        </figure>
-        <article class="sheet" id="sheet">
-          <header class="m-head">
-            <div class="m-name">Casa Pepe</div>
-            <div class="m-rule"></div>
-            <div class="m-sub">Taberna tradicional · Chamberí</div>
-          </header>
-          <div class="m-body">
-            <section>
-              <div class="m-sec-t"><b>I</b>Para picar</div>
-              <div class="m-row">Jamón ibérico de bellota<span class="r">100 g</span><em>24</em></div>
-              <div class="m-row">Croquetas de cocido<span class="r">8 uds.</span><em>12,50</em></div>
-              <div class="m-row">Patatas bravas<em>6,50</em><small>Salsa brava de la casa</small></div>
-            </section>
-            <section>
-              <div class="m-sec-t"><b>II</b>Del mar</div>
-              <div class="m-row">Pulpo a feira<em>19,50</em><small>Con cachelos y pimentón</small></div>
-              <div class="m-row">Calamares a la andaluza<em>14</em></div>
-            </section>
-            <section>
-              <div class="m-sec-t"><b>III</b>Postres</div>
-              <div class="m-row">Tarta de queso<em>6,50</em></div>
-              <div class="m-row">Arroz con leche<em>5,50</em><small>Requemado</small></div>
-            </section>
-          </div>
-          <footer class="m-foot">Pan y cubierto 1,80 · IVA incluido</footer>
-          <div class="sheet-alt" id="sheetAlt"><img class="on" src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 70vw, 430px" alt="Carta de Casa Pepe maquetada en estilo Riviera" fetchpriority="high" width="900" height="1273"></div>
-        </article>
-        <div class="ready" id="ready"><i aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><div>PDF A4 listo<small id="readyEstilo">Estilo Riviera · 1 página</small></div></div>
+      <div class="esc" id="demo" aria-label="Carta de ejemplo de Casa Pepe en varios estilos">
+        <div class="esc-pila">
+          <div class="esc-hoja" id="escHoja"><img class="on" src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 72vw, 440px" alt="Carta de Casa Pepe maquetada en estilo Riviera" fetchpriority="high" width="900" height="1273"></div>
+          <div class="esc-rotulo"><i></i>Estilo <span id="escNombre">Riviera</span></div>
+        </div>
+        <div class="esc-puntos" id="escPuntos" role="group" aria-label="Estilo de la carta de ejemplo"></div>
       </div>
     </div>
   </section>
@@ -4632,7 +4640,32 @@ function nOpciones(b) {
   });
 
   // ── Animaciones (si se pueden cargar) ──
+  // ── Escaparate de la portada: la carta de ejemplo cambia de estilo sola; los puntos eligen ──
+  function escaparate() {
+    const hoja = $('#escHoja'), caja = $('#escPuntos'); if (!hoja || !caja) return;
+    const lista = [['riviera', 'Riviera'], ['vermut', 'Vermut'], ['serigrafia', 'Serigrafía'], ['bloque', 'Bloque'], ['marinero', 'Marinero'], ['pizarra', 'Pizarra']];
+    const imgs = lista.map(([k], n) => {
+      if (n === 0) return hoja.querySelector('img'); // Riviera ya está en la página
+      const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy';
+      im.sizes = '(max-width: 900px) 72vw, 440px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
+      hoja.appendChild(im); return im;
+    });
+    const puntos = lista.map(([k, n], i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Ver en estilo ' + n); b.setAttribute('aria-pressed', i === 0); caja.appendChild(b); return b; });
+    let i = 0, tocado = false, visible = true, vueltas = 0, reloj = null;
+    const ir = n => { i = n; imgs.forEach((im, x) => im.classList.toggle('on', x === n)); puntos.forEach((b, x) => b.setAttribute('aria-pressed', x === n)); $('#escNombre').textContent = lista[n][1]; };
+    puntos.forEach((b, n) => b.addEventListener('click', () => { tocado = true; clearInterval(reloj); ir(n); }));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(hoja);
+    reloj = setInterval(() => {
+      if (tocado || !visible || document.hidden) return;
+      const s = (i + 1) % lista.length;
+      if (s === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
+      ir(s);
+    }, 2600);
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
+    escaparate();
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (quieto || !window.gsap || !window.ScrollTrigger) return;
     // Si las animaciones llegan tarde (red lenta), no se rehace la portada que ya se ve
@@ -4657,79 +4690,16 @@ function nOpciones(b) {
         .observe(document.body, { attributes: true, attributeFilter: ['style'] });
     }
 
-    // Portada: el titular entra por líneas y la carta se compone sola
-    const demo = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
-    const filas = $$('#sheet .m-head > *, #sheet .m-sec-t, #sheet .m-row, #sheet .m-foot');
-    demo
-      .set('#ready', { autoAlpha: 0, y: 16 })
-      .set(filas, { autoAlpha: 0, y: 10 })
-      .set('#sheet', { autoAlpha: 0, y: 30, rotate: 7 })
-      .set('#scan', { top: '0%', autoAlpha: 0 })
-      .fromTo('#photo', { autoAlpha: 0, x: -30, rotate: -10 }, { autoAlpha: 1, x: 0, rotate: -9, duration: .8 })
-      .to('#scan', { autoAlpha: 1, duration: .2 }, '-=.1')
-      .to('#scan', { top: '100%', duration: 1.3, ease: 'power1.inOut' })
-      .to('#scan', { autoAlpha: 0, duration: .2 })
-      .to('#sheet', { autoAlpha: 1, y: 0, rotate: 4, duration: .9 }, '-=.5')
-      .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
-      .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
-      .add(() => { ciclarPortada(); escena(); });
-    // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
-    function ciclarPortada() {
-      const lista = [['riviera', 'Riviera'], ['serigrafia', 'Serigrafía'], ['cartel', 'Cartel'], ['sumi', 'Sumi'], ['azulejo', 'Azulejo'], ['gaceta', 'Gaceta'], ['sobremesa', 'Sobremesa']];
-      const capa = $('#sheetAlt');
-      const imgs = lista.map(([k], n) => {
-        if (n === 0) return capa.querySelector('img'); // Riviera ya está en la página
-        const im = new Image(); im.alt = ''; im.decoding = 'async';
-        im.sizes = '(max-width: 900px) 70vw, 430px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
-        capa.appendChild(im); return im;
-      });
-      const txt = $('#readyEstilo');
-      let i = 0, visible = true, capaZ = 1;
-      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
-      let vueltas = 0, quieta = false, reloj = null;
-      const d = $('#demo');
-      ['pointerenter', 'focusin', 'touchstart'].forEach(ev => d.addEventListener(ev, () => { quieta = true; }, { passive: true }));
-      ['pointerleave', 'focusout'].forEach(ev => d.addEventListener(ev, () => { quieta = false; }));
-      const paso = () => {
-        if (!visible || document.hidden || quieta) return;
-        i = (i + 1) % lista.length;
-        if (i === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
-        // la nueva entra por encima; la anterior se quita cuando ya está tapada
-        const nueva = imgs[i];
-        nueva.style.zIndex = ++capaZ;
-        nueva.classList.add('on');
-        setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
-        txt.textContent = 'Estilo ' + lista[i][1] + ' · 1 página';
-        gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
-      };
-      setTimeout(() => { paso(); reloj = setInterval(paso, 2600); }, 1800);
-    }
-
+    // Portada: el titular entra por líneas; texto y carta suben una vez
     if (window.SplitText && !tarde) {
       const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });
-      gsap.from(st.lines, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: .09, delay: .1 });
+      gsap.from(st.lines, { yPercent: 105, duration: .8, ease: 'expo.out', stagger: .08, delay: .05 });
     }
-    if (!tarde) gsap.from('.nhero .eyebrow, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 18, duration: .8, ease: 'power3.out', stagger: .08, delay: .35 });
-    if (tarde) { demo.progress(1); } else demo.play(0).delay(.4);
-
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      const d = $('#demo');
-      const rx = gsap.quickTo('#sheet', 'rotationY', { duration: .8, ease: 'power3' });
-      const ry = gsap.quickTo('#sheet', 'rotationX', { duration: .8, ease: 'power3' });
-      gsap.set('#demo', { perspective: 900 });
-      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 6); ry(-((e.clientY - r.top) / r.height - .5) * 4); });
-      d.addEventListener('pointerleave', () => { rx(0); ry(0); });
+    if (!tarde) {
+      gsap.from('.nhero .golpe, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 16, duration: .6, ease: 'power3.out', stagger: .06, delay: .25 });
+      gsap.from('#demo', { autoAlpha: 0, y: 28, duration: .8, ease: 'power3.out', delay: .3 });
     }
-    // Al bajar: la foto se aparta y la carta se endereza y crece hasta el centro
-    function escena() {
-      if (escena.hecha) return; escena.hecha = true;
-      const movil = window.innerWidth < 900;
-      const st = { trigger: '#demo', start: movil ? 'top 40%' : 'top 12%', end: movil ? 'bottom 30%' : 'bottom 40%', scrub: .6 };
-      gsap.fromTo('#photo', { xPercent: 0, rotate: -9, autoAlpha: 1 }, { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.fromTo('#sheet', { xPercent: 0, rotate: 4, scale: 1 }, { xPercent: movil ? -20 : -28, rotate: 0, scale: movil ? 1.08 : 1.14, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.fromTo('#ready', { xPercent: 0 }, { xPercent: movil ? 0 : -40, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
-    }
+    gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
 
     gsap.from('#herramienta > .wrap', { y: 40, autoAlpha: 0, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: '#herramienta', start: 'top 92%', once: true } });
     $$('.rv').forEach(el => gsap.from(el, {

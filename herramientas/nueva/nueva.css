@@ -329,3 +329,39 @@ body.n .btn:active, body.n .chips button:active, body.n .toggle button:active, #
 @supports not (overflow-x:clip){html,body.n{overflow-x:hidden}.n-prueba{overflow:hidden}}
 html,body.n{overscroll-behavior-x:none}
 @media (max-width:900px){body.n .nhero{overflow:hidden}body.n .photo{left:0}body.n .domingo,body.n .cifras{overflow:hidden}}
+
+/* ═══ Portada «Escaparate»: texto a la izquierda, la carta de ejemplo a la derecha cambiando de estilo ═══ */
+body.n .nhero{text-align:left;padding-block:clamp(24px,4vw,56px) 0;overflow:visible}
+body.n .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,80px);align-items:center}
+body.n .nhero .h-xl{font-size:clamp(50px,7.6vw,128px);line-height:.88}
+body.n .golpe{margin:clamp(20px,2.4vw,32px) 0 0}
+body.n .nhero .lead, body.n .nhero .golpe + .lead{margin:12px 0 0;max-width:32em}
+body.n .hero-ctas{justify-content:flex-start;margin-top:28px}
+body.n .hero-trust{justify-content:flex-start;margin-top:22px}
+.esc{min-width:0}
+.esc-pila{position:relative;width:min(100%,440px);margin-inline:auto}
+.esc-pila::before,.esc-pila::after{content:"";position:absolute;inset:0;border-radius:6px;background:#fff;box-shadow:0 0 0 1px rgba(12,12,13,.07),0 30px 60px -40px rgba(12,12,13,.35)}
+.esc-pila::before{transform:translate(-7%,2%) rotate(-7deg)}
+.esc-pila::after{transform:translate(6%,1%) rotate(5deg)}
+.esc-hoja{position:relative;z-index:1;aspect-ratio:210/297;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(12,12,13,.06),0 40px 80px -36px rgba(12,12,13,.4),0 0 0 1px rgba(12,12,13,.04)}
+.esc-hoja img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .28s ease-out}
+.esc-hoja img.on{opacity:1}
+.esc-rotulo{position:absolute;z-index:2;left:50%;bottom:-18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.esc-rotulo i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.esc-puntos{display:flex;justify-content:center;gap:6px;margin-top:40px}
+.esc-puntos button{width:28px;height:28px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
+.esc-puntos button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line);transition:background-color .15s ease-out,transform .15s cubic-bezier(.23,1,.32,1)}
+.esc-puntos button[aria-pressed="true"]::before{background:var(--ink);transform:scale(1.3)}
+@media (max-width:900px){
+  body.n .nhero{text-align:center;overflow:hidden}
+  body.n .hero-grid{grid-template-columns:minmax(0,1fr)}
+  body.n .golpe{margin-inline:auto}
+  body.n .nhero .lead, body.n .nhero .golpe + .lead{margin-inline:auto}
+  body.n .hero-ctas,body.n .hero-trust{justify-content:center}
+  .esc{order:9;margin-top:10px;padding-bottom:6px}
+  .esc-pila{width:min(72%,330px)}
+}
+@media (prefers-reduced-motion:reduce){.esc-hoja img{transition:none}}
+@media (max-width:900px){
+  body.n .nhero h1{order:1}body.n .nhero .golpe{order:2;margin-top:18px}body.n .nhero .lead,body.n .nhero .golpe + .lead{order:3;margin-top:10px}body.n .hero-ctas{order:4;margin-top:24px}body.n .hero-trust{order:5;margin-top:18px}
+}

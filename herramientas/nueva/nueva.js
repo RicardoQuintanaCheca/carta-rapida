@@ -209,7 +209,32 @@ function nOpciones(b) {
   });
 
   // ── Animaciones (si se pueden cargar) ──
+  // ── Escaparate de la portada: la carta de ejemplo cambia de estilo sola; los puntos eligen ──
+  function escaparate() {
+    const hoja = $('#escHoja'), caja = $('#escPuntos'); if (!hoja || !caja) return;
+    const lista = [['riviera', 'Riviera'], ['vermut', 'Vermut'], ['serigrafia', 'Serigrafía'], ['bloque', 'Bloque'], ['marinero', 'Marinero'], ['pizarra', 'Pizarra']];
+    const imgs = lista.map(([k], n) => {
+      if (n === 0) return hoja.querySelector('img'); // Riviera ya está en la página
+      const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy';
+      im.sizes = '(max-width: 900px) 72vw, 440px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
+      hoja.appendChild(im); return im;
+    });
+    const puntos = lista.map(([k, n], i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Ver en estilo ' + n); b.setAttribute('aria-pressed', i === 0); caja.appendChild(b); return b; });
+    let i = 0, tocado = false, visible = true, vueltas = 0, reloj = null;
+    const ir = n => { i = n; imgs.forEach((im, x) => im.classList.toggle('on', x === n)); puntos.forEach((b, x) => b.setAttribute('aria-pressed', x === n)); $('#escNombre').textContent = lista[n][1]; };
+    puntos.forEach((b, n) => b.addEventListener('click', () => { tocado = true; clearInterval(reloj); ir(n); }));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(hoja);
+    reloj = setInterval(() => {
+      if (tocado || !visible || document.hidden) return;
+      const s = (i + 1) % lista.length;
+      if (s === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
+      ir(s);
+    }, 2600);
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
+    escaparate();
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (quieto || !window.gsap || !window.ScrollTrigger) return;
     // Si las animaciones llegan tarde (red lenta), no se rehace la portada que ya se ve
@@ -234,79 +259,16 @@ function nOpciones(b) {
         .observe(document.body, { attributes: true, attributeFilter: ['style'] });
     }
 
-    // Portada: el titular entra por líneas y la carta se compone sola
-    const demo = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
-    const filas = $$('#sheet .m-head > *, #sheet .m-sec-t, #sheet .m-row, #sheet .m-foot');
-    demo
-      .set('#ready', { autoAlpha: 0, y: 16 })
-      .set(filas, { autoAlpha: 0, y: 10 })
-      .set('#sheet', { autoAlpha: 0, y: 30, rotate: 7 })
-      .set('#scan', { top: '0%', autoAlpha: 0 })
-      .fromTo('#photo', { autoAlpha: 0, x: -30, rotate: -10 }, { autoAlpha: 1, x: 0, rotate: -9, duration: .8 })
-      .to('#scan', { autoAlpha: 1, duration: .2 }, '-=.1')
-      .to('#scan', { top: '100%', duration: 1.3, ease: 'power1.inOut' })
-      .to('#scan', { autoAlpha: 0, duration: .2 })
-      .to('#sheet', { autoAlpha: 1, y: 0, rotate: 4, duration: .9 }, '-=.5')
-      .to(filas, { autoAlpha: 1, y: 0, duration: .5, stagger: .07 }, '-=.5')
-      .to('#ready', { autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, '-=.1')
-      .add(() => { ciclarPortada(); escena(); });
-    // Tras componerse en Sobremesa, la misma carta va pasando por otros estilos
-    function ciclarPortada() {
-      const lista = [['riviera', 'Riviera'], ['serigrafia', 'Serigrafía'], ['cartel', 'Cartel'], ['sumi', 'Sumi'], ['azulejo', 'Azulejo'], ['gaceta', 'Gaceta'], ['sobremesa', 'Sobremesa']];
-      const capa = $('#sheetAlt');
-      const imgs = lista.map(([k], n) => {
-        if (n === 0) return capa.querySelector('img'); // Riviera ya está en la página
-        const im = new Image(); im.alt = ''; im.decoding = 'async';
-        im.sizes = '(max-width: 900px) 70vw, 430px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
-        capa.appendChild(im); return im;
-      });
-      const txt = $('#readyEstilo');
-      let i = 0, visible = true, capaZ = 1;
-      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe($('#demo'));
-      let vueltas = 0, quieta = false, reloj = null;
-      const d = $('#demo');
-      ['pointerenter', 'focusin', 'touchstart'].forEach(ev => d.addEventListener(ev, () => { quieta = true; }, { passive: true }));
-      ['pointerleave', 'focusout'].forEach(ev => d.addEventListener(ev, () => { quieta = false; }));
-      const paso = () => {
-        if (!visible || document.hidden || quieta) return;
-        i = (i + 1) % lista.length;
-        if (i === 0 && ++vueltas >= 2) clearInterval(reloj); // tras dos vueltas se queda en Riviera
-        // la nueva entra por encima; la anterior se quita cuando ya está tapada
-        const nueva = imgs[i];
-        nueva.style.zIndex = ++capaZ;
-        nueva.classList.add('on');
-        setTimeout(() => imgs.forEach(im => { if (im !== nueva) im.classList.remove('on'); }), 1000);
-        txt.textContent = 'Estilo ' + lista[i][1] + ' · 1 página';
-        gsap.fromTo('#ready', { scale: .96 }, { scale: 1, duration: .4, ease: 'back.out(2)' });
-      };
-      setTimeout(() => { paso(); reloj = setInterval(paso, 2600); }, 1800);
-    }
-
+    // Portada: el titular entra por líneas; texto y carta suben una vez
     if (window.SplitText && !tarde) {
       const st = new SplitText('#heroTitle', { type: 'lines', mask: 'lines', linesClass: 'ln' });
-      gsap.from(st.lines, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: .09, delay: .1 });
+      gsap.from(st.lines, { yPercent: 105, duration: .8, ease: 'expo.out', stagger: .08, delay: .05 });
     }
-    if (!tarde) gsap.from('.nhero .eyebrow, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 18, duration: .8, ease: 'power3.out', stagger: .08, delay: .35 });
-    if (tarde) { demo.progress(1); } else demo.play(0).delay(.4);
-
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      const d = $('#demo');
-      const rx = gsap.quickTo('#sheet', 'rotationY', { duration: .8, ease: 'power3' });
-      const ry = gsap.quickTo('#sheet', 'rotationX', { duration: .8, ease: 'power3' });
-      gsap.set('#demo', { perspective: 900 });
-      d.addEventListener('pointermove', e => { const r = d.getBoundingClientRect(); rx(((e.clientX - r.left) / r.width - .5) * 6); ry(-((e.clientY - r.top) / r.height - .5) * 4); });
-      d.addEventListener('pointerleave', () => { rx(0); ry(0); });
+    if (!tarde) {
+      gsap.from('.nhero .golpe, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 16, duration: .6, ease: 'power3.out', stagger: .06, delay: .25 });
+      gsap.from('#demo', { autoAlpha: 0, y: 28, duration: .8, ease: 'power3.out', delay: .3 });
     }
-    // Al bajar: la foto se aparta y la carta se endereza y crece hasta el centro
-    function escena() {
-      if (escena.hecha) return; escena.hecha = true;
-      const movil = window.innerWidth < 900;
-      const st = { trigger: '#demo', start: movil ? 'top 40%' : 'top 12%', end: movil ? 'bottom 30%' : 'bottom 40%', scrub: .6 };
-      gsap.fromTo('#photo', { xPercent: 0, rotate: -9, autoAlpha: 1 }, { xPercent: -60, rotate: -18, autoAlpha: 0, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.fromTo('#sheet', { xPercent: 0, rotate: 4, scale: 1 }, { xPercent: movil ? -20 : -28, rotate: 0, scale: movil ? 1.08 : 1.14, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.fromTo('#ready', { xPercent: 0 }, { xPercent: movil ? 0 : -40, ease: 'none', immediateRender: false, scrollTrigger: st });
-      gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
-    }
+    gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
 
     gsap.from('#herramienta > .wrap', { y: 40, autoAlpha: 0, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: '#herramienta', start: 'top 92%', once: true } });
     $$('.rv').forEach(el => gsap.from(el, {
