@@ -270,7 +270,7 @@ function nOpciones(b) {
     }
     if (!tarde) {
       gsap.from('.nhero .golpe, .nhero .lead, .hero-ctas, .hero-trust', { autoAlpha: 0, y: 16, duration: .6, ease: 'power3.out', stagger: .06, delay: .25 });
-      gsap.from('#demo', { autoAlpha: 0, y: 28, duration: .8, ease: 'power3.out', delay: .3 });
+      gsap.from('#demo', { y: 28, duration: .8, ease: 'power3.out', delay: .3 }); // sin esconderla: es la imagen principal de la página
     }
     gsap.from('.cifras b', { yPercent: 60, autoAlpha: 0, stagger: .12, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: '.cifras', start: 'top 88%', once: true } });
 
