@@ -237,6 +237,12 @@ function nOpciones(b) {
     }, 2600);
   }
 
+  // Las tipografías de los ejemplos de carta se piden cuando la página ya ha cargado
+  window.addEventListener('load', () => setTimeout(() => {
+    const l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap';
+    document.head.appendChild(l);
+  }, 1200));
   window.addEventListener('DOMContentLoaded', () => {
     escaparate();
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

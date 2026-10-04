@@ -284,9 +284,7 @@
 
 .cu-velo { overscroll-behavior: contain; }
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}</style><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}</style>
 
 <link rel="stylesheet" href="/herramienta.css?v=a376d98b" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/herramienta.css?v=a376d98b"></noscript>
 <style>
@@ -1089,7 +1087,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
     <!-- SALUDO MASCOTA -->
     <div class="t2-greeting">
       <div style="position:relative;width:40px;height:40px;display:inline-block;flex-shrink:0;">
-        <img src="/mascota/kart-feliz.webp" alt="" class="mascota-kart" onerror="this.style.display='none'" style="width:100%;height:100%;display:block;" draggable="false">
+        <img loading="lazy" decoding="async" src="/mascota/kart-feliz.webp" alt="" class="mascota-kart" onerror="this.style.display='none'" style="width:100%;height:100%;display:block;" draggable="false">
       </div>
       <div class="t2-bubble" id="toolBubble">¡Empezamos! Hazle una foto a tu carta 📸</div>
     </div>
@@ -1465,7 +1463,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
             <span class="bubble-emoji" id="progressEmoji">👀</span>
             <span class="bubble-text" id="progressBubbleText">Mirando…</span>
           </div>
-          <img src="/mascota/kart-feliz.webp" alt="" class="mascota-kart mascota-procesado" onerror="this.style.display='none'" draggable="false">
+          <img loading="lazy" decoding="async" src="/mascota/kart-feliz.webp" alt="" class="mascota-kart mascota-procesado" onerror="this.style.display='none'" draggable="false">
           <div class="sparkles">
             <div class="sparkle sparkle-1"></div>
             <div class="sparkle sparkle-2"></div>
@@ -1511,7 +1509,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       </div>
       <div class="picker">
         <div class="pick-sheet" id="pickSheet" aria-live="polite">
-          <figure data-k="riviera" class="on"><img src="/ejemplo/portada-riviera.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Riviera"></figure>
+          <figure data-k="riviera" class="on"><img src="/ejemplo/portada-riviera-640.webp" srcset="/ejemplo/portada-riviera-640.webp 640w, /ejemplo/portada-riviera.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" loading="lazy" decoding="async" alt="Carta en estilo Riviera"></figure>
           <figure data-k="sobremesa"><img data-srcset="/ejemplo/portada-sobremesa-640.webp 640w, /ejemplo/portada-sobremesa.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Sobremesa" loading="lazy"></figure>
           <figure data-k="serigrafia"><img data-srcset="/ejemplo/portada-serigrafia-640.webp 640w, /ejemplo/portada-serigrafia.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Serigrafía" loading="lazy"></figure>
           <figure data-k="gaceta"><img data-srcset="/ejemplo/portada-gaceta-640.webp 640w, /ejemplo/portada-gaceta.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273" alt="Carta en estilo Gaceta" loading="lazy"></figure>
@@ -1825,11 +1823,11 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   </div>
 </div>
 
-<script src="/herramienta.js?v=f7997a95" defer></script>
+<script src="/herramienta.js?v=456aa851" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/portada.js?v=f7997a95" defer></script>
+<script src="/portada.js?v=456aa851" defer></script>
 </body>
 </html>

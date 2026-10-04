@@ -35,10 +35,9 @@ for viejo, nuevo in [
 ]:
     assert viejo in head, viejo
     head = head.replace(viejo, nuevo)
-FUENTES = ('<link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>'
-           '<style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;'
+FUENTES = ('<style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;'
            'font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}</style>'
-           '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap" onload="this.onload=null;this.rel=\'stylesheet\'">')
+           '')
 head, n_f = re.subn(r'<link href="https://fonts.googleapis.com/css2\?family=Bricolage[^>]*>', lambda m: FUENTES, head)
 assert n_f == 1
 css_viejo = entre(i_style+1, i_fin_style-1)
@@ -98,7 +97,7 @@ def _fig(m, visto=[0]):
     k = m.group(1); visto[0] += 1
     juego = '/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w' % (k, k)
     resto = 'sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273"'
-    if visto[0] == 1: return 'src="/ejemplo/portada-%s.webp" srcset="%s" %s' % (k, juego, resto)
+    if visto[0] == 1: return 'src="/ejemplo/portada-%s-640.webp" srcset="%s" %s loading="lazy" decoding="async"' % (k, juego, resto)
     return 'data-srcset="%s" %s' % (juego, resto)  # las demás se cargan al elegirlas
 cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', _fig, cuerpo)
 
@@ -225,6 +224,8 @@ modal = modal.replace('<script src="/cuenta.js"></script>', '<script src="/cuent
 _ccss = (REPO / 'cuenta.css').read_text()
 assert head.count('<link rel="stylesheet" href="/cuenta.css">') == 1
 head = head.replace('<link rel="stylesheet" href="/cuenta.css">', '<style>' + _ccss + '</style>')
+head = re.sub(r'<link rel="preconnect" href="https://fonts\.g[^>]*>\n?', '', head)
+cuerpo = cuerpo.replace('<img src="/mascota/kart-feliz.webp"', '<img loading="lazy" decoding="async" src="/mascota/kart-feliz.webp"')
 html = head + '\n' + ENLACE_VIEJO + '\n<style>\n/* ═══ Diseño nuevo ═══ */\n' + css_nuevo + '\n/* ═══ Herramienta con el diseño nuevo ═══ */\n' + extra + '\n</style>\n' + scripts_head + '\n</head>\n<body class="n">\n' + cuerpo + '\n' + modal + '\n' + cookies_visor + '\n' + script_viejo + '''
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
