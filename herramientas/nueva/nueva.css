@@ -395,3 +395,9 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
 .n-prueba .n-pasos span{box-shadow:none;background:var(--ink);color:#fff}
 .n-prueba #herramienta > .wrap, .n-prueba #herramienta > .nwrap{box-shadow:0 40px 90px -40px rgba(60,12,0,.6)}
 .n-prueba{margin-bottom:clamp(56px,8vw,112px)}
+
+/* Enlaces a las páginas por tipo de local */
+.foot-tipos{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;padding:22px 0;border-top:1px solid var(--line);font-size:15px;color:var(--muted)}
+.foot-tipos b{color:var(--ink);font-weight:650;margin-right:6px}
+.foot-tipos a{text-decoration:none}
+.foot-tipos a:hover{color:var(--ink);text-decoration:underline}

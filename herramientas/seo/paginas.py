@@ -1,0 +1,272 @@
+#!/usr/bin/env python3
+"""Páginas de entrada por tipo de local. Uso: python3 herramientas/seo/paginas.py
+Genera public/<slug>/index.html y public/sitemap.xml. Sin datos inventados: solo lo que la herramienta hace."""
+import json, pathlib, datetime, html
+RAIZ = pathlib.Path(__file__).parent.parent.parent / 'public'
+WEB = 'https://www.cartarapida.es'
+HOY = datetime.date.today().isoformat()
+NOMBRE = {'riviera':'Riviera','sobremesa':'Sobremesa','serigrafia':'Serigrafía','gaceta':'Gaceta','cartel':'Cartel','bloque':'Bloque','marinero':'Marinero','brunch':'Brunch','vermut':'Vermut','pizarra':'Pizarra','brasserie':'Brasserie','sumi':'Sumi','editorial':'Editorial','azulejo':'Azulejo','trattoria':'Trattoria','ticket':'Ticket','deco':'Déco','mantel':'Mantel','barra':'Barra','autor':'Autor'}
+PRO = {'riviera','sumi','cartel','serigrafia','azulejo','marinero','brunch','vermut'}
+
+COMUN_FAQ = [
+  ('¿Cuánto cuesta?', 'Dos cartas al mes son gratis, con 12 estilos, y el PDF te llega al email. Carta Pro cuesta 12,90 € al mes y añade los 8 estilos restantes, guardar tus cartas, cambiar precios sin empezar de cero, tu logotipo y la traducción. Si solo la necesitas una vez, hay un pase de 7 días por 15 €, sin suscripción.'),
+  ('¿En qué formato me llega?', 'En PDF tamaño A4, listo para imprimir en tu impresora o en una copistería.'),
+]
+
+PAGINAS = [
+ dict(slug='plantillas-carta-restaurante', menu='Plantillas de carta',
+  title='Plantillas de carta de restaurante: 20 estilos listos para imprimir',
+  desc='20 plantillas de carta de restaurante que se rellenan solas: subes una foto de tu carta y la recibes maquetada en PDF A4. 12 estilos gratis.',
+  h1='Plantillas de carta de restaurante que se rellenan solas.',
+  golpe='Una plantilla normal te deja el trabajo a ti. Esta no.',
+  intro='Con una plantilla de las de siempre eliges un diseño bonito y después tecleas cuarenta platos, uno a uno, cuadrando precios y saltos de línea. Aquí haces una foto a la carta que ya tienes, eliges estilo y recibes el PDF en A4.',
+  estilos=list(NOMBRE.keys()), todos=True,
+  bloques=[
+   ('Veinte estilos, no veinte colores de lo mismo', 'Hay cartas de tinta y papel para un restaurante de mantel, cartas de tiza para un bar, cartas de bloque para una hamburguesería y cartas claras para un brunch. Cada estilo cambia la tipografía, la retícula y los adornos. Doce son gratis; ocho son de Carta Pro.'),
+   ('Cómo funciona', 'Uno: haces una foto a tu carta, o pegas el texto si lo tienes en el ordenador. Dos: eliges el estilo y lo cambias las veces que quieras viendo tu propia carta, no un ejemplo. Tres: pides el PDF y te llega al email en A4.'),
+   ('Lo que no tienes que hacer', 'No tecleas platos. No arrastras cajas de texto. No ajustas márgenes. No buscas una tipografía que combine. Si la carta ocupa más de una página, se reparte sola.'),
+  ],
+  faq=[('¿Puedo cambiar de plantilla después de subir mi carta?', 'Sí. Subes la carta una vez y vas probando estilos sobre tus propios platos hasta que uno te encaje.'),
+       ('¿Las plantillas son editables?', 'Con la versión gratis recibes el PDF terminado. Con Carta Pro guardas la carta y cambias platos y precios cuando quieras, sin volver a empezar.')]),
+ dict(slug='carta-para-bar', menu='Carta para bar',
+  title='Carta para bar: diseña e imprime la tuya en 30 segundos',
+  desc='Haz la carta de tu bar sin diseñar nada: foto a la que tienes, eliges estilo y la imprimes en A4. Raciones, tapas y bebidas ordenadas solas.',
+  h1='La carta de tu bar, lista antes de que se enfríe el café.',
+  golpe='Tienes un bar. No tienes una tarde libre para maquetar.',
+  intro='La carta de un bar cambia más que la de nadie: sube la caña, entra una ración nueva, se acaba el producto de temporada. Si cada cambio te cuesta una tarde, la carta se queda vieja y con tachones. Aquí es una foto y medio minuto.',
+  estilos=['vermut','pizarra','barra','ticket'],
+  bloques=[
+   ('Tapas, raciones y bebidas, cada cosa en su sitio', 'La carta se ordena por secciones tal y como la tienes: para picar, raciones, bocadillos, bebidas. Si un plato tiene media ración y ración, salen los dos precios alineados.'),
+   ('Estilos que pegan con una barra', 'Vermut es una etiqueta clásica con cinta. Pizarra parece escrita a rotulador. Barra y Ticket son directas, de las que se leen de pie. Pruebas las cuatro sobre tu carta y te quedas con la que encaje con tu local.'),
+   ('Para cuando suben los precios', 'Con Carta Pro la carta se queda guardada. Cambias el precio de la caña, guardas y tienes el PDF nuevo. Sin abrir ningún programa.'),
+  ],
+  faq=[('¿Sirve si mi carta está escrita a mano o en una pizarra?', 'Sí, mientras se lea bien en la foto. Hazla de frente y con luz. Si algún plato sale mal, lo corriges antes de pedir el PDF.'),
+       ('¿Puedo poner la carta en dos idiomas?', 'La traducción de la carta es una función de Carta Pro.')]),
+ dict(slug='carta-para-cafeteria', menu='Carta para cafetería',
+  title='Carta para cafetería y brunch: maquetada en 30 segundos',
+  desc='Carta de cafetería o brunch con diseño cuidado y sin diseñar: foto a tu carta, eliges estilo y la recibes en PDF A4 para imprimir.',
+  h1='Una carta de cafetería que apetece leer.',
+  golpe='El café lo haces bien. La carta no debería ser lo que desentona.',
+  intro='En una cafetería la carta se mira despacio, con el móvil al lado y sin prisa. Si está hecha en un documento de texto con letra por defecto, se nota. Aquí subes la que tienes y la recibes con un diseño limpio, en A4.',
+  estilos=['brunch','sobremesa','editorial','autor'],
+  bloques=[
+   ('Cafés, tostadas, bollería y brunch', 'Las secciones salen como las tienes en tu carta. Los suplementos y las aclaraciones de cada plato van debajo, en pequeño, sin ensuciar la línea del precio.'),
+   ('Estilos claros, con aire', 'Brunch usa colores suaves y formas redondas. Sobremesa y Editorial son tipográficas, con mucho blanco. Autor es sobria. Todas se imprimen sobre fondo blanco, así que no gastas tinta de más.'),
+   ('Carta de temporada sin drama', 'Cambias la carta de otoño por la de invierno pegando el texto nuevo o haciendo otra foto. El diseño se mantiene.'),
+  ],
+  faq=[('¿Puedo añadir mi logotipo?', 'Sí, con Carta Pro. Se limpia el fondo del logotipo y se coloca en la cabecera.'),
+       ('¿Qué pasa si tengo pocos platos?', 'La carta se ajusta al contenido: con pocos platos la letra crece y la página no queda vacía.')]),
+ dict(slug='carta-para-pizzeria', menu='Carta para pizzería',
+  title='Carta para pizzería: plantilla que se rellena con una foto',
+  desc='Diseña la carta de tu pizzería sin teclear cada pizza: foto a la carta actual, eliges estilo y la tienes en PDF A4 lista para imprimir.',
+  h1='Treinta pizzas en la carta. Cero que teclear.',
+  golpe='Lo largo de una carta de pizzería es lo que nadie quiere maquetar.',
+  intro='Una pizzería tiene la carta más larga del barrio: pizzas, ingredientes de cada una, tamaños, extras, pastas, postres. Pasar eso a una plantilla a mano es una tarde entera. Aquí haces una foto y la carta sale ordenada, con los ingredientes debajo de cada pizza.',
+  estilos=['trattoria','mantel','cartel','gaceta'],
+  bloques=[
+   ('Ingredientes debajo de cada pizza', 'El nombre va en grande y los ingredientes en una línea más pequeña debajo, como en una carta de imprenta. Si tienes dos tamaños con dos precios, salen los dos.'),
+   ('Estilos de casa italiana', 'Trattoria y Mantel tienen aire de casa de comidas. Cartel es contundente, para leer desde lejos. Gaceta ordena mucho contenido en poco espacio, que es lo que necesita una carta larga.'),
+   ('Si la carta no cabe en una hoja', 'Se reparte en las páginas que haga falta, sin cortar una sección por la mitad.'),
+  ],
+  faq=[('¿Mi carta tiene varias hojas, puedo subirlas todas?', 'Sí. Puedes subir varias fotos de la misma carta y salen juntas en un solo PDF.'),
+       ('¿Puedo marcar las pizzas más vendidas?', 'Hay una opción para destacar tus platos fuertes, que los coloca primero en cada sección.')]),
+ dict(slug='carta-para-marisqueria', menu='Carta para marisquería',
+  title='Carta para marisquería: diseño marinero listo para imprimir',
+  desc='Carta de marisquería o restaurante de pescado con diseño marinero, hecha desde una foto de tu carta. PDF A4 para imprimir en 30 segundos.',
+  h1='La carta de tu marisquería, con el precio de hoy.',
+  golpe='El marisco cambia de precio cada semana. La carta también debería poder.',
+  intro='En una marisquería el producto manda y el precio se mueve. Una carta que cuesta rehacer acaba llena de pegatinas o con el "s/m" en media página. Aquí rehaces la carta en medio minuto cada vez que cambia la lonja.',
+  estilos=['marinero','riviera','azulejo','brasserie'],
+  bloques=[
+   ('Precio por peso, por unidad o por ración', 'Si tu carta dice "€/kg", "unidad" o "ración", sale igual en la carta nueva, alineado con el precio.'),
+   ('Estilos de costa', 'Marinero lleva olas y un salvavidas en la cabecera. Riviera es azul y luminoso. Azulejo recuerda a una casa de comidas del sur. Brasserie es clásico, de mantel blanco.'),
+   ('Cambiar un precio sin rehacer la carta', 'Con Carta Pro la carta queda guardada: cambias el precio de la gamba, guardas y descargas el PDF nuevo.'),
+  ],
+  faq=[('¿Puedo poner "según mercado" en lugar de precio?', 'Sí. Si en tu carta un plato va a precio según mercado, en la carta nueva se mantiene así, sin número.'),
+       ('¿Se imprime bien en una impresora normal?', 'Sí. Las cartas van sobre fondo blanco y en A4, pensadas para una impresora de oficina.')]),
+ dict(slug='carta-para-hamburgueseria', menu='Carta para hamburguesería',
+  title='Carta para hamburguesería: diseño con carácter en 30 segundos',
+  desc='Haz la carta de tu hamburguesería sin diseñador: foto a tu carta, eliges un estilo con carácter y la imprimes en A4.',
+  h1='Una carta con tanto carácter como tu hamburguesa.',
+  golpe='Una smash burger no se presenta con letra de informe.',
+  intro='Una hamburguesería vende actitud: el nombre de cada burger, los extras, las salsas. Una carta en letra genérica le quita la mitad de la gracia. Aquí subes la tuya y eliges un estilo con peso.',
+  estilos=['bloque','cartel','serigrafia','ticket'],
+  bloques=[
+   ('Burgers, extras, entrantes y bebidas', 'Cada burger con sus ingredientes debajo y el precio a la derecha. Los extras y suplementos van en su propia sección.'),
+   ('Estilos que gritan', 'Bloque lleva una cabecera negra con franja de cuadros de diner. Cartel y Serigrafía son de letra grande y tinta plana. Ticket imita un recibo de caja.'),
+   ('Carta nueva cada vez que cambias la burger del mes', 'Pegas el texto nuevo o haces otra foto y tienes la carta actualizada con el mismo diseño.'),
+  ],
+  faq=[('¿Puedo usar los colores de mi marca?', 'Cada estilo tiene sus colores. Puedes añadir tu logotipo con Carta Pro; los colores del estilo no se cambian.'),
+       ('¿Sirve para la carta de reparto o para llevar?', 'Recibes un PDF en A4 que puedes imprimir o enviar. No genera una carta web ni un código QR.')]),
+ dict(slug='menu-del-dia', menu='Menú del día',
+  title='Plantilla de menú del día para imprimir: hecha en 30 segundos',
+  desc='Haz el menú del día de tu restaurante cada mañana sin abrir Word: pegas los platos, eliges estilo e imprimes el PDF en A4.',
+  h1='El menú del día, impreso antes de abrir.',
+  golpe='Cambia todos los días. No puede costarte veinte minutos todos los días.',
+  intro='El menú del día es la hoja que más se imprime en un restaurante y la que peor suele quedar: un documento de texto retocado encima del de ayer. Aquí pegas los primeros, los segundos y el precio, eliges estilo y lo imprimes.',
+  estilos=['pizarra','ticket','gaceta','mantel'],
+  bloques=[
+   ('Pegas el texto y listo', 'No hace falta foto. Escribes o pegas los platos del día como los tengas, con sus secciones (primeros, segundos, postres) y el precio del menú.'),
+   ('Estilos para una hoja corta', 'Pizarra parece escrita a mano con rotulador. Ticket es directo y pequeño. Gaceta y Mantel son más de casa de comidas. Con pocos platos la letra crece y la hoja no queda vacía.'),
+   ('Dos cartas gratis al mes; para hacerlo a diario, Carta Pro', 'La versión gratis da para dos cartas al mes. Si vas a hacer el menú todos los días, Carta Pro te deja guardarlo y cambiar solo los platos.'),
+  ],
+  faq=[('¿Puedo poner "pan, bebida y postre incluidos"?', 'Sí. Las notas que pongas al final salen en el pie de la carta.'),
+       ('¿Tengo que subir una foto cada día?', 'No. Puedes pegar el texto. Con Carta Pro, además, el menú queda guardado y solo cambias lo que cambia.')]),
+ dict(slug='alternativa-a-canva-para-cartas', menu='Alternativa a Canva',
+  title='Alternativa a Canva para cartas de restaurante: sin teclear platos',
+  desc='Canva es una herramienta de diseño. Esto es otra cosa: haces una foto a tu carta y la recibes maquetada en PDF A4. Sin plantillas que rellenar.',
+  h1='Si lo que quieres es la carta, no aprender a diseñar.',
+  golpe='Canva te da un lienzo. Tú querías la carta terminada.',
+  intro='Canva es una buena herramienta de diseño general. El problema no es Canva: es que para hacer una carta tienes que elegir plantilla, borrar los platos de ejemplo, teclear los tuyos uno a uno y cuadrar cada línea. Carta Rápida solo hace cartas, y por eso se salta todo eso.',
+  estilos=['riviera','sobremesa','gaceta','vermut'],
+  bloques=[
+   ('La diferencia, en una frase', 'En una herramienta de diseño tú maquetas. Aquí subes una foto de la carta que ya tienes y la maquetación sale hecha.'),
+   ('Cuándo te conviene cada una', 'Si quieres diseñar un cartel, una publicación para redes o algo a tu medida, usa una herramienta de diseño. Si quieres tu carta en A4, bien compuesta y hoy, usa esto.'),
+   ('Lo que cuesta de verdad', 'El precio de hacer una carta a mano no es la suscripción: son las horas. Aquí son treinta segundos, y dos cartas al mes son gratis.'),
+  ],
+  faq=[('¿Puedo retocar el diseño a mano?', 'No es un editor de diseño: eliges entre 20 estilos y la carta se compone sola. Lo que sí puedes corregir es el contenido: platos, precios y secciones.'),
+       ('¿Necesito registrarme?', 'Para probar y ver tu carta maquetada, no. Para recibir el PDF te pedimos un email, que es donde te lo enviamos.')]),
+]
+
+CSS = """
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}
+:root{--ink:#0C0C0D;--muted:#6C6C72;--line:#E6E6EA;--soft:#F3F3F5;--accent:#FF4A1C;--accent-ink:#C93A0E}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff;font-size:18px;line-height:1.55;overflow-x:clip}
+a{color:inherit}.w{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-weight:800;font-size:20px;text-decoration:none;letter-spacing:-.02em}.logo b{color:var(--accent);font-weight:800}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 26px;border-radius:14px;background:var(--accent);color:#fff;font-weight:650;text-decoration:none;font-size:18px;transition:transform .16s ease-out}
+.btn:active{transform:scale(.97)}.btn.s{min-height:44px;padding:0 18px;font-size:16px;background:var(--ink);border-radius:12px}
+.btn.o{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center;padding-top:clamp(28px,5vw,64px);padding-bottom:clamp(40px,6vw,80px)}
+.miga{font-size:14px;color:var(--muted);margin:0 0 18px}.miga a{text-decoration:none}.miga a:hover{text-decoration:underline}
+h1{font-size:clamp(38px,6vw,76px);line-height:.96;letter-spacing:-.04em;font-weight:800;margin:0;text-wrap:balance}
+.golpe{font-size:clamp(20px,2.2vw,26px);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:22px 0 0;text-wrap:balance}
+.lead{color:var(--muted);margin:14px 0 0;max-width:34em}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 20px;margin:20px 0 0;padding:0;list-style:none;color:var(--muted);font-size:15px}
+.trust li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle}
+.hoja{margin:0;justify-self:center;width:min(100%,420px)}
+.hoja img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 0 0 1px var(--line),0 40px 70px -40px rgba(12,12,13,.45)}
+.hoja figcaption{font-size:14px;color:var(--muted);margin-top:12px;text-align:center}
+section{padding:clamp(44px,7vw,88px) 0}
+h2{font-size:clamp(28px,3.6vw,46px);line-height:1.02;letter-spacing:-.035em;font-weight:800;margin:0 0 18px;text-wrap:balance}
+.gris{background:var(--soft)}
+.bloques{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
+.bloques h2{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.025em;line-height:1.1}
+.bloques p{margin:0;color:#3a3a3f}
+.estilos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,28px);margin-top:28px}
+.estilos figure{margin:0}.estilos img{display:block;width:100%;height:auto;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 20px 40px -28px rgba(12,12,13,.4)}
+.estilos figcaption{font-size:15px;font-weight:650;margin-top:10px}.estilos figcaption span{font-weight:500;color:var(--accent-ink);font-size:13px;margin-left:6px}
+.pasos{counter-reset:p;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;list-style:none;padding:0;margin:26px 0 0}
+.pasos li{counter-increment:p;border-top:2px solid var(--ink);padding-top:14px;font-weight:650}
+.pasos li::before{content:counter(p);display:block;font-size:40px;font-weight:800;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.pasos li span{display:block;font-weight:400;color:var(--muted);font-size:16px;margin-top:4px}
+.faq details{border-top:1px solid var(--line);padding:18px 0}.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{font-weight:700;font-size:20px;letter-spacing:-.015em;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";color:var(--accent);font-weight:500}.faq details[open] summary::after{content:"–"}
+.faq p{margin:10px 0 0;color:#3a3a3f;max-width:46em}
+.fin{background:var(--accent);color:var(--ink);text-align:center}.fin h2{font-size:clamp(34px,5vw,64px)}.fin .btn{background:var(--ink);margin-top:10px}
+.otras{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;padding:0;list-style:none}
+.otras a{display:block;padding:10px 16px;border-radius:99px;box-shadow:inset 0 0 0 1.5px var(--line);text-decoration:none;font-size:16px;font-weight:600}
+.otras a:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+footer{padding-top:32px;padding-bottom:48px;color:var(--muted);font-size:15px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer a{text-decoration:none}footer a:hover{text-decoration:underline}
+@media (max-width:860px){body{font-size:17px}.hero{grid-template-columns:minmax(0,1fr)}.hoja{width:min(78%,340px)}.bloques,.pasos{grid-template-columns:minmax(0,1fr)}.estilos{grid-template-columns:repeat(2,minmax(0,1fr))}.btn{width:100%}.nav .btn{width:auto}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+"""
+
+def e(t): return html.escape(t, quote=True)
+
+def img(k, ancho, clase='', prioridad=False):
+    extra = ' fetchpriority="high"' if prioridad else ' loading="lazy" decoding="async"'
+    return ('<img src="/ejemplo/portada-%s-640.webp" srcset="/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w" sizes="%s" '
+            'width="900" height="1273" alt="Carta de restaurante de ejemplo en estilo %s"%s>') % (k, k, k, ancho, e(NOMBRE[k]), extra)
+
+def pagina(p):
+    url = '%s/%s/' % (WEB, p['slug'])
+    faq = p['faq'] + COMUN_FAQ
+    ld = [
+      {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Carta Rápida","item":WEB + "/"},
+        {"@type":"ListItem","position":2,"name":p['menu'],"item":url}]},
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]},
+    ]
+    primero = p['estilos'][0]
+    otras = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], e(o['menu'])) for o in PAGINAS if o['slug'] != p['slug'])
+    figs = ''.join('<figure>%s<figcaption>%s%s</figcaption></figure>' % (
+        img(k, '(max-width: 860px) 44vw, 250px'), e(NOMBRE[k]), '<span>Pro</span>' if k in PRO else '') for k in p['estilos'])
+    titulo_estilos = 'Los 20 estilos' if p.get('todos') else 'Estilos que encajan'
+    return f'''<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preload" as="image" href="/ejemplo/portada-{primero}-640.webp" imagesrcset="/ejemplo/portada-{primero}-640.webp 640w, /ejemplo/portada-{primero}.webp 900w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
+<link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<title>{e(p['title'])} | Carta Rápida</title>
+<meta name="description" content="{e(p['desc'])}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{url}">
+<meta property="og:title" content="{e(p['title'])}">
+<meta property="og:description" content="{e(p['desc'])}">
+<meta property="og:url" content="{url}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Carta Rápida">
+<meta property="og:image" content="{WEB}/og-portada.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#FF4A1C">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<style>{CSS}</style>
+</head>
+<body>
+<header class="w nav"><a class="logo" href="/" aria-label="Carta Rápida, inicio">Carta <b>Rápida</b></a><a class="btn s" href="/#herramienta">Empezar gratis</a></header>
+<main>
+<div class="w hero">
+  <div>
+    <p class="miga"><a href="/">Carta Rápida</a> › {e(p['menu'])}</p>
+    <h1>{e(p['h1'])}</h1>
+    <p class="golpe">{e(p['golpe'])}</p>
+    <p class="lead">{e(p['intro'])}</p>
+    <div class="ctas"><a class="btn" href="/#herramienta">Sube una foto de tu carta</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
+    <ul class="trust"><li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li></ul>
+  </div>
+  <figure class="hoja">{img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>Carta de ejemplo en estilo {e(NOMBRE[primero])}</figcaption></figure>
+</div>
+<section class="gris"><div class="w bloques">{''.join('<div><h2>%s</h2><p>%s</p></div>' % (e(t), e(x)) for t, x in p['bloques'])}</div></section>
+<section id="estilos"><div class="w">
+  <h2>{titulo_estilos}</h2>
+  <p class="lead" style="margin-top:0">Los ves sobre una carta de ejemplo. Cuando subas la tuya, los pruebas con tus platos.</p>
+  <div class="estilos">{figs}</div>
+  <div class="ctas"><a class="btn" href="/#herramienta">Probar con mi carta</a>{'' if p.get('todos') else '<a class="btn o" href="/plantillas-carta-restaurante/">Ver los 20 estilos</a>'}</div>
+</div></section>
+<section class="gris"><div class="w">
+  <h2>Tres pasos. Ninguno es aprender a diseñar.</h2>
+  <ol class="pasos"><li>Haz una foto a tu carta<span>O pega el texto, si lo tienes escrito.</span></li><li>Elige el estilo<span>Lo cambias las veces que quieras, sobre tus platos.</span></li><li>Recibe el PDF<span>En A4, en tu email, listo para imprimir.</span></li></ol>
+</div></section>
+<section class="faq"><div class="w">
+  <h2>Preguntas frecuentes</h2>
+  {''.join('<details><summary>%s</summary><p>%s</p></details>' % (e(q), e(a)) for q, a in faq)}
+</div></section>
+<section class="fin"><div class="w"><h2>Tu carta, hoy.</h2><a class="btn" href="/#herramienta">Sube una foto de tu carta</a></div></section>
+<section><div class="w"><h2 style="font-size:clamp(22px,2.4vw,30px)">Más cartas por tipo de local</h2><ul class="otras">{otras}</ul></div></section>
+</main>
+<footer class="w"><span>Carta Rápida es de <a href="https://kartia.es" style="text-decoration:underline">Kartia</a>, portamenús hechos a mano en España.</span>
+<nav aria-label="Legal"><a href="/legal/aviso-legal.html">Aviso legal</a><a href="/legal/privacidad.html">Privacidad</a><a href="/legal/cookies.html">Cookies</a><a href="/legal/condiciones.html">Condiciones</a></nav></footer>
+</body>
+</html>
+'''
+
+for p in PAGINAS:
+    d = RAIZ / p['slug']; d.mkdir(exist_ok=True)
+    (d / 'index.html').write_text(pagina(p), encoding='utf-8')
+
+urls = [(WEB + '/', '1.0')] + [('%s/%s/' % (WEB, p['slug']), '0.8') for p in PAGINAS]
+(RAIZ / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
+    '  <url>\n    <loc>%s</loc>\n    <lastmod>%s</lastmod>\n    <priority>%s</priority>\n  </url>\n' % (u, HOY, pr) for u, pr in urls) + '</urlset>\n', encoding='utf-8')
+print(len(PAGINAS), 'páginas ·', len(urls), 'URL en el sitemap')

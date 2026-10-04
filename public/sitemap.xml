@@ -2,8 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.cartarapida.es/</loc>
-    <lastmod>2026-09-29</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-04</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/plantillas-carta-restaurante/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/carta-para-bar/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/carta-para-cafeteria/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/carta-para-pizzeria/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/carta-para-marisqueria/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/carta-para-hamburgueseria/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/menu-del-dia/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cartarapida.es/alternativa-a-canva-para-cartas/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <priority>0.8</priority>
   </url>
 </urlset>
