@@ -126,6 +126,133 @@ PAGINAS = [
   ],
   faq=[('¿Puedo retocar el diseño a mano?', 'No es un editor de diseño: eliges entre 20 estilos y la carta se compone sola. Lo que sí puedes corregir es el contenido: platos, precios y secciones.'),
        ('¿Necesito registrarme?', 'Para probar y ver tu carta maquetada, no. Para recibir el PDF te pedimos un email, que es donde te lo enviamos.')]),
+ dict(slug='plantilla-carta-restaurante-word', menu='Plantilla en Word',
+  title='Plantilla de carta de restaurante en Word: la alternativa que no hay que rellenar',
+  desc='¿Buscas una plantilla de carta de restaurante en Word? Antes de teclear cuarenta platos, prueba esto: foto a tu carta y la recibes maquetada en PDF A4.',
+  h1='Antes de abrir Word, haz una foto a tu carta.',
+  golpe='La plantilla de Word es gratis. La tarde que le echas, no.',
+  intro='Una plantilla de Word parece la solución rápida: la descargas, cambias el nombre y a escribir. Luego llegan los platos largos que descuadran la línea, los precios que no se alinean y la segunda página que se queda con tres platos sueltos. Aquí no rellenas nada: subes la carta que ya tienes y sale compuesta.',
+  estilos=['sobremesa','gaceta','mantel','editorial'],
+  bloques=[
+   ('Lo que pasa con las plantillas de Word', 'Están pensadas para la carta de ejemplo, no para la tuya. En cuanto tu carta tiene más platos, nombres más largos o una sección de más, el diseño se rompe y acabas peleándote con tabuladores.'),
+   ('Lo que hace esto distinto', 'El diseño se adapta a tu contenido, no al revés. Si tienes pocos platos, la letra crece. Si tienes muchos, se reparten en columnas o en más páginas sin partir una sección.'),
+   ('¿Y si ya tengo la carta en Word?', 'Mejor todavía. Copias el texto, lo pegas en la herramienta y eliges estilo. No hace falta ni la foto.'),
+  ],
+  faq=[('¿Me dan un archivo de Word editable?', 'No. Recibes un PDF en A4 listo para imprimir. Si quieres cambiar platos y precios más adelante sin empezar de cero, eso lo hace Carta Pro: la carta queda guardada y la editas desde el navegador.'),
+       ('¿Puedo pegar el texto en lugar de subir una foto?', 'Sí. Si tienes la carta escrita en Word, en un correo o en una nota, la pegas tal cual.')]),
+ dict(slug='crear-carta-restaurante-online', menu='Crear carta online',
+  title='Crear la carta de tu restaurante online y gratis, en 30 segundos',
+  desc='Crea la carta de tu restaurante online sin instalar nada: subes una foto de la que tienes, eliges estilo y la recibes en PDF A4 para imprimir. Dos al mes, gratis.',
+  h1='Crea tu carta online. Sin instalar nada. Sin diseñar nada.',
+  golpe='Desde el móvil, entre el servicio de comidas y el de cenas.',
+  intro='No hace falta programa, ni cuenta, ni ordenador. Abres la web desde el móvil, haces una foto a la carta que tienes ahora mismo en la mesa y en medio minuto la ves maquetada. Si te gusta, pides el PDF y te llega al email.',
+  estilos=['riviera','sobremesa','bloque','pizarra'],
+  bloques=[
+   ('Qué necesitas', 'La carta que ya tienes, aunque esté impresa hace años, escrita a mano o en un documento. Y un email para recibir el PDF. Nada más.'),
+   ('Qué recibes', 'Una carta en PDF tamaño A4, compuesta con tipografía y retícula de imprenta, sobre fondo blanco para que imprimirla no te cueste un cartucho.'),
+   ('Carta impresa, no carta con QR', 'Esto hace la carta que va en la mesa o en el portamenús. No crea una carta web ni un código QR. Si lo que buscas es una carta digital para el móvil del cliente, es otro tipo de herramienta.'),
+  ],
+  faq=[('¿Funciona desde el móvil?', 'Sí. Está pensada para hacer la foto y elegir estilo desde el propio móvil.'),
+       ('¿Tengo que registrarme?', 'Para ver tu carta maquetada, no. Para recibir el PDF te pedimos un email, que es donde te lo enviamos.')]),
+ dict(slug='carta-con-alergenos', menu='Carta con alérgenos',
+  title='Carta de restaurante con alérgenos: cómo ponerlos y dejarla lista para imprimir',
+  desc='Cómo indicar los alérgenos en la carta de tu restaurante y dejarla maquetada en PDF A4. Qué pide la normativa y cómo hacerlo sin rehacer la carta entera.',
+  h1='Los alérgenos, en la carta. Sin que la carta parezca un prospecto.',
+  golpe='Informar es obligatorio. Que quede feo, no.',
+  intro='En la Unión Europea los establecimientos que sirven comida tienen que poder informar al cliente de los catorce alérgenos de declaración obligatoria (Reglamento UE 1169/2011; en España lo desarrolla el Real Decreto 126/2015). Muchos restaurantes lo resuelven indicándolos en la propia carta. El problema es que, mal puestos, convierten una carta limpia en una sopa de iconos.',
+  estilos=['gaceta','sobremesa','brasserie','editorial'],
+  bloques=[
+   ('Cómo se indican en la carta', 'Lo habitual es poner los alérgenos junto a cada plato, con su nombre o con un número o código que se explica al pie. Si tu carta ya los lleva así, aquí se mantienen tal cual: nombres como nombres, números como números.'),
+   ('Lo que esta herramienta hace y lo que no', 'Recoge los alérgenos que ya figuran en tu carta y los coloca ordenados bajo cada plato. No los calcula ni los adivina: qué alérgenos lleva cada plato lo sabes tú, por tus recetas y tus proveedores.'),
+   ('La nota al pie', 'Frases como "Disponemos de información sobre alérgenos, consulte a nuestro personal" se conservan en el pie de la carta, junto al IVA o el servicio de pan.'),
+  ],
+  secciones=[
+   ('Los catorce alérgenos de declaración obligatoria', 'Cereales con gluten, crustáceos, huevos, pescado, cacahuetes, soja, leche, frutos de cáscara, apio, mostaza, sésamo, dióxido de azufre y sulfitos, altramuces y moluscos. Son los que recoge el anexo II del Reglamento (UE) 1169/2011.'),
+   ('¿Tienen que estar por escrito en la carta?', 'La norma española permite dar la información de forma oral siempre que haya un cartel visible que indique dónde pedirla y exista un registro escrito o electrónico a disposición del cliente y de la inspección. Aun así, ponerlos en la carta evita preguntas en pleno servicio y errores de comunicación. Si tienes dudas sobre tu caso, consulta a la autoridad sanitaria de tu comunidad autónoma.'),
+  ],
+  faq=[('¿La herramienta añade los alérgenos por mí?', 'No. Solo reproduce los que ya aparecen en tu carta. La información sobre alérgenos es responsabilidad del establecimiento.'),
+       ('¿Mi carta usa números para los alérgenos, se respetan?', 'Sí. Si usas números o códigos, se mantienen como números.')]),
+ dict(slug='traducir-carta-restaurante', menu='Traducir la carta',
+  title='Traducir la carta de tu restaurante al inglés, francés o alemán',
+  desc='Traduce la carta de tu restaurante al inglés, francés o alemán y recíbela maquetada en PDF A4. Platos, descripciones y secciones, en un minuto.',
+  h1='Tu carta en inglés, sin "wine in rags".',
+  golpe='El turista pide lo que entiende. Lo que no entiende, no lo pide.',
+  intro='Una carta solo en español en zona de turistas es dinero que se queda en la mesa: el cliente señala lo único que reconoce. Y una carta traducida palabra por palabra da para foto en redes, pero no en el buen sentido. Con Carta Pro traduces la carta entera y la recibes ya maquetada.',
+  estilos=['riviera','brasserie','sobremesa','azulejo'],
+  bloques=[
+   ('Qué se traduce', 'Los nombres de los platos, las descripciones, las secciones, el subtítulo y las notas del pie. El nombre de tu restaurante y los precios no se tocan.'),
+   ('Idiomas', 'Inglés, francés y alemán. Recibes la carta traducida con el mismo diseño que la original, para que puedas imprimir las dos.'),
+   ('Revísala antes de imprimir', 'Los platos con nombre propio o muy local (un "pisto", unas "migas") conviene repasarlos: a veces es mejor dejar el nombre original y explicar el plato en la descripción. Puedes corregir cualquier texto antes de pedir el PDF.'),
+  ],
+  faq=[('¿La traducción es gratis?', 'La traducción es una función de Carta Pro (12,90 € al mes). Puedes probarla antes de pagar para ver cómo queda tu carta.'),
+       ('¿Puedo tener la carta en dos idiomas en la misma hoja?', 'Cada carta sale en un idioma. Lo habitual es imprimir una carta en español y otra traducida.')]),
+ dict(slug='carta-de-vinos', menu='Carta de vinos',
+  title='Carta de vinos para restaurante: diseño limpio y lista para imprimir',
+  desc='Haz la carta de vinos de tu restaurante sin maquetar: foto o texto, eliges estilo y la recibes en PDF A4. Copa y botella, alineadas.',
+  h1='Una carta de vinos que se lee con una copa en la mano.',
+  golpe='Si el cliente no encuentra el vino, pide una caña.',
+  intro='La carta de vinos es la que más se actualiza y la que peor se maqueta: referencias que entran y salen, añadas que cambian, precios por copa y por botella. Aquí subes la lista como la tengas y sale ordenada por secciones, con los dos precios alineados.',
+  estilos=['brasserie','sobremesa','autor','deco'],
+  bloques=[
+   ('Copa y botella', 'Si un vino tiene dos precios, salen los dos, uno al lado del otro. Sin tabuladores ni puntos suspensivos hechos a mano.'),
+   ('Por tipo, por zona o como la tengas', 'Las secciones se respetan tal y como están en tu carta: blancos, tintos, espumosos, o por denominación de origen. La bodega o la uva que pongas junto al vino va debajo, en pequeño.'),
+   ('Cuando cambia una añada', 'Con Carta Pro la carta queda guardada: cambias la referencia o el precio y descargas el PDF nuevo.'),
+  ],
+  faq=[('¿Puedo hacer la carta de vinos separada de la de comida?', 'Sí. Cada carta que subes es un PDF independiente.'),
+       ('¿Sirve para cervezas, cócteles o destilados?', 'Sí. Funciona con cualquier lista de productos con nombre y precio organizada por secciones.')]),
+ dict(slug='carta-de-cocteles', menu='Carta de cócteles',
+  title='Carta de cócteles para bar o coctelería: lista para imprimir en 30 segundos',
+  desc='Diseña la carta de cócteles de tu bar sin maquetar: pegas la lista, eliges estilo y la recibes en PDF A4. Ingredientes debajo de cada cóctel.',
+  h1='La carta de cócteles, tan cuidada como el cóctel.',
+  golpe='Nadie paga doce euros por algo que viene en una hoja de cálculo.',
+  intro='En coctelería la carta es parte del producto: el nombre, los ingredientes, el orden. Una lista en letra genérica le quita valor a lo que hay en la copa. Aquí pegas tu carta y eliges un estilo con personalidad.',
+  estilos=['deco','sumi','vermut','autor'],
+  bloques=[
+   ('Ingredientes debajo del nombre', 'El nombre del cóctel va en grande y los ingredientes en una línea más fina debajo. El precio, a la derecha.'),
+   ('Clásicos, de autor, sin alcohol', 'Las secciones salen como las tengas. Si marcas algún cóctel como especialidad de la casa, puede ir destacado.'),
+   ('Carta corta, carta con aire', 'Con pocos cócteles la letra crece y la página respira, que es lo que pide una carta de coctelería.'),
+  ],
+  faq=[('¿Puedo cambiar la carta cada temporada?', 'Sí. Pegas la carta nueva y eliges el mismo estilo. Con Carta Pro, además, queda guardada y solo cambias lo que cambia.'),
+       ('¿Hay formatos más pequeños que A4?', 'El PDF sale en A4. Para una carta más pequeña puedes imprimirla reducida desde las opciones de tu impresora.')]),
+ dict(slug='imprimir-carta-restaurante', menu='Imprimir la carta',
+  title='Imprimir la carta de un restaurante: tamaño, papel y cómo presentarla',
+  desc='Cómo imprimir la carta de tu restaurante para que aguante el servicio: tamaño A4, papel, impresora o copistería, y cómo presentarla en la mesa.',
+  h1='Una carta bien impresa se nota antes de leerla.',
+  golpe='El diseño es la mitad. La otra mitad es el papel y dónde lo pones.',
+  intro='Puedes tener la carta mejor maquetada del barrio y estropearla al imprimirla en un folio fino que se arruga a la primera gota. Aquí va lo básico para que la carta que sale de la impresora esté a la altura de tu cocina.',
+  estilos=['sobremesa','brasserie','riviera','gaceta'],
+  bloques=[
+   ('Tamaño', 'El PDF sale en A4 (210 × 297 mm), que es el tamaño que admite cualquier impresora y cualquier copistería. Al imprimir, elige "tamaño real" o "100 %" para que no se recorten los márgenes.'),
+   ('Papel', 'Un papel de más gramaje que el folio normal aguanta mejor el uso y no transparenta. Si la carta va a ir sin funda, pide en la copistería un papel grueso o un acabado que resista manchas.'),
+   ('Impresora o copistería', 'Las cartas van sobre fondo blanco, así que una impresora de oficina las saca bien. Para muchas copias o papel grueso, una copistería sale mejor y más barato por unidad.'),
+  ],
+  secciones=[
+   ('Cómo presentarla en la mesa', 'Una hoja suelta dura poco: se mancha, se dobla y da sensación de provisional. Un portamenús la protege, permite cambiar la hoja cuando cambian los precios y hace que la carta se perciba como parte del local. Carta Rápida es de Kartia, taller español que fabrica portamenús a mano desde 2018; las cartas en A4 que salen de aquí están pensadas para ir dentro.'),
+   ('Cada cuánto reimprimir', 'Cada vez que cambie un precio o un plato. Una carta con tachones o pegatinas transmite dejadez. Por eso conviene que rehacerla cueste medio minuto y no una tarde.'),
+  ],
+  faq=[('¿La carta se puede imprimir a doble cara?', 'Sí. Si tu carta ocupa dos páginas, puedes imprimirlas a doble cara desde las opciones de tu impresora.'),
+       ('¿Hacéis vosotros la impresión?', 'No imprimimos cartas. Recibes el PDF y lo imprimes donde prefieras. Lo que sí fabrica Kartia son los portamenús.')]),
+ dict(slug='como-hacer-la-carta-de-un-restaurante', menu='Cómo hacer la carta',
+  title='Cómo hacer la carta de un restaurante: guía práctica paso a paso',
+  desc='Guía práctica para hacer la carta de tu restaurante: cuántos platos, cómo ordenarlos, cómo poner los precios y cómo dejarla lista para imprimir.',
+  h1='Cómo hacer la carta de un restaurante, sin teoría de más.',
+  golpe='Primero se decide qué va en la carta. Luego, cómo se ve.',
+  intro='La carta es el único vendedor que atiende a todas las mesas. Antes de pensar en tipografías conviene resolver tres cosas: qué platos entran, en qué orden y cómo se escriben. El diseño viene después, y es la parte que menos tiempo debería llevarte.',
+  estilos=['sobremesa','gaceta','riviera','mantel'],
+  bloques=[
+   ('1. Decide qué entra', 'Una carta larga no vende más: hace dudar al cliente y complica la cocina. Quédate con los platos que salen bien, se venden y dejan margen. Lo demás, fuera o a sugerencias.'),
+   ('2. Ordena por secciones', 'Agrupa como el cliente piensa la comida: para picar, entrantes, principales, postres, bebidas. Dentro de cada sección, pon primero lo que más te interesa vender.'),
+   ('3. Escribe claro', 'Nombre del plato, una línea de descripción si aporta algo y el precio. Sin adjetivos de relleno. Si un plato necesita tres líneas para explicarse, el problema no es la carta.'),
+  ],
+  secciones=[
+   ('Los precios', 'Alineados a la derecha y sin el símbolo del euro repetido en cada línea, que solo añade ruido. Si un plato tiene media ración y ración, o copa y botella, pon los dos precios juntos. Indica al pie si el IVA está incluido y si cobras pan o servicio.'),
+   ('Los platos de la casa', 'Marca pocos. Si todo está destacado, nada lo está. Dos o tres especialidades por carta, colocadas al principio de su sección.'),
+   ('Los alérgenos', 'Tienes que poder informar de los catorce alérgenos de declaración obligatoria. Muchos locales los indican junto a cada plato o con un código explicado al pie.'),
+   ('El diseño', 'Una tipografía legible, buen contraste, aire entre secciones y fondo blanco si la vas a imprimir tú. No hace falta más. Es justo la parte que resuelve Carta Rápida: subes la carta con las decisiones ya tomadas y sale compuesta en A4.'),
+   ('Revísala y cámbiala', 'Lee la carta impresa antes de sacar cincuenta copias: erratas, precios, platos que ya no haces. Y revísala cada temporada. Una carta que no cambia nunca suele ser una carta que nadie mira.'),
+  ],
+  faq=[('¿Cuántos platos debe tener una carta?', 'No hay un número mágico. Como referencia práctica: los que tu cocina pueda sacar bien en hora punta y el cliente pueda leer sin agobiarse.'),
+       ('¿Es mejor una hoja o varias?', 'Si cabe en una hoja a doble cara sin apretar la letra, mejor. Si no, sepárala: comida por un lado, bebidas y vinos por otro.')]),
 ]
 
 CSS = """
@@ -153,6 +280,7 @@ h1{font-size:clamp(38px,6vw,76px);line-height:.96;letter-spacing:-.04em;font-wei
 section{padding:clamp(44px,7vw,88px) 0}
 h2{font-size:clamp(28px,3.6vw,46px);line-height:1.02;letter-spacing:-.035em;font-weight:800;margin:0 0 18px;text-wrap:balance}
 .gris{background:var(--soft)}
+.prosa{max-width:820px}.prosa h2{font-size:clamp(24px,2.6vw,34px);margin-top:36px}.prosa h2:first-child{margin-top:0}.prosa p{margin:0;color:#3a3a3f}
 .bloques{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
 .bloques h2{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.025em;line-height:1.1}
 .bloques p{margin:0;color:#3a3a3f}
@@ -198,6 +326,9 @@ def pagina(p):
     otras = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], e(o['menu'])) for o in PAGINAS if o['slug'] != p['slug'])
     figs = ''.join('<figure>%s<figcaption>%s%s</figcaption></figure>' % (
         img(k, '(max-width: 860px) 44vw, 250px'), e(NOMBRE[k]), '<span>Pro</span>' if k in PRO else '') for k in p['estilos'])
+    prosa = ''
+    if p.get('secciones'):
+        prosa = '<section><div class="w prosa">' + ''.join('<h2>%s</h2><p>%s</p>' % (e(t), e(x)) for t, x in p['secciones']) + '</div></section>'
     titulo_estilos = 'Los 20 estilos' if p.get('todos') else 'Estilos que encajan'
     return f'''<!DOCTYPE html>
 <html lang="es">
@@ -206,7 +337,7 @@ def pagina(p):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preload" as="image" href="/ejemplo/portada-{primero}-640.webp" imagesrcset="/ejemplo/portada-{primero}-640.webp 640w, /ejemplo/portada-{primero}.webp 900w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
 <link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>
-<title>{e(p['title'])} | Carta Rápida</title>
+<title>{e(p['title'] + (' | Carta Rápida' if len(p['title']) <= 47 else ''))}</title>
 <meta name="description" content="{e(p['desc'])}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="{url}">
@@ -239,7 +370,7 @@ def pagina(p):
   <figure class="hoja">{img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>Carta de ejemplo en estilo {e(NOMBRE[primero])}</figcaption></figure>
 </div>
 <section class="gris"><div class="w bloques">{''.join('<div><h2>%s</h2><p>%s</p></div>' % (e(t), e(x)) for t, x in p['bloques'])}</div></section>
-<section id="estilos"><div class="w">
+{prosa}<section id="estilos"><div class="w">
   <h2>{titulo_estilos}</h2>
   <p class="lead" style="margin-top:0">Los ves sobre una carta de ejemplo. Cuando subas la tuya, los pruebas con tus platos.</p>
   <div class="estilos">{figs}</div>
