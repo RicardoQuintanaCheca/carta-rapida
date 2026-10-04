@@ -211,14 +211,26 @@ PRECARGA = '<link rel="preload" as="image" href="/ejemplo/portada-riviera-640.we
 head = head.replace('<title>', PRECARGA + '<title>', 1)
 ENLACE_VIEJO = ('<link rel="stylesheet" href="/herramienta.css?v=%s" media="print" onload="this.media=\'all\'">'
                 '<noscript><link rel="stylesheet" href="/herramienta.css?v=%s"></noscript>') % (_v, _v)
+# El código va en archivos aparte y diferidos: la página pinta antes de ejecutarlo
+_ini = script_viejo.rfind('<script>'); _fin = script_viejo.rfind('</script>')
+assert _ini >= 0 and _fin > _ini
+_js_viejo = script_viejo[_ini + 8:_fin]
+(REPO / 'herramienta.js').write_text(_js_viejo)
+(REPO / 'portada.js').write_text(js_nuevo)
+_vj = hashlib.md5((_js_viejo + js_nuevo).encode()).hexdigest()[:8]
+script_viejo = script_viejo[:_ini] + '<script src="/herramienta.js?v=%s" defer></script>' % _vj + script_viejo[_fin + 9:]
+assert modal.count('<script src="/cuenta.js"></script>') == 1
+modal = modal.replace('<script src="/cuenta.js"></script>', '<script src="/cuenta.js" defer></script>')
+# cuenta.css va dentro de la página: un archivo menos antes del primer pintado
+_ccss = (REPO / 'cuenta.css').read_text()
+assert head.count('<link rel="stylesheet" href="/cuenta.css">') == 1
+head = head.replace('<link rel="stylesheet" href="/cuenta.css">', '<style>' + _ccss + '</style>')
 html = head + '\n' + ENLACE_VIEJO + '\n<style>\n/* ═══ Diseño nuevo ═══ */\n' + css_nuevo + '\n/* ═══ Herramienta con el diseño nuevo ═══ */\n' + extra + '\n</style>\n' + scripts_head + '\n</head>\n<body class="n">\n' + cuerpo + '\n' + modal + '\n' + cookies_visor + '\n' + script_viejo + '''
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script>
-''' + js_nuevo + '''
-</script>
+<script src="/portada.js?v=''' + _vj + '''" defer></script>
 </body>
 </html>
 '''
