@@ -16,7 +16,7 @@
 // Sin nada configurado, la web sigue funcionando y ofrece escribir a hola@kartia.es.
 
 // Dirección pública de la web (en Railway: PUBLIC_URL). Mientras no se cambie, la de siempre.
-const WEB = (process.env.PUBLIC_URL || 'https://cartarapida.kartia.es').replace(/\/$/, '');
+const WEB = (process.env.PUBLIC_URL || 'https://cartarapida.es').replace(/\/$/, '');
 const WEB_CORTA = WEB.replace(/^https?:\/\//, '');
 const REMITENTE = process.env.CORREO_REMITENTE || process.env.SMTP_USUARIO || '';
 const RESEND = process.env.RESEND_API_KEY || '';
