@@ -30,7 +30,7 @@ head = re.sub(r'<link rel="preload" as="image"[^>]*>\n', '', head)
 # Vista previa al compartir, con la identidad nueva
 for viejo, nuevo in [
     ('content="Deja Canva: tu carta, lista para imprimir en 30 segundos"', 'content="Tu carta, maquetada como en una imprenta · Carta Rápida"'),
-    ('content="https://cartarapida.es/og-deja-canva.jpg"', 'content="https://cartarapida.es/og-portada.jpg"'),
+    ('content="https://www.cartarapida.es/og-deja-canva.jpg"', 'content="https://www.cartarapida.es/og-portada.jpg"'),
     ('content="Deja Canva: una carta de restaurante antes y después de pasar por Carta Rápida"', 'content="Una carta de restaurante hecha en Word, antes y después de pasar por Carta Rápida"'),
 ]:
     assert viejo in head, viejo
