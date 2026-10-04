@@ -162,9 +162,11 @@ function nOpciones(b) {
   const chips = $$('#chips button');
   const figuras = $$('#pickSheet figure');
   let tocado = false, ciclo = null, elegido = 'riviera';
+  const cargarFig = k => { const f = figuras.find(x => x.dataset.k === k), im = f && f.querySelector('img[data-srcset]'); if (im) { im.srcset = im.dataset.srcset; im.removeAttribute('data-srcset'); im.removeAttribute('loading'); } };
   const elegir = (k, auto) => {
     elegido = k;
     chips.forEach(c => c.setAttribute('aria-selected', String(c.dataset.k === k)));
+    cargarFig(k); { const i = chips.findIndex(c => c.dataset.k === k); if (i >= 0) cargarFig(chips[(i + 1) % chips.length].dataset.k); } // la elegida y la siguiente
     figuras.forEach(f => f.classList.toggle('on', f.dataset.k === k));
     $('#probarEstiloNom').textContent = (NOMBRES[k] || k) + (esPro_(k) ? ' · Pro' : '');
     { const c = chips.find(x => x.dataset.k === k); if (c && window.innerWidth < 900) c.parentNode.scrollTo({ left: c.offsetLeft - 20, behavior: 'smooth' }); } // en móvil la fila acompaña al estilo activo
@@ -216,12 +218,14 @@ function nOpciones(b) {
     const imgs = lista.map(([k], n) => {
       if (n === 0) return hoja.querySelector('img'); // Riviera ya está en la página
       const im = new Image(); im.alt = ''; im.decoding = 'async'; im.loading = 'lazy';
-      im.sizes = '(max-width: 900px) 72vw, 440px'; im.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
+      im.sizes = '(max-width: 900px) 72vw, 440px'; im.dataset.srcset = '/ejemplo/portada-' + k + '-640.webp 640w, /ejemplo/portada-' + k + '.webp 900w';
       hoja.appendChild(im); return im;
     });
     const puntos = lista.map(([k, n], i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Ver en estilo ' + n); b.setAttribute('aria-pressed', i === 0); caja.appendChild(b); return b; });
     let i = 0, tocado = false, visible = true, vueltas = 0, reloj = null;
-    const ir = n => { i = n; imgs.forEach((im, x) => im.classList.toggle('on', x === n)); puntos.forEach((b, x) => b.setAttribute('aria-pressed', x === n)); $('#escNombre').textContent = lista[n][1]; };
+    const cargar = n => { const im = imgs[n]; if (im && im.dataset.srcset) { im.removeAttribute('loading'); im.srcset = im.dataset.srcset; delete im.dataset.srcset; } };
+    setTimeout(() => cargar(1), 1200); // la siguiente, cuando la página ya ha pintado
+    const ir = n => { cargar(n); cargar((n + 1) % lista.length); i = n; imgs.forEach((im, x) => im.classList.toggle('on', x === n)); puntos.forEach((b, x) => b.setAttribute('aria-pressed', x === n)); $('#escNombre').textContent = lista[n][1]; };
     puntos.forEach((b, n) => b.addEventListener('click', () => { tocado = true; clearInterval(reloj); ir(n); }));
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(hoja);

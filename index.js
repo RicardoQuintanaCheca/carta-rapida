@@ -37,7 +37,7 @@ app.use(express.json({ limit: '6mb' }));
 app.use(express.static('public', {
   setHeaders(res, ruta) {
     if (/\.html?$/.test(ruta)) res.setHeader('Cache-Control', 'no-cache');
-    else if (/\.(webp|png|jpe?g|ico|svg|woff2?)$/.test(ruta)) res.setHeader('Cache-Control', 'public, max-age=604800');
+    else if (/\.(webp|png|jpe?g|ico|svg|woff2?)$/.test(ruta)) res.setHeader('Cache-Control', 'public, max-age=2592000');
     else if (/\.(css|js)$/.test(ruta)) res.setHeader('Cache-Control', 'no-cache');
   }
 }));

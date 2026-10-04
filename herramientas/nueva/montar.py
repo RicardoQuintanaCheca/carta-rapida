@@ -94,7 +94,13 @@ extra = (AQUI / 'nueva.css').read_text()
 # Imágenes reales
 cuerpo = cuerpo.replace('{{img:antes}}', '/ejemplo/antes-640.webp')
 # Estilos: la misma carta de ejemplo (Casa Pepe) compuesta con el motor real
-cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', lambda m: 'src="/ejemplo/portada-%s.webp" srcset="/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w" sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273"' % ((m.group(1),) * 3), cuerpo)
+def _fig(m, visto=[0]):
+    k = m.group(1); visto[0] += 1
+    juego = '/ejemplo/portada-%s-640.webp 640w, /ejemplo/portada-%s.webp 900w' % (k, k)
+    resto = 'sizes="(max-width: 900px) 92vw, 500px" width="900" height="1273"'
+    if visto[0] == 1: return 'src="/ejemplo/portada-%s.webp" srcset="%s" %s' % (k, juego, resto)
+    return 'data-srcset="%s" %s' % (juego, resto)  # las demás se cargan al elegirlas
+cuerpo = re.sub(r'src="\{\{img:(\w+)\}\}"', _fig, cuerpo)
 
 # Barra: enlaces reales
 cuerpo = cuerpo.replace('<a class="nlogo" href="#inicio"', '<a class="nlogo" href="/"')
