@@ -11,9 +11,9 @@
 //      SMTP_CLAVE         la contraseña (en Gmail: «contraseña de aplicación»)
 //
 //   En los dos casos:
-//      CORREO_REMITENTE   p. ej.  Carta Rápida <hola@kartia.es>
+//      CORREO_REMITENTE   p. ej.  Carta Rápida <hola@cartarapida.es>
 //
-// Sin nada configurado, la web sigue funcionando y ofrece escribir a hola@kartia.es.
+// Sin nada configurado, la web sigue funcionando y ofrece escribir a hola@cartarapida.es.
 
 // Dirección pública de la web (en Railway: PUBLIC_URL). Mientras no se cambie, la de siempre.
 const WEB = (process.env.PUBLIC_URL || 'https://www.cartarapida.es').replace(/\/$/, '');

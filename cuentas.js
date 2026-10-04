@@ -318,7 +318,7 @@ function crearRutas({ limite, limiteCuenta }) {
   r.post('/cuenta/olvide', limiteCuenta, sinCuentas, async (req, res) => {
     const email = String((req.body || {}).email || '').trim().toLowerCase();
     if (!emailValido(email)) return res.json({ ok: false, campo: 'email', error: 'Revisa el email.' });
-    if (!CORREO_ACTIVO) return res.json({ ok: false, sinCorreo: true, error: 'Escríbenos desde tu email a hola@kartia.es y te la restablecemos en el día.' });
+    if (!CORREO_ACTIVO) return res.json({ ok: false, sinCorreo: true, error: 'Escríbenos desde tu email a hola@cartarapida.es y te la restablecemos en el día.' });
     const u = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
     if (u) {
       const enlace = `${origenDe(req)}/panel?restablecer=${tokenRestablecer(u)}`;
@@ -377,7 +377,7 @@ function crearRutas({ limite, limiteCuenta }) {
     if (!confirmado) return res.json({ ok: false, error: u.sin_clave ? 'Escribe BORRAR para confirmar.' : 'La contraseña no es correcta.' });
     if (u.sub_id && stripe && !u.sub_id.startsWith('demo_') && SUB_VIVA.includes(u.sub_estado)) {
       try { await stripe.subscriptions.cancel(u.sub_id); }
-      catch (e) { console.error('[CUENTA] no se pudo cancelar la suscripción al borrar:', e.message); return res.json({ ok: false, error: 'No hemos podido cancelar tu suscripción. Escríbenos a hola@kartia.es y la borramos a mano.' }); }
+      catch (e) { console.error('[CUENTA] no se pudo cancelar la suscripción al borrar:', e.message); return res.json({ ok: false, error: 'No hemos podido cancelar tu suscripción. Escríbenos a hola@cartarapida.es y la borramos a mano.' }); }
     }
     db.prepare('DELETE FROM usuarios WHERE id = ?').run(u.id);
     console.log(`CUENTA BORRADA: ${JSON.stringify({ email: u.email, fecha: ahoraMadrid() })}`);
@@ -538,7 +538,7 @@ function crearRutas({ limite, limiteCuenta }) {
       res.json({ ok: true, licencia: crearLicencia(email, hasta), caduca: hasta, email });
     } catch (e) {
       console.error('[PASE] no se pudo confirmar:', e.message);
-      res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@kartia.es y lo activamos a mano.' });
+      res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@cartarapida.es y lo activamos a mano.' });
     }
   });
 
@@ -588,7 +588,7 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
       res.json({ ok: true, cuenta: datosCuenta(al) });
     } catch (e) {
       console.error('[PAGO] no se pudo confirmar:', e.message);
-      res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@kartia.es y lo activamos a mano.' });
+      res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@cartarapida.es y lo activamos a mano.' });
     }
   });
 
@@ -650,7 +650,7 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
       res.json({ ok: true, url: p.url });
     } catch (e) {
       console.error('[PORTAL] no se pudo abrir:', e.message);
-      res.json({ ok: false, error: 'No hemos podido abrir la gestión de tu suscripción. Escríbenos a hola@kartia.es.' });
+      res.json({ ok: false, error: 'No hemos podido abrir la gestión de tu suscripción. Escríbenos a hola@cartarapida.es.' });
     }
   });
 

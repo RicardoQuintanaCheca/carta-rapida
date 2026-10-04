@@ -192,7 +192,7 @@ pie = '''<div class="n-kartia rv">
         <a href="/panel">Mis cartas</a>
         <a href="https://kartia.es/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=pie">kartia.es</a>
         <a href="https://escandallo.kartia.es">Escandallos</a>
-        <a href="mailto:hola@kartia.es">Contacto</a>
+        <a href="mailto:hola@cartarapida.es">Contacto</a>
         <a href="/legal/aviso-legal.html">Aviso legal</a>
         <a href="/legal/privacidad.html">Privacidad</a>
         <a href="/legal/condiciones.html">Condiciones</a>

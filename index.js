@@ -595,7 +595,7 @@ app.post('/solicitar-montaje', limiteLeads, async (req, res) => {
   const platos = carta.secciones.reduce((n, s) => n + s.platos.length, 0);
   const restaurante = carta.nombre_restaurante || String(b.restaurante || '').slice(0, 120);
   const { db } = require('./db');
-  if (!db) return res.json({ ok: false, error: 'Ahora mismo no podemos recibir solicitudes. Escríbenos a info@kartia.es.' });
+  if (!db) return res.json({ ok: false, error: 'Ahora mismo no podemos recibir solicitudes. Escríbenos a hola@cartarapida.es.' });
   const id = require('crypto').randomBytes(9).toString('base64url');
   db.prepare('INSERT INTO solicitudes (id, email, telefono, restaurante, estilo, platos, datos, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
     .run(id, email, telefono, restaurante, estilo, platos, JSON.stringify({ carta, estilo, logo }), Date.now());

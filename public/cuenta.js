@@ -250,7 +250,7 @@
       btn.disabled = false; btn.textContent = 'Enviarme el enlace';
       if (!d.ok) {
         if (d.sinCorreo) {
-          err.innerHTML = 'Escríbenos desde ese email a <a href="mailto:hola@kartia.es?subject=Contrase%C3%B1a%20Carta%20R%C3%A1pida">hola@kartia.es</a> y te la restablecemos en el día.';
+          err.innerHTML = 'Escríbenos desde ese email a <a href="mailto:hola@cartarapida.es?subject=Contrase%C3%B1a%20Carta%20R%C3%A1pida">hola@cartarapida.es</a> y te la restablecemos en el día.';
         } else err.textContent = d.error || 'No ha sido posible.';
         return;
       }
