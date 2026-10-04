@@ -8,7 +8,7 @@ const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
 const rutasAdmin = require('./admin');
-const { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO } = require('./correo');
+const { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO, WEB } = require('./correo');
 
 const app = express();
 app.set('trust proxy', true);
@@ -21,6 +21,15 @@ const upload = multer({
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const MODELO = process.env.OPENAI_MODEL || 'gpt-4o';
+
+// Un solo dominio: cuando PUBLIC_URL está puesto, cualquier otra dirección (la antigua, o con www) lleva a él.
+// Los avisos de Stripe y la comprobación de salud se atienden en cualquier dirección.
+const HOST_PRINCIPAL = process.env.PUBLIC_URL ? WEB.replace(/^https?:\/\//, '') : '';
+app.use((req, res, next) => {
+  if (!HOST_PRINCIPAL || req.hostname === HOST_PRINCIPAL || /^(localhost|127\.|\[::1\])/.test(req.hostname) || /\.railway\.(app|internal)$/.test(req.hostname)) return next();
+  if ((req.method !== 'GET' && req.method !== 'HEAD') || req.path.startsWith('/stripe/') || req.path === '/salud') return next();
+  res.redirect(301, WEB + req.originalUrl);
+});
 
 app.use(compression());
 app.use(express.json({ limit: '6mb' }));
@@ -454,7 +463,7 @@ function guardarVista(buf) {
   try {
     const id = require('crypto').randomBytes(12).toString('base64url');
     require('fs').writeFileSync(require('path').join(DIR_VISTAS, id + '.jpg'), buf);
-    return `https://cartarapida.kartia.es/v/${id}.jpg`;
+    return `${WEB}/v/${id}.jpg`;
   } catch (e) { return ''; }
 }
 app.get('/v/:id.jpg', (req, res) => {
@@ -520,7 +529,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
         para: destino,
         asunto: `Tu carta${limpia.nombre_restaurante ? ' de ' + limpia.nombre_restaurante : ''}, lista para imprimir`,
         html: plantillaCarta({ restaurante: limpia.nombre_restaurante, estilo: NOMBRE_ESTILO[estiloFinal] || estiloFinal, imagen, conPase: PASE_ACTIVO }),
-        texto: 'Aquí tienes tu carta, adjunta en PDF A4 y lista para imprimir. Carta Rápida · cartarapida.kartia.es',
+        texto: 'Aquí tienes tu carta, adjunta en PDF A4 y lista para imprimir. Carta Rápida · ' + WEB.replace(/^https?:\/\//, ''),
         adjuntos: [{ nombre: nombreArchivo, contenido: Buffer.from(pdf) }]
       });
       if (enviado) {

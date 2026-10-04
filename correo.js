@@ -15,6 +15,9 @@
 //
 // Sin nada configurado, la web sigue funcionando y ofrece escribir a hola@kartia.es.
 
+// Dirección pública de la web (en Railway: PUBLIC_URL). Mientras no se cambie, la de siempre.
+const WEB = (process.env.PUBLIC_URL || 'https://cartarapida.kartia.es').replace(/\/$/, '');
+const WEB_CORTA = WEB.replace(/^https?:\/\//, '');
 const REMITENTE = process.env.CORREO_REMITENTE || process.env.SMTP_USUARIO || '';
 const RESEND = process.env.RESEND_API_KEY || '';
 const SMTP = process.env.SMTP_HOST && process.env.SMTP_USUARIO && process.env.SMTP_CLAVE;
@@ -72,7 +75,7 @@ function plantilla({ titulo, texto, boton, enlace, pie }) {
 ${enlace ? `<tr><td style="padding-top:28px"><a href="${esc(enlace)}" style="${F};display:inline-block;background:#FF4A1C;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:16px;padding:16px 26px;border-radius:10px">${esc(boton)}</a></td></tr>` : ''}
 <tr><td style="${F};padding-top:30px;margin-top:30px;font-size:13.5px;line-height:1.55;color:#6C6C72"><div style="border-top:1px solid #E6E6EA;padding-top:20px">${esc(pie)}${enlace ? `<br><br>Si el botón no funciona, copia este enlace en el navegador:<br><span style="word-break:break-all;color:#C93A0E">${esc(enlace)}</span>` : ''}</div></td></tr>
 </table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:540px"><tr><td style="${F};padding:18px 8px 0;font-size:12.5px;line-height:1.5;color:#8F877E">Carta Rápida es de Kartia, portamenús hechos a mano en España · cartarapida.kartia.es</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:540px"><tr><td style="${F};padding:18px 8px 0;font-size:12.5px;line-height:1.5;color:#8F877E">Carta Rápida es de Kartia, portamenús hechos a mano en España · ${WEB_CORTA}</td></tr></table>
 </td></tr></table></body></html>`;
 }
 
@@ -80,7 +83,7 @@ ${enlace ? `<tr><td style="padding-top:28px"><a href="${esc(enlace)}" style="${F
 function plantillaCarta({ restaurante, estilo, imagen, conPase }) {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const F = "font-family:'Bricolage Grotesque','Helvetica Neue',Helvetica,Arial,sans-serif";
-  const web = 'https://cartarapida.kartia.es';
+  const web = WEB;
   const fila = (n, t) => `<tr><td width="34" valign="top" style="${F};padding:7px 0;font-size:13px;font-weight:bold;color:#FF4A1C">${n}</td><td style="${F};padding:7px 0;font-size:15.5px;line-height:1.5;color:#3A3A40">${t}</td></tr>`;
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;background:#F3F3F5;${F};color:#0C0C0D">
@@ -110,8 +113,8 @@ ${conPase ? `<div style="${F};padding-top:14px;font-size:14px;line-height:1.5;co
 </td></tr></table></td></tr>
 <tr><td style="${F};padding:26px 36px 32px;font-size:13px;line-height:1.55;color:#8A8A92">Te escribimos porque has pedido tu carta en Carta Rápida. Si no has sido tú, ignora este correo.</td></tr>
 </table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px"><tr><td style="${F};padding:18px 8px 0;font-size:12.5px;line-height:1.5;color:#8A8A92">Carta Rápida es de Kartia, portamenús hechos a mano en España · cartarapida.kartia.es</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px"><tr><td style="${F};padding:18px 8px 0;font-size:12.5px;line-height:1.5;color:#8A8A92">Carta Rápida es de Kartia, portamenús hechos a mano en España · ${WEB_CORTA}</td></tr></table>
 </td></tr></table></body></html>`;
 }
 
-module.exports = { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO };
+module.exports = { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO, WEB };
