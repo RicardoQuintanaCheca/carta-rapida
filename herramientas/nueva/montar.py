@@ -35,8 +35,12 @@ for viejo, nuevo in [
 ]:
     assert viejo in head, viejo
     head = head.replace(viejo, nuevo)
-head = re.sub(r'<link href="https://fonts.googleapis.com/css2\?family=Bricolage[^>]*>',
-              '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap">', head)
+FUENTES = ('<link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>'
+           '<style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;'
+           'font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}</style>'
+           '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Jost:wght@400;500&display=swap" onload="this.onload=null;this.rel=\'stylesheet\'">')
+head, n_f = re.subn(r'<link href="https://fonts.googleapis.com/css2\?family=Bricolage[^>]*>', lambda m: FUENTES, head)
+assert n_f == 1
 css_viejo = entre(i_style+1, i_fin_style-1)
 scripts_head = entre(i_fin_style+1, i_head_fin-1)
 
