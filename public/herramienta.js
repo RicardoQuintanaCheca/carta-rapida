@@ -1118,33 +1118,6 @@
   function cartaTraducida() { return !!cartaActual && String(cartaActual.idioma || 'es').slice(0, 2).toLowerCase() !== 'es'; }
   function olvidarLicencia() { licencia = null; almacen.borrar('cr_licencia'); }
   function cabeceraLicencia() { return licencia && licencia.caduca > Date.now() ? { 'X-Licencia': licencia.licencia } : {}; }
-  // Pase de 7 días: pago único, sin cuenta
-  async function comprarPase() {
-    try {
-      if (cartaActual && typeof guardarPendiente === 'function') guardarPendiente();
-      const r = await fetch('/pase/crear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: almacen.leer('cr_email') || '' }) });
-      const d = await r.json();
-      if (d.ok && d.url) { medir('begin_checkout', { tipo: 'pase' }); location.href = d.url; return; }
-      status(d.error || 'No hemos podido abrir el pago. Inténtalo de nuevo.');
-    } catch (e) { status('No hemos podido abrir el pago. Inténtalo de nuevo.'); }
-  }
-  async function vueltaDelPase(valor) {
-    history.replaceState(null, '', location.pathname);
-    if (valor === 'quiero') return comprarPase();
-    const hay = typeof restaurarPendiente === 'function' ? restaurarPendiente() : false;
-    if (valor === 'cancelado') { if (hay) status('Pago cancelado. Tu carta sigue aquí.'); return; }
-    try {
-      const r = await fetch('/pase/confirmar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sesion: valor }) });
-      const d = await r.json();
-      if (!d.ok) { status(d.error || 'No hemos podido comprobar el pago.'); return; }
-      licencia = { licencia: d.licencia, caduca: d.caduca };
-      almacen.guardar('cr_licencia', licencia);
-      pintarPlan(); if (cartaActual) renderVista();
-      medir('purchase', { tipo: 'pase', value: 15, currency: 'EUR' });
-      updateToolBubble('¡Pase activado! 7 días sin firma, con tu logo y los 20 estilos ✨');
-      document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
-    } catch (e) { status('No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@cartarapida.es.'); }
-  }
   let cartaGuardadaId = null;
 
   const fechaCorta = ms => new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
@@ -1387,8 +1360,7 @@
     a.href = c ? '/panel' : '/panel';
   }
   (async function iniciarCuenta() {
-    const pase = new URLSearchParams(location.search).get('pase');
-    if (pase) setTimeout(() => vueltaDelPase(pase), 300);
+    if (new URLSearchParams(location.search).get('pase')) history.replaceState(null, '', location.pathname);
     if (!window.Cuenta) return;
     await Cuenta.cargar();
     const params = new URLSearchParams(location.search);

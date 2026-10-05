@@ -1677,8 +1677,7 @@
               </ul>
               <button class="pro-btn" id="proBtn" onclick="probarPro()" type="button">Pruébalo 7 días gratis</button>
               <button class="pro-prueba-btn" id="proPagarBtn" onclick="hacersePro()" type="button">o hazte Pro ya · desde 9,90 € al mes</button>
-              <button class="pro-prueba-btn" id="proPaseBtn" onclick="comprarPase()" type="button">o paga una sola vez · 15 € por 7 días, sin suscripción</button>
-              <div class="pro-garantia">La prueba no pide tarjeta ni se renueva sola · después, desde 9,90 €/mes</div>
+              <div class="pro-garantia">La prueba no pide tarjeta ni se renueva sola · Con Pro te das de baja cuando quieras, en un clic</div>
             </div>
           <div class="ajuste-wrap" id="ajusteWrap">
             <div class="ajuste-inner">
@@ -2314,7 +2313,7 @@
     <h2 class="cu-titulo" id="enviadaTit">Mira tu correo</h2>
     <p class="cu-sub">Te hemos enviado la carta en PDF a <b id="enviadaEmail"></b>. Suele tardar menos de un minuto. Si no la ves, mira en el correo no deseado.</p>
     <button class="cu-btn" type="button" onclick="cerrarEnviada()">Entendido</button>
-    <p class="cu-pie">¿Te has equivocado de email? <button type="button" class="cu-enlace" onclick="otroEmail()">Enviarla a otro</button><br>¿La quieres sin firma y con tu logo? <button type="button" class="cu-enlace" onclick="cerrarEnviada(); mostrarPro()">Prueba Carta Pro 7 días gratis</button> o <button type="button" class="cu-enlace" onclick="comprarPase()">paga una vez 15 €</button></p>
+    <p class="cu-pie">¿Te has equivocado de email? <button type="button" class="cu-enlace" onclick="otroEmail()">Enviarla a otro</button><br>¿La quieres sin firma y con tu logo? <button type="button" class="cu-enlace" onclick="cerrarEnviada(); mostrarPro()">Prueba Carta Pro 7 días gratis</button></p>
   </div>
 </div>
 
@@ -3489,33 +3488,6 @@
   function cartaTraducida() { return !!cartaActual && String(cartaActual.idioma || 'es').slice(0, 2).toLowerCase() !== 'es'; }
   function olvidarLicencia() { licencia = null; almacen.borrar('cr_licencia'); }
   function cabeceraLicencia() { return licencia && licencia.caduca > Date.now() ? { 'X-Licencia': licencia.licencia } : {}; }
-  // Pase de 7 días: pago único, sin cuenta
-  async function comprarPase() {
-    try {
-      if (cartaActual && typeof guardarPendiente === 'function') guardarPendiente();
-      const r = await fetch('/pase/crear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: almacen.leer('cr_email') || '' }) });
-      const d = await r.json();
-      if (d.ok && d.url) { medir('begin_checkout', { tipo: 'pase' }); location.href = d.url; return; }
-      status(d.error || 'No hemos podido abrir el pago. Inténtalo de nuevo.');
-    } catch (e) { status('No hemos podido abrir el pago. Inténtalo de nuevo.'); }
-  }
-  async function vueltaDelPase(valor) {
-    history.replaceState(null, '', location.pathname);
-    if (valor === 'quiero') return comprarPase();
-    const hay = typeof restaurarPendiente === 'function' ? restaurarPendiente() : false;
-    if (valor === 'cancelado') { if (hay) status('Pago cancelado. Tu carta sigue aquí.'); return; }
-    try {
-      const r = await fetch('/pase/confirmar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sesion: valor }) });
-      const d = await r.json();
-      if (!d.ok) { status(d.error || 'No hemos podido comprobar el pago.'); return; }
-      licencia = { licencia: d.licencia, caduca: d.caduca };
-      almacen.guardar('cr_licencia', licencia);
-      pintarPlan(); if (cartaActual) renderVista();
-      medir('purchase', { tipo: 'pase', value: 15, currency: 'EUR' });
-      updateToolBubble('¡Pase activado! 7 días sin firma, con tu logo y los 20 estilos ✨');
-      document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });
-    } catch (e) { status('No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@cartarapida.es.'); }
-  }
   let cartaGuardadaId = null;
 
   const fechaCorta = ms => new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
@@ -3758,8 +3730,7 @@
     a.href = c ? '/panel' : '/panel';
   }
   (async function iniciarCuenta() {
-    const pase = new URLSearchParams(location.search).get('pase');
-    if (pase) setTimeout(() => vueltaDelPase(pase), 300);
+    if (new URLSearchParams(location.search).get('pase')) history.replaceState(null, '', location.pathname);
     if (!window.Cuenta) return;
     await Cuenta.cargar();
     const params = new URLSearchParams(location.search);

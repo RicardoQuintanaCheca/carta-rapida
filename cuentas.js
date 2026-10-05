@@ -95,6 +95,8 @@ function leerLicencia(token) {
 }
 
 // ── Pase de 7 días (pago único de 15 €): funciones Pro al descargar, sin cuenta ni suscripción ──
+// Retirado de la web (oct. 2026): competía con la prueba gratis. Se reactiva con PASE_ACTIVO=si.
+const PASE_ACTIVO = process.env.PASE_ACTIVO === 'si';
 const PASE = { precio: 15, dias: 7, env: 'STRIPE_PRICE_PASE', defecto: 'price_1UMYSJRZgd5ArTbXwFE2whqX' };
 function crearLicencia(email, hasta) {
   const datos = Buffer.from(JSON.stringify({ p: 'pro', e: email || '', x: hasta })).toString('base64url');
@@ -493,6 +495,7 @@ function crearRutas({ limite, limiteCuenta }) {
     const origen = origenDe(req);
     const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 200);
     try {
+      if (!PASE_ACTIVO) return res.json({ ok: false, error: 'El pase ya no está disponible. Prueba Carta Pro gratis 7 días.' });
       if (!PAGOS_ACTIVOS) return res.json({ ok: false, error: 'El pago estará disponible en unos minutos.' });
       if (MODO_DEMO) return res.json({ ok: true, url: `${origen}/?pase=demo_${crypto.randomBytes(9).toString('base64url')}` });
       const sesion = await stripe.checkout.sessions.create({
@@ -657,4 +660,4 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
   return r;
 }
 
-module.exports = { ADMINS, crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO: PAGOS_ACTIVOS };
+module.exports = { ADMINS, crearRutas, planDe, usuarioDe, planDeUsuario, firmar, iguales, leerCookie, ESTILOS_PRO, MODO_DEMO, PAGOS_ACTIVOS, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO };

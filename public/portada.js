@@ -153,7 +153,7 @@ function nOpciones(b) {
     periodoElegido = anual ? 'ano' : 'mes';
     $('#tAno').setAttribute('aria-pressed', anual); $('#tMes').setAttribute('aria-pressed', !anual);
     $('#proAmount').textContent = anual ? '9,90 €' : '12,90 €';
-    $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido.' : 'Mes a mes, cancela cuando quieras. IVA incluido.';
+    $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido. Te das de baja cuando quieras.' : 'Mes a mes. IVA incluido. Te das de baja cuando quieras, en un clic.';
   };
   $('#tAno').addEventListener('click', () => pintarPrecio(true));
   $('#tMes').addEventListener('click', () => pintarPrecio(false));

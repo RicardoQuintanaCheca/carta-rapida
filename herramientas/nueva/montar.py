@@ -136,7 +136,7 @@ cuerpo = cuerpo.replace('''          </ul>
         <div class="editor"''', '''          </ul>
           <div class="n-pro-ctas">
             <button class="btn btn-accent" type="button" onclick="probarPro()">Pruébalo 7 días gratis</button>
-            <span class="n-nota">Sin tarjeta · después, desde 9,90 €/mes</span>
+            <span class="n-nota">Sin tarjeta · te das de baja cuando quieras</span>
           </div>
         </div>
         <div class="editor"''')

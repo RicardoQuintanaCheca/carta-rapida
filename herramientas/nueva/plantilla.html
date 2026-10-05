@@ -538,7 +538,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
         </article>
         <article class="plan plan-pro rv">
           <div class="plan-top"><b>Carta Pro</b><span class="tag">7 días gratis</span></div>
-          <div><div class="amount"><span id="proAmount">9,90 €</span><small>/mes</small></div><div class="cond" id="proCond">Con el plan anual: 118,80 € al año. IVA incluido.</div></div>
+          <div><div class="amount"><span id="proAmount">9,90 €</span><small>/mes</small></div><div class="cond" id="proCond">Con el plan anual: 118,80 € al año. IVA incluido. Te das de baja cuando quieras.</div></div>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Los 20 estilos</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Sin firma y con tu logotipo</li>
@@ -600,7 +600,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
   const pintarPrecio = anual => {
     $('#tAno').setAttribute('aria-pressed', anual); $('#tMes').setAttribute('aria-pressed', !anual);
     $('#proAmount').textContent = anual ? '9,90 €' : '12,90 €';
-    $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido.' : 'Mes a mes, cancela cuando quieras. IVA incluido.';
+    $('#proCond').textContent = anual ? 'Con el plan anual: 118,80 € al año. IVA incluido. Te das de baja cuando quieras.' : 'Mes a mes. IVA incluido. Te das de baja cuando quieras, en un clic.';
   };
   $('#tAno').addEventListener('click', () => pintarPrecio(true));
   $('#tMes').addEventListener('click', () => pintarPrecio(false));
