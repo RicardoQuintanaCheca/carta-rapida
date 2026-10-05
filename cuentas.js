@@ -591,6 +591,11 @@ a{display:block;text-align:center;padding:14px;border-radius:10px;text-decoratio
       res.json({ ok: true, cuenta: datosCuenta(al) });
     } catch (e) {
       console.error('[PAGO] no se pudo confirmar:', e.message);
+      // Cobrado pero sin activar: aviso interno para activarlo a mano si Stripe no lo arregla solo con su aviso
+      const avisos = (process.env.AVISOS_EMAIL || 'info@kartia.es').split(',').map(x => x.trim()).filter(Boolean);
+      const limpio = t => String(t || '').replace(/[<>&]/g, ' ').slice(0, 400);
+      for (const para of avisos) enviarCorreo({ para, asunto: 'Carta Rápida: un pago no se ha podido activar',
+        html: `<p>El cliente <b>${limpio(u.email)}</b> ha vuelto del pago y no se ha podido comprobar.</p><p>Pago: ${limpio(sesionId)}</p><p>Error: ${limpio(e.message)}</p><p>Míralo en Stripe y, si está cobrado, actívalo.</p>` }).catch(() => {});
       res.json({ ok: false, error: 'No hemos podido comprobar el pago. Si te lo han cobrado, escríbenos a hola@cartarapida.es y lo activamos a mano.' });
     }
   });

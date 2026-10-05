@@ -366,7 +366,9 @@
     params.delete('suscripcion');
     history.replaceState(null, '', location.pathname + (params.toString() ? '?' + params : '') + location.hash);
     if (s === 'cancelada') { aviso('Pago cancelado. No se ha cobrado nada.'); if (alTerminar) alTerminar(false); return true; }
-    const d = await api('/pago/confirmar', { sesion: s });
+    let d = await api('/pago/confirmar', { sesion: s });
+    // Si Stripe tarda en confirmar, se reintenta un par de veces antes de dar el aviso
+    for (let i = 0; i < 2 && !d.ok && !s.startsWith('demo_'); i++) { await new Promise(r => setTimeout(r, 2500)); d = await api('/pago/confirmar', { sesion: s }); }
     if (d.ok) {
       Cuenta.poner(d.cuenta);
       if (!s.startsWith('demo_')) medir('purchase', { transaction_id: s, value: d.cuenta.periodo === 'ano' ? 118.8 : 12.9, currency: 'EUR', items: [{ item_name: 'Carta Pro ' + d.cuenta.periodo }] });
