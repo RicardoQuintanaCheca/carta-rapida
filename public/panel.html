@@ -165,6 +165,57 @@
   .nota-vista { font-size: 13px; color: var(--gris); text-align: center; margin-top: 10px; }
   .pestanas { display: none; }
 
+
+  /* Franja de Pro: lo que tienes, a un clic */
+  .pro-franja { background: var(--ink); color: #fff; border-radius: 20px; padding: clamp(20px, 3vw, 30px); margin-bottom: 28px; }
+  .pro-franja-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; margin-bottom: 20px; }
+  .pro-franja-cab b { font-size: clamp(21px, 2.4vw, 27px); letter-spacing: -.03em; font-weight: 750; display: flex; align-items: center; gap: 10px; }
+  .pro-sello { font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--cta); color: #fff; padding: 4px 8px; border-radius: 6px; }
+  .pro-franja-cab span.sub { color: #B9B9C0; font-size: 14.5px; display: block; margin-top: 4px; font-weight: 500; letter-spacing: 0; }
+  .pro-franja-cab button { border: none; background: none; color: #fff; font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 8px 0; }
+  .pro-accesos { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+  .pro-acceso { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #fff; background: #1B1B1E; border-radius: 14px; padding: 16px 18px; transition: background-color .2s, translate .2s; }
+  .pro-acceso:hover { background: #26262B; translate: 0 -2px; }
+  .pro-acceso strong { font-size: 16px; letter-spacing: -.015em; font-weight: 700; }
+  .pro-acceso small { color: #B9B9C0; font-size: 13.5px; line-height: 1.45; }
+  .pro-acceso i { font-style: normal; color: var(--cta); font-weight: 700; font-size: 13.5px; margin-top: 8px; }
+
+  /* Puente a Kartia: la carta, en su portamenús */
+  .kartia { margin-top: 36px; border-radius: 20px; background: #F6F1EA; padding: clamp(22px, 3.4vw, 36px); display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
+  .kartia h2 { font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -.04em; font-weight: 750; line-height: 1.05; margin: 0 0 12px; text-wrap: balance; }
+  .kartia p { margin: 0; color: #55504A; font-size: 16px; line-height: 1.55; max-width: 34em; }
+  .kartia .kartia-marca { font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-coral); margin-bottom: 10px; }
+  .kartia-form { background: #fff; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .kartia-form .btn { width: 100%; }
+  .kartia-form .ayuda { margin: 0; overflow-wrap: anywhere; }
+  .kartia-ok { font-weight: 650; font-size: 16px; line-height: 1.5; }
+  .kartia-mini { margin-top: 14px; border-radius: 14px; background: #F6F1EA; padding: 16px; }
+  .kartia-mini b { display: block; font-size: 15.5px; letter-spacing: -.015em; margin-bottom: 4px; }
+  .kartia-mini p { margin: 0 0 12px; font-size: 13.5px; color: #55504A; line-height: 1.5; }
+  .kartia-mini .kartia-form { padding: 0; background: none; }
+
+  /* Pestañas del editor */
+  .ed-tabs { display: flex; gap: 4px; background: var(--suave); border-radius: 12px; padding: 4px; margin: 18px 0 0; overflow-x: auto; scrollbar-width: none; }
+  .ed-tabs::-webkit-scrollbar { display: none; }
+  .ed-tabs button { flex: 1 0 auto; border: none; background: transparent; padding: 10px 16px; border-radius: 9px; font-size: 14.5px; font-weight: 650; color: var(--gris); cursor: pointer; white-space: nowrap; }
+  .ed-tabs button:hover { color: var(--ink); }
+  .ed-tabs button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(12,12,13,.12); }
+  #edFs[data-t="diseno"] .bloque:not([data-t="diseno"]), #edFs[data-t="platos"] .bloque:not([data-t="platos"]),
+  #edFs[data-t="frase"] .bloque:not([data-t="frase"]), #edFs[data-t="traducir"] .bloque:not([data-t="traducir"]) { display: none; }
+  #edFs .bloque { border-bottom: none; }
+  #edFs[data-t="platos"] .bloque + .bloque[data-t="platos"], #edFs[data-t="diseno"] .bloque + .bloque[data-t="diseno"] { border-top: 1px solid var(--linea); }
+  .bloque-intro { color: var(--gris); font-size: 15.5px; margin: -6px 0 16px; max-width: 36em; }
+  .ejemplos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .ejemplos button { border: none; box-shadow: inset 0 0 0 1.5px var(--linea); background: #fff; border-radius: 999px; padding: 7px 12px; font-size: 13.5px; font-weight: 550; cursor: pointer; color: var(--ink); }
+  .ejemplos button:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .idiomas { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .idiomas button { border: none; box-shadow: inset 0 0 0 1.5px var(--linea); background: #fff; border-radius: 12px; padding: 14px; font-weight: 650; font-size: 15px; cursor: pointer; text-align: left; text-transform: capitalize; }
+  .idiomas button:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .idiomas button:disabled { opacity: .5; cursor: default; }
+  .estilo-b { position: relative; }
+  .estilo-b em { position: absolute; top: 9px; right: 9px; font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; background: var(--ink); color: #fff; padding: 2px 5px; border-radius: 4px; }
+  .ed-barra .btn { flex: 0 0 auto; }
+
   .cargando-pag { text-align: center; padding: 80px 20px; color: var(--gris); }
 
   @media (max-width: 1000px) {
@@ -175,6 +226,7 @@
     .pestanas .segmento button { flex: 1; padding: 11px; }
     .ed.solo-form .ed-vista { position: absolute; left: -10000px; top: 0; width: 360px; visibility: hidden; } /* sigue maquetando aunque no se vea */
     .ed.solo-vista .ed-form { display: none; }
+    .kartia { grid-template-columns: minmax(0, 1fr); }
     .vista-marco { max-height: none; }
   }
   @media (max-width: 600px) {
@@ -183,6 +235,11 @@
     .pestanas { top: 60px; }
     .plan-pill { display: none; }
     .ed-titulo { font-size: 22px; order: 3; flex-basis: 100%; }
+    .ed-barra .btn { display: none; }
+    .pro-accesos { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .pro-acceso { padding: 14px; }
+    .pro-acceso small, .pro-acceso i { display: none; }
+    .pro-acceso strong { font-size: 14.5px; line-height: 1.3; }
     .guardado { margin-left: auto; }
     .plato { grid-template-columns: minmax(0, 1fr) 82px; }
     .plato .acciones { grid-row: auto; grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
@@ -222,7 +279,7 @@
         <a href="/panel">Mis cartas</a>
         <a href="/#herramienta">Crear carta desde una foto</a>
         <a href="/admin" id="menuAdmin" hidden>Administración</a>
-        <button type="button" id="menuPortal" onclick="Cuenta.portal()">Facturas y suscripción</button>
+        <button type="button" id="menuPortal" onclick="Cuenta.portal()">Plan, facturas y darse de baja</button>
         <button type="button" onclick="cambiarClave()">Contraseña</button>
         <button type="button" onclick="Cuenta.salir().then(() => location.href = '/panel')">Salir</button>
         <button type="button" class="peligro" onclick="borrarCuenta()">Borrar mi cuenta</button>
@@ -244,7 +301,21 @@
   const app = document.getElementById('app');
   let ed = null; // estado del editor
 
-  function medir(e, d) { /* la analítica se carga en la web principal */ }
+  // Analítica: solo si ya aceptó las cookies en la web (aquí no se vuelve a preguntar)
+  const _cola = []; let _gaLista = false;
+  function medir(e, d) { try { if (_gaLista) gtag('event', e, d || {}); else _cola.push([e, d]); } catch (err) {} }
+  (function () {
+    let el = null; try { el = JSON.parse(localStorage.getItem('cr_consentimiento')); } catch (e) {}
+    if (!el || !el.si || Date.now() - el.t > 365 * 864e5) return;
+    fetch('/config').then(r => r.json()).then(c => {
+      if (!c.ga4) return;
+      window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); };
+      gtag('consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied' });
+      gtag('js', new Date()); gtag('config', c.ga4, { anonymize_ip: true });
+      _gaLista = true; _cola.splice(0).forEach(([e, d]) => gtag('event', e, d || {}));
+      const sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga4); document.head.appendChild(sc);
+    }).catch(() => {});
+  })();
 
   // ── Barra ──
   function pintarBarra() {
@@ -324,6 +395,7 @@
       <div class="cab-lista"><div><h1>Mis cartas</h1><p>${n ? n + (n === 1 ? ' carta guardada' : ' cartas guardadas') : 'Aún no has guardado ninguna carta'}</p></div>
         <a class="btn primario" href="/#herramienta">+ Nueva carta desde una foto</a></div>
       ${avisoPlanHTML()}
+      ${franjaProHTML(cartas)}
       ${n ? `<div class="rejilla">${cartas.map(c => `
         <article class="tarjeta">
           <div class="tarjeta-img" data-id="${esc(c.id)}" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
@@ -338,9 +410,68 @@
           </div>
         </article>`).join('')}
         <a class="nueva-tarjeta" href="/#herramienta"><span class="mas">+</span>Nueva carta<small>Sube una foto y la guardas aquí</small></a>
-      </div>` : `<div class="vacio"><h2>Tu primera carta, en 30 segundos</h2><p>Hazle una foto a tu carta, elige estilo y pulsa «Guardar en mis cartas». Aparecerá aquí para editarla cuando quieras.</p><a class="btn primario" href="/#herramienta">Hacer mi carta</a></div>`}`;
+      </div>` : `<div class="vacio"><h2>Tu primera carta, en 30 segundos</h2><p>Hazle una foto a tu carta, elige estilo y pulsa «Guardar en mis cartas». Aparecerá aquí para editarla cuando quieras.</p><a class="btn primario" href="/#herramienta">Hacer mi carta</a></div>`}
+      ${n ? `<section class="kartia" aria-labelledby="kartiaTit">
+        <div><div class="kartia-marca">Kartia · portamenús hechos a mano en España</div>
+          <h2 id="kartiaTit">Tu carta ya está. Ahora, dónde la presentas.</h2>
+          <p>Te enviamos gratis un montaje de tu carta dentro de un portamenús Kartia, en el material que mejor encaje con tu local. Lo ves antes de decidir nada.</p></div>
+        <div id="kartiaCaja"></div></section>` : ''}`;
+    if (n) cajaMontaje(document.getElementById('kartiaCaja'), cartas, 'panel');
     app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } }));
     miniaturas();
+  }
+
+
+  // Con Pro (o en la prueba): lo que tienes desbloqueado, a un clic de la carta más reciente
+  const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
+  function franjaProHTML(cartas) {
+    const c = Cuenta.estado;
+    if (c.plan !== 'pro' && c.plan !== 'prueba') return '';
+    const id = cartas[0] && cartas[0].id;
+    const a = t => id ? `#carta=${esc(id)}&t=${t}` : '/#herramienta';
+    const ir = id ? 'Abrir en mi carta →' : 'Crea tu primera carta →';
+    const sub = c.plan === 'pro'
+      ? (c.cancela ? `Activa hasta el ${Cuenta.fmtFecha(c.hasta)}. No se renovará.` : `Plan ${c.periodo === 'ano' ? 'anual' : 'mensual'} · se renueva el ${Cuenta.fmtFecha(c.hasta)}`)
+      : 'Estás probando todo lo de Pro. Esto es lo que incluye.';
+    return `<section class="pro-franja" aria-label="Tu Carta Pro">
+      <div class="pro-franja-cab"><div><b><span class="pro-sello">Pro</span>${c.plan === 'pro' ? 'Carta Pro activa' : 'Carta Pro, en prueba'}</b><span class="sub">${esc(sub)}</span></div>
+        ${c.plan === 'pro' && c.puedePortal ? '<button type="button" onclick="Cuenta.portal()">Facturas, tarjeta y baja</button>' : ''}</div>
+      <div class="pro-accesos">
+        <a class="pro-acceso" href="${a('traducir')}"><strong>Tradúcela a 6 idiomas</strong><small>Inglés, francés, alemán, italiano, portugués y chino, con vocabulario de hostelería.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="${a('frase')}"><strong>Cambia precios con una frase</strong><small>Escribe el cambio como se lo dirías a una persona y se aplica a toda la carta.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="${a('diseno')}"><strong>Tu logotipo y los 20 estilos</strong><small>Los 8 estilos Pro y tu logo arriba, sin la firma de Carta Rápida.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="${a('platos')}"><strong>Edita platos al momento</strong><small>Sube, baja, añade o quita platos y descarga el PDF nuevo en segundos.</small><i>${ir}</i></a>
+      </div></section>`;
+  }
+
+  // Montaje gratis en un portamenús Kartia: se envía la carta tal cual está guardada
+  function cajaMontaje(caja, cartas, origen, actual) {
+    if (!caja) return;
+    const varias = !actual && cartas.length > 1;
+    caja.innerHTML = `<form class="kartia-form" novalidate>
+      ${varias ? `<div><label class="etq" for="kCarta_${origen}">¿Qué carta?</label><select class="campo" id="kCarta_${origen}">${cartas.map(c => `<option value="${esc(c.id)}">${esc(c.titulo)}</option>`).join('')}</select></div>` : ''}
+      <div><label class="etq" for="kTel_${origen}">Teléfono (opcional)</label><input class="campo" id="kTel_${origen}" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="Por si prefieres que te llamemos"></div>
+      <button class="btn oscuro" type="submit">Quiero ver el montaje</button>
+      <p class="ayuda">Gratis y sin compromiso. Te lo enviamos a ${esc(Cuenta.estado.email)} en 1–2 días laborables. <a href="/legal/privacidad.html" target="_blank" rel="noopener">Privacidad</a></p></form>`;
+    const form = caja.querySelector('form');
+    form.onsubmit = async ev => {
+      ev.preventDefault();
+      const b = form.querySelector('button[type=submit]');
+      b.disabled = true; b.textContent = 'Enviando…';
+      try {
+        let datos = actual ? actual() : null;
+        if (!datos) {
+          const sel = form.querySelector('select');
+          const d = await Cuenta.api('/cartas/' + (sel ? sel.value : cartas[0].id));
+          if (!d.ok) throw new Error(d.error || 'No encontramos esa carta.');
+          datos = { carta: d.carta, estilo: d.estilo, logo: d.logo && d.cabecera === 'logo' ? d.logo : null };
+        }
+        const r = await Cuenta.api('/solicitar-montaje', { email: Cuenta.estado.email, telefono: form.querySelector('input[type=tel]').value.trim(), origen: 'carta-rapida-montaje', ...datos });
+        if (!r.ok) throw new Error(r.error || 'No se ha podido enviar.');
+        medir('generate_lead', { origen: 'montaje-' + origen });
+        caja.innerHTML = '<div class="kartia-form"><div class="kartia-ok">Hecho. En 1–2 días laborables tienes el montaje en tu email.</div><p class="ayuda">Si tienes prisa, escríbenos a <a href="mailto:hola@cartarapida.es">hola@cartarapida.es</a>.</p></div>';
+      } catch (e) { Cuenta.aviso(e.message); b.disabled = false; b.textContent = 'Quiero ver el montaje'; }
+    };
   }
 
   // Miniatura real: cada tarjeta compone su propia carta (con el mismo motor del PDF) cuando entra en pantalla
@@ -397,7 +528,8 @@
     const aEs = p => /^\d+\.\d+$/.test(String(p || '')) ? parseFloat(p).toFixed(2).replace('.', ',') : (p || '');
     carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
     carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
-    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null };
+    const t0 = (location.hash.match(/[&]t=(diseno|platos|frase|traducir)/) || [])[1];
+    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
     pintarEditor();
   }
 
@@ -410,13 +542,17 @@
         <button class="volver" type="button" onclick="location.hash=''">← Mis cartas</button>
         <input class="ed-titulo" id="edTitulo" value="${esc(ed.titulo)}" maxlength="80" aria-label="Nombre de esta carta en tu panel">
         <span class="guardado" id="guardado" role="status">Guardado</span>
+        <button class="btn primario peq js-descargar" type="button">Descargar PDF</button>
       </div>
       <div id="bloqueo"></div>
       <div class="pestanas"><div class="segmento"><button type="button" class="on" data-p="form">Editar</button><button type="button" data-p="vista">Ver carta</button></div></div>
       <div class="ed solo-form" id="ed">
         <div class="ed-form">
-          <fieldset id="edFs">
-            <section class="bloque">
+          <div class="ed-tabs" role="tablist" aria-label="Qué quieres cambiar">
+            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">Platos y precios</button><button type="button" role="tab" data-t="frase">Cambios rápidos</button><button type="button" role="tab" data-t="traducir">Traducir</button>
+          </div>
+          <fieldset id="edFs" data-t="${ed.tab}">
+            <section class="bloque" data-t="diseno">
               <h2 class="bloque-tit">Cabecera</h2>
               <div class="etq">Arriba de la carta sale</div>
               <div class="segmento" id="segCab"><button type="button" data-v="nombre">El nombre</button><button type="button" data-v="logo">Tu logotipo</button></div>
@@ -434,31 +570,37 @@
               </div>
             </section>
 
-            <section class="bloque">
+            <section class="bloque" data-t="diseno">
               <h2 class="bloque-tit">Estilo</h2>
-              <div class="estilos">${ESTILOS.map(([k, n]) => `<button type="button" class="estilo-b${k === ed.estilo ? ' on' : ''}" data-estilo="${k}"><span style="background-image:url(/carta/muestra-${k}.webp)"></span><span>${n}</span></button>`).join('')}</div>
+              <div class="estilos">${ESTILOS.map(([k, n]) => `<button type="button" class="estilo-b${k === ed.estilo ? ' on' : ''}" data-estilo="${k}"><span style="background-image:url(/carta/muestra-${k}.webp)"></span><span>${n}</span>${ESTILOS_PRO.includes(k) ? '<em>Pro</em>' : ''}</button>`).join('')}</div>
             </section>
 
-            <section class="bloque">
+            <section class="bloque" data-t="platos">
               <h2 class="bloque-tit">Platos y precios <span style="font-size:13.5px;letter-spacing:0;color:var(--gris);font-weight:500">Los cambios se guardan solos</span></h2>
               <div id="secciones"></div>
               <button class="anadir seccion-nueva" type="button" id="nuevaSeccion">+ Añadir sección</button>
             </section>
 
-            <section class="bloque">
+            <section class="bloque" data-t="platos">
               <h2 class="bloque-tit">Pan, servicio y pie</h2>
               <div id="servicios"></div>
               <button class="anadir" type="button" id="nuevoServicio">+ Añadir pan, cubierto o suplemento</button>
               <div class="grupo" style="margin-top:14px"><label class="etq" for="fPie">Nota al pie</label><input class="campo" id="fPie" maxlength="300" value="${esc(c.nota_pie || '')}" data-k="nota_pie" placeholder="IVA incluido. Consulte la información sobre alérgenos a nuestro personal."></div>
             </section>
 
-            <section class="bloque">
+            <section class="bloque" data-t="frase">
               <h2 class="bloque-tit">Cambios con una frase</h2>
-              <div class="frase"><textarea class="campo" id="fFrase" maxlength="600" placeholder="Ej: sube todos los postres 50 céntimos y pon las croquetas las primeras"></textarea><button class="btn oscuro peq" type="button" id="aplicarFrase">Aplicar</button></div>
-              <p class="ayuda">Escribe el cambio como se lo dirías a una persona. Revisa el resultado antes de imprimir.</p>
-              <div class="grupo" style="margin-top:14px"><label class="etq" for="fIdioma">Crear una copia traducida</label>
-                <div class="frase"><select class="campo" id="fIdioma">${Object.entries(IDIOMAS).map(([k, n]) => `<option value="${k}">En ${n}</option>`).join('')}</select><button class="btn peq" type="button" id="traducir">Traducir</button></div>
-                <p class="ayuda">Se guarda como carta nueva; esta se queda como está.</p></div>
+              <p class="bloque-intro">Escribe el cambio como se lo dirías a una persona y se aplica a toda la carta de una vez.</p>
+              <div class="frase"><textarea class="campo" id="fFrase" maxlength="600" rows="3" placeholder="Ej: sube todos los postres 50 céntimos y pon las croquetas las primeras"></textarea><button class="btn oscuro peq" type="button" id="aplicarFrase">Aplicar</button></div>
+              <div class="ejemplos" aria-label="Ejemplos">${['Sube todos los precios un 5 % y redondea a 50 céntimos', 'Ordena cada sección de más barato a más caro', 'Quita los platos que no tienen precio', 'Pon la primera letra de cada plato en mayúscula'].map(x => `<button type="button" data-ej="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+              <p class="ayuda">Revisa el resultado antes de imprimir: precios y alérgenos son responsabilidad tuya.</p>
+            </section>
+
+            <section class="bloque" data-t="traducir">
+              <h2 class="bloque-tit">Traducir la carta</h2>
+              <p class="bloque-intro">Elige idioma y se crea una copia traducida, con vocabulario de hostelería. Esta carta se queda como está.</p>
+              <div class="idiomas">${Object.entries(IDIOMAS).map(([k, n]) => `<button type="button" data-idioma="${k}">${n}</button>`).join('')}</div>
+              <p class="ayuda">No se traducen el nombre del restaurante ni los precios. Si un idioma no lo dominas, pide a alguien que lo revise antes de imprimir.</p>
             </section>
           </fieldset>
         </div>
@@ -466,8 +608,9 @@
         <div class="ed-vista">
           <div class="vista-cab"><span class="vista-info" id="vistaInfo" aria-live="polite">Componiendo…</span></div>
           <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
-          <button class="btn primario descargar" type="button" id="descargar">Descargar PDF</button>
+          <button class="btn primario descargar js-descargar" type="button">Descargar PDF</button>
           <div class="nota-vista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
+          <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Te enviamos gratis un montaje de esta carta en un portamenús Kartia, hecho a mano en España.</p><div id="kartiaEd"></div></div>
         </div>
       </div>`;
 
@@ -506,8 +649,14 @@
     document.getElementById('nuevaSeccion').onclick = () => { ed.carta.secciones.push({ nombre: '', platos: [plato()] }); pintarSecciones(true); cambio(); };
     document.getElementById('nuevoServicio').onclick = () => { ed.carta.servicios.push({ nombre: '', precio: '' }); pintarServicios(true); cambio(); };
     document.getElementById('aplicarFrase').onclick = aplicarFrase;
-    document.getElementById('traducir').onclick = traducir;
-    document.getElementById('descargar').onclick = descargar;
+    app.querySelectorAll('[data-ej]').forEach(b => b.onclick = () => { const t = document.getElementById('fFrase'); t.value = b.dataset.ej; t.focus(); });
+    app.querySelectorAll('[data-idioma]').forEach(b => b.onclick = () => traducir(b.dataset.idioma, b));
+    app.querySelectorAll('.js-descargar').forEach(b => b.onclick = descargar);
+    const fs = document.getElementById('edFs');
+    const ponTab = t => { ed.tab = t; fs.dataset.t = t; app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
+    app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
+    ponTab(ed.tab);
+    cajaMontaje(document.getElementById('kartiaEd'), [], 'editor', () => ({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }));
     pintarSecciones();
     pintarServicios();
     pintarBloqueo();
@@ -708,8 +857,8 @@
 
   // ── Descargar, frase y traducción ──
   async function descargar() {
-    const b = document.getElementById('descargar');
-    b.disabled = true; const t = b.textContent; b.textContent = 'Preparando tu PDF…';
+    const bs = [...document.querySelectorAll('.js-descargar')];
+    bs.forEach(b => { b.disabled = true; b.textContent = 'Preparando tu PDF…'; });
     try {
       if (ed.pendiente) await guardarYa();
       const r = await fetch('/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
@@ -727,7 +876,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 60000);
       Cuenta.aviso('PDF descargado.');
     } catch (e) { Cuenta.aviso(e.message); }
-    finally { b.disabled = false; b.textContent = t; }
+    finally { bs.forEach(b => { b.disabled = false; b.textContent = 'Descargar PDF'; }); }
   }
 
   async function pedirAjuste(ajuste) {
@@ -750,10 +899,9 @@
     } catch (e) { Cuenta.aviso(e.message); }
     finally { const b2 = document.getElementById('aplicarFrase'); if (b2) { b2.disabled = false; b2.textContent = 'Aplicar'; } }
   }
-  async function traducir() {
-    const cod = document.getElementById('fIdioma').value;
-    const b = document.getElementById('traducir');
-    b.disabled = true; b.textContent = 'Traduciendo…';
+  async function traducir(cod, b) {
+    const todos = [...document.querySelectorAll('[data-idioma]')];
+    todos.forEach(x => x.disabled = true); b.textContent = 'Traduciendo…';
     try {
       const nueva = await pedirAjuste(`Traduce TODA la carta al ${IDIOMAS[cod]} (código ${cod}) con terminología profesional de hostelería: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "${cod}".`);
       nueva.idioma = cod;
@@ -762,7 +910,7 @@
       Cuenta.aviso('Copia traducida guardada.');
       location.hash = 'carta=' + d.id;
     } catch (e) { Cuenta.aviso(e.message); }
-    finally { const b2 = document.getElementById('traducir'); if (b2) { b2.disabled = false; b2.textContent = 'Traducir'; } }
+    finally { todos.forEach(x => { if (x.isConnected) { x.disabled = false; x.textContent = IDIOMAS[x.dataset.idioma]; } }); }
   }
 
   // ── Cuenta ──
