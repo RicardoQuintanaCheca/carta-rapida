@@ -253,6 +253,38 @@ PAGINAS = [
   ],
   faq=[('¿Cuántos platos debe tener una carta?', 'No hay un número mágico. Como referencia práctica: los que tu cocina pueda sacar bien en hora punta y el cliente pueda leer sin agobiarse.'),
        ('¿Es mejor una hoja o varias?', 'Si cabe en una hoja a doble cara sin apretar la letra, mejor. Si no, sepárala: comida por un lado, bebidas y vinos por otro.')]),
+ dict(slug='menu-de-navidad-restaurante', menu='Menú de Navidad',
+  title='Plantilla de menú de Navidad para restaurante, lista para imprimir',
+  desc='Haz el menú de Navidad de tu restaurante sin maquetar: pegas los platos y el precio, eliges estilo y lo recibes en PDF A4. Para comidas de empresa, Nochebuena y Nochevieja.',
+  h1='El menú de Navidad, hecho antes de que llamen las empresas.',
+  golpe='En octubre te piden el menú. En noviembre ya han reservado en otro sitio.',
+  intro='Las comidas de empresa se deciden con el menú delante. Quien lo manda primero, y bien presentado, se lleva la reserva. Aquí pegas los platos, el precio por persona y lo que incluye, y en medio minuto tienes un PDF que puedes imprimir, enviar por correo o por WhatsApp.',
+  estilos=['deco','brasserie','autor','sobremesa'],
+  bloques=[
+   ('Menú cerrado, precio por persona', 'Entrantes a compartir, principal a elegir, postre y bebida. Lo escribes como lo vas a servir y sale ordenado, con el precio por persona bien visible y la nota de lo que incluye al pie.'),
+   ('Varios menús, uno por hoja', 'Si ofreces dos o tres menús de grupo a distinto precio, haz una carta para cada uno. Así el cliente compara sin liarse y tú envías solo el que te interesa.'),
+   ('Elegante sin disfrazarlo', 'No hay estilos con abetos ni bolas. Hay estilos sobrios, de los que funcionan en Navidad y siguen sirviendo en enero. Déco y Brasserie son los más de celebración.'),
+  ],
+  secciones=[
+   ('Qué debe llevar un menú de grupo', 'El precio por persona y si incluye IVA. Qué bebida entra y hasta cuándo. Si hay opción vegetariana o para alérgicos. El mínimo de comensales y cómo se reserva. Son las cuatro preguntas que te van a hacer por teléfono si no están en la hoja.'),
+   ('Nochebuena, Nochevieja y Reyes', 'Sirve igual para el menú de una noche concreta: pones la fecha en el subtítulo, los platos en orden de servicio y el precio. Si incluye cotillón o uvas, va en la nota del pie.'),
+  ],
+  faq=[('¿Puedo enviar el menú por WhatsApp o por correo?', 'Sí. Recibes un PDF en A4 que puedes reenviar a tus clientes o imprimir.'),
+       ('¿Puedo hacer varios menús de Navidad?', 'La versión gratis da para dos cartas al mes. Si vas a preparar más, o quieres retocarlos según te pidan, Carta Pro los guarda y te deja cambiarlos sin empezar de cero; también hay un pase de 7 días por 15 €.')]),
+ dict(slug='diseno-carta-restaurante', menu='Diseño de carta',
+  title='Diseño de carta de restaurante sin diseñador: 20 estilos en 30 segundos',
+  desc='Diseño de carta de restaurante con tipografía y retícula de imprenta, sin contratar a nadie: subes tu carta, eliges entre 20 estilos y la recibes en PDF A4.',
+  h1='Diseño de carta de restaurante, sin esperar al diseñador.',
+  golpe='Un diseñador tarda una semana. Tu carta cambia cada mes.',
+  intro='Encargar el diseño de la carta tiene sentido una vez. El problema viene después: cada cambio de precio o de plato es otro correo, otra espera y otra factura, y al final la carta se queda desactualizada. Aquí el diseño ya está hecho: son 20 estilos pensados para carta impresa, y tu contenido entra solo.',
+  estilos=['riviera','sumi','serigrafia','editorial'],
+  bloques=[
+   ('Qué hace que una carta parezca diseñada', 'Una sola familia tipográfica bien elegida, jerarquía clara entre sección, plato y descripción, precios alineados y aire. No son adornos: es orden. Cada estilo trae eso resuelto.'),
+   ('Veinte estilos, de la taberna al restaurante de autor', 'Hay estilos de tinta y papel, de tiza, de cartel, de azulejo y de línea fina. Los pruebas todos sobre tu propia carta y eliges viendo tus platos, no un ejemplo.'),
+   ('Lo que no es', 'No es un editor para mover cajas ni cambiar colores a mano. Si necesitas un diseño único para tu marca, eso es trabajo de un diseñador. Si necesitas una carta bien compuesta hoy y poder cambiarla mañana, es esto.'),
+  ],
+  faq=[('¿Puedo poner mi logotipo?', 'Sí, con Carta Pro. Se limpia el fondo del logotipo y se coloca en la cabecera de la carta.'),
+       ('¿Puedo usar mi propia tipografía o mis colores?', 'No. Cada estilo tiene su tipografía y sus colores, y la carta se compone sola dentro de ese estilo.')]),
 ]
 
 CSS = """
