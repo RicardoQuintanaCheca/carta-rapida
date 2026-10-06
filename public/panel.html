@@ -162,6 +162,11 @@
   .vista-cargando { position: absolute; top: 12px; right: 14px; font-size: 12.5px; font-weight: 600; background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 8px; display: none; }
   .vista-marco.cargando .vista-cargando { display: block; }
   .descargar { width: 100%; margin-top: 12px; min-height: 54px; font-size: 16.5px; }
+  .acc-pdf { display: flex; gap: 10px; }
+  .acc-pdf .js-descargar { flex: 1 1 auto; }
+  .acc-pdf .js-imprimir { flex: 0 0 auto; width: auto; padding: 0 26px; }
+  /* Imprimir desde el navegador del móvil falla demasiado: ahí solo se descarga */
+  @media (max-width: 860px), (pointer: coarse) { .js-imprimir { display: none !important; } }
   .nota-vista { font-size: 13px; color: var(--gris); text-align: center; margin-top: 10px; }
   .pestanas { display: none; }
 
@@ -626,6 +631,7 @@
         <button class="volver" type="button" onclick="location.hash=''">← Mis cartas</button>
         <input class="ed-titulo" id="edTitulo" value="${esc(ed.titulo)}" maxlength="80" aria-label="Nombre de esta carta en tu panel">
         <span class="guardado" id="guardado" role="status">Guardado</span>
+        <button class="btn peq js-imprimir" type="button">Imprimir</button>
         <button class="btn primario peq js-descargar" type="button">Descargar PDF</button>
       </div>
       <div id="bloqueo"></div>
@@ -738,7 +744,8 @@
         <div class="ed-vista">
           <div class="vista-cab"><span class="vista-info" id="vistaInfo" aria-live="polite">Componiendo…</span></div>
           <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
-          <button class="btn primario descargar js-descargar" type="button">Descargar PDF</button>
+          <div class="acc-pdf"><button class="btn primario descargar js-descargar" type="button">Descargar PDF</button><button class="btn descargar js-imprimir" type="button">Imprimir</button></div>
+          <div id="imprimirNota"></div>
           <div class="nota-vista" id="notaVista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
           <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Te enviamos gratis un montaje de esta carta en un portamenús Kartia, hecho a mano en España.</p><div id="kartiaEd"></div></div>
         </div>
@@ -807,6 +814,7 @@
     app.querySelectorAll('[data-ej]').forEach(b => b.onclick = () => { const t = document.getElementById('fFrase'); t.value = b.dataset.ej; t.focus(); });
     app.querySelectorAll('[data-idioma]').forEach(b => b.onclick = () => traducir(b.dataset.idioma, b));
     app.querySelectorAll('.js-descargar').forEach(b => b.onclick = descargar);
+    app.querySelectorAll('.js-imprimir').forEach(b => b.onclick = () => imprimir(false));
     const fs = document.getElementById('edFs');
     const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
     app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
@@ -1028,27 +1036,71 @@
   window.addEventListener('resize', ajustarVista);
 
   // ── Descargar, frase y traducción ──
+  // Pide el PDF de lo que hay en pantalla. Devuelve null si ha saltado la pantalla de planes.
+  async function pedirPDF() {
+    if (ed.pendiente) await guardarYa();
+    const r = await fetch('/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: logoActivo() }) });
+    if (!r.ok) {
+      let d = {}; try { d = await r.json(); } catch (e) {}
+      if (r.status === 402) { Cuenta.planes({ motivo: d.error, vuelta: 'panel' }); return null; }
+      throw new Error(d.error || 'No hemos podido generar el PDF.');
+    }
+    const n = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
+    return { blob: await r.blob(), nombre: n ? n[1] : 'carta.pdf' };
+  }
   async function descargar() {
     const bs = [...document.querySelectorAll('.js-descargar')];
     bs.forEach(b => { b.disabled = true; b.textContent = 'Preparando tu PDF…'; });
     try {
-      if (ed.pendiente) await guardarYa();
-      const r = await fetch('/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
-        body: JSON.stringify({ carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: logoActivo() }) });
-      if (!r.ok) {
-        let d = {}; try { d = await r.json(); } catch (e) {}
-        if (r.status === 402) return Cuenta.planes({ motivo: d.error, vuelta: 'panel' });
-        throw new Error(d.error || 'No hemos podido generar el PDF.');
-      }
-      const blob = await r.blob();
-      const n = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = n ? n[1] : 'carta.pdf';
+      const pdf = await pedirPDF();
+      if (!pdf) return;
+      const url = URL.createObjectURL(pdf.blob);
+      const a = document.createElement('a'); a.href = url; a.download = pdf.nombre;
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 60000);
       Cuenta.aviso('PDF descargado.');
     } catch (e) { Cuenta.aviso(e.message); }
     finally { bs.forEach(b => { b.disabled = false; b.textContent = 'Descargar PDF'; }); }
+  }
+
+  // Imprimir sin pasar por la carpeta de descargas: el PDF se carga oculto y se abre el cuadro de imprimir del navegador.
+  // Los formatos que no son un A4 normal necesitan ajustes que solo puede poner quien imprime: se avisa antes.
+  const AVISO_IMPRIMIR = {
+    slim: 'Elige <strong>«tamaño real»</strong> (o 100 %), no «ajustar a la página». Sale en un folio y cortas el sobrante.',
+    elastico: 'Papel <strong>A3</strong>, a <strong>doble cara</strong> y volteando por el <strong>borde corto</strong>, a tamaño real. Haz antes una copia de prueba y dóblala.',
+    a5x2: 'Elige <strong>«tamaño real»</strong> (o 100 %) y orientación <strong>horizontal</strong>. Después cortas por la marca del centro.'
+  };
+  async function imprimir(avisado) {
+    const nota = document.getElementById('imprimirNota');
+    if (AVISO_IMPRIMIR[ed.formato] && !avisado) {
+      nota.innerHTML = `<div class="formato-nota"><b>Antes de imprimir</b>${AVISO_IMPRIMIR[ed.formato]}<div style="margin-top:10px"><button class="btn oscuro peq" type="button" id="imprimirYa">Entendido, imprimir</button></div></div>`;
+      document.getElementById('imprimirYa').onclick = () => imprimir(true);
+      nota.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      return;
+    }
+    if (nota) nota.innerHTML = '';
+    const bs = [...document.querySelectorAll('.js-imprimir')];
+    bs.forEach(b => { b.disabled = true; b.textContent = 'Preparando…'; });
+    try {
+      const pdf = await pedirPDF();
+      if (!pdf) return;
+      const url = URL.createObjectURL(new Blob([pdf.blob], { type: 'application/pdf' }));
+      document.querySelectorAll('iframe.marco-imprimir').forEach(f => f.remove());
+      const f = document.createElement('iframe');
+      f.className = 'marco-imprimir'; f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+      f.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+      let hecho = false;
+      // Si el navegador no deja imprimir desde aquí, el PDF se abre en otra pestaña para imprimirlo desde ahí
+      const plan_b = () => { if (hecho) return; hecho = true; const w = window.open(url, '_blank'); if (!w) Cuenta.aviso('Tu navegador no deja imprimir desde aquí. Descarga el PDF e imprímelo.'); };
+      f.onload = () => { setTimeout(() => { if (hecho) return; try { f.contentWindow.focus(); f.contentWindow.print(); hecho = true; } catch (e) { plan_b(); } }, 350); };
+      f.src = url;
+      document.body.appendChild(f);
+      setTimeout(plan_b, 6000);
+      setTimeout(() => URL.revokeObjectURL(url), 10 * 60000);
+      medir('imprimir', { formato: ed.formato, menu: ed.carta.menu ? 'si' : 'no' });
+    } catch (e) { Cuenta.aviso(e.message); }
+    finally { bs.forEach(b => { b.disabled = false; b.textContent = 'Imprimir'; }); }
   }
 
 
