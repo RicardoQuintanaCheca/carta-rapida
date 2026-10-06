@@ -530,6 +530,21 @@
 .contra-in { font-size: 7.6pt; letter-spacing: .3em; text-transform: uppercase; text-align: center; opacity: .6; }
 .contra-in img { display: block; max-height: 15mm; max-width: 48mm; object-fit: contain; }
 .hoja-a3 { width: 420mm; height: 297mm; display: flex; position: relative; background: #fff; }
+/* Menú del día: rótulo, precio único y lo que incluye. Heredan la letra del plato de cada estilo. */
+.menu-tit, .menu-precio { flex: 0 0 auto; text-align: center; }
+.pagina .menu-tit .pl-n { display: block; position: static; background: none; padding: 0; font-size: calc(21pt * min(var(--k), 1.25)); line-height: 1.1; }
+.menu-tit { margin-bottom: calc(6mm * min(var(--k), 1.2)); }
+.menu-precio { margin-top: 5mm; padding-top: 5mm; border-top: .6pt solid var(--linea, #CFCFCF); }
+.pagina .menu-precio .pl-p { display: block; position: static; background: none; margin: 0; padding: 0; text-align: center; font-size: calc(27pt * min(var(--k), 1.25)); line-height: 1; }
+.pagina .menu-precio .pl-d { padding: 0; margin: 2.6mm auto 0; max-width: 120mm; text-align: center; font-size: calc(10pt * min(var(--k), 1.25)); line-height: 1.35; }
+/* Plato sin precio: sin puntos guía ni hueco reservado */
+.pagina .pl-sp .pl-g, .pagina .pl-sp .pl-l::after, .pagina .pl-sp .pl-l::before { display: none; }
+.pagina .pl-sp .pl-l { padding-right: 0; }
+.pagina .pl-sp .pl-d { padding-right: 0; }
+.hoja-a4x2 { width: 297mm; height: 210mm; display: flex; position: relative; background: #fff; overflow: hidden; }
+.hoja-a4x2 .pagina { zoom: .70711; flex: none; }
+.hoja-a4x2::before, .hoja-a4x2::after { content: ''; position: absolute; left: 50%; width: .2mm; height: 3mm; background: #9A9A9A; z-index: 3; }
+.hoja-a4x2::before { top: 0; } .hoja-a4x2::after { bottom: 0; }
 /* Marca de hendido: dos trazos finos en el centro, solo en la cara exterior */
 .hoja-a3.anverso::before, .hoja-a3.anverso::after { content: ''; position: absolute; left: 50%; width: .2mm; height: 3mm; background: #9A9A9A; z-index: 3; }
 .hoja-a3.anverso::before { top: 0; } .hoja-a3.anverso::after { bottom: 0; }
@@ -538,7 +553,7 @@
 @media screen {
   .carta { display: flex; flex-direction: column; align-items: center; gap: 10mm; }
   .pagina, .hoja-a3 { box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.10); }
-  .hoja-a3 .pagina { box-shadow: none; }
+  .hoja-a3 .pagina, .hoja-a4x2 .pagina { box-shadow: none; }
 }
 @media print {
   @page { size: A4; margin: 0; }
@@ -552,8 +567,198 @@
   .hoja-a3 { height: 296.6mm; break-after: page; overflow: hidden; }
   .hoja-a3:last-child { break-after: auto; }
   .hoja-a3 .pagina, .hoja-a3 .pagina:last-child { break-after: auto; }
+  .hoja-a4x2 { height: 209.7mm; break-after: page; }
+  .hoja-a4x2:last-child { break-after: auto; }
+  .hoja-a4x2 .pagina, .hoja-a4x2 .pagina:last-child { break-after: auto; }
 }
 
+
+/* ============================================================
+   BLOQUE — hamburguesería, street food: bloques negros y precio subrayado en amarillo
+   ============================================================ */
+.est-bloque { --tinta: #111111; --acento: #FFD400; --suave: #55554F; --linea: #111111; --papel: #FFFFFF; }
+.est-bloque .pagina { font-family: 'Archivo', sans-serif; padding: 14mm 14mm 12mm; }
+.est-bloque .cab { border-bottom: 4pt solid var(--tinta); padding-bottom: 4mm; margin-bottom: calc(8mm * min(var(--k), 1.1)); display: flex; align-items: flex-end; justify-content: space-between; gap: 6mm; }
+.est-bloque .cab-nombre { font-family: 'Anton', sans-serif; font-size: min(calc(84pt * min(var(--k), 1.06)), calc(1500pt / var(--letras))); line-height: .9; text-transform: uppercase; letter-spacing: .005em; }
+.est-bloque .cab-logo { max-height: 28mm; max-width: 100mm; }
+.est-bloque .cab-sub { max-width: 46mm; text-align: right; font-weight: 800; font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; line-height: 1.35; background: var(--acento); padding: 1.6mm 2.4mm; }
+.est-bloque .cols-2 .cuerpo { column-gap: 10mm; }
+.est-bloque .sec-t { background: var(--tinta); color: #fff; font-family: 'Anton', sans-serif; font-weight: 400; font-size: calc(17pt * var(--k)); line-height: 1; text-transform: uppercase; letter-spacing: .04em; padding: calc(4.5pt * var(--k)) calc(7pt * var(--k)) calc(3.5pt * var(--k)); margin-bottom: calc(5pt * var(--k)); }
+.est-bloque .pl { margin-top: calc(6.5pt * var(--k)); }
+.est-bloque .pl-n { font-weight: 800; font-size: calc(10.4pt * var(--k)); line-height: 1.2; text-transform: uppercase; letter-spacing: .01em; }
+.est-bloque .pl-p { font-family: 'Anton', sans-serif; font-size: calc(13pt * var(--k)); background: linear-gradient(transparent 52%, var(--acento) 0); padding: 0 1.2mm; }
+.est-bloque .pl-d { font-weight: 500; font-size: calc(9pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-bloque .pl-r { text-transform: none; }
+.est-bloque .pl-a { font-size: calc(6.8pt * var(--k)); color: var(--suave); letter-spacing: .06em; text-transform: uppercase; }
+.est-bloque .pl-etq { display: inline-block; font-weight: 800; font-size: calc(6.6pt * var(--k)); letter-spacing: .12em; text-transform: uppercase; background: var(--acento); padding: 1.4pt 4pt; }
+.est-bloque .pie { border-top: 4pt solid var(--tinta); padding-top: 2.8mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-bloque .pie-serv { font-size: 8.8pt; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.est-bloque .pie-serv span + span { margin-left: 5mm; }
+.est-bloque .pie-serv b { margin-left: 2mm; background: var(--acento); padding: 0 1mm; }
+.est-bloque .pie-nota { font-size: 7pt; color: var(--suave); max-width: 110mm; text-align: right; line-height: 1.35; }
+.est-bloque .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ============================================================
+   MARINERO — marisquería, chiringuito, arrocería: rayas azul marino y letra de rótulo
+   ============================================================ */
+.est-marinero { --tinta: #14305E; --acento: #D9432F; --suave: #5A6B8C; --linea: #14305E; --papel: #FFFFFF; }
+.est-marinero .pagina { font-family: 'Figtree', sans-serif; padding: 25mm 18mm 23mm; }
+.est-marinero .pagina::before, .est-marinero .pagina::after { content: ''; position: absolute; left: 0; right: 0; height: 11mm; background: repeating-linear-gradient(var(--tinta) 0 1.6mm, transparent 1.6mm 3.13mm); }
+.est-marinero .pagina::before { top: 7mm; }
+.est-marinero .pagina::after { bottom: 7mm; }
+.est-marinero .cab { text-align: center; margin-bottom: calc(8mm * min(var(--k), 1.1)); }
+.est-marinero .cab-nombre { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: min(calc(54pt * min(var(--k), 1.1)), calc(820pt / var(--letras))); line-height: 1; text-transform: uppercase; letter-spacing: .03em; }
+.est-marinero .cab-logo { max-height: 24mm; max-width: 80mm; }
+.est-marinero .cab-sub { display: inline-block; margin-top: 3mm; font-weight: 600; font-size: 8pt; letter-spacing: .26em; padding: 1.4mm 3mm 1.4mm 3.26mm; text-transform: uppercase; color: #fff; background: var(--acento); }
+.est-marinero .cols-2 .cuerpo { column-gap: 13mm; }
+.est-marinero .sec-t { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(15pt * var(--k)); line-height: 1.05; text-transform: uppercase; letter-spacing: .08em; padding-bottom: calc(3.5pt * var(--k)); margin-bottom: calc(4pt * var(--k)); border-bottom: 1pt solid var(--tinta); position: relative; }
+.est-marinero .sec-t::after { content: ''; position: absolute; left: 0; bottom: -2.6pt; width: 14mm; border-bottom: 2.4pt solid var(--acento); }
+.est-marinero .pl { margin-top: calc(6pt * var(--k)); }
+.est-marinero .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-marinero .pl-p { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(11.4pt * var(--k)); color: var(--acento); }
+.est-marinero .pl-d { font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-marinero .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-marinero .pl-etq { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: calc(7.6pt * var(--k)); letter-spacing: .12em; text-transform: uppercase; color: var(--acento); }
+.est-marinero .pie { text-align: center; padding-top: 3mm; }
+.est-marinero .pie-serv { font-size: 9.2pt; font-weight: 600; margin-bottom: 1.6mm; }
+.est-marinero .pie-serv span + span { margin-left: 6mm; }
+.est-marinero .pie-serv b { color: var(--acento); margin-left: .5em; }
+.est-marinero .pie-nota { font-size: 7.6pt; color: var(--suave); max-width: 130mm; margin: 0 auto; line-height: 1.35; }
+
+/* ============================================================
+   BRUNCH — cafetería de especialidad: letra redonda y rotulador pastel
+   ============================================================ */
+.est-brunch { --tinta: #3A2C27; --acento: #E2674A; --suave: #7C6A63; --linea: #3A2C27; --papel: #FFFFFF; --pastel: #FFD9C7; }
+.est-brunch .pagina { font-family: 'Figtree', sans-serif; padding: 16mm 17mm 13mm; }
+.est-brunch .cab { position: relative; margin-bottom: calc(10mm * min(var(--k), 1.1)); }
+.est-brunch .br-sol { position: absolute; right: -30mm; top: -34mm; width: 78mm; height: 78mm; border-radius: 50%; background: #FCE9A9; }
+.est-brunch .cab-nombre { position: relative; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: min(calc(66pt * min(var(--k), 1.08)), calc(980pt / var(--letras))); line-height: .95; letter-spacing: -.02em; }
+.est-brunch .cab-logo { position: relative; max-height: 26mm; max-width: 100mm; }
+.est-brunch .cab-sub { position: relative; display: inline-block; margin-top: 3.4mm; font-weight: 600; font-size: 9pt; background: var(--pastel); border-radius: 99px; padding: 1.4mm 3.6mm; }
+.est-brunch .cols-2 .cuerpo { column-gap: 12mm; }
+.est-brunch .sec:nth-of-type(4n+2) { --pastel: #CFEBDD; }
+.est-brunch .sec:nth-of-type(4n+3) { --pastel: #FCE9A9; }
+.est-brunch .sec:nth-of-type(4n+4) { --pastel: #E3D9F6; }
+.est-brunch .sec-t { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: calc(17pt * var(--k)); line-height: 1.1; margin-bottom: calc(4pt * var(--k)); }
+.est-brunch .sec-t span { background: linear-gradient(transparent 45%, var(--pastel) 0); padding: 0 1.6mm; margin-left: -1.6mm; }
+.est-brunch .pl { margin-top: calc(6pt * var(--k)); }
+.est-brunch .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-brunch .pl-p { font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: calc(11pt * var(--k)); color: var(--acento); }
+.est-brunch .pl-d { font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-brunch .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-brunch .pl-etq { display: inline-block; font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: calc(7.6pt * var(--k)); background: var(--pastel); border-radius: 99px; padding: 1.6pt 5pt; }
+.est-brunch .pie { border-top: 1.2pt dashed var(--tinta); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-brunch .pie-serv { font-size: 9pt; font-weight: 600; }
+.est-brunch .pie-serv span + span { margin-left: 5mm; }
+.est-brunch .pie-serv b { color: var(--acento); margin-left: 2mm; }
+.est-brunch .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
+.est-brunch .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ============================================================
+   VERMUT — vermutería, bar de tapas con solera: etiqueta antigua en verde y granate
+   ============================================================ */
+.est-vermut { --tinta: #1F4A3A; --acento: #8A1C2B; --suave: #5C7268; --linea: #1F4A3A; --papel: #FFFFFF; }
+.est-vermut .pagina { font-family: 'Libre Franklin', sans-serif; padding: 16mm 18mm 13mm; }
+.est-vermut .cab { text-align: center; margin-bottom: calc(8mm * min(var(--k), 1.1)); }
+.est-vermut .vm-etq { display: inline-block; min-width: 96mm; max-width: 100%; border: 1.6pt solid var(--tinta); outline: .6pt solid var(--tinta); outline-offset: 1.6mm; border-radius: 5mm; padding: 4.4mm 9mm 4.6mm; margin: 2mm 0; }
+.est-vermut .vm-over { display: block; font-weight: 600; font-size: 7pt; letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; color: var(--acento); margin-bottom: 1.6mm; }
+.est-vermut .cab-nombre { font-family: 'Abril Fatface', serif; font-size: min(calc(46pt * min(var(--k), 1.1)), calc(640pt / var(--letras))); line-height: 1; text-transform: uppercase; letter-spacing: .02em; }
+.est-vermut .cab-logo { max-height: 24mm; max-width: 80mm; }
+.est-vermut .cab-sub { margin-top: 2mm; font-family: 'Playfair Display', serif; font-style: italic; font-size: 10pt; color: var(--acento); }
+.est-vermut .cols-2 .cuerpo { column-gap: 13mm; }
+.est-vermut .sec-t { display: flex; align-items: center; gap: 3mm; font-family: 'Abril Fatface', serif; font-weight: 400; font-size: calc(15pt * var(--k)); line-height: 1.05; color: var(--acento); margin-bottom: calc(4pt * var(--k)); }
+.est-vermut .sec-t::before, .est-vermut .sec-t::after { content: ''; flex: 1; height: 2.4pt; border-block: .6pt solid var(--tinta); }
+.est-vermut .pl { margin-top: calc(6pt * var(--k)); }
+.est-vermut .pl-n { font-weight: 600; font-size: calc(10pt * var(--k)); line-height: 1.25; }
+.est-vermut .pl-g { display: block; flex: 1 1 4mm; min-width: 4mm; border-bottom: .8pt dotted var(--tinta); transform: translateY(-.25em); }
+.est-vermut .pl-n { flex: 0 1 auto; }
+.est-vermut .pl-l { column-gap: 2mm; }
+.est-vermut .pl-p { font-family: 'Abril Fatface', serif; font-size: calc(10.6pt * var(--k)); color: var(--acento); }
+.est-vermut .pl-d { font-family: 'Playfair Display', serif; font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-vermut .pl-a { font-size: calc(6.8pt * var(--k)); color: var(--suave); }
+.est-vermut .pl-etq { font-family: 'Playfair Display', serif; font-style: italic; font-size: calc(8.6pt * var(--k)); color: var(--acento); }
+.est-vermut .pie { text-align: center; padding-top: 3mm; border-top: 2.4pt double var(--tinta); }
+.est-vermut .pie-serv { font-size: 9pt; font-weight: 600; margin-bottom: 1.6mm; }
+.est-vermut .pie-serv span + span { margin-left: 6mm; }
+.est-vermut .pie-serv b { color: var(--acento); margin-left: .5em; }
+.est-vermut .pie-nota { font-family: 'Playfair Display', serif; font-style: italic; font-size: 7.8pt; color: var(--suave); max-width: 130mm; margin: 0 auto; line-height: 1.35; }
+
+/* ============================================================
+   PIZARRA — menú del día, bar de barrio cuidado: títulos a mano y subrayado de rotulador
+   ============================================================ */
+.est-pizarra { --tinta: #1D1D1B; --acento: #E5482B; --suave: #66645E; --linea: #1D1D1B; --papel: #FFFFFF; }
+.est-pizarra .pagina { font-family: 'Karla', sans-serif; padding: 15mm 17mm 13mm; }
+.est-pizarra .cab { margin-bottom: calc(9mm * min(var(--k), 1.1)); }
+.est-pizarra .cab-nombre { display: inline-block; font-family: 'Caveat', cursive; font-weight: 700; font-size: min(calc(82pt * min(var(--k), 1.08)), calc(1150pt / var(--letras))); line-height: .82; transform: rotate(-2.2deg); transform-origin: left bottom; padding: 0 2mm 1.5mm 0; border-bottom: 2.6pt solid var(--acento); border-radius: 0 0 60% 8% / 0 0 5mm 2mm; }
+.est-pizarra .cab-logo { max-height: 26mm; max-width: 100mm; }
+.est-pizarra .cab-sub { margin-top: 4.5mm; font-weight: 600; font-size: 8.4pt; letter-spacing: .2em; text-transform: uppercase; color: var(--suave); }
+.est-pizarra .cols-2 .cuerpo { column-gap: 12mm; }
+.est-pizarra .sec-t { font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(24pt * var(--k)); line-height: .95; margin-bottom: calc(3pt * var(--k)); }
+.est-pizarra .sec-t span { display: inline-block; padding: 0 1.5mm .6mm 0; border-bottom: 1.6pt solid var(--tinta); border-radius: 0 0 50% 10% / 0 0 2.4mm 1mm; transform: rotate(-1deg); transform-origin: left bottom; }
+.est-pizarra .pl { margin-top: calc(6pt * var(--k)); }
+.est-pizarra .pl-n { font-weight: 600; font-size: calc(10.4pt * var(--k)); line-height: 1.24; }
+.est-pizarra .pl-p { font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(15pt * var(--k)); line-height: .8; color: var(--acento); }
+.est-pizarra .pl-d { font-style: italic; font-size: calc(9.2pt * var(--k)); line-height: 1.3; color: var(--suave); }
+.est-pizarra .pl-a { font-size: calc(7pt * var(--k)); color: var(--suave); }
+.est-pizarra .pl-etq { display: inline-block; font-family: 'Caveat', cursive; font-weight: 700; font-size: calc(11pt * var(--k)); line-height: 1; color: var(--acento); border: 1pt solid var(--acento); border-radius: 50% 45% 55% 48%; padding: .6pt 5pt 1.4pt; transform: rotate(-3deg); }
+.est-pizarra .pie { border-top: 1.6pt solid var(--tinta); padding-top: 3mm; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; column-gap: 8mm; row-gap: 1.4mm; }
+.est-pizarra .pie-serv { font-size: 9pt; font-weight: 600; }
+.est-pizarra .pie-serv span + span { margin-left: 5mm; }
+.est-pizarra .pie-serv b { font-family: 'Caveat', cursive; font-size: 13pt; color: var(--acento); margin-left: 2mm; }
+.est-pizarra .pie-nota { font-size: 7.2pt; color: var(--suave); max-width: 115mm; text-align: right; line-height: 1.35; }
+.est-pizarra .pie-credito { flex-basis: 100%; margin-top: 0; }
+
+/* ───── Segunda pasada: más carácter gráfico en la colección por tipo de local ───── */
+/* BLOQUE: cabecera en negro a sangre y franja de cuadros de diner */
+.est-bloque .pagina { padding: 0 14mm 15mm; }
+.est-bloque .cab { margin: 0 -14mm calc(9mm * min(var(--k), 1.1)); padding: 13mm 14mm 11mm; background: var(--tinta); color: #fff; border-bottom: 0; position: relative; }
+.est-bloque .cab::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5mm; background: conic-gradient(#fff 25%, #111 0 50%, #fff 0 75%, #111 0) 0 0 / 5mm 5mm; }
+.est-bloque .cab-nombre { color: #fff; font-size: min(calc(92pt * min(var(--k), 1.06)), calc(1560pt / var(--letras))); }
+.est-bloque .cab-logo { mix-blend-mode: normal; background: #fff; padding: 2mm; }
+.est-bloque .cab-sub { color: var(--tinta); transform: rotate(-4deg); margin-bottom: 4mm; }
+.est-bloque .sec-t { display: flex; align-items: stretch; padding: 0; }
+.est-bloque .sec-t::before { content: ''; flex: 0 0 3.4mm; background: var(--acento); }
+.est-bloque .sec-t span { padding: calc(4.5pt * var(--k)) calc(7pt * var(--k)) calc(3.5pt * var(--k)); }
+.est-bloque .pagina::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5mm; background: conic-gradient(#fff 25%, #111 0 50%, #fff 0 75%, #111 0) 0 0 / 5mm 5mm; }
+
+/* MARINERO: salvavidas, olas y rayas */
+.est-marinero .ma-aro { display: block; width: 15mm; height: 15mm; margin: 0 auto 3.4mm; border-radius: 50%; background: repeating-conic-gradient(from 22.5deg, var(--acento) 0 45deg, #E9EDF5 0 90deg); -webkit-mask: radial-gradient(closest-side, transparent 54%, #000 56%); mask: radial-gradient(closest-side, transparent 54%, #000 56%); }
+.est-marinero .ma-ola { height: 2.4mm; margin: 4.6mm auto 0; width: 62mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%2314305E' stroke-width='1.5'/%3E%3C/svg%3E") 0 50% / 6mm 2mm repeat-x; }
+.est-marinero .sec-t { border-bottom: 0; padding-bottom: calc(6pt * var(--k)); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%2314305E' stroke-width='1.5'/%3E%3C/svg%3E") 0 100% / 6mm 2mm repeat-x; }
+.est-marinero .sec-t::after { display: none; }
+.est-marinero .pie { padding-top: 4.4mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 -1.5 12 4 T24 4' fill='none' stroke='%23D9432F' stroke-width='1.5'/%3E%3C/svg%3E") 50% 0 / 6mm 2mm repeat-x; }
+
+/* BRUNCH: formas de papel recortado y títulos en pastilla */
+.est-brunch .br-sol { right: -32mm; top: -36mm; width: 84mm; height: 84mm; }
+.est-brunch .br-aro { position: absolute; right: -40mm; top: -44mm; width: 100mm; height: 100mm; border-radius: 50%; border: 1.4pt dashed var(--tinta); opacity: .55; }
+.est-brunch .pagina::before { content: ''; position: absolute; left: -30mm; bottom: -34mm; width: 62mm; height: 62mm; border-radius: 50%; background: #CFEBDD; }
+.est-brunch .pagina::after { content: ''; position: absolute; left: 24mm; bottom: -19mm; width: 30mm; height: 30mm; border-radius: 50%; background: #FFD9C7; }
+.est-brunch .cuerpo, .est-brunch .pie { position: relative; z-index: 1; }
+.est-brunch .sec-t span { display: inline-block; background: var(--pastel); border-radius: 99px; padding: calc(2.4pt * var(--k)) calc(9pt * var(--k)) calc(3pt * var(--k)); margin-left: calc(-4pt * var(--k)); }
+.est-brunch .pie { border-top: 0; padding: 3mm 0 0 50mm; }
+
+/* VERMUT: marco de etiqueta, rombos y cinta */
+.est-vermut .pagina { padding: 20mm 21mm 17mm; }
+.est-vermut .pagina::before { content: ''; position: absolute; inset: 7mm; border: 1.8pt solid var(--tinta); border-radius: 7mm; pointer-events: none; }
+.est-vermut .pagina::after { content: ''; position: absolute; inset: 8.8mm; border: .6pt solid var(--tinta); border-radius: 5.4mm; pointer-events: none; }
+.est-vermut .vm-etq { border: 0; outline: 0; padding: 0 6mm; margin: 0; min-width: 0; }
+.est-vermut .vm-over { display: flex; align-items: center; justify-content: center; gap: 3mm; margin-bottom: 2.6mm; }
+.est-vermut .vm-over i { width: 2.2mm; height: 2.2mm; background: var(--acento); transform: rotate(45deg); }
+.est-vermut .vm-over::before, .est-vermut .vm-over::after { content: ''; width: 16mm; border-top: .8pt solid var(--tinta); }
+.est-vermut .cab-nombre { font-size: min(calc(58pt * min(var(--k), 1.1)), calc(800pt / var(--letras))); letter-spacing: .03em; }
+.est-vermut .vm-cinta { margin-top: 3.4mm; }
+.est-vermut .vm-cinta span { display: inline-block; background: var(--acento); color: #fff; font-family: 'Playfair Display', serif; font-style: italic; font-size: 10pt; padding: 1.5mm 8mm 1.9mm; clip-path: polygon(0 0, 100% 0, calc(100% - 3mm) 50%, 100% 100%, 0 100%, 3mm 50%); }
+.est-vermut .sec-t { font-size: calc(16pt * var(--k)); }
+
+/* PIZARRA: rotulador, garabatos y marco a mano */
+.est-pizarra .pagina::before { content: ''; position: absolute; inset: 7mm; border: 1.3pt solid var(--tinta); border-radius: 2mm 5mm 3mm 6mm / 5mm 2mm 6mm 3mm; transform: rotate(-.35deg); pointer-events: none; }
+.est-pizarra .pagina::after { content: ''; position: absolute; inset: 7.6mm 6.6mm 6.8mm 7.4mm; border: .7pt solid var(--tinta); border-radius: 4mm 2mm 6mm 3mm / 2mm 6mm 3mm 5mm; transform: rotate(.3deg); opacity: .7; pointer-events: none; }
+.est-pizarra .pagina { padding: 19mm 20mm 16mm; }
+.est-pizarra .cab { position: relative; }
+.est-pizarra .pz-estrella { position: absolute; right: 2mm; top: 0; width: 17mm; height: 17mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 L31 55 M7 17 L54 44 M53 15 L8 45 M5 31 L56 29' fill='none' stroke='%23E5482B' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E") 50% / contain no-repeat; transform: rotate(8deg); }
+.est-pizarra .cab-nombre { border-bottom: 0; border-radius: 0; padding: 0 3mm 5.4mm 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='16' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C40 3 70 12 110 7 S170 5 197 8 M20 13 C70 9 120 14 180 11' fill='none' stroke='%23E5482B' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") 0 100% / 100% 5mm no-repeat; }
+.est-pizarra .sec-t span { border-bottom: 0; border-radius: 0; padding: 0 2mm 2.2mm 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C18 2 30 8 46 5 S78 3 92 6 S110 4 118 5' fill='none' stroke='%231D1D1B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 0 100% / 100% 2.6mm no-repeat; }
+.est-pizarra .pie { border-top: 0; padding-top: 4.4mm; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C18 2 30 8 46 5 S78 3 92 6 S110 4 118 5' fill='none' stroke='%231D1D1B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 100% 2.6mm no-repeat; }
 /* ============ Alérgenos: pictogramas y leyenda (común a todos los estilos) ============ */
 .carta .al-i { display: inline-block; width: 1.5em; height: 1.5em; vertical-align: -.34em; flex: none; }
 .carta .pl-ali { display: inline-block; white-space: nowrap; margin-left: .55em; color: var(--suave); font-style: normal; letter-spacing: 0; line-height: 1; }
