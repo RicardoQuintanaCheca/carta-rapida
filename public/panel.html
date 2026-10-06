@@ -213,18 +213,23 @@
 
 
   /* Franja de Pro: lo que tienes, a un clic */
-  .pro-franja { background: var(--ink); color: #fff; border-radius: 20px; padding: clamp(20px, 3vw, 30px); margin-bottom: 28px; }
-  .pro-franja-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; margin-bottom: 20px; }
-  .pro-franja-cab b { font-size: clamp(21px, 2.4vw, 27px); letter-spacing: -.03em; font-weight: 750; display: flex; align-items: center; gap: 10px; }
-  .pro-sello { font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--cta); color: #fff; padding: 4px 8px; border-radius: 6px; }
-  .pro-franja-cab span.sub { color: #B9B9C0; font-size: 14.5px; display: block; margin-top: 4px; font-weight: 500; letter-spacing: 0; }
-  .pro-franja-cab button { border: none; background: none; color: #fff; font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 8px 0; }
-  .pro-accesos { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
-  .pro-acceso { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #fff; background: #1B1B1E; border-radius: 14px; padding: 16px 18px; transition: background-color .2s, translate .2s; }
-  .pro-acceso:hover { background: #26262B; translate: 0 -2px; }
-  .pro-acceso strong { font-size: 16px; letter-spacing: -.015em; font-weight: 700; }
-  .pro-acceso small { color: #B9B9C0; font-size: 13.5px; line-height: 1.45; }
-  .pro-acceso i { font-style: normal; color: var(--cta); font-weight: 700; font-size: 13.5px; margin-top: 8px; }
+  .pro-franja { background: #fff; color: var(--ink); border-radius: 20px; box-shadow: inset 0 0 0 1px var(--linea), 0 18px 40px -30px rgba(12,12,13,.25); padding: 0; margin-bottom: 28px; overflow: hidden; }
+  .pro-franja-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px 20px; flex-wrap: wrap; padding: clamp(18px, 2.4vw, 24px) clamp(18px, 2.6vw, 28px); background: linear-gradient(180deg, #FFF8F4, #fff); border-bottom: 1px solid var(--linea); }
+  .pro-franja-cab b { font-size: clamp(19px, 2vw, 23px); letter-spacing: -.025em; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .pro-sello { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: none; color: var(--tinta-coral); box-shadow: inset 0 0 0 1.5px currentColor; padding: 3px 8px; border-radius: 99px; }
+  .pro-franja-cab span.sub { color: var(--gris); font-size: 14px; display: block; margin-top: 3px; font-weight: 500; letter-spacing: 0; }
+  .pro-franja-cab button { border: none; background: none; color: var(--ink); font-weight: 600; font-size: 14px; text-decoration: underline; text-decoration-color: #C9C9CF; text-underline-offset: 4px; cursor: pointer; padding: 8px 0; }
+  .pro-franja-cab button:hover { text-decoration-color: var(--ink); }
+  .pro-accesos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--linea); }
+  .pro-acceso { display: grid; grid-template-columns: 38px minmax(0, 1fr) 14px; column-gap: 14px; align-items: center; text-decoration: none; color: var(--ink); background: #fff; padding: 18px clamp(16px, 2vw, 24px); transition: background-color .18s; }
+  .pro-acceso:hover { background: #FAFAFB; }
+  .pro-acceso .ic { width: 38px; height: 38px; border-radius: 12px; background: #FFF1EA; color: var(--tinta-coral); display: grid; place-items: center; }
+  .pro-acceso .ic svg { width: 19px; height: 19px; }
+  .pro-acceso strong { display: block; font-size: 15.5px; letter-spacing: -.015em; font-weight: 650; line-height: 1.25; }
+  .pro-acceso small { display: block; color: var(--gris); font-size: 13px; line-height: 1.4; margin-top: 2px; }
+  .pro-acceso .fl { color: #B5B5BC; transition: translate .18s, color .18s; }
+  .pro-acceso:hover .fl { translate: 3px 0; color: var(--ink); }
+  @media (max-width: 1000px) { .pro-accesos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
   /* Puente a Kartia: la carta, en su portamenús */
   .kartia { margin-top: 36px; border-radius: 20px; background: #F6F1EA; padding: clamp(22px, 3.4vw, 36px); display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
@@ -335,10 +340,10 @@
     .al-c { max-height: 46px; }
     .al-nombres { display: block; }
     .al-barra .btn { margin-left: 0; width: 100%; }
-    .pro-accesos { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .pro-acceso { padding: 14px; }
-    .pro-acceso small, .pro-acceso i { display: none; }
-    .pro-acceso strong { font-size: 14.5px; line-height: 1.3; }
+    .pro-accesos { grid-template-columns: minmax(0, 1fr); }
+    .pro-acceso { padding: 13px 18px; grid-template-columns: 34px minmax(0, 1fr) 14px; column-gap: 12px; }
+    .pro-acceso .ic { width: 34px; height: 34px; border-radius: 10px; }
+    .pro-acceso small { display: none; }
     .guardado { margin-left: auto; }
     .plato { grid-template-columns: minmax(0, 1fr) 82px; }
     .plato .acciones { grid-row: auto; grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
@@ -534,7 +539,6 @@
     if (c.plan !== 'pro' && c.plan !== 'prueba') return '';
     const id = cartas[0] && cartas[0].id;
     const a = t => id ? `#carta=${esc(id)}&t=${t}` : '/#herramienta';
-    const ir = id ? 'Abrir en mi carta →' : 'Crea tu primera carta →';
     const sub = c.plan === 'pro'
       ? (c.cancela ? `Activa hasta el ${Cuenta.fmtFecha(c.hasta)}. No se renovará.` : `Plan ${c.periodo === 'ano' ? 'anual' : 'mensual'} · se renueva el ${Cuenta.fmtFecha(c.hasta)}`)
       : 'Estás probando todo lo de Pro. Esto es lo que incluye.';
@@ -542,12 +546,12 @@
       <div class="pro-franja-cab"><div><b><span class="pro-sello">Pro</span>${c.plan === 'pro' ? 'Carta Pro activa' : 'Carta Pro, en prueba'}</b><span class="sub">${esc(sub)}</span></div>
         ${c.plan === 'pro' && c.puedePortal ? '<button type="button" onclick="Cuenta.portal()">Facturas, tarjeta y baja</button>' : ''}</div>
       <div class="pro-accesos">
-        <a class="pro-acceso" href="${a('traducir')}"><strong>Tradúcela a 6 idiomas</strong><small>Inglés, francés, alemán, italiano, portugués y chino, con vocabulario de hostelería.</small><i>${ir}</i></a>
-        <a class="pro-acceso" href="${a('frase')}"><strong>Cambia precios con una frase</strong><small>Escribe el cambio como se lo dirías a una persona y se aplica a toda la carta.</small><i>${ir}</i></a>
-        <a class="pro-acceso" href="${a('diseno')}"><strong>Tu logotipo y los 20 estilos</strong><small>Los 8 estilos Pro y tu logo arriba, sin la firma de Carta Rápida.</small><i>${ir}</i></a>
-        <a class="pro-acceso" href="#menu=nuevo"><strong>El menú del día</strong><small>Precio único, la fecha de hoy y tus platos de siempre. Cada mañana cambias los platos y descargas.</small><i>Hacer un menú →</i></a>
-        <a class="pro-acceso" href="${a('redes')}"><strong>Imágenes para redes</strong><small>El menú, una sección o un plato, en una imagen lista para Instagram y el estado de WhatsApp.</small><i>${ir}</i></a>
-        <a class="pro-acceso" href="${a('alergenos')}"><strong>Marca los alérgenos</strong><small>Iconos o números en la carta, con su leyenda, y la tabla para sala e inspección.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="${a('diseno')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="8.6" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="7.8" r="1" fill="currentColor"/><circle cx="15.4" cy="10" r="1" fill="currentColor"/><path d="M12 20.5c-1.6 0-2-1.6-1-2.6 1-1 .4-2.4 1.4-2.4h2.4c2.6 0 5.7-1 5.7-3.5"/></svg></span><span><strong>Diseño, logotipo y color</strong><small>Los 20 estilos, tu logotipo arriba y el color de tu marca.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="#menu=nuevo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span><span><strong>El menú del día</strong><small>La fecha se pone sola. Cada mañana solo cambias los platos.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="${a('redes')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.7" cy="7.3" r=".7" fill="currentColor"/></svg></span><span><strong>Imágenes para redes</strong><small>El menú o un plato, listos para Instagram y WhatsApp.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="${a('alergenos')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9"/><path d="M12 9c-1.7-1.7-1.7-4.2 0-6.2 1.7 2 1.7 4.5 0 6.2z"/><path d="M12 14c-2.6.2-4.3-1.1-4.7-3.5 2.6-.2 4.3 1.1 4.7 3.5z"/><path d="M12 14c2.6.2 4.3-1.1 4.7-3.5-2.6-.2-4.3 1.1-4.7 3.5z"/></svg></span><span><strong>Alérgenos</strong><small>Iconos en la carta y la tabla para sala e inspección.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="${a('traducir')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c.6 3.4 2.6 6 6 7.4M11.5 6c-.6 3.4-2.8 6.2-6.5 7.6"/><path d="M13 20l3.6-8.4L20.2 20M14.3 17h4.6"/></svg></span><span><strong>Dos idiomas</strong><small>Cada plato en español y en otro idioma, o una copia traducida.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="${a('frase')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19l3.6-.8L19 7.8a2 2 0 0 0-2.8-2.8L5.8 15.4 5 19z"/><path d="M14.5 6.7l2.8 2.8"/></svg></span><span><strong>Cambios con una frase</strong><small>Sube precios o reordena la carta escribiéndolo como lo dirías.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       </div></section>`;
   }
 
