@@ -240,6 +240,20 @@
   .al-c:hover { box-shadow: inset 0 0 0 1.5px var(--ink); color: var(--ink); }
   .al-c.on { background: var(--ink); box-shadow: none; color: #fff; }
   .al-nombres { display: none; font-size: 13px; color: var(--gris); margin-top: 8px; }
+
+  /* Formato de la hoja */
+  .formatos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .formato-b { border: none; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 14px; background: #fff; padding: 16px 14px 14px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; transition: box-shadow .15s, background-color .15s; }
+  .formato-b:hover { box-shadow: inset 0 0 0 1.5px #CFC6BA; }
+  .formato-b.on { box-shadow: inset 0 0 0 2px var(--ink); background: var(--suave); }
+  .formato-b svg { height: 76px; width: auto; margin: 0 auto 10px; display: block; color: var(--ink); }
+  .formato-b > div { display: flex; flex-direction: column; gap: 4px; }
+  .formato-b b { font-size: 15.5px; letter-spacing: -.015em; }
+  .formato-b span { font-size: 13px; color: var(--gris); line-height: 1.4; }
+  .formato-b i { font-style: normal; font-size: 12px; font-weight: 700; color: var(--tinta-coral); letter-spacing: .02em; }
+  .formato-nota { background: var(--suave); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.5; margin-top: 12px; }
+  .formato-nota b { display: block; margin-bottom: 2px; }
+  .formato-nota ol { margin: 6px 0 0; padding-left: 18px; }
   .ed-barra .btn { flex: 0 0 auto; }
 
   .cargando-pag { text-align: center; padding: 80px 20px; color: var(--gris); }
@@ -263,6 +277,10 @@
     .plan-pill { display: none; }
     .ed-titulo { font-size: 22px; order: 3; flex-basis: 100%; }
     .ed-barra .btn { display: none; }
+    .formatos { grid-template-columns: minmax(0, 1fr); }
+    .formato-b { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 2px 14px; }
+    .formato-b svg { height: 58px; margin: 0; }
+    .formato-b > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .al-cols { position: static; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px 6px; border-bottom: none; background: var(--suave); border-radius: 12px; padding: 12px 8px; }
     .al-celdas { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
     .al-c { max-height: 46px; }
@@ -521,7 +539,7 @@
       new ResizeObserver(escala).observe(el);
       const oir = e => {
         if (e.origin !== location.origin || e.source !== f.contentWindow || !e.data) return;
-        if (e.data.tipo === 'vista-lista') f.contentWindow.postMessage({ tipo: 'componer', id: 1, carta: d.carta, estilo: d.estilo, logo: d.logo && d.cabecera === 'logo' ? d.logo : null, credito: false }, location.origin);
+        if (e.data.tipo === 'vista-lista') f.contentWindow.postMessage({ tipo: 'componer', id: 1, carta: d.carta, estilo: d.estilo, formato: d.formato === 'slim' ? 'slim' : 'a4', logo: d.logo && d.cabecera === 'logo' ? d.logo : null, credito: false }, location.origin);
         if (e.data.tipo === 'compuesta') { el.classList.add('lista'); removeEventListener('message', oir); }
       };
       addEventListener('message', oir);
@@ -562,7 +580,7 @@
     carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
     carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
     const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|frase|traducir)/) || [])[1];
-    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
+    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, formato: d.formato || 'a4', logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
     pintarEditor();
   }
 
@@ -601,6 +619,23 @@
               </div>
               <p class="ayuda">PNG con fondo transparente queda mejor.</p>
               </div>
+            </section>
+
+            <section class="bloque" data-t="diseno">
+              <h2 class="bloque-tit">Formato</h2>
+              <p class="bloque-intro">El tamaño de la hoja. La carta se vuelve a componer sola para cada uno.</p>
+              <div class="formatos" id="formatos">
+                <button type="button" class="formato-b" data-f="a4">
+                  <svg viewBox="0 0 80 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="64" height="90" rx="1.5" fill="#fff"/><path d="M26 16h28M18 30h18M18 37h18M18 44h18M18 55h18M18 62h18M44 30h18M44 37h18M44 44h18M44 55h18M44 62h18" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg>
+                  <div><b>A4</b><span>Una hoja de folio. La de siempre, para portamenús y fundas.</span><i>21 × 29,7 cm</i></div></button>
+                <button type="button" class="formato-b" data-f="slim">
+                  <svg viewBox="0 0 80 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="19" y="3" width="42" height="90" rx="1.5" fill="#fff"/><path d="M31 16h18M27 29h26M27 36h26M27 43h26M27 54h26M27 61h26M27 68h26M27 79h26" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg>
+                  <div><b>A4 slim</b><span>Igual de alta que un folio y más estrecha. A una columna.</span><i>14 × 29,7 cm</i></div></button>
+                <button type="button" class="formato-b" data-f="elastico">
+                  <svg viewBox="0 0 132 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M66 9L10 3v88l56 6 56-6V3z" fill="#fff"/><path d="M66 9v88" stroke-dasharray="3 3" stroke-width="1.2"/><path d="M66 3v100" stroke="#FF4A1C" stroke-width="2.4" stroke-linecap="round"/><path d="M22 22h30M22 30h30M22 38h30M22 50h30M22 58h30M80 26h30M80 34h30M80 42h30M80 54h30M80 62h30" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg>
+                  <div><b>Cuadernillo con elástico</b><span>Hojas A3 dobladas por el centro, con portada y contraportada.</span><i>A4 cerrado · A3 abierto</i></div></button>
+              </div>
+              <div id="formatoNota"></div>
             </section>
 
             <section class="bloque" data-t="diseno">
@@ -654,7 +689,7 @@
           <div class="vista-cab"><span class="vista-info" id="vistaInfo" aria-live="polite">Componiendo…</span></div>
           <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
           <button class="btn primario descargar js-descargar" type="button">Descargar PDF</button>
-          <div class="nota-vista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
+          <div class="nota-vista" id="notaVista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
           <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Te enviamos gratis un montaje de esta carta en un portamenús Kartia, hecho a mano en España.</p><div id="kartiaEd"></div></div>
         </div>
       </div>`;
@@ -691,6 +726,8 @@
       app.querySelectorAll('.estilo-b').forEach(x => x.classList.toggle('on', x === b));
       cambio();
     });
+    app.querySelectorAll('.formato-b').forEach(b => b.onclick = () => { ed.formato = b.dataset.f; pintarFormato(); cambio(); });
+    pintarFormato();
     document.getElementById('nuevaSeccion').onclick = () => { ed.carta.secciones.push({ nombre: '', platos: [plato()] }); pintarSecciones(true); cambio(); };
     document.getElementById('nuevoServicio').onclick = () => { ed.carta.servicios.push({ nombre: '', precio: '' }); pintarServicios(true); cambio(); };
     document.getElementById('tablaAl').onclick = descargarTabla;
@@ -840,7 +877,7 @@
     ed.guardando = true; ed.pendiente = false;
     const g = document.getElementById('guardado');
     if (g) g.textContent = 'Guardando…';
-    const d = await Cuenta.api('/cartas/' + ed.id, { titulo: ed.titulo, carta: ed.carta, estilo: ed.estilo, logo: ed.logo, cabecera: ed.cabecera }, 'PUT');
+    const d = await Cuenta.api('/cartas/' + ed.id, { titulo: ed.titulo, carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera }, 'PUT');
     ed.guardando = false;
     const g2 = document.getElementById('guardado');
     if (d.ok) { if (g2) g2.textContent = 'Guardado ✓'; }
@@ -876,14 +913,15 @@
   }
   function enviarVista() {
     vista.pendiente = false; vista.id++;
-    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: ed.carta, estilo: ed.estilo, logo: logoActivo(), credito: !Cuenta.esPro() }, location.origin);
+    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: logoActivo(), credito: !Cuenta.esPro() }, location.origin);
   }
   function ajustarVista() {
     if (!vista.iframe) return;
     const marco = document.getElementById('vistaMarco');
     if (!marco || !marco.clientWidth) return;
     const disp = marco.clientWidth - 36;
-    const e = Math.min(1, disp / vista.ancho);
+    // La hoja estrecha se enseña a la misma escala que un A4: así se ve estrecha, no ampliada
+    const e = Math.min(1, disp / Math.max(vista.ancho, 794));
     vista.iframe.style.width = vista.ancho + 'px';
     vista.iframe.style.height = vista.alto + 'px';
     vista.iframe.style.transform = 'scale(' + e + ')';
@@ -901,7 +939,9 @@
       ajustarVista();
       const i = e.data.info;
       const vi = document.getElementById('vistaInfo');
-      if (vi) vi.textContent = `A4 · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'} · ${i.platos} platos · ${NOMBRE_ESTILO[ed.estilo] || ed.estilo}`;
+      const que = i.formato === 'elastico' ? `Cuadernillo · ${i.paginas} páginas · ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'} A3` : `${i.formato === 'slim' ? 'A4 slim' : 'A4'} · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'}`;
+      if (vi) vi.textContent = `${que} · ${i.platos} platos · ${NOMBRE_ESTILO[ed.estilo] || ed.estilo}`;
+      ed.info = i; pintarFormato();
     }
   });
   window.addEventListener('resize', ajustarVista);
@@ -913,7 +953,7 @@
     try {
       if (ed.pendiente) await guardarYa();
       const r = await fetch('/pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
-        body: JSON.stringify({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }) });
+        body: JSON.stringify({ carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: logoActivo() }) });
       if (!r.ok) {
         let d = {}; try { d = await r.json(); } catch (e) {}
         if (r.status === 402) return Cuenta.planes({ motivo: d.error, vuelta: 'panel' });
@@ -930,6 +970,21 @@
     finally { bs.forEach(b => { b.disabled = false; b.textContent = 'Descargar PDF'; }); }
   }
 
+
+
+  // ── Formato de la hoja ──
+  function pintarFormato() {
+    if (!ed) return;
+    document.querySelectorAll('.formato-b').forEach(b => { const on = b.dataset.f === ed.formato; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    const nota = document.getElementById('formatoNota'), pie = document.getElementById('notaVista');
+    const i = ed.info && ed.info.formato === ed.formato ? ed.info : null;
+    if (nota) nota.innerHTML = ed.formato === 'elastico' ? `<div class="formato-nota"><b>Cómo se imprime el cuadernillo</b>
+      El PDF sale ya montado en A3 apaisado${i ? `: ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'}, ${i.paginas} páginas` : ''}, con las páginas en el orden correcto para que al doblar queden seguidas.
+      <ol><li>Imprime en A3 a doble cara, volteando por el <b style="display:inline">borde corto</b>.</li><li>Hiende y dobla cada hoja por el centro.</li><li>Mete unas dentro de otras, en orden, y pasa el elástico.</li></ol></div>`
+      : ed.formato === 'slim' ? `<div class="formato-nota"><b>Cómo se imprime el A4 slim</b>El PDF mide 14 × 29,7 cm. En imprenta, pídelo a ese tamaño. En una impresora de casa, imprime «a tamaño real» en un folio y corta el sobrante.</div>` : '';
+    if (pie) pie.textContent = ed.formato === 'elastico' ? 'Aquí la ves página a página. El PDF sale montado en A3 para imprimir y doblar.'
+      : ed.formato === 'slim' ? 'A4 slim, 14 × 29,7 cm. Antes de imprimir, revisa precios y alérgenos.' : 'A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.';
+  }
 
   // ── Alérgenos ──
   const AL = Alergenos;
@@ -1045,7 +1100,7 @@
       const nueva = await pedirAjuste(`Traduce TODA la carta al ${IDIOMAS[cod]} (código ${cod}) con terminología profesional de hostelería: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "${cod}".`);
       nueva.idioma = cod;
       const perdidos = heredarAlergenos(ed.carta, nueva, true);
-      const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, logo: ed.logo, cabecera: ed.cabecera });
+      const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera });
       if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la copia.');
       Cuenta.aviso(perdidos ? 'Copia traducida guardada. Revisa los alérgenos: la traducción ha cambiado platos de sitio.' : 'Copia traducida guardada.');
       location.hash = 'carta=' + d.id;

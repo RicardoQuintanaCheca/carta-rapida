@@ -483,6 +483,7 @@ function slug(s) {
 app.post('/pdf', limitePDF, async (req, res) => {
   try {
     const { carta, estilo, logo } = req.body || {};
+    const formato = ['slim', 'elastico'].includes((req.body || {}).formato) ? req.body.formato : 'a4';
     if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
@@ -498,6 +499,9 @@ app.post('/pdf', limitePDF, async (req, res) => {
     if (!pro) {
       if (String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
         return res.status(402).json({ ok: false, pro: true, motivo: 'idioma', error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
+      }
+      if (formato !== 'a4') {
+        return res.status(402).json({ ok: false, pro: true, motivo: 'formato', error: 'El A4 slim y el cuadernillo son de Carta Pro. Pruébalo gratis 7 días o descárgala en A4.' });
       }
       if (ESTILOS_PRO.includes(estiloFinal)) {
         return res.status(402).json({ ok: false, pro: true, motivo: 'estilo', error: 'Este estilo es de Carta Pro. Pruébalo gratis 7 días o elige uno de los estilos gratis.' });
@@ -515,12 +519,12 @@ app.post('/pdf', limitePDF, async (req, res) => {
 
     const t0 = Date.now();
     const porCorreo = !pro && destino && CORREO_ACTIVO;
-    const { pdf, info, vista } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro, conVista: !!porCorreo });
-    console.log(`[PDF] ${estiloFinal} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${plan.plan} · ${Date.now() - t0} ms`);
+    const { pdf, info, vista } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro, conVista: !!porCorreo, formato });
+    console.log(`[PDF] ${estiloFinal} · ${formato} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${plan.plan} · ${Date.now() - t0} ms`);
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}.pdf"`,
+      'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}${formato === 'slim' ? '-slim' : formato === 'elastico' ? '-cuadernillo-a3' : ''}.pdf"`,
       'Cache-Control': 'no-store'
     });
     // Versión gratis: la carta se envía al email (así el email es de verdad). Si el correo falla, se descarga igual.

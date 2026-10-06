@@ -91,8 +91,12 @@ async function obtenerNavegador() {
 
 const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia', 'bloque', 'marinero', 'brunch', 'vermut', 'pizarra']);
 
-async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true, conVista = false } = {}) {
+// Tamaño de la hoja del PDF según el formato (el cuadernillo sale ya impuesto en A3 apaisado)
+const HOJA = { a4: { width: '210mm', height: '297mm' }, slim: { width: '140mm', height: '297mm' }, elastico: { width: '420mm', height: '297mm' } };
+
+async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true, conVista = false, formato = 'a4' } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
+  if (!HOJA[formato]) formato = 'a4';
   const nav = await obtenerNavegador();
   const contexto = await nav.newContext();
   try {
@@ -110,16 +114,18 @@ async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = tru
         '16px "Newsreader"', '500 16px "Newsreader"', 'italic 16px "Newsreader"'];
       await Promise.all(caras.map(c => document.fonts.load(c, 'Áéñ')));
     }, estilo);
-    const info = await pagina.evaluate(async ({ carta, estilo, logo, credito }) => {
+    const info = await pagina.evaluate(async ({ carta, estilo, logo, credito, formato }) => {
       // El logo se decodifica antes de medir; si no, la cabecera mediría 0 y el texto se saldría
       if (logo) await new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = logo; window.__logo = i; });
-      return MotorCarta.componer(document.getElementById('d'), carta, { estilo, logo, credito });
-    }, { carta, estilo, logo, credito });
+      return MotorCarta.componer(document.getElementById('d'), carta, { estilo, logo, credito, formato, imponer: true });
+    }, { carta, estilo, logo, credito, formato });
     let vista = null;
     if (conVista) {
       try { const hoja = await pagina.$('.pagina'); if (hoja) vista = await hoja.screenshot({ type: 'jpeg', quality: 82 }); } catch (e) {}
     }
     await pagina.emulateMedia({ media: 'print' });
+    // El tamaño de hoja se fija con @page (así Chromium respeta también la orientación apaisada del A3)
+    await pagina.addStyleTag({ content: `@media print { @page { size: ${HOJA[formato].width} ${HOJA[formato].height}; margin: 0; } }` });
     const pdf = await pagina.pdf({ preferCSSPageSize: true, printBackground: true });
     return { pdf, info, vista };
   } finally {

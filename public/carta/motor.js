@@ -382,7 +382,13 @@
 
     destino.innerHTML = '';
     const pliego = document.createElement('div');
-    pliego.className = `carta est-${claveEstilo}`;
+    // Formato: A4 (por defecto), A4 slim (140 × 297 mm) o cuadernillo A4 en pliegos A3 con hendido.
+    // El slim se compone sobre una hoja proporcionalmente más grande y se reduce: así los márgenes
+    // y adornos de cada estilo encogen a la vez que la hoja, y la letra se compensa con la escala.
+    const FORMATO = ['slim', 'elastico'].includes(opts.formato) ? opts.formato : 'a4';
+    const S = FORMATO === 'slim' ? 0.8 : 1;
+    const kMin = K_MIN / S, kComodo = K_COMODO / S;
+    pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}`;
     destino.appendChild(pliego);
 
     // Crea una página vacía con N columnas y devuelve sus piezas
@@ -402,7 +408,8 @@
     function probar(cols, numPag, k) {
       pliego.innerHTML = '';
       const paginas = [];
-      for (let i = 0; i < numPag; i++) paginas.push(pagina(cols, i === 0, i === numPag - 1, k));
+      // En cuadernillo la cabecera grande va en la portada: dentro, solo el nombre en pequeño
+      for (let i = 0; i < numPag; i++) paginas.push(pagina(cols, i === 0 && FORMATO !== 'elastico', i === numPag - 1, k));
       // Alturas de cada sección, medidas en una columna real
       const colRef = paginas[0].querySelector('.col');
       const alturas = htmlSec.map(h => {
@@ -425,8 +432,8 @@
 
     function mejorK(cols, numPag) {
       // con varias páginas hay sitio: la letra puede crecer un poco más
-      const K_MAX = numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : kMaxPara(totalPlatos);
-      let lo = K_MIN, hi = K_MAX, mejor = null;
+      const K_MAX = (numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : kMaxPara(totalPlatos)) / S;
+      let lo = kMin, hi = K_MAX, mejor = null;
       const alMax = probar(cols, numPag, hi);
       if (alMax.ratio <= HOLGURA) return alMax;
       const alMin = probar(cols, numPag, lo);
@@ -442,8 +449,9 @@
 
     // Candidatas: 1 columna solo tiene sentido en cartas cortas
     const candidatas = [];
-    if (totalPlatos <= 14) candidatas.push([1, 1]);
-    candidatas.push([2, 1]);
+    const COLS = FORMATO === 'slim' ? 1 : 2; // la hoja estrecha va siempre a una columna
+    if (totalPlatos <= 14 || COLS === 1) candidatas.push([1, 1]);
+    if (COLS === 2) candidatas.push([2, 1]);
     let elegida = null;
     for (const [c, p] of candidatas) {
       const r = mejorK(c, p);
@@ -451,15 +459,24 @@
       // 1 columna solo si no obliga a una letra claramente menor que a 2 columnas
       if (!elegida || r.k > elegida.k * 1.08) elegida = r;
     }
-    if (elegida && elegida.cols === 2 && elegida.k < K_COMODO) {
+    if (elegida && elegida.cols === 2 && elegida.k < kComodo) {
       const dos = mejorK(2, 2);
-      if (!dos.noCabe && dos.k >= K_COMODO) elegida = dos;
+      if (!dos.noCabe && dos.k >= kComodo) elegida = dos;
     }
     let paginasNecesarias = 2;
     while (!elegida) {
-      const r = mejorK(2, paginasNecesarias);
-      if (!r.noCabe || paginasNecesarias >= 6) elegida = r;
+      const r = mejorK(COLS, paginasNecesarias);
+      if (!r.noCabe || paginasNecesarias >= (COLS === 1 ? 10 : FORMATO === 'elastico' ? 14 : 6)) elegida = r;
       paginasNecesarias++;
+    }
+    // Cuadernillo: portada + interior + contraportada tienen que sumar un múltiplo de 4.
+    // Si falta una página, se reparte el interior en una más (letra más holgada) en vez de dejarla en blanco.
+    const enBlanco = n => (4 - ((n + 2) % 4)) % 4;
+    if (FORMATO === 'elastico' && enBlanco(elegida.numPag) % 2 === 1) {
+      const n = elegida.numPag + 1;
+      const una = totalPlatos / n <= 14 ? mejorK(1, n) : { noCabe: true };
+      const r = una.noCabe ? mejorK(2, n) : una;
+      if (!r.noCabe) elegida = r;
     }
 
     // Reconstruye con la configuración elegida y coloca las secciones
@@ -498,7 +515,41 @@
       p.style.setProperty('--aire-pl', airePl.toFixed(1) + 'px');
     });
 
-    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: elegida.numPag, escala: +elegida.k.toFixed(3), platos: totalPlatos });
+    let hojas = 0;
+    if (FORMATO === 'elastico') {
+      const suelta = (clase, html) => {
+        const p = document.createElement('div');
+        p.className = 'pagina ' + clase;
+        p.style.setProperty('--letras', Math.max(6, String(carta.nombre_restaurante || '').length));
+        p.style.setProperty('--k', 1);
+        p.innerHTML = html;
+        return p;
+      };
+      const blancas = enBlanco(final.paginas.length);
+      const portada = suelta('portada', `<div class="portada-in">${estilo.cabecera(carta, logo)}</div>`);
+      const contra = suelta('contra', `<div class="contra-in">${logo ? `<img class="cab-logo" src="${logo}" alt="">` : esc(carta.nombre_restaurante || '')}</div>`);
+      pliego.insertBefore(portada, pliego.firstChild);
+      // Las páginas en blanco, donde menos molestan: el reverso de la portada y el de la contraportada
+      if (blancas >= 2) portada.after(suelta('blanca', ''));
+      for (let i = blancas >= 2 ? 1 : 0; i < blancas; i++) pliego.appendChild(suelta('blanca', ''));
+      pliego.appendChild(contra);
+      const todas = [...pliego.children];
+      hojas = todas.length / 4;
+      // Imposición para imprimir a doble cara en A3 y hender por el centro:
+      // hoja 1 anverso = contraportada | portada, reverso = pág. 2 | penúltima, y así hacia dentro.
+      if (opts.imponer) {
+        const N = todas.length;
+        const cara = (izq, der, lado) => { const h = document.createElement('div'); h.className = 'hoja-a3 ' + lado; h.append(izq, der); return h; };
+        const caras = [];
+        for (let i = 0; i < N / 4; i++) {
+          caras.push(cara(todas[N - 1 - 2 * i], todas[2 * i], 'anverso'));
+          caras.push(cara(todas[2 * i + 1], todas[N - 2 - 2 * i], 'reverso'));
+        }
+        pliego.replaceChildren(...caras);
+      }
+    }
+    const numPaginas = FORMATO === 'elastico' ? hojas * 4 : elegida.numPag;
+    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: numPaginas, escala: +(elegida.k * S).toFixed(3), platos: totalPlatos, formato: FORMATO, ...(hojas ? { hojas } : {}) });
     return JSON.parse(pliego.dataset.info);
   }
 

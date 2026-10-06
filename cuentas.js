@@ -176,7 +176,8 @@ function limpiarDatosCarta(b) {
     carta,
     estilo: ESTILO_OK.test(b.estilo || '') ? b.estilo : 'sobremesa',
     logo,
-    cabecera: b.cabecera === 'nombre' ? 'nombre' : 'logo'
+    cabecera: b.cabecera === 'nombre' ? 'nombre' : 'logo',
+    ...(['slim', 'elastico'].includes(b.formato) ? { formato: b.formato } : {})
   };
   const json = JSON.stringify(datos);
   if (json.length > MAX_DATOS) return { error: 'La carta o el logotipo son demasiado grandes para guardarlos.' };

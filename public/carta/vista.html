@@ -43,7 +43,9 @@
     // El logo se decodifica antes de medir; si no, la cabecera mediría 0 y el texto se saldría
     if (e.data.logo) await precargar(e.data.logo);
     try {
-      info = MotorCarta.componer(d, e.data.carta, { estilo: e.data.estilo, logo: e.data.logo, credito: e.data.credito !== false });
+      // La hoja estrecha mide 140 mm; A4 y cuadernillo (que aquí se ve página a página, en orden de lectura), 210
+      d.style.width = e.data.formato === 'slim' ? '140mm' : '210mm';
+      info = MotorCarta.componer(d, e.data.carta, { estilo: e.data.estilo, logo: e.data.logo, credito: e.data.credito !== false, formato: e.data.formato });
     } catch (err) { error = String(err && err.message || err); }
     const r = d.getBoundingClientRect();
     parent.postMessage({ tipo: 'compuesta', id: e.data.id, info, error, ancho: r.width, alto: r.height }, location.origin);
