@@ -401,7 +401,10 @@
   function route() {
     if (!Cuenta.estado) return pintarBienvenida();
     const m = location.hash.match(/^#carta=([\w-]+)/);
-    if (m) abrirEditor(m[1]); else pintarLista();
+    if (m) return abrirEditor(m[1]);
+    // Llegada desde la portada: «Hacer el menú del día» crea el menú y lo abre
+    if (/^#menu=nuevo/.test(location.hash)) { history.replaceState(null, '', location.pathname); return pintarLista().then(c => nuevoMenu(c || [])); }
+    pintarLista();
   }
   window.addEventListener('hashchange', () => { if (ed && ed.pendiente) guardarYa(); ed = null; route(); });
 
@@ -474,6 +477,7 @@
     document.getElementById('nuevoMenu').onclick = e => nuevoMenu(cartas, e.currentTarget);
     app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } }));
     miniaturas();
+    return cartas;
   }
 
 
@@ -495,6 +499,7 @@
         <a class="pro-acceso" href="${a('traducir')}"><strong>Tradúcela a 6 idiomas</strong><small>Inglés, francés, alemán, italiano, portugués y chino, con vocabulario de hostelería.</small><i>${ir}</i></a>
         <a class="pro-acceso" href="${a('frase')}"><strong>Cambia precios con una frase</strong><small>Escribe el cambio como se lo dirías a una persona y se aplica a toda la carta.</small><i>${ir}</i></a>
         <a class="pro-acceso" href="${a('diseno')}"><strong>Tu logotipo y los 20 estilos</strong><small>Los 8 estilos Pro y tu logo arriba, sin la firma de Carta Rápida.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="#menu=nuevo"><strong>El menú del día</strong><small>Precio único, la fecha de hoy y tus platos de siempre. Cada mañana cambias los platos y descargas.</small><i>Hacer un menú →</i></a>
         <a class="pro-acceso" href="${a('alergenos')}"><strong>Marca los alérgenos</strong><small>Iconos o números en la carta, con su leyenda, y la tabla para sala e inspección.</small><i>${ir}</i></a>
       </div></section>`;
   }
@@ -557,7 +562,7 @@
   // Menú nuevo: hereda nombre, estilo y logotipo de tu última carta, para que salga con la misma imagen
   async function nuevoMenu(cartas, b) {
     if (!Cuenta.esPro()) return Cuenta.planes({ motivo: 'El menú del día es de Carta Pro.', vuelta: 'panel' });
-    b.disabled = true;
+    if (b) b.disabled = true;
     let base = {};
     const ref = cartas.find(c => !c.menu) || cartas[0];
     if (ref) { const d = await Cuenta.api('/cartas/' + ref.id); if (d.ok) base = d; }
@@ -566,7 +571,7 @@
       menu: { titulo: 'Menú del día', fecha: hoyTexto(), fecha_auto: true, precio: '', incluye: 'Pan, bebida y postre o café', habituales: [] },
       secciones: ['Primeros', 'Segundos', 'Postres'].map(nombre => ({ nombre, platos: [plato(), plato(), plato()] })) };
     const d = await Cuenta.api('/cartas', { titulo: 'Menú del día', carta, estilo: base.estilo || 'pizarra', logo: base.logo || null, cabecera: base.cabecera || 'logo' });
-    b.disabled = false;
+    if (b) b.disabled = false;
     if (d.status === 402) return Cuenta.planes({ motivo: 'El menú del día es de Carta Pro.', vuelta: 'panel' });
     if (!d.ok) return Cuenta.aviso(d.error || 'No se ha podido crear el menú.');
     location.hash = 'carta=' + d.id + '&t=platos';

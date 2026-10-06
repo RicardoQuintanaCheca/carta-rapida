@@ -1841,6 +1841,12 @@
           <span class="t2-pf-label">Marcar alérgenos<span class="pro-pill">Pro</span><div class="t2-pf-sub">Iconos en la carta y tabla para inspección · pruébalo gratis</div></span>
           <div class="toggle-wrap" id="alergToggle"><div class="toggle-dot"></div></div>
         </div>
+        <!-- Menú del día -->
+        <div class="t2-feat-row" onclick="irAMenu()">
+          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span>
+          <span class="t2-pf-label">Hacer el menú del día<span class="pro-pill">Pro</span><div class="t2-pf-sub">Precio único, la fecha de hoy y tus platos de siempre · pruébalo gratis</div></span>
+          <svg class="opcion-arrow t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
         <!-- Texto accordion -->
         <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
           <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
@@ -3681,6 +3687,15 @@
   }
 
   // Alérgenos: se marcan en el panel, así que la carta se guarda primero y se abre allí en esa pestaña
+  // Menú del día: se hace en el panel, sin subir ninguna foto
+  function irAMenu() {
+    medir('menu_desde_herramienta');
+    const ir = () => { location.href = '/panel#menu=nuevo'; };
+    if (!Cuenta.estado) return Cuenta.acceso({ modo: 'crear', motivo: 'Crea tu cuenta para hacer el menú del día. Son 7 días de prueba, sin tarjeta.', alEntrar: ir });
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('El menú del día es de Carta Pro.');
+    ir();
+  }
+
   async function irAAlergenos() {
     if (!cartaActual) return;
     medir('alergenos_desde_herramienta');

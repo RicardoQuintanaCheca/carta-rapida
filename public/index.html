@@ -1372,6 +1372,12 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
           <span class="t2-pf-label">Marcar alérgenos<span class="pro-pill">Pro</span><div class="t2-pf-sub">Iconos en la carta y tabla para inspección · pruébalo gratis</div></span>
           <div class="toggle-wrap" id="alergToggle"><div class="toggle-dot"></div></div>
         </div>
+        <!-- Menú del día -->
+        <div class="t2-feat-row" onclick="irAMenu()">
+          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span>
+          <span class="t2-pf-label">Hacer el menú del día<span class="pro-pill">Pro</span><div class="t2-pf-sub">Precio único, la fecha de hoy y tus platos de siempre · pruébalo gratis</div></span>
+          <svg aria-hidden="true" class="opcion-arrow t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </div>
         <!-- Texto accordion -->
         <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
           <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
@@ -1730,6 +1736,29 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
     </div>
   </section>
 
+  <section class="sec" id="menu-del-dia" style="padding-top:0">
+    <div class="nwrap">
+      <div class="alg">
+        <div class="alg-vista" style="padding-bottom:16%">
+          <img src="/ejemplo/menu-pizarra-640.webp" srcset="/ejemplo/menu-pizarra-640.webp 640w, /ejemplo/menu-pizarra.webp 900w" sizes="(max-width: 900px) 70vw, 400px" width="900" height="1273" loading="lazy" decoding="async" alt="Menú del día de un restaurante con primeros, segundos, postres y el precio al pie">
+          <img class="tabla" style="width:66%" src="/ejemplo/menu-a5-dos-por-folio-640.webp" width="1280" height="905" loading="lazy" decoding="async" alt="El mismo menú del día dos veces en un folio apaisado, para cortar en dos hojas A5">
+        </div>
+        <div>
+          <div class="eyebrow">Menú del día · Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">El menú del día, en dos minutos. <span class="grey">Mañana, en uno.</span></h2>
+          <p class="alg-golpe">Cambia todos los días. Lo único que debería cambiar son los platos.</p>
+          <p class="t">El precio, lo que incluye, tu logotipo y el diseño se quedan guardados. Cada mañana abres, cambias los platos y descargas.</p>
+          <ol class="alg-pasos">
+            <li><span><b>La fecha se pone sola.</b> Abres el menú y ya dice el día de hoy.</span></li>
+            <li><span><b>Tus platos de siempre, con dos letras.</b> Empiezas a escribir y te los ofrece.</span></li>
+            <li><span><b>Dos por folio.</b> En A5 sale dos veces en cada hoja. Cortas y gastas la mitad de papel.</span></li>
+          </ol>
+          <div class="alg-cta"><a class="btn btn-accent" href="#prueba">Pruébalo 7 días gratis</a><a class="mas" href="/menu-del-dia/">Cómo funciona, con ejemplos</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="precios" style="padding-top:0">
     <div class="nwrap">
       <div class="sec-head">
@@ -1766,6 +1795,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Traducción a 6 idiomas y ajustes ilimitados</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Alérgenos con iconos y tabla para inspección</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>A4, A4 slim y cuadernillo con elástico</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Menú del día con la fecha de hoy</li>
           </ul>
           <div class="n-plan-ctas"><button class="btn btn-accent" type="button" onclick="probarPro()">Probar 7 días gratis</button><button class="n-directo" type="button" onclick="hacersePro()">o activa Pro ya</button></div>
         </article>
@@ -1803,7 +1833,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       <div class="n-final-ctas"><a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a><button class="btn n-btn-claro" type="button" onclick="probarPro()">Probar Pro 7 días gratis</button></div>
     </div>
     <nav class="foot-tipos" aria-label="Cartas por tipo de local"><b>Cartas por tipo de local</b><a href="/plantillas-carta-restaurante/">Plantillas de carta</a><a href="/carta-para-bar/">Bar</a><a href="/carta-para-cafeteria/">Cafetería</a><a href="/carta-para-pizzeria/">Pizzería</a><a href="/carta-para-marisqueria/">Marisquería</a><a href="/carta-para-hamburgueseria/">Hamburguesería</a><a href="/menu-del-dia/">Menú del día</a><a href="/menu-de-navidad-restaurante/">Menú de Navidad</a><a href="/carta-de-vinos/">Carta de vinos</a><a href="/carta-de-cocteles/">Cócteles</a></nav>
-    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
+    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/como-hacer-un-menu-del-dia/">Cómo hacer un menú del día</a><a href="/menu-del-dia-a5/">Menú del día en A5</a><a href="/menu-del-dia-con-alergenos/">Menú del día con alérgenos</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
     <div class="n-kartia rv">
       <div><b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018.</div>
       <a class="btn btn-ghost" href="https://kartia.es/portamenus/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=banda" target="_blank" rel="noopener">Ver portamenús</a>
@@ -1921,11 +1951,11 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   </div>
 </div>
 
-<script src="/herramienta.js?v=1e787e28" defer></script>
+<script src="/herramienta.js?v=4c29653f" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/portada.js?v=1e787e28" defer></script>
+<script src="/portada.js?v=4c29653f" defer></script>
 </body>
 </html>

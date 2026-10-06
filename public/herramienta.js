@@ -1295,6 +1295,15 @@
   }
 
   // Alérgenos: se marcan en el panel, así que la carta se guarda primero y se abre allí en esa pestaña
+  // Menú del día: se hace en el panel, sin subir ninguna foto
+  function irAMenu() {
+    medir('menu_desde_herramienta');
+    const ir = () => { location.href = '/panel#menu=nuevo'; };
+    if (!Cuenta.estado) return Cuenta.acceso({ modo: 'crear', motivo: 'Crea tu cuenta para hacer el menú del día. Son 7 días de prueba, sin tarjeta.', alEntrar: ir });
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('El menú del día es de Carta Pro.');
+    ir();
+  }
+
   async function irAAlergenos() {
     if (!cartaActual) return;
     medir('alergenos_desde_herramienta');

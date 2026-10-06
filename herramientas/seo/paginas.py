@@ -53,6 +53,13 @@ MONTAJE = ('<section><div class="w"><h2>Cómo sale montado el PDF</h2><p class="
   + '<ol class="pasos" style="margin-top:36px"><li>Imprime en A3 a doble cara<span>Volteando por el borde corto. Es una opción de la impresora o de la copistería.</span></li><li>Dobla cada hoja por el centro<span>Si el papel es grueso, pide que te lo hiendan antes para que no se cuartee.</span></li><li>Mete unas hojas dentro de otras<span>En orden, y pasa el elástico por el lomo.</span></li></ol>'
   + '</div></section>')
 
+MENUS = ('<section><div class="w"><h2>El mismo menú, en tres estilos</h2><p class="lead" style="margin-top:0">Es un menú de ejemplo. Hay veinte estilos y en todos sale centrado, con el precio al pie.</p><div class="tres">'
+  + fig_al('menu-pizarra', 'Menú del día en estilo Pizarra, con títulos a mano', 'Pizarra')
+  + fig_al('menu-sobremesa', 'Menú del día en estilo Sobremesa, clásico y centrado', 'Sobremesa')
+  + fig_al('menu-gaceta', 'Menú del día en estilo Gaceta, como la cabecera de un periódico', 'Gaceta')
+  + '</div>' + fig_ancha('menu-a5-dos-por-folio', 'Menú del día dos veces en un folio apaisado, con marca de corte', 'Y en A5: el menú sale dos veces en cada folio. Cortas por el centro.')
+  + '</div></section>')
+
 COMUN_FAQ = [
   ('¿Cuánto cuesta?', 'Dos cartas al mes son gratis, con 12 estilos, y el PDF te llega al email. Carta Pro cuesta 12,90 € al mes y añade los 8 estilos restantes, guardar tus cartas, cambiar precios sin empezar de cero, tu logotipo y la traducción. Tiene 7 días de prueba gratis, sin tarjeta, y te das de baja cuando quieras.'),
   ('¿En qué formato me llega?', 'En PDF tamaño A4, listo para imprimir en tu impresora o en una copistería. Con Carta Pro puedes elegir también A4 slim (140 × 297 mm) o cuadernillo con elástico, en hojas A3 dobladas.'),
@@ -143,20 +150,97 @@ PAGINAS = [
   ],
   faq=[('¿Puedo usar los colores de mi marca?', 'Cada estilo tiene sus colores. Puedes añadir tu logotipo con Carta Pro; los colores del estilo no se cambian.'),
        ('¿Sirve para la carta de reparto o para llevar?', 'Recibes un PDF en A4 que puedes imprimir o enviar. No genera una carta web ni un código QR.')]),
- dict(slug='menu-del-dia', menu='Menú del día',
-  title='Plantilla de menú del día para imprimir: hecha en 30 segundos',
-  desc='Haz el menú del día de tu restaurante cada mañana sin abrir Word: pegas los platos, eliges estilo e imprimes el PDF en A4.',
+ dict(slug='menu-del-dia', cta=('Hacer mi menú del día', '/panel#menu=nuevo'), menu='Menú del día',
+  title='Plantilla de menú del día para imprimir: lista en dos minutos',
+  desc='Haz el menú del día de tu restaurante sin abrir Word: primeros, segundos, postres y el precio, en una hoja lista para imprimir. La fecha se pone sola y los platos de siempre se escriben con dos letras.',
   h1='El menú del día, impreso antes de abrir.',
   golpe='Cambia todos los días. No puede costarte veinte minutos todos los días.',
-  intro='El menú del día es la hoja que más se imprime en un restaurante y la que peor suele quedar: un documento de texto retocado encima del de ayer. Aquí pegas los primeros, los segundos y el precio, eliges estilo y lo imprimes.',
-  estilos=['pizarra','ticket','gaceta','mantel'],
+  intro='El menú del día es la hoja que más se imprime en un restaurante y la que peor suele quedar: un documento de texto retocado encima del de ayer, con la fecha de la semana pasada. Aquí lo montas una vez y cada mañana solo cambias los platos.',
+  estilos=['pizarra','gaceta','sobremesa','mantel'],
+  hero=('menu-pizarra', 'Menú del día de un restaurante con primeros, segundos, postres y el precio al pie', 'Menú del día de ejemplo'),
+  extra=MENUS,
   bloques=[
-   ('Pegas el texto y listo', 'No hace falta foto. Escribes o pegas los platos del día como los tengas, con sus secciones (primeros, segundos, postres) y el precio del menú.'),
-   ('Estilos para una hoja corta', 'Pizarra parece escrita a mano con rotulador. Ticket es directo y pequeño. Gaceta y Mantel son más de casa de comidas. Con pocos platos la letra crece y la hoja no queda vacía.'),
-   ('Dos cartas gratis al mes; para hacerlo a diario, Carta Pro', 'La versión gratis da para dos cartas al mes. Si vas a hacer el menú todos los días, Carta Pro te deja guardarlo y cambiar solo los platos.'),
+   ('Lo montas una vez', 'Nombre o logotipo, estilo, precio del menú y lo que incluye. Eso se queda guardado. No vuelves a tocarlo hasta que suba el precio.'),
+   ('Cada mañana, solo los platos', 'Abres el menú y la fecha ya es la de hoy. Cambias los primeros, los segundos y el postre, y descargas el PDF. Los platos que ya has puesto otros días te los ofrece al empezar a escribir.'),
+   ('Sale centrado y con el precio grande', 'Como se espera de un menú del día: platos centrados, sin precio en cada línea, y abajo el precio del menú con lo que incluye. Si un plato lleva suplemento, se indica a su lado.'),
   ],
-  faq=[('¿Puedo poner "pan, bebida y postre incluidos"?', 'Sí. Las notas que pongas al final salen en el pie de la carta.'),
-       ('¿Tengo que subir una foto cada día?', 'No. Puedes pegar el texto. Con Carta Pro, además, el menú queda guardado y solo cambias lo que cambia.')]),
+  secciones=[
+   ('Gratis o con Carta Pro', 'Sin cuenta puedes pegar el texto de tu menú en la herramienta y recibirlo maquetado como una carta, dos veces al mes. El modo de menú del día, con el precio único, la fecha automática, los platos habituales y el formato A5, es de Carta Pro, que se prueba 7 días gratis y sin tarjeta.'),
+   ('Media hoja basta', 'Un menú del día no necesita un folio entero. En el formato A5 el menú sale dos veces en cada folio: imprimes, cortas por el centro y tienes dos hojas. La mitad de papel y de tinta.'),
+   ('Con el mismo diseño que tu carta', 'El menú nuevo hereda el nombre, el logotipo y el estilo de tu carta. El cliente ve la carta y el menú del día como parte del mismo sitio, no como un papel suelto.'),
+  ],
+  faq=[('¿Puedo poner «pan, bebida y postre incluidos»?', 'Sí. Hay una casilla para lo que incluye el menú y sale debajo del precio.'),
+       ('¿Tengo que rehacerlo cada día?', 'No. El menú queda guardado. Cambias los platos que cambien y descargas el PDF nuevo, con la fecha del día.'),
+       ('¿Y si un plato lleva suplemento?', 'Escribes el suplemento en su casilla, por ejemplo +4, y sale junto al plato.'),
+       ('¿Sirve para un menú de fin de semana o un menú degustación?', 'Sí. El rótulo «Menú del día» se puede cambiar por el que quieras, y la fecha se puede quitar o sustituir por otro texto.'),
+       ('¿Es una plantilla de Word?', 'No. No descargas una plantilla para rellenar: escribes los platos y recibes el PDF ya maquetado.')]),
+ dict(slug='como-hacer-un-menu-del-dia', cta=('Hacer mi menú del día', '/panel#menu=nuevo'), menu='Cómo hacer un menú del día',
+  title='Cómo hacer un menú del día: qué poner y cómo presentarlo',
+  desc='Qué lleva un menú del día bien hecho: cuántos platos, cómo escribir el precio, qué decir que incluye y cómo imprimirlo cada mañana sin perder tiempo.',
+  h1='Cómo hacer un menú del día que se lea de un vistazo.',
+  golpe='El cliente lo decide en diez segundos, de pie, en la puerta.',
+  intro='Un menú del día tiene un trabajo muy concreto: que quien pasa por delante sepa qué hay, cuánto cuesta y qué entra en el precio, sin preguntar. Lo demás sobra. Esta es la estructura que funciona y cómo dejarla impresa cada mañana.',
+  estilos=['pizarra','sobremesa','gaceta','trattoria'],
+  hero=('menu-sobremesa', 'Menú del día centrado con primeros, segundos y postres y el precio destacado', 'Menú del día de ejemplo'),
+  extra=MENUS,
+  bloques=[
+   ('Tres bloques y un precio', 'Primeros, segundos y postres, con tres o cuatro opciones en cada uno. Con más, el cliente tarda en elegir y la cocina sufre. Con menos de dos, no parece un menú.'),
+   ('El precio, una vez y grande', 'En un menú del día los platos no llevan precio: lo lleva el menú. Va destacado, abajo o arriba, y justo al lado lo que incluye: pan, bebida, postre o café.'),
+   ('La fecha', 'Un menú con la fecha de hoy dice que la cocina ha cocinado hoy. Uno sin fecha, o con la de ayer, dice lo contrario.'),
+  ],
+  secciones=[
+   ('Cómo escribir los platos', 'Nombre claro y corto: «Lentejas estofadas», no «Nuestras lentejas de la abuela a fuego lento». Si hace falta una aclaración, va en una línea pequeña debajo. Los suplementos, junto al plato que los lleva.'),
+   ('Lo que no debe faltar', 'El precio final que paga el cliente, lo que incluye y lo que no (segunda bebida, café, suplementos), y la información de alérgenos o la indicación de dónde pedirla. Si tienes dudas sobre lo que te exige tu comunidad autónoma, consúltalo con tu gestoría o con la autoridad de consumo.'),
+   ('Centrado', 'Una hoja corta se lee mejor centrada: el ojo baja en línea recta de los primeros al precio. Las columnas y los precios alineados a la derecha son para la carta, no para el menú.'),
+   ('Que no te cueste tiempo', 'El menú cambia a diario, así que lo que cuenta es cuánto tardas en rehacerlo. Con Carta Pro lo dejas montado y cada mañana solo cambias los platos; la fecha se pone sola.'),
+  ],
+  faq=[('¿Cuántos platos debe tener un menú del día?', 'Lo habitual son tres o cuatro primeros, tres o cuatro segundos y dos o tres postres. Lo importante es que la cocina pueda sacarlos bien en hora punta.'),
+       ('¿Hay que poner los alérgenos en el menú del día?', 'Tienes que poder informar de ellos igual que en la carta. Puedes ponerlos en la propia hoja o indicar que el personal dispone de la información.'),
+       ('¿En qué tamaño se imprime?', 'En A4 si va en un atril o en la puerta. En A5 si va en la mesa: ocupa menos y de cada folio salen dos.')]),
+ dict(slug='menu-del-dia-a5', cta=('Hacer mi menú del día', '/panel#menu=nuevo'), menu='Menú del día en A5',
+  title='Menú del día en A5: dos por folio, listos para cortar',
+  desc='Imprime el menú del día en A5: sale dos veces en cada folio, con marca de corte. La mitad de papel y una hoja que cabe en la mesa.',
+  h1='El menú del día en media hoja. Dos por folio.',
+  golpe='Un folio entero para nueve platos es tirar papel.',
+  intro='Un menú del día tiene pocas líneas. En A4 queda bien en la puerta, pero en la mesa ocupa demasiado y gastas una hoja por menú. En A5 (14,8 × 21 cm) cabe todo, se lee igual y de cada folio salen dos.',
+  estilos=['pizarra','gaceta','sobremesa','ticket'],
+  hero=('menu-a5-dos-por-folio', 'Menú del día dos veces en un folio apaisado, con marca de corte en el centro', 'Así sale el PDF: un folio, dos menús', 1800, 1273),
+  extra=MENUS,
+  bloques=[
+   ('Un folio, dos menús', 'El PDF es un A4 apaisado con el menú repetido a izquierda y derecha. Imprimes a tamaño real, cortas por la marca del centro y tienes dos hojas A5.'),
+   ('La letra no se encoge sin control', 'El menú se recompone para el A5: si los platos caben con una letra cómoda, va en una hoja. Si no, pasa a dos antes que dejar una letra ilegible.'),
+   ('Mismo menú, dos tamaños', 'Puedes descargar el A4 para la puerta y el A5 para las mesas. Es el mismo menú guardado: cambias de formato con un clic.'),
+  ],
+  secciones=[
+   ('Cómo imprimirlo', 'En cualquier impresora A4, a tamaño real o al 100 %, sin «ajustar a la página». Corta con guillotina o con cúter y regla por las dos marcas pequeñas del centro.'),
+   ('Cuántos folios necesito', 'La mitad que mesas. Para veinte mesas, diez folios. Si además cambias el menú a diario, a final de mes se nota.'),
+  ],
+  faq=[('¿Qué mide una hoja A5?', '14,8 × 21 cm: justo la mitad de un folio A4.'),
+       ('¿Puedo imprimirlo en mi impresora normal?', 'Sí. Es un folio A4 apaisado. Solo hay que cortarlo después.'),
+       ('¿El formato A5 es gratis?', 'Es parte del menú del día de Carta Pro, que puedes probar 7 días gratis y sin tarjeta.'),
+       ('¿Sirve también para la carta?', 'De momento el A5 dos por folio es solo para el menú del día. Para la carta están el A4, el A4 slim y el cuadernillo.')]),
+ dict(slug='menu-del-dia-con-alergenos', cta=('Hacer mi menú del día', '/panel#menu=nuevo'), menu='Menú del día con alérgenos',
+  title='Menú del día con alérgenos: cómo indicarlos sin recargar la hoja',
+  desc='Cómo poner los alérgenos en el menú del día de tu restaurante: un icono discreto junto a cada plato y la leyenda al pie. Los marcas una vez por plato.',
+  h1='El menú del día, con sus alérgenos. Sin que parezca un prospecto.',
+  golpe='El menú cambia cada día. La obligación de informar, no.',
+  intro='Con la carta es fácil: los alérgenos se revisan una vez y ahí se quedan. Con el menú del día cambian los platos cada mañana y la información tiene que cambiar con ellos. Lo normal es que no se ponga nada y se confíe en que el camarero lo sepa. Aquí van en la propia hoja.',
+  estilos=['sobremesa','pizarra','azulejo','gaceta'],
+  hero=('menu-azulejo', 'Menú del día con iconos de alérgenos junto a cada plato y la leyenda al pie', 'Menú del día de ejemplo, con alérgenos'),
+  extra=MENUS,
+  bloques=[
+   ('Un icono junto al plato', 'Marcas qué lleva cada plato y sale a su lado con un pictograma fino, del color del texto. O con un número, si lo prefieres. No añade líneas ni desordena el menú.'),
+   ('La leyenda se monta sola', 'Al pie aparece solo la leyenda de los alérgenos que usa el menú de hoy, centrada, con el nombre de cada uno.'),
+   ('Los marcas tú', 'Carta Rápida no deduce ingredientes ni alérgenos. Qué lleva cada plato lo sabes tú, por tus recetas y las fichas de tus proveedores.'),
+  ],
+  secciones=[
+   ('¿Es obligatorio ponerlos en el menú del día?', 'Tienes que poder informar de los catorce alérgenos de declaración obligatoria (Reglamento UE 1169/2011; en España, Real Decreto 126/2015) también en los platos del menú. La norma española permite hacerlo de palabra si hay un cartel que indique dónde pedir la información y un registro escrito o electrónico disponible. Ponerlos en la hoja evita preguntas en hora punta. Si tienes dudas sobre tu caso, consulta a la autoridad sanitaria de tu comunidad autónoma.'),
+   ('Y la tabla, para sala', 'Con las mismas marcas se genera la tabla de alérgenos en PDF: los platos del menú en filas y los catorce alérgenos en columnas, con fecha.'),
+  ],
+  faq=[('¿La herramienta me dice qué alérgenos lleva cada plato?', 'No. No los calcula ni los adivina: los marcas tú.'),
+       ('¿Tengo que marcarlos cada día?', 'Los marcas en los platos del menú de hoy. Al cambiar un plato por otro, revisa sus alérgenos antes de imprimir.'),
+       ('¿Puedo no mostrarlos en la hoja y tener solo la tabla?', 'Sí. Puedes elegir iconos, números o no mostrarlos en el menú y descargar solo la tabla.'),
+       ('¿Es gratis?', 'El menú del día y los alérgenos son de Carta Pro, que puedes probar 7 días gratis y sin tarjeta.')]),
  dict(slug='alternativa-a-canva-para-cartas', menu='Alternativa a Canva',
   title='Alternativa a Canva para cartas de restaurante: sin teclear platos',
   desc='Canva es una herramienta de diseño. Esto es otra cosa: haces una foto a tu carta y la recibes maquetada en PDF A4. Sin plantillas que rellenar.',
@@ -532,10 +616,11 @@ def pagina(p):
         {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]},
     ]
     primero = p['estilos'][0]
+    cta = p.get('cta', ('Sube una foto de tu carta', '/#herramienta'))
     hero = p.get('hero')
     hero_base = hero[0] if hero else 'portada-' + primero
     hero_w, hero_h = (hero[3], hero[4]) if hero and len(hero) > 3 else (900, 1274)
-    hero_estilo = ' style="width:min(%d%%,%dpx)"' % (round(78 * hero_w / 900), round(420 * hero_w / 900)) if hero_w != 900 else ''
+    hero_estilo = ' style="width:min(100%,540px)"' if hero_w > 900 else ' style="width:min(%d%%,%dpx)"' % (round(78 * hero_w / 900), round(420 * hero_w / 900)) if hero_w != 900 else ''
     otras = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], e(o['menu'])) for o in PAGINAS if o['slug'] != p['slug'])
     figs = ''.join('<figure>%s<figcaption>%s%s</figcaption></figure>' % (
         img(k, '(max-width: 860px) 44vw, 250px'), e(NOMBRE[k]), '<span>Pro</span>' if k in PRO else '') for k in p['estilos'])
@@ -577,8 +662,8 @@ def pagina(p):
     <h1>{e(p['h1'])}</h1>
     <p class="golpe">{e(p['golpe'])}</p>
     <p class="lead">{e(p['intro'])}</p>
-    <div class="ctas"><a class="btn" href="/#herramienta">Sube una foto de tu carta</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
-    <ul class="trust"><li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li></ul>
+    <div class="ctas"><a class="btn" href="{cta[1]}">{cta[0]}</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
+    <ul class="trust">{'<li>7 días gratis</li><li>Sin tarjeta</li><li>Sin subir fotos</li>' if p.get('cta') else '<li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li>'}</ul>
   </div>
   <figure class="hoja"{hero_estilo}>{('<img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp %dw, /ejemplo/%s.webp %dw" sizes="(max-width: 860px) 78vw, 420px" width="%d" height="%d" alt="%s" fetchpriority="high">' % (hero_base, hero_base, round(hero_w * 640 / 900), hero_base, hero_w, hero_w, hero_h, e(hero[1]))) if hero else img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>{e(hero[2]) if hero else 'Carta de ejemplo en estilo ' + e(NOMBRE[primero])}</figcaption></figure>
 </div>
@@ -597,7 +682,7 @@ def pagina(p):
   <h2>Preguntas frecuentes</h2>
   {''.join('<details><summary>%s</summary><p>%s</p></details>' % (e(q), e(a)) for q, a in faq)}
 </div></section>
-<section class="fin"><div class="w"><h2>Tu carta, hoy.</h2><a class="btn" href="/#herramienta">Sube una foto de tu carta</a></div></section>
+<section class="fin"><div class="w"><h2>Tu carta, hoy.</h2><a class="btn" href="{cta[1]}">{cta[0]}</a></div></section>
 <section><div class="w"><h2 style="font-size:clamp(22px,2.4vw,30px)">Más cartas por tipo de local</h2><ul class="otras">{otras}</ul></div></section>
 </main>
 <footer class="w"><span>Carta Rápida es de <a href="https://kartia.es" style="text-decoration:underline">Kartia</a>, portamenús hechos a mano en España.</span>
