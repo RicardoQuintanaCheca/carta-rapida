@@ -8,6 +8,33 @@ HOY = datetime.date.today().isoformat()
 NOMBRE = {'riviera':'Riviera','sobremesa':'Sobremesa','serigrafia':'Serigrafía','gaceta':'Gaceta','cartel':'Cartel','bloque':'Bloque','marinero':'Marinero','brunch':'Brunch','vermut':'Vermut','pizarra':'Pizarra','brasserie':'Brasserie','sumi':'Sumi','editorial':'Editorial','azulejo':'Azulejo','trattoria':'Trattoria','ticket':'Ticket','deco':'Déco','mantel':'Mantel','barra':'Barra','autor':'Autor'}
 PRO = {'riviera','sumi','cartel','serigrafia','azulejo','marinero','brunch','vermut'}
 
+AL = json.loads((pathlib.Path(__file__).parent / 'alergenos.json').read_text(encoding='utf-8'))
+AL_QUE = {1:'Trigo, centeno, cebada, avena, espelta, kamut y sus variedades híbridas, y lo que se elabora con ellos.',
+ 2:'Gambas, langostinos, cigalas, cangrejos, bogavante y los productos hechos con ellos.',
+ 3:'Huevos y los productos a base de huevo.',
+ 4:'Pescado y los productos a base de pescado.',
+ 5:'Cacahuetes y los productos a base de cacahuetes.',
+ 6:'Soja y los productos a base de soja.',
+ 7:'Leche y sus derivados, incluida la lactosa.',
+ 8:'Almendras, avellanas, nueces, anacardos, pacanas, nueces de Brasil, pistachos y nueces de macadamia.',
+ 9:'Apio y los productos derivados.',
+ 10:'Mostaza y los productos derivados.',
+ 11:'Granos de sésamo y los productos a base de sésamo.',
+ 12:'Dióxido de azufre y sulfitos en concentraciones superiores a 10 mg/kg o 10 mg/litro.',
+ 13:'Altramuces y los productos a base de altramuces.',
+ 14:'Mejillones, almejas, calamar, sepia, pulpo, caracoles y los productos hechos con ellos.'}
+def fig_al(base, alt, pie, ancho='(max-width: 860px) 78vw, 340px'):
+    return ('<figure><img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp 640w, /ejemplo/%s.webp 900w" sizes="%s" width="900" height="1274" alt="%s" loading="lazy" decoding="async"><figcaption>%s</figcaption></figure>'
+            % (base, base, base, ancho, html.escape(alt, quote=True), html.escape(pie)))
+TRES_FORMAS = ('<section><div class="w"><h2>Tres formas de enseñarlos. Tú eliges.</h2><p class="lead" style="margin-top:0">La misma carta de ejemplo, con los alérgenos que ha marcado el restaurante.</p><div class="tres">'
+  + fig_al('alergenos-iconos', 'Carta de restaurante con iconos de alérgenos junto a cada plato y leyenda al pie', 'Con iconos, del color de tu carta')
+  + fig_al('alergenos-numeros', 'Carta de restaurante con los alérgenos indicados con números y leyenda numerada al pie', 'Con números y leyenda al pie')
+  + fig_al('alergenos-tabla', 'Tabla de alérgenos de un restaurante con los platos en filas y los 14 alérgenos en columnas', 'O solo en la tabla, para sala')
+  + '</div></div></section>')
+LOS_14 = ('<section><div class="w"><h2>Los catorce, uno a uno</h2><p class="lead" style="margin-top:0">En el orden del anexo II del Reglamento (UE) 1169/2011. Los iconos son los que usa Carta Rápida en la carta y en la tabla.</p><ol class="al14">'
+  + ''.join('<li>%s<div><b>%s</b><span>%s</span></div></li>' % (a['svg'], html.escape(a['es']), html.escape(AL_QUE[a['id']])) for a in AL)
+  + '</ol><p class="nota">El anexo recoge algunas excepciones para derivados muy procesados. Ante la duda, manda el texto oficial y la ficha técnica de tu proveedor.</p></div></section>')
+
 COMUN_FAQ = [
   ('¿Cuánto cuesta?', 'Dos cartas al mes son gratis, con 12 estilos, y el PDF te llega al email. Carta Pro cuesta 12,90 € al mes y añade los 8 estilos restantes, guardar tus cartas, cambiar precios sin empezar de cero, tu logotipo y la traducción. Si solo la necesitas una vez, hay un pase de 7 días por 15 €, sin suscripción.'),
   ('¿En qué formato me llega?', 'En PDF tamaño A4, listo para imprimir en tu impresora o en una copistería.'),
@@ -161,6 +188,8 @@ PAGINAS = [
   golpe='Informar es obligatorio. Que quede feo, no.',
   intro='En la Unión Europea los establecimientos que sirven comida tienen que poder informar al cliente de los catorce alérgenos de declaración obligatoria (Reglamento UE 1169/2011; en España lo desarrolla el Real Decreto 126/2015). Muchos restaurantes lo resuelven indicándolos en la propia carta. El problema es que, mal puestos, convierten una carta limpia en una sopa de iconos.',
   estilos=['gaceta','sobremesa','brasserie','editorial'],
+  hero=('alergenos-iconos', 'Carta de restaurante con iconos de alérgenos junto a cada plato', 'Carta de ejemplo con los alérgenos marcados'),
+  extra=TRES_FORMAS,
   bloques=[
    ('Cómo se indican en la carta', 'Lo habitual es poner los alérgenos junto a cada plato, con su nombre o con un número o código que se explica al pie. Si tu carta ya los lleva así, aquí se mantienen tal cual: nombres como nombres, números como números.'),
    ('Lo que esta herramienta hace y lo que no', 'Recoge los alérgenos que ya figuran en tu carta y los coloca ordenados bajo cada plato. Con Carta Pro, además, los marcas tú plato a plato y salen en la carta con un pictograma discreto o con un número, y con su leyenda al pie. No los calcula ni los adivina: qué alérgenos lleva cada plato lo sabes tú, por tus recetas y tus proveedores.'),
@@ -174,6 +203,52 @@ PAGINAS = [
   faq=[('¿La herramienta añade los alérgenos por mí?', 'No. Reproduce los que ya aparecen en tu carta y, con Carta Pro, pinta los que tú marques. La información sobre alérgenos es responsabilidad del establecimiento.'),
        ('¿Los iconos de alérgenos y la tabla son gratis?', 'Son de Carta Pro, que puedes probar 7 días gratis y sin tarjeta. En la versión gratis se mantienen los alérgenos tal como vienen escritos en tu carta.'),
        ('¿Mi carta usa números para los alérgenos, se respetan?', 'Sí. Si usas números o códigos, se mantienen como números.')]),
+
+ dict(slug='tabla-de-alergenos-restaurante', menu='Tabla de alérgenos',
+  title='Tabla de alérgenos para restaurante en PDF, hecha con tus platos',
+  desc='Haz la tabla de alérgenos de tu restaurante en PDF A4: tus platos en filas y los 14 alérgenos en columnas, con fecha y firma. Sale de tu propia carta, sin rellenar una plantilla a mano.',
+  h1='La tabla de alérgenos, con tus platos. No con los de una plantilla.',
+  golpe='Marcas. Descargas. A la carpeta de sala.',
+  intro='La tabla de alérgenos es ese documento que se guarda en sala y se enseña cuando un cliente pregunta o cuando llega una inspección: todos los platos en filas, los catorce alérgenos en columnas y un punto donde toca. Lo habitual es bajarse una plantilla en blanco y copiar la carta a mano. Aquí sale de la carta que ya tienes.',
+  estilos=['sobremesa','gaceta','brasserie','editorial'],
+  hero=('alergenos-tabla', 'Tabla de alérgenos de restaurante en A4 con platos en filas y los 14 alérgenos en columnas', 'Tabla de ejemplo, generada desde la carta'),
+  extra=TRES_FORMAS,
+  bloques=[
+   ('De tu carta a la tabla', 'Subes una foto de tu carta y la herramienta la lee: secciones, platos y precios. En tu panel marcas qué alérgenos lleva cada plato, con un clic por casilla. La tabla se monta sola con esos mismos platos, en el mismo orden.'),
+   ('Qué lleva el PDF', 'Un A4 sobrio, pensado para imprimir en blanco y negro: tu logotipo o el nombre del local, la fecha de actualización, los catorce alérgenos con su nombre y su icono, y al pie un espacio para «revisada por», fecha y firma.'),
+   ('Lo que no hace', 'No calcula ni adivina alérgenos. Qué lleva cada plato lo sabes tú, por tus recetas y las fichas de tus proveedores. La herramienta lo ordena y lo deja presentable; la información es tuya.'),
+  ],
+  secciones=[
+   ('Sin revisar no es lo mismo que sin alérgenos', 'Una fila vacía puede significar dos cosas: que el plato no lleva ninguno o que nadie lo ha mirado todavía. En la tabla se distinguen. Los platos que marcas como revisados y limpios dicen «Sin alérgenos declarados»; los que faltan se quedan en blanco y la tabla avisa de que hay filas pendientes.'),
+   ('¿Es obligatorio tenerla?', 'La norma española permite informar de los alérgenos de palabra siempre que haya un cartel visible que diga dónde pedir la información y exista un registro escrito o electrónico a disposición del cliente y de la inspección. La tabla es la forma más directa de tener ese registro. Si tienes dudas sobre tu caso, consulta a la autoridad sanitaria de tu comunidad autónoma.'),
+   ('Cuándo hay que rehacerla', 'Cada vez que cambia un plato, una receta o un proveedor. Como sale de la carta guardada en tu panel, cambias la casilla y descargas el PDF nuevo, con la fecha del día.'),
+  ],
+  faq=[('¿Es una plantilla en blanco para rellenar?', 'No. La tabla se genera con los platos de tu carta y los alérgenos que tú marcas. No hay que copiar nada a mano.'),
+       ('¿La tabla de alérgenos es gratis?', 'Es de Carta Pro, que puedes probar 7 días gratis y sin tarjeta. Durante la prueba puedes marcar los alérgenos y descargar la tabla.'),
+       ('¿En qué formato se descarga?', 'En PDF, tamaño A4, lista para imprimir. No es un Excel ni un Word.'),
+       ('¿Puedo poner también los alérgenos en la carta?', 'Sí. Con lo mismo que marcas para la tabla, la carta puede enseñarlos con iconos o con números y su leyenda al pie. O no enseñarlos y tener solo la tabla.')]),
+ dict(slug='los-14-alergenos', menu='Los 14 alérgenos',
+  title='Los 14 alérgenos de declaración obligatoria: lista e iconos',
+  desc='La lista de los 14 alérgenos que un restaurante tiene que poder declarar, uno a uno, con su icono y lo que incluye cada grupo. Y cómo ponerlos en la carta sin llenarla de símbolos.',
+  h1='Los 14 alérgenos. Uno a uno y sin letra pequeña.',
+  golpe='Son catorce grupos. No hace falta aprenderse un prospecto.',
+  intro='El Reglamento (UE) 1169/2011 recoge en su anexo II catorce sustancias o grupos que causan alergias o intolerancias. Un restaurante tiene que poder decir cuáles lleva cada plato. Esta es la lista, con lo que entra en cada grupo, y debajo cómo llevarla a tu carta.',
+  estilos=['gaceta','azulejo','sobremesa','brasserie'],
+  hero=('alergenos-iconos-gaceta', 'Carta de restaurante con los iconos de alérgenos junto a cada plato', 'Carta de ejemplo con los alérgenos marcados'),
+  extra=LOS_14 + TRES_FORMAS,
+  bloques=[
+   ('Catorce grupos, no catorce ingredientes', 'Cada alérgeno es una familia. «Frutos de cáscara» son ocho frutos distintos; «cereales con gluten» incluye trigo, cebada, centeno y avena. Por eso conviene mirar la ficha técnica de cada producto y no fiarse del nombre del plato.'),
+   ('Cómo llevarlos a la carta', 'Con Carta Pro marcas los de cada plato en una rejilla y salen en la carta con un icono discreto, del color del texto, o con un número. La leyenda al pie se monta sola, solo con los que usa tu carta.'),
+   ('Y la tabla para sala', 'Con las mismas marcas se genera la tabla en PDF: platos en filas, los catorce en columnas. Es el papel que se enseña cuando preguntan.'),
+  ],
+  secciones=[
+   ('¿Existen unos iconos oficiales?', 'No. El reglamento obliga a informar de las sustancias; no fija un dibujo concreto. Los iconos que ves en cartas y carteles son de quien los ha diseñado. Los de esta página son los que usa Carta Rápida, y por eso van siempre acompañados de su leyenda con el nombre.'),
+   ('¿Y las trazas?', 'El anexo habla de alérgenos presentes como ingrediente. La mención a posibles trazas por contaminación cruzada es otra cosa y depende de cómo trabaje tu cocina. Si la necesitas, puedes escribirla en la nota al pie de la carta.'),
+  ],
+  faq=[('¿Cuáles son los 14 alérgenos?', 'Cereales con gluten, crustáceos, huevos, pescado, cacahuetes, soja, leche, frutos de cáscara, apio, mostaza, sésamo, dióxido de azufre y sulfitos, altramuces y moluscos.'),
+       ('¿Puedo descargar los iconos sueltos?', 'No se descargan por separado. Aparecen en tu carta y en tu tabla de alérgenos cuando marcas los de cada plato.'),
+       ('¿La herramienta me dice qué alérgenos lleva cada plato?', 'No. No los calcula ni los adivina: los marcas tú, que conoces tus recetas y a tus proveedores.'),
+       ('¿Marcar alérgenos es gratis?', 'Es de Carta Pro, que puedes probar 7 días gratis y sin tarjeta.')]),
  dict(slug='traducir-carta-restaurante', menu='Traducir la carta',
   title='Traducir la carta de tu restaurante al inglés, francés o alemán',
   desc='Traduce la carta de tu restaurante al inglés, francés o alemán y recíbela maquetada en PDF A4. Platos, descripciones y secciones, en un minuto.',
@@ -330,12 +405,20 @@ h2{font-size:clamp(28px,3.6vw,46px);line-height:1.02;letter-spacing:-.035em;font
 .faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";color:var(--accent);font-weight:500}.faq details[open] summary::after{content:"–"}
 .faq p{margin:10px 0 0;color:#3a3a3f;max-width:46em}
 .fin{background:var(--accent);color:var(--ink);text-align:center}.fin h2{font-size:clamp(34px,5vw,64px)}.fin .btn{background:var(--ink);margin-top:10px}
+.tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.6vw,36px);margin-top:28px}
+.tres figure{margin:0}.tres img{display:block;width:100%;height:auto;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 24px 44px -30px rgba(12,12,13,.45)}
+.tres figcaption{font-size:16px;font-weight:650;margin-top:12px}
+.al14{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,56px)}
+.al14 li{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-top:1px solid var(--line)}
+.al14 .al-i{width:40px;height:40px;flex:none;color:var(--ink)}
+.al14 b{display:block;font-size:20px;letter-spacing:-.02em;line-height:1.2}.al14 span{display:block;color:#3a3a3f;font-size:16px;margin-top:3px}
+.nota{color:var(--muted);font-size:15px;margin:22px 0 0;max-width:46em}
 .otras{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;padding:0;list-style:none}
 .otras a{display:block;padding:10px 16px;border-radius:99px;box-shadow:inset 0 0 0 1.5px var(--line);text-decoration:none;font-size:16px;font-weight:600}
 .otras a:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
 footer{padding-top:32px;padding-bottom:48px;color:var(--muted);font-size:15px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
 footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer a{text-decoration:none}footer a:hover{text-decoration:underline}
-@media (max-width:860px){body{font-size:17px}.hero{grid-template-columns:minmax(0,1fr)}.hoja{width:min(78%,340px)}.bloques,.pasos{grid-template-columns:minmax(0,1fr)}.estilos{grid-template-columns:repeat(2,minmax(0,1fr))}.btn{width:100%}.nav .btn{width:auto}}
+@media (max-width:860px){body{font-size:17px}.hero{grid-template-columns:minmax(0,1fr)}.hoja{width:min(78%,340px)}.bloques,.pasos,.al14{grid-template-columns:minmax(0,1fr)}.tres{grid-template-columns:minmax(0,1fr);max-width:340px}.estilos{grid-template-columns:repeat(2,minmax(0,1fr))}.btn{width:100%}.nav .btn{width:auto}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
 
@@ -357,6 +440,8 @@ def pagina(p):
         {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]},
     ]
     primero = p['estilos'][0]
+    hero = p.get('hero')
+    hero_base = hero[0] if hero else 'portada-' + primero
     otras = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], e(o['menu'])) for o in PAGINAS if o['slug'] != p['slug'])
     figs = ''.join('<figure>%s<figcaption>%s%s</figcaption></figure>' % (
         img(k, '(max-width: 860px) 44vw, 250px'), e(NOMBRE[k]), '<span>Pro</span>' if k in PRO else '') for k in p['estilos'])
@@ -369,7 +454,7 @@ def pagina(p):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" as="image" href="/ejemplo/portada-{primero}-640.webp" imagesrcset="/ejemplo/portada-{primero}-640.webp 640w, /ejemplo/portada-{primero}.webp 900w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
+<link rel="preload" as="image" href="/ejemplo/{hero_base}-640.webp" imagesrcset="/ejemplo/{hero_base}-640.webp 640w, /ejemplo/{hero_base}.webp 900w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
 <link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <title>{e(p['title'] + (' | Carta Rápida' if len(p['title']) <= 47 else ''))}</title>
 <meta name="description" content="{e(p['desc'])}">
@@ -401,10 +486,10 @@ def pagina(p):
     <div class="ctas"><a class="btn" href="/#herramienta">Sube una foto de tu carta</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
     <ul class="trust"><li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li></ul>
   </div>
-  <figure class="hoja">{img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>Carta de ejemplo en estilo {e(NOMBRE[primero])}</figcaption></figure>
+  <figure class="hoja">{('<img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp 640w, /ejemplo/%s.webp 900w" sizes="(max-width: 860px) 78vw, 420px" width="900" height="1274" alt="%s" fetchpriority="high">' % (hero_base, hero_base, hero_base, e(hero[1]))) if hero else img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>{e(hero[2]) if hero else 'Carta de ejemplo en estilo ' + e(NOMBRE[primero])}</figcaption></figure>
 </div>
 <section class="gris"><div class="w bloques">{''.join('<div><h2>%s</h2><p>%s</p></div>' % (e(t), e(x)) for t, x in p['bloques'])}</div></section>
-{prosa}<section id="estilos"><div class="w">
+{p.get('extra', '')}{prosa}<section id="estilos"><div class="w">
   <h2>{titulo_estilos}</h2>
   <p class="lead" style="margin-top:0">Los ves sobre una carta de ejemplo. Cuando subas la tuya, los pruebas con tus platos.</p>
   <div class="estilos">{figs}</div>

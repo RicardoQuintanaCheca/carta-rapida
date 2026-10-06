@@ -199,6 +199,22 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .hl{position:relative}
 
 /* ── Pro: cambia un precio ── */
+.alg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.alg-golpe{font-size:clamp(19px,1.7vw,23px);font-weight:700;letter-spacing:-.02em;line-height:1.25;margin:20px 0 0;max-width:24em}
+.alg p.t{color:#55555C;margin:14px 0 0;max-width:30em}
+.alg-pasos{list-style:none;counter-reset:a;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.alg-pasos li{counter-increment:a;display:flex;gap:14px;align-items:baseline;font-weight:500}
+.alg-pasos li::before{content:counter(a);flex:none;width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;translate:0 -1px}
+.alg-pasos b{font-weight:700}
+.alg-cta{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:30px}
+.alg-cta a.mas{font-weight:650;text-underline-offset:4px}
+.alg-vista{position:relative;padding:0 0 12% 0}
+.alg-vista img{display:block;width:74%;height:auto;border-radius:6px;background:#fff;box-shadow:0 0 0 1px var(--line),0 40px 70px -40px rgba(12,12,13,.45)}
+.alg-vista img.tabla{position:absolute;right:0;bottom:0;width:52%;box-shadow:0 0 0 1px var(--line),0 30px 60px -30px rgba(12,12,13,.5)}
+.alg-iconos{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:8px;margin-top:clamp(36px,5vw,64px);padding-top:clamp(24px,3vw,36px);border-top:1px solid var(--line)}
+.alg-iconos span{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:#55555C;text-align:center;line-height:1.2}
+.alg-iconos .al-i{width:34px;height:34px;color:var(--ink)}
+@media (max-width:900px){.alg{grid-template-columns:minmax(0,1fr)}.alg-vista{max-width:440px;margin:0 auto;width:100%}.alg-iconos{grid-template-columns:repeat(7,minmax(0,1fr));gap:18px 6px}.alg-iconos span{font-size:11px}.alg-iconos .al-i{width:28px;height:28px}}
 .pro{background:var(--soft);border-radius:clamp(24px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
 .pro-list{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;font-weight:500}
 .pro-list li{display:flex;gap:12px;align-items:flex-start}
@@ -511,6 +527,31 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
     </div>
   </section>
 
+  <section class="sec" id="alergenos" style="padding-top:0">
+    <div class="wrap">
+      <div class="alg">
+        <div>
+          <div class="eyebrow">Alérgenos · Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">Los alérgenos, en la carta. <span class="grey">Y la carta sigue pareciendo una carta.</span></h2>
+          <p class="alg-golpe">Informar es obligatorio. Que quede feo, no.</p>
+          <p class="t">Marcas qué lleva cada plato y salen junto a él con un icono fino, del color de tu carta. O con un número. La leyenda del pie se monta sola.</p>
+          <ol class="alg-pasos">
+            <li><span><b>Marcas.</b> Una rejilla: tus platos y los catorce alérgenos. Un clic por casilla.</span></li>
+            <li><span><b>Eliges cómo se ven.</b> Iconos, números, o solo en la tabla.</span></li>
+            <li><span><b>Descargas la tabla.</b> Un A4 con fecha y firma para la carpeta de sala.</span></li>
+          </ol>
+          <p class="t" style="font-size:15px">Los marcas tú. Carta Rápida no deduce ingredientes ni alérgenos.</p>
+          <div class="alg-cta"><a class="btn btn-accent" href="#prueba">Pruébalo 7 días gratis</a><a class="mas" href="/carta-con-alergenos/">Cómo funciona, con ejemplos</a></div>
+        </div>
+        <div class="alg-vista">
+          <img src="/ejemplo/alergenos-iconos-640.webp" srcset="/ejemplo/alergenos-iconos-640.webp 640w, /ejemplo/alergenos-iconos.webp 900w" sizes="(max-width: 900px) 70vw, 400px" width="900" height="1274" loading="lazy" decoding="async" alt="Carta de restaurante con iconos de alérgenos junto a cada plato y leyenda al pie">
+          <img class="tabla" src="/ejemplo/alergenos-tabla-640.webp" width="640" height="906" loading="lazy" decoding="async" alt="Tabla de alérgenos del restaurante en A4, con platos en filas y los 14 alérgenos en columnas">
+        </div>
+      </div>
+      <div class="alg-iconos" aria-label="Los 14 alérgenos de declaración obligatoria">{{alergenos-iconos}}</div>
+    </div>
+  </section>
+
   <section class="sec" id="precios" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
@@ -575,7 +616,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
       <a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a>
     </div>
     <nav class="foot-tipos" aria-label="Cartas por tipo de local"><b>Cartas por tipo de local</b><a href="/plantillas-carta-restaurante/">Plantillas de carta</a><a href="/carta-para-bar/">Bar</a><a href="/carta-para-cafeteria/">Cafetería</a><a href="/carta-para-pizzeria/">Pizzería</a><a href="/carta-para-marisqueria/">Marisquería</a><a href="/carta-para-hamburgueseria/">Hamburguesería</a><a href="/menu-del-dia/">Menú del día</a><a href="/menu-de-navidad-restaurante/">Menú de Navidad</a><a href="/carta-de-vinos/">Carta de vinos</a><a href="/carta-de-cocteles/">Cócteles</a></nav>
-    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
+    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
     <footer class="foot">
       <span>Carta Rápida es de <a href="https://kartia.es" style="text-decoration:underline">Kartia</a>, portamenús hechos a mano en España.</span>
       <nav aria-label="Legal"><a href="#legal">Aviso legal</a><a href="#privacidad">Privacidad</a><a href="#cookies">Cookies</a><a href="#condiciones">Condiciones</a></nav>

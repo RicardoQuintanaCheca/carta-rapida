@@ -92,6 +92,9 @@ extra = (AQUI / 'nueva.css').read_text()
 
 # Imágenes reales
 cuerpo = cuerpo.replace('{{img:antes}}', '/ejemplo/antes-640.webp')
+import json as _json
+_al = _json.loads((AQUI.parent / 'seo' / 'alergenos.json').read_text(encoding='utf-8'))
+cuerpo = cuerpo.replace('{{alergenos-iconos}}', ''.join('<span>%s%s</span>' % (a['svg'], 'Fr. de cáscara' if a['id'] == 8 else a['es']) for a in _al))
 # Estilos: la misma carta de ejemplo (Casa Pepe) compuesta con el motor real
 def _fig(m, visto=[0]):
     k = m.group(1); visto[0] += 1

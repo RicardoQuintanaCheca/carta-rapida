@@ -403,4 +403,4 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
 .foot-tipos a:hover{color:var(--ink);text-decoration:underline}
 
 /* Las secciones de abajo no se calculan hasta que se acercan a la pantalla */
-#estilos,#vender,#pro,#precios,#faq{content-visibility:auto;contain-intrinsic-size:auto 900px}
+#estilos,#vender,#pro,#alergenos,#precios,#faq{content-visibility:auto;contain-intrinsic-size:auto 900px}
