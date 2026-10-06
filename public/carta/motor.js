@@ -398,7 +398,7 @@
     const S = FORMATO === 'slim' ? 0.8 : FORMATO === 'a5x2' ? 0.7071 : 1;
     // en A5 se admite una letra algo menor (≈8,4 pt el plato): es una hoja que se lee de cerca
     const kMin = (FORMATO === 'a5x2' ? 0.76 : K_MIN) / S, kComodo = (FORMATO === 'a5x2' ? 0.78 : K_COMODO) / S;
-    pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}`;
+    pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}${M ? ' es-menu' : ''}`;
     destino.appendChild(pliego);
 
     // Crea una página vacía con N columnas y devuelve sus piezas

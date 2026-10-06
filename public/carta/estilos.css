@@ -537,6 +537,19 @@
 .menu-precio { margin-top: 5mm; padding-top: 5mm; border-top: .6pt solid var(--linea, #CFCFCF); }
 .pagina .menu-precio .pl-p { display: block; position: static; background: none; margin: 0; padding: 0; text-align: center; font-size: calc(27pt * min(var(--k), 1.25)); line-height: 1; }
 .pagina .menu-precio .pl-d { padding: 0; margin: 2.6mm auto 0; max-width: 120mm; text-align: center; font-size: calc(10pt * min(var(--k), 1.25)); line-height: 1.35; }
+/* Un menú del día va centrado, sea cual sea el estilo: títulos, platos y suplementos */
+.es-menu .pagina .cuerpo .sec { text-align: center; }
+.es-menu .pagina .cuerpo .sec-t { justify-content: center; text-align: center; margin-left: auto; margin-right: auto; }
+.es-menu .pagina .cuerpo .pl-l { display: block; position: static; padding-right: 0; padding-left: 0; }
+.es-menu .pagina .cuerpo .pl-l::after, .es-menu .pagina .cuerpo .pl-l::before, .es-menu .pagina .cuerpo .pl-g { display: none; }
+.es-menu .pagina .cuerpo .pl-n { display: inline; position: static; padding: 0; }
+.es-menu .pagina .cuerpo .pl-p { display: inline; position: static; float: none; margin-left: .7em; padding: 0; white-space: nowrap; }
+.es-menu .pagina .cuerpo .pl-d, .es-menu .pagina .cuerpo .pl-a { padding-left: 0; padding-right: 0; text-align: center; }
+.es-menu .pagina .cuerpo .pl-etq { margin-left: auto; margin-right: auto; }
+/* Títulos con filete a un lado: en el menú llevan filete a los dos, para que el título quede en el centro */
+.es-menu.est-mantel .cuerpo .sec-t::before { content: ''; flex: 1; border-top: .5pt solid var(--linea); transform: translateY(-.5pt); }
+.es-menu.est-trattoria .cuerpo .sec-t::before { content: ''; flex: 1; border-top: .8pt solid var(--acento); transform: translateY(-.28em); }
+.es-menu.est-ticket .cuerpo .sec-t::before { flex: 1; }
 /* Plato sin precio: sin puntos guía ni hueco reservado */
 .pagina .pl-sp .pl-g, .pagina .pl-sp .pl-l::after, .pagina .pl-sp .pl-l::before { display: none; }
 .pagina .pl-sp .pl-l { padding-right: 0; }
