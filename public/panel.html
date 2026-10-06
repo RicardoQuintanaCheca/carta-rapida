@@ -163,6 +163,9 @@
   .vista-marco.cargando .vista-cargando { display: block; }
   .descargar { width: 100%; margin-top: 12px; min-height: 54px; font-size: 16.5px; }
   .acc-pdf { display: flex; gap: 10px; }
+  .aviso-copia { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; background: #EEF3FB; border-radius: 14px; padding: 14px 18px; margin: 4px 0 18px; }
+  .aviso-copia b { display: block; font-size: 15.5px; letter-spacing: -.01em; }
+  .aviso-copia span { font-size: 14px; color: var(--gris); }
   .campo.dos { font-style: italic; background: #FBFAF7; font-size: 14.5px; }
   .seccion-cab .campo.dos { flex: 1 1 100%; order: 5; }
   .dos-fila { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 8px; }
@@ -674,6 +677,7 @@
         <button class="btn primario peq js-descargar" type="button">Descargar PDF</button>
       </div>
       <div id="bloqueo"></div>
+      <div id="avisoCopia"></div>
       <div class="pestanas"><div class="segmento"><button type="button" class="on" data-p="form">Editar</button><button type="button" data-p="vista">Ver carta</button></div></div>
       <div class="ed solo-form" id="ed">
         <div class="ed-form">
@@ -814,8 +818,9 @@
 
             <section class="bloque" data-t="traducir">
               <h2 class="bloque-tit">Traducir la carta</h2>
-              <p class="bloque-intro">Elige idioma y se crea una copia traducida, con vocabulario de hostelería. Esta carta se queda como está.</p>
+              <p class="bloque-intro">Elige idioma y se crea una <strong>copia aparte</strong> en ese idioma. Esta carta se queda en español, tal como está, y puedes volver a ella cuando quieras.</p>
               <div class="idiomas">${Object.entries(IDIOMAS).map(([k, n]) => `<button type="button" data-idioma="${k}">${n}</button>`).join('')}</div>
+              <div id="copiasHechas"></div>
               <p class="ayuda">No se traducen el nombre del restaurante ni los precios. Si un idioma no lo dominas, pide a alguien que lo revise antes de imprimir.</p>
             </section>
           </fieldset>
@@ -867,6 +872,7 @@
     document.getElementById('colorOtro').oninput = e => { ed.carta.color = e.target.value; pintarColor(); cambio(); };
     pintarColor();
     pintarBilingue();
+    pintarVersiones();
     pintarFormato();
     if (c.menu) {
       const m = c.menu;
@@ -1293,6 +1299,28 @@
 
 
   // ── Formato de la hoja ──
+  // ── Versiones de una carta: la original en español y sus copias traducidas ──
+  // En una copia traducida se enseña siempre cómo volver a la original; en la original, sus copias.
+  async function pintarVersiones() {
+    const yo = ed, c = ed.carta, caja = document.getElementById('avisoCopia');
+    const idioma = String(c.idioma || 'es').slice(0, 2), esCopia = idioma !== 'es';
+    if (caja && esCopia) caja.innerHTML = `<div class="aviso-copia"><div><b>Estás en la copia en ${esc(IDIOMAS[idioma] || idioma)}</b><span>Tu carta en español sigue intacta, guardada aparte.</span></div><a class="btn oscuro peq" href="#" id="volverOriginal">Volver a la carta en español</a></div>`;
+    let lista = [];
+    try { const d = await Cuenta.api('/cartas'); lista = d.cartas || []; } catch (e) {}
+    if (ed !== yo) return;
+    if (esCopia) {
+      const base = ed.titulo.replace(/\s*\([^()]*\)\s*$/, '').trim();
+      const ori = (c.copia_de && lista.find(x => x.id === c.copia_de.id)) || lista.find(x => x.id !== ed.id && (x.idioma || 'es').slice(0, 2) === 'es' && x.titulo.trim() === base);
+      const a = document.getElementById('volverOriginal');
+      if (a) { a.href = ori ? '#carta=' + ori.id : '#'; if (!ori) { a.textContent = 'Ver mis cartas'; a.onclick = e => { e.preventDefault(); location.hash = ''; }; } }
+      return;
+    }
+    // En la original: las copias que ya existen, para saltar a ellas sin pasar por la lista
+    const copias = lista.filter(x => x.id !== ed.id && (x.idioma || 'es').slice(0, 2) !== 'es' && x.titulo.trim().startsWith(ed.titulo.trim() + ' ('));
+    const hueco = document.getElementById('copiasHechas');
+    if (hueco) hueco.innerHTML = copias.length ? `<div class="formato-nota"><b>Copias que ya tienes</b>${copias.map(x => `<a href="#carta=${esc(x.id)}">${esc(IDIOMAS[(x.idioma || '').slice(0, 2)] || x.idioma)}</a>`).join(' · ')}</div>` : '';
+  }
+
   // ── Carta bilingüe ──
   // Lo que queda por traducir: secciones y platos con nombre que aún no tienen segundo idioma
   const biFaltan = () => ed.carta.secciones.reduce((n, s) => n + (s.nombre && s.nombre2 === undefined ? 1 : 0) + (s.platos || []).filter(p => String(p.nombre || '').trim() && p.nombre2 === undefined).length, 0);
@@ -1491,10 +1519,11 @@
     try {
       const nueva = await pedirAjuste(`Traduce TODA la carta al ${IDIOMAS[cod]} (código ${cod}) con terminología profesional de hostelería: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "${cod}".`);
       nueva.idioma = cod;
+      nueva.copia_de = { id: ed.id, titulo: ed.titulo }; // para poder volver a la original desde la copia
       const perdidos = heredarAlergenos(ed.carta, nueva, true);
       const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera });
       if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la copia.');
-      Cuenta.aviso(perdidos ? 'Copia traducida guardada. Revisa los alérgenos: la traducción ha cambiado platos de sitio.' : 'Copia traducida guardada.');
+      Cuenta.aviso(perdidos ? 'Copia traducida guardada. Tu carta en español sigue intacta. Revisa los alérgenos: la traducción ha cambiado platos de sitio.' : 'Copia traducida guardada. Tu carta en español sigue intacta.');
       location.hash = 'carta=' + d.id;
     } catch (e) { Cuenta.aviso(e.message); }
     finally { todos.forEach(x => { if (x.isConnected) { x.disabled = false; x.textContent = IDIOMAS[x.dataset.idioma]; } }); }
