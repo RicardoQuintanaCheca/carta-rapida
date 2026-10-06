@@ -35,9 +35,27 @@ LOS_14 = ('<section><div class="w"><h2>Los catorce, uno a uno</h2><p class="lead
   + ''.join('<li>%s<div><b>%s</b><span>%s</span></div></li>' % (a['svg'], html.escape(a['es']), html.escape(AL_QUE[a['id']])) for a in AL)
   + '</ol><p class="nota">El anexo recoge algunas excepciones para derivados muy procesados. Ante la duda, manda el texto oficial y la ficha técnica de tu proveedor.</p></div></section>')
 
+def fig_f(base, w, h, alt, medida, nombre, texto, pro, ancho):
+    ch = round(w * 640 / 900)
+    return ('<figure><img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp %dw, /ejemplo/%s.webp %dw" sizes="%s" width="%d" height="%d" alt="%s" loading="lazy" decoding="async"><figcaption><span>%s</span><b>%s%s</b>%s</figcaption></figure>'
+            % (base, base, ch, base, w, ancho, w, h, html.escape(alt, quote=True), html.escape(medida), html.escape(nombre), '<i>Pro</i>' if pro else '', html.escape(texto)))
+TRES_FORMATOS = ('<section><div class="w"><h2>La misma carta, en los tres formatos</h2><p class="lead" style="margin-top:0">Uno al lado del otro, para que veas la diferencia de tamaño. Es una carta de ejemplo.</p><div class="fmts">'
+  + fig_f('formato-a4', 900, 1273, 'Carta de restaurante en formato A4, a dos columnas', '210 × 297 mm', 'A4', 'El folio de siempre. Para funda, tablilla o portamenús.', False, '(max-width: 860px) 55vw, 290px')
+  + fig_f('formato-slim', 600, 1273, 'La misma carta en formato A4 slim, alta y estrecha, a una columna', '140 × 297 mm', 'A4 slim', 'Igual de alta, más estrecha. Se sujeta con una mano.', True, '(max-width: 860px) 36vw, 190px')
+  + fig_f('formato-cuadernillo-abierto', 1800, 1272, 'La misma carta en cuadernillo, abierta por las páginas interiores', 'Hojas A3 dobladas · A4 cerrado', 'Cuadernillo con elástico', 'Con portada y contraportada. Abierto ocupa un A3.', True, '(max-width: 860px) 92vw, 580px')
+  + '</div></div></section>')
+def fig_ancha(base, alt, pie):
+    return ('<figure class="ancha"><img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp 1280w, /ejemplo/%s.webp 1800w" sizes="(max-width: 860px) 92vw, 820px" width="1800" height="1272" alt="%s" loading="lazy" decoding="async"><figcaption>%s</figcaption></figure>'
+            % (base, base, base, html.escape(alt, quote=True), html.escape(pie)))
+MONTAJE = ('<section><div class="w"><h2>Cómo sale montado el PDF</h2><p class="lead" style="margin-top:0">No recibes las páginas sueltas una detrás de otra. Recibes las hojas A3 tal como hay que imprimirlas, con cada página en su sitio.</p>'
+  + fig_ancha('formato-cuadernillo-hoja', 'Hoja A3 del cuadernillo por la cara exterior: contraportada a la izquierda y portada a la derecha, con marcas de plegado en el centro', 'Cara exterior de la primera hoja: contraportada a la izquierda, portada a la derecha. Las dos rayitas del centro marcan por dónde se dobla.')
+  + fig_ancha('formato-cuadernillo-azulejo-abierto', 'Hoja A3 del cuadernillo por la cara interior, con dos páginas de carta', 'La otra cara de esa misma hoja: las páginas de dentro.')
+  + '<ol class="pasos" style="margin-top:36px"><li>Imprime en A3 a doble cara<span>Volteando por el borde corto. Es una opción de la impresora o de la copistería.</span></li><li>Dobla cada hoja por el centro<span>Si el papel es grueso, pide que te lo hiendan antes para que no se cuartee.</span></li><li>Mete unas hojas dentro de otras<span>En orden, y pasa el elástico por el lomo.</span></li></ol>'
+  + '</div></section>')
+
 COMUN_FAQ = [
-  ('¿Cuánto cuesta?', 'Dos cartas al mes son gratis, con 12 estilos, y el PDF te llega al email. Carta Pro cuesta 12,90 € al mes y añade los 8 estilos restantes, guardar tus cartas, cambiar precios sin empezar de cero, tu logotipo y la traducción. Si solo la necesitas una vez, hay un pase de 7 días por 15 €, sin suscripción.'),
-  ('¿En qué formato me llega?', 'En PDF tamaño A4, listo para imprimir en tu impresora o en una copistería.'),
+  ('¿Cuánto cuesta?', 'Dos cartas al mes son gratis, con 12 estilos, y el PDF te llega al email. Carta Pro cuesta 12,90 € al mes y añade los 8 estilos restantes, guardar tus cartas, cambiar precios sin empezar de cero, tu logotipo y la traducción. Tiene 7 días de prueba gratis, sin tarjeta, y te das de baja cuando quieras.'),
+  ('¿En qué formato me llega?', 'En PDF tamaño A4, listo para imprimir en tu impresora o en una copistería. Con Carta Pro puedes elegir también A4 slim (140 × 297 mm) o cuadernillo con elástico, en hojas A3 dobladas.'),
 ]
 
 PAGINAS = [
@@ -290,7 +308,7 @@ PAGINAS = [
    ('Carta corta, carta con aire', 'Con pocos cócteles la letra crece y la página respira, que es lo que pide una carta de coctelería.'),
   ],
   faq=[('¿Puedo cambiar la carta cada temporada?', 'Sí. Pegas la carta nueva y eliges el mismo estilo. Con Carta Pro, además, queda guardada y solo cambias lo que cambia.'),
-       ('¿Hay formatos más pequeños que A4?', 'El PDF sale en A4. Para una carta más pequeña puedes imprimirla reducida desde las opciones de tu impresora.')]),
+       ('¿Hay formatos más pequeños que A4?', 'No. Con Carta Pro hay un formato más estrecho, el A4 slim (140 × 297 mm), y un cuadernillo de hojas A3 dobladas. Para una carta más pequeña que esas puedes imprimirla reducida desde las opciones de tu impresora.')]),
  dict(slug='imprimir-carta-restaurante', menu='Imprimir la carta',
   title='Imprimir la carta de un restaurante: tamaño, papel y cómo presentarla',
   desc='Cómo imprimir la carta de tu restaurante para que aguante el servicio: tamaño A4, papel, impresora o copistería, y cómo presentarla en la mesa.',
@@ -299,7 +317,7 @@ PAGINAS = [
   intro='Puedes tener la carta mejor maquetada del barrio y estropearla al imprimirla en un folio fino que se arruga a la primera gota. Aquí va lo básico para que la carta que sale de la impresora esté a la altura de tu cocina.',
   estilos=['sobremesa','brasserie','riviera','gaceta'],
   bloques=[
-   ('Tamaño', 'El PDF sale en A4 (210 × 297 mm), que es el tamaño que admite cualquier impresora y cualquier copistería. Al imprimir, elige "tamaño real" o "100 %" para que no se recorten los márgenes.'),
+   ('Tamaño', 'El PDF sale en A4 (210 × 297 mm), que es el tamaño que admite cualquier impresora y cualquier copistería. Con Carta Pro puedes pedirlo también en A4 slim (140 × 297 mm) o en cuadernillo, montado en hojas A3. Al imprimir, elige "tamaño real" o "100 %" para que no se recorten los márgenes.'),
    ('Papel', 'Un papel de más gramaje que el folio normal aguanta mejor el uso y no transparenta. Si la carta va a ir sin funda, pide en la copistería un papel grueso o un acabado que resista manchas.'),
    ('Impresora o copistería', 'Las cartas van sobre fondo blanco, así que una impresora de oficina las saca bien. Para muchas copias o papel grueso, una copistería sale mejor y más barato por unidad.'),
   ],
@@ -307,8 +325,76 @@ PAGINAS = [
    ('Cómo presentarla en la mesa', 'Una hoja suelta dura poco: se mancha, se dobla y da sensación de provisional. Un portamenús la protege, permite cambiar la hoja cuando cambian los precios y hace que la carta se perciba como parte del local. Carta Rápida es de Kartia, taller español que fabrica portamenús a mano desde 2018; las cartas en A4 que salen de aquí están pensadas para ir dentro.'),
    ('Cada cuánto reimprimir', 'Cada vez que cambie un precio o un plato. Una carta con tachones o pegatinas transmite dejadez. Por eso conviene que rehacerla cueste medio minuto y no una tarde.'),
   ],
-  faq=[('¿La carta se puede imprimir a doble cara?', 'Sí. Si tu carta ocupa dos páginas, puedes imprimirlas a doble cara desde las opciones de tu impresora.'),
+  faq=[('¿La carta se puede imprimir a doble cara?', 'Sí. Si tu carta ocupa dos páginas, puedes imprimirlas a doble cara desde las opciones de tu impresora. Si lo que quieres es un cuadernillo que se dobla, Carta Pro te da el PDF con las páginas ya colocadas para eso.'),
        ('¿Hacéis vosotros la impresión?', 'No imprimimos cartas. Recibes el PDF y lo imprimes donde prefieras. Lo que sí fabrica Kartia son los portamenús.')]),
+ dict(slug='tamanos-carta-restaurante', menu='Tamaños de carta',
+  title='Tamaños de carta de restaurante: A4, A4 slim y cuadernillo',
+  desc='Qué tamaño de carta le conviene a tu restaurante: A4, A4 slim (140 × 297 mm) o cuadernillo en A3 doblado. Medidas, para qué sirve cada uno y cómo imprimirlos.',
+  h1='El tamaño de la carta se elige antes que el diseño.',
+  golpe='Un folio, una carta estrecha o un cuadernillo. Depende de cuánto tengas que contar.',
+  intro='Hay tres formatos que resuelven casi cualquier carta impresa: el A4 de toda la vida, el A4 slim, que es igual de alto pero más estrecho, y el cuadernillo, que son hojas A3 dobladas por la mitad. Aquí van las medidas de cada uno, cuándo conviene y cómo se imprime. Carta Rápida saca tu carta en los tres.',
+  estilos=['sobremesa','gaceta','brasserie','azulejo'],
+  hero=('formato-a4', 'Carta de restaurante de ejemplo en formato A4', 'Carta de ejemplo en A4'),
+  extra=TRES_FORMATOS,
+  bloques=[
+   ('A4 · 210 × 297 mm', 'El más usado. Cabe en cualquier impresora, en cualquier funda y en la mayoría de portamenús. Si tu carta entra en una o dos caras, no necesitas otra cosa. Es el formato de la versión gratis.'),
+   ('A4 slim · 140 × 297 mm', 'Igual de alto que un folio y un tercio más estrecho. Va a una sola columna, se lee de arriba abajo y se sujeta con una mano. Funciona muy bien para cartas cortas, vinos, cócteles y postres.'),
+   ('Cuadernillo · A3 doblado', 'Cada hoja A3 doblada por la mitad da cuatro páginas A4. Tiene portada y contraportada y se sujeta con un elástico en el lomo. Para cartas largas, o cuando quieres que la carta se abra como un libro.'),
+  ],
+  secciones=[
+   ('Cómo elegir', 'Mira cuánto ocupa tu carta. Si entra en una o dos caras de folio, A4. Si es una carta corta o una segunda carta (vinos, cócteles, postres), el slim queda más fino que un folio medio vacío. Si pasas de dos caras o quieres portada, cuadernillo.'),
+   ('Cambiar de formato no es rehacer la carta', 'Con Carta Pro eliges el formato en el editor y la carta se recoloca sola: columnas, tamaño de letra y saltos de página. Puedes tener la misma carta en A4 para la barra y en cuadernillo para la sala.'),
+   ('Cómo se imprime cada uno', 'El A4, en cualquier impresora. El slim sale en un PDF de 14 × 29,7 cm: en imprenta se pide a ese tamaño y en casa se imprime a tamaño real en un folio y se corta el sobrante. El cuadernillo sale montado en A3 apaisado y se imprime a doble cara volteando por el borde corto.'),
+  ],
+  faq=[('¿Cuál es el tamaño normal de una carta de restaurante?', 'El A4, 210 × 297 mm. Es el que admite cualquier impresora y para el que están hechos la mayoría de portamenús y fundas.'),
+       ('¿Qué mide una carta A4 slim?', '140 × 297 mm: la altura de un folio y 7 cm menos de ancho.'),
+       ('¿Los tres formatos son gratis?', 'El A4 sí. El A4 slim y el cuadernillo con elástico son de Carta Pro, que puedes probar 7 días gratis y sin tarjeta.'),
+       ('¿Hay formato A5?', 'De momento no. Los formatos son A4, A4 slim y cuadernillo en A3 doblado.')]),
+ dict(slug='carta-restaurante-a4-slim', menu='Carta A4 slim',
+  title='Carta de restaurante alargada: formato A4 slim, 140 × 297 mm',
+  desc='Carta de restaurante alta y estrecha en formato A4 slim (140 × 297 mm). Sube tu carta y recíbela maquetada a una columna, en un PDF a esa medida listo para imprenta.',
+  h1='La carta estrecha. La que se sujeta con una mano.',
+  golpe='14 centímetros de ancho. Lo que no cabe, sobraba.',
+  intro='El A4 slim mide 140 × 297 mm: la altura de un folio y siete centímetros menos de ancho. Es el formato de las cartas de vinos, de cócteles y de muchos restaurantes que quieren una carta corta y fina en la mesa. El problema es maquetarla: una carta pensada para folio no se estrecha sin más. Aquí se recompone sola.',
+  estilos=['sobremesa','brasserie','editorial','gaceta'],
+  hero=('formato-slim', 'Carta de restaurante de ejemplo en formato A4 slim, alta y estrecha', 'Carta de ejemplo en A4 slim', 600, 1273),
+  extra=TRES_FORMATOS,
+  bloques=[
+   ('Una columna, de arriba abajo', 'En 14 cm dos columnas no se leen. La carta pasa a una sola: sección, platos y precios en vertical. Si no entra en una cara, sigue en la siguiente.'),
+   ('El PDF sale a medida', 'No es un A4 con márgenes anchos. El PDF mide 14 × 29,7 cm exactos, que es lo que te va a pedir la imprenta.'),
+   ('Mismo estilo, mismos platos', 'Eliges el formato en el editor de Carta Pro y la carta que ya tienes se recoloca. No tecleas nada otra vez, y puedes volver al A4 cuando quieras.'),
+  ],
+  secciones=[
+   ('Cómo imprimirla', 'En imprenta o copistería, pídela a 14 × 29,7 cm. En una impresora de casa, imprime «a tamaño real» sobre un folio y corta el sobrante con cúter y regla. De un A4 sale una carta; de un A3, tres.'),
+   ('Para qué carta funciona', 'Cartas cortas, de vinos, de cócteles, de postres o de menú degustación. Si tu carta tiene muchas secciones y platos con descripción larga, en slim se va a varias páginas: ahí compensa un A4 o un cuadernillo.'),
+  ],
+  faq=[('¿Qué medidas tiene el A4 slim?', '140 × 297 mm. La misma altura que un A4 y dos tercios de su ancho.'),
+       ('¿Puedo imprimirla en mi impresora?', 'Sí, a tamaño real sobre un folio A4, y después cortas el sobrante. En imprenta te la entregan ya cortada.'),
+       ('¿El A4 slim es gratis?', 'Es de Carta Pro, que puedes probar 7 días gratis y sin tarjeta. La versión gratis sale en A4.')]),
+ dict(slug='carta-restaurante-cuadernillo', menu='Carta en cuadernillo',
+  title='Carta de restaurante en cuadernillo: A3 doblado, lista para imprimir',
+  desc='Haz la carta de tu restaurante en cuadernillo con elástico: hojas A3 dobladas, con portada, contraportada y las páginas ya ordenadas en el PDF para imprimir a doble cara.',
+  h1='La carta en cuadernillo, con las páginas en su sitio.',
+  golpe='Imprimes, doblas y pasas el elástico. El orden ya viene hecho.',
+  intro='Un cuadernillo son hojas A3 dobladas por la mitad y metidas unas dentro de otras, sujetas con un elástico en el lomo. Queda como un libro pequeño, con su portada. Lo difícil no es doblar: es que en cada hoja van páginas que no son seguidas, y si las colocas mal, la carta sale desordenada. Aquí el PDF ya sale montado.',
+  estilos=['azulejo','sobremesa','gaceta','brasserie'],
+  hero=('formato-cuadernillo-azulejo', 'Portada de una carta de restaurante en cuadernillo', 'Portada de un cuadernillo de ejemplo'),
+  extra=MONTAJE + TRES_FORMATOS,
+  bloques=[
+   ('Portada y contraportada', 'La primera página es la portada, con el nombre del local. La última, la contraportada. La carta empieza al abrir.'),
+   ('Páginas de cuatro en cuatro', 'Cada hoja A3 son cuatro páginas. Si tu carta no llena la última hoja, las páginas en blanco se quedan en el interior de las tapas, no en mitad de la carta.'),
+   ('El orden, resuelto', 'En una carta de ocho páginas, la primera hoja lleva por fuera la contraportada y la portada, y por dentro las páginas 2 y 7. Tú no tienes que saberlo: el PDF sale así.'),
+  ],
+  secciones=[
+   ('Cuántas hojas necesito', 'Una hoja A3 da para portada, contraportada y dos páginas de carta. Dos hojas, seis páginas de carta. Tres hojas, diez. El editor te dice cuántas hojas ocupa la tuya antes de descargar.'),
+   ('Por qué con elástico y no grapado', 'Porque los precios cambian. Con elástico sacas la hoja que ha cambiado, imprimes la nueva y la vuelves a meter. Grapado, tiras el cuadernillo entero.'),
+   ('Papel', 'Para las hojas de dentro vale un papel algo más grueso que el folio normal. Si la cubierta va en cartulina, pide que te la hiendan: el hendido es la marca que se hace antes de doblar para que el papel no se cuartee por el lomo.'),
+  ],
+  faq=[('¿Tengo que ordenar yo las páginas?', 'No. El PDF sale en hojas A3 apaisadas con cada página ya colocada para que, al doblar, queden seguidas.'),
+       ('¿Cómo se imprime a doble cara?', 'En A3, a doble cara y volteando por el borde corto. Antes de imprimir todas las copias, haz una de prueba y dóblala.'),
+       ('¿No tengo impresora A3?', 'Lleva el PDF a una copistería: es un trabajo habitual. Diles A3, doble cara, volteo por el borde corto.'),
+       ('¿Cuántas páginas puede tener?', 'Hasta 14 páginas de carta más portada y contraportada, que son cuatro hojas A3.'),
+       ('¿El cuadernillo es gratis?', 'Es de Carta Pro, que puedes probar 7 días gratis y sin tarjeta.')]),
  dict(slug='como-hacer-la-carta-de-un-restaurante', menu='Cómo hacer la carta',
   title='Cómo hacer la carta de un restaurante: guía práctica paso a paso',
   desc='Guía práctica para hacer la carta de tu restaurante: cuántos platos, cómo ordenarlos, cómo poner los precios y cómo dejarla lista para imprimir.',
@@ -347,7 +433,7 @@ PAGINAS = [
    ('Nochebuena, Nochevieja y Reyes', 'Sirve igual para el menú de una noche concreta: pones la fecha en el subtítulo, los platos en orden de servicio y el precio. Si incluye cotillón o uvas, va en la nota del pie.'),
   ],
   faq=[('¿Puedo enviar el menú por WhatsApp o por correo?', 'Sí. Recibes un PDF en A4 que puedes reenviar a tus clientes o imprimir.'),
-       ('¿Puedo hacer varios menús de Navidad?', 'La versión gratis da para dos cartas al mes. Si vas a preparar más, o quieres retocarlos según te pidan, Carta Pro los guarda y te deja cambiarlos sin empezar de cero; también hay un pase de 7 días por 15 €.')]),
+       ('¿Puedo hacer varios menús de Navidad?', 'La versión gratis da para dos cartas al mes. Si vas a preparar más, o quieres retocarlos según te pidan, Carta Pro los guarda y te deja cambiarlos sin empezar de cero, y puedes probarlo 7 días gratis.')]),
  dict(slug='diseno-carta-restaurante', menu='Diseño de carta',
   title='Diseño de carta de restaurante sin diseñador: 20 estilos en 30 segundos',
   desc='Diseño de carta de restaurante con tipografía y retícula de imprenta, sin contratar a nadie: subes tu carta, eliges entre 20 estilos y la recibes en PDF A4.',
@@ -412,13 +498,19 @@ h2{font-size:clamp(28px,3.6vw,46px);line-height:1.02;letter-spacing:-.035em;font
 .al14 li{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-top:1px solid var(--line)}
 .al14 .al-i{width:40px;height:40px;flex:none;color:var(--ink)}
 .al14 b{display:block;font-size:20px;letter-spacing:-.02em;line-height:1.2}.al14 span{display:block;color:#3a3a3f;font-size:16px;margin-top:3px}
+.fmts{display:grid;grid-template-columns:3fr 2fr 6fr;gap:clamp(14px,2.6vw,40px);align-items:start;margin-top:28px}
+.fmts figure,.ancha{margin:0}.fmts img,.ancha img{display:block;width:100%;height:auto;border-radius:4px;background:#fff;box-shadow:0 0 0 1px var(--line),0 24px 44px -30px rgba(12,12,13,.45)}
+.fmts figcaption{margin-top:14px;font-size:15px;color:#3a3a3f;line-height:1.4}.fmts figcaption b{display:block;color:var(--ink);font-size:18px;font-weight:700;letter-spacing:-.02em}
+.fmts figcaption span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.fmts figcaption i{font-style:normal;font-size:12px;font-weight:700;color:var(--accent-ink);border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+.ancha{max-width:820px;margin-top:28px}.ancha figcaption{font-size:15px;color:var(--muted);margin-top:12px}
 .nota{color:var(--muted);font-size:15px;margin:22px 0 0;max-width:46em}
 .otras{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;padding:0;list-style:none}
 .otras a{display:block;padding:10px 16px;border-radius:99px;box-shadow:inset 0 0 0 1.5px var(--line);text-decoration:none;font-size:16px;font-weight:600}
 .otras a:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
 footer{padding-top:32px;padding-bottom:48px;color:var(--muted);font-size:15px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
 footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}footer a{text-decoration:none}footer a:hover{text-decoration:underline}
-@media (max-width:860px){body{font-size:17px}.hero{grid-template-columns:minmax(0,1fr)}.hoja{width:min(78%,340px)}.bloques,.pasos,.al14{grid-template-columns:minmax(0,1fr)}.tres{grid-template-columns:minmax(0,1fr);max-width:340px}.estilos{grid-template-columns:repeat(2,minmax(0,1fr))}.btn{width:100%}.nav .btn{width:auto}}
+@media (max-width:860px){body{font-size:17px}.hero{grid-template-columns:minmax(0,1fr)}.hoja{width:min(78%,340px)}.bloques,.pasos,.al14{grid-template-columns:minmax(0,1fr)}.tres{grid-template-columns:minmax(0,1fr);max-width:340px}.fmts{grid-template-columns:3fr 2fr;align-items:start}.fmts figure:last-child{grid-column:1/-1}.estilos{grid-template-columns:repeat(2,minmax(0,1fr))}.btn{width:100%}.nav .btn{width:auto}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
 
@@ -442,6 +534,8 @@ def pagina(p):
     primero = p['estilos'][0]
     hero = p.get('hero')
     hero_base = hero[0] if hero else 'portada-' + primero
+    hero_w, hero_h = (hero[3], hero[4]) if hero and len(hero) > 3 else (900, 1274)
+    hero_estilo = ' style="width:min(%d%%,%dpx)"' % (round(78 * hero_w / 900), round(420 * hero_w / 900)) if hero_w != 900 else ''
     otras = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], e(o['menu'])) for o in PAGINAS if o['slug'] != p['slug'])
     figs = ''.join('<figure>%s<figcaption>%s%s</figcaption></figure>' % (
         img(k, '(max-width: 860px) 44vw, 250px'), e(NOMBRE[k]), '<span>Pro</span>' if k in PRO else '') for k in p['estilos'])
@@ -454,7 +548,7 @@ def pagina(p):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" as="image" href="/ejemplo/{hero_base}-640.webp" imagesrcset="/ejemplo/{hero_base}-640.webp 640w, /ejemplo/{hero_base}.webp 900w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
+<link rel="preload" as="image" href="/ejemplo/{hero_base}-640.webp" imagesrcset="/ejemplo/{hero_base}-640.webp {round(hero_w * 640 / 900)}w, /ejemplo/{hero_base}.webp {hero_w}w" imagesizes="(max-width: 860px) 78vw, 420px" fetchpriority="high">
 <link rel="preload" href="/fuentes/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <title>{e(p['title'] + (' | Carta Rápida' if len(p['title']) <= 47 else ''))}</title>
 <meta name="description" content="{e(p['desc'])}">
@@ -486,7 +580,7 @@ def pagina(p):
     <div class="ctas"><a class="btn" href="/#herramienta">Sube una foto de tu carta</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
     <ul class="trust"><li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li></ul>
   </div>
-  <figure class="hoja">{('<img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp 640w, /ejemplo/%s.webp 900w" sizes="(max-width: 860px) 78vw, 420px" width="900" height="1274" alt="%s" fetchpriority="high">' % (hero_base, hero_base, hero_base, e(hero[1]))) if hero else img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>{e(hero[2]) if hero else 'Carta de ejemplo en estilo ' + e(NOMBRE[primero])}</figcaption></figure>
+  <figure class="hoja"{hero_estilo}>{('<img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp %dw, /ejemplo/%s.webp %dw" sizes="(max-width: 860px) 78vw, 420px" width="%d" height="%d" alt="%s" fetchpriority="high">' % (hero_base, hero_base, round(hero_w * 640 / 900), hero_base, hero_w, hero_w, hero_h, e(hero[1]))) if hero else img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>{e(hero[2]) if hero else 'Carta de ejemplo en estilo ' + e(NOMBRE[primero])}</figcaption></figure>
 </div>
 <section class="gris"><div class="w bloques">{''.join('<div><h2>%s</h2><p>%s</p></div>' % (e(t), e(x)) for t, x in p['bloques'])}</div></section>
 {p.get('extra', '')}{prosa}<section id="estilos"><div class="w">

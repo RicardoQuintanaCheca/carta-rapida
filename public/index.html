@@ -501,6 +501,17 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .alg-iconos{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:8px;margin-top:clamp(36px,5vw,64px);padding-top:clamp(24px,3vw,36px);border-top:1px solid var(--line)}
 .alg-iconos span{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:#55555C;text-align:center;line-height:1.2}
 .alg-iconos .al-i{width:34px;height:34px;color:var(--ink)}
+.fmt-cab{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,5vw,80px);align-items:end}
+.fmt-cab p.t{color:#55555C;margin:0;max-width:30em}
+.fmt-cab .alg-golpe{margin:0 0 12px}
+.fmts{display:grid;grid-template-columns:3fr 2fr 6fr;gap:clamp(14px,2.6vw,40px);align-items:start;margin-top:clamp(32px,5vw,60px)}
+.fmts figure{margin:0}
+.fmts img{display:block;width:100%;height:auto;border-radius:4px;background:#fff;box-shadow:0 0 0 1px var(--line),0 30px 56px -34px rgba(12,12,13,.45)}
+.fmts figcaption{margin-top:16px;font-size:15px;color:#55555C;line-height:1.4}
+.fmts figcaption b{display:block;color:var(--ink);font-size:18px;font-weight:700;letter-spacing:-.02em}
+.fmts figcaption i{font-style:normal;font-size:12px;font-weight:700;color:var(--accent-ink,#C93A0E);border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+.fmts figcaption span{display:block;font-size:13px;font-weight:600;color:#8A8A90;margin-bottom:2px}
+@media (max-width:900px){.fmt-cab{grid-template-columns:minmax(0,1fr);align-items:start}.fmts{grid-template-columns:3fr 2fr;align-items:start}.fmts figure:last-child{grid-column:1/-1}}
 @media (max-width:900px){.alg{grid-template-columns:minmax(0,1fr)}.alg-vista{max-width:440px;margin:0 auto;width:100%}.alg-iconos{grid-template-columns:repeat(7,minmax(0,1fr));gap:18px 6px}.alg-iconos span{font-size:11px}.alg-iconos .al-i{width:28px;height:28px}}
 .npro{background:var(--soft);border-radius:clamp(24px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
 .pro-list{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;font-weight:500}
@@ -1688,6 +1699,36 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
     </div>
   </section>
 
+  <section class="sec" id="formatos" style="padding-top:0">
+    <div class="nwrap">
+      <div class="fmt-cab">
+        <div>
+          <div class="eyebrow">Formatos · Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">No todas las cartas son un folio. <span class="grey">La tuya tampoco tiene por qué.</span></h2>
+        </div>
+        <div>
+          <p class="alg-golpe">Misma carta. Tres formas de llevarla a la mesa.</p>
+          <p class="t">Eliges el formato y la carta se recoloca sola: columnas, tamaño de letra y saltos de página. Tú no rehaces nada.</p>
+          <div class="alg-cta" style="margin-top:20px"><a class="btn btn-accent" href="#prueba">Pruébalo 7 días gratis</a><a class="mas" href="/tamanos-carta-restaurante/">Qué formato te conviene</a></div>
+        </div>
+      </div>
+      <div class="fmts">
+        <figure>
+          <img src="/ejemplo/formato-a4-640.webp" srcset="/ejemplo/formato-a4-640.webp 640w, /ejemplo/formato-a4.webp 900w" sizes="(max-width: 900px) 55vw, 300px" width="900" height="1273" loading="lazy" decoding="async" alt="Carta de restaurante en formato A4, a dos columnas">
+          <figcaption><span>210 × 297 mm</span><b>A4</b>El folio de siempre. Para funda, tablilla o portamenús.</figcaption>
+        </figure>
+        <figure>
+          <img src="/ejemplo/formato-slim-640.webp" srcset="/ejemplo/formato-slim-640.webp 427w, /ejemplo/formato-slim.webp 600w" sizes="(max-width: 900px) 36vw, 200px" width="600" height="1273" loading="lazy" decoding="async" alt="La misma carta en formato A4 slim, alta y estrecha, a una columna">
+          <figcaption><span>140 × 297 mm</span><b>A4 slim<i>Pro</i></b>Igual de alta, más estrecha. Se sujeta con una mano.</figcaption>
+        </figure>
+        <figure>
+          <img src="/ejemplo/formato-cuadernillo-abierto-640.webp" srcset="/ejemplo/formato-cuadernillo-abierto-640.webp 1280w, /ejemplo/formato-cuadernillo-abierto.webp 1800w" sizes="(max-width: 900px) 92vw, 600px" width="1800" height="1272" loading="lazy" decoding="async" alt="La misma carta en cuadernillo, abierta por las páginas interiores">
+          <figcaption><span>Hojas A3 dobladas · A4 cerrado</span><b>Cuadernillo con elástico<i>Pro</i></b>Con portada y contraportada. El PDF sale con las páginas ya ordenadas: imprimes a doble cara, doblas y pasas el elástico.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="precios" style="padding-top:0">
     <div class="nwrap">
       <div class="sec-head">
@@ -1723,6 +1764,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Panel para guardar y editar tus cartas</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Traducción a 6 idiomas y ajustes ilimitados</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Alérgenos con iconos y tabla para inspección</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>A4, A4 slim y cuadernillo con elástico</li>
           </ul>
           <div class="n-plan-ctas"><button class="btn btn-accent" type="button" onclick="probarPro()">Probar 7 días gratis</button><button class="n-directo" type="button" onclick="hacersePro()">o activa Pro ya</button></div>
         </article>
@@ -1760,7 +1802,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       <div class="n-final-ctas"><a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a><button class="btn n-btn-claro" type="button" onclick="probarPro()">Probar Pro 7 días gratis</button></div>
     </div>
     <nav class="foot-tipos" aria-label="Cartas por tipo de local"><b>Cartas por tipo de local</b><a href="/plantillas-carta-restaurante/">Plantillas de carta</a><a href="/carta-para-bar/">Bar</a><a href="/carta-para-cafeteria/">Cafetería</a><a href="/carta-para-pizzeria/">Pizzería</a><a href="/carta-para-marisqueria/">Marisquería</a><a href="/carta-para-hamburgueseria/">Hamburguesería</a><a href="/menu-del-dia/">Menú del día</a><a href="/menu-de-navidad-restaurante/">Menú de Navidad</a><a href="/carta-de-vinos/">Carta de vinos</a><a href="/carta-de-cocteles/">Cócteles</a></nav>
-    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
+    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
     <div class="n-kartia rv">
       <div><b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018.</div>
       <a class="btn btn-ghost" href="https://kartia.es/portamenus/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=banda" target="_blank" rel="noopener">Ver portamenús</a>

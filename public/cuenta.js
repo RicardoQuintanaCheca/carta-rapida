@@ -324,6 +324,7 @@
         <li><b>Tu logotipo</b> y <b>sin la firma</b> de Carta Rápida</li>
         <li><b>Traducida</b> a inglés, francés, alemán, italiano, portugués o chino</li>
         <li><b>Alérgenos</b> con iconos en la carta y tabla para inspección</li>
+        <li><b>Formatos</b>: A4, A4 slim y cuadernillo con elástico</li>
         <li><b>Cambios ilimitados</b> con una frase: «sube las croquetas a 13»</li>
       </ul>
       <label class="cu-check" id="cuPagoLbl"><input type="checkbox" id="cuPagoAcepto"> <span>Acepto las <a href="/legal/condiciones.html" target="_blank" rel="noopener">condiciones de Carta Pro</a>: se renueva sola hasta que la cancele y, como empieza ya, renuncio al desistimiento.</span></label>
