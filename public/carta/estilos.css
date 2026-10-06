@@ -550,6 +550,11 @@
 .es-menu.est-mantel .cuerpo .sec-t::before { content: ''; flex: 1; border-top: .5pt solid var(--linea); transform: translateY(-.5pt); }
 .es-menu.est-trattoria .cuerpo .sec-t::before { content: ''; flex: 1; border-top: .8pt solid var(--acento); transform: translateY(-.28em); }
 .es-menu.est-ticket .cuerpo .sec-t::before { flex: 1; }
+/* El pie del menú (leyenda de alérgenos, pan y nota) también va centrado */
+.es-menu .pagina .pie { display: block; text-align: center; padding-left: 0; padding-right: 0; }
+.es-menu .pagina .pie > * { margin-left: auto; margin-right: auto; text-align: center; }
+.es-menu .pagina .pie-al { width: 100%; justify-content: center; }
+.es-menu .pagina .pie-serv { justify-content: center; }
 /* Plato sin precio: sin puntos guía ni hueco reservado */
 .pagina .pl-sp .pl-g, .pagina .pl-sp .pl-l::after, .pagina .pl-sp .pl-l::before { display: none; }
 .pagina .pl-sp .pl-l { padding-right: 0; }
