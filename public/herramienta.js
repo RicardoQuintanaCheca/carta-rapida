@@ -71,7 +71,7 @@
   });
 
   let filesList = [], logoFile = null, logoDataUrl = null;
-  let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
+  let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false, alergActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
   let estiloActual = 'sobremesa';
   const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
@@ -413,6 +413,12 @@
     if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
   }
 
+  function toggleAlergenos() {
+    alergActivo = !alergActivo;
+    document.getElementById('alergToggle').classList.toggle('on', alergActivo);
+    if (alergActivo) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
+  }
+
   function toggleTraducir() {
     const wasOff = !tradActivo;
     tradActivo = !tradActivo;
@@ -721,6 +727,9 @@
       medir('carta_generada', { fotos: filesList.length, estilo: estiloActual });
       cartaGuardadaId = null;
       mostrarCarta(data.carta);
+      // Pidió alérgenos: se le lleva al botón que los abre (se marcan en el panel, con la carta guardada)
+      document.getElementById('alergenosBtn').classList.toggle('toca', alergActivo);
+      if (alergActivo) setTimeout(() => updateToolBubble('Tu carta está lista. Ahora marca sus alérgenos con el botón de abajo ↓'), 1600);
     } catch (err) {
       stopCountdown();
       isProcessing = false;

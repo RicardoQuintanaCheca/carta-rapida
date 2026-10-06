@@ -1239,6 +1239,7 @@
   .guardar-btn.guardada { border-color: #2E7D32; color: #1F5E23; background: #EAF5EA; }
   .guardar-btn.guardada .pro-pill { display: none; }
   #alergenosBtn { margin-top: 16px; }
+  #alergenosBtn.toca { background: #0E0E0E; color: #fff; }
   .guardar-nota { font-size: 12.5px; color: #6E6E6E; text-align: center; margin-top: 7px; line-height: 1.45; }
   .pro-lista b { font-weight: 700; color: #0E0E0E; }
   .pro-btn { background: var(--cta); font-size: 18.7px; box-shadow: 0 5px 0 #0E0E0E; }

@@ -1406,6 +1406,7 @@
   .guardar-btn.guardada { border-color: #2E7D32; color: #1F5E23; background: #EAF5EA; }
   .guardar-btn.guardada .pro-pill { display: none; }
   #alergenosBtn { margin-top: 16px; }
+  #alergenosBtn.toca { background: #0E0E0E; color: #fff; }
   .guardar-nota { font-size: 12.5px; color: #6E6E6E; text-align: center; margin-top: 7px; line-height: 1.45; }
   .pro-lista b { font-weight: 700; color: #0E0E0E; }
   .pro-btn { background: var(--cta); font-size: 18.7px; box-shadow: 0 5px 0 #0E0E0E; }
@@ -1833,6 +1834,12 @@
             <button class="idioma-btn" onclick="selIdioma(this,'pt')"><span class="flag">🇵🇹</span> Portugués</button>
             <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
           </div>
+        </div>
+        <!-- Alérgenos -->
+        <div class="t2-feat-row" onclick="toggleAlergenos(); updateToolBubble(alergActivo ? 'Cuando tengas la carta, los marcas plato a plato ✨' : 'Sin alérgenos por ahora.')">
+          <span class="t2-pf-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Marcar alérgenos<span class="pro-pill">Pro</span><div class="t2-pf-sub">Iconos en la carta y tabla para inspección · pruébalo gratis</div></span>
+          <div class="toggle-wrap" id="alergToggle"><div class="toggle-dot"></div></div>
         </div>
         <!-- Texto accordion -->
         <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
@@ -2450,7 +2457,7 @@
   });
 
   let filesList = [], logoFile = null, logoDataUrl = null;
-  let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false;
+  let descActivo = false, logoActivo = false, neuroActivo = true, tradActivo = false, alergActivo = false;
   let idiomaSeleccionado = null, textoActivo = false, cartaActual = null;
   let estiloActual = 'sobremesa';
   const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
@@ -2792,6 +2799,12 @@
     if (wasOff) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
   }
 
+  function toggleAlergenos() {
+    alergActivo = !alergActivo;
+    document.getElementById('alergToggle').classList.toggle('on', alergActivo);
+    if (alergActivo) { setPose('asombrado'); setTimeout(() => setPose('feliz'), 800); }
+  }
+
   function toggleTraducir() {
     const wasOff = !tradActivo;
     tradActivo = !tradActivo;
@@ -3100,6 +3113,9 @@
       medir('carta_generada', { fotos: filesList.length, estilo: estiloActual });
       cartaGuardadaId = null;
       mostrarCarta(data.carta);
+      // Pidió alérgenos: se le lleva al botón que los abre (se marcan en el panel, con la carta guardada)
+      document.getElementById('alergenosBtn').classList.toggle('toca', alergActivo);
+      if (alergActivo) setTimeout(() => updateToolBubble('Tu carta está lista. Ahora marca sus alérgenos con el botón de abajo ↓'), 1600);
     } catch (err) {
       stopCountdown();
       isProcessing = false;

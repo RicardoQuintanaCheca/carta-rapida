@@ -286,7 +286,7 @@
 </style>
 <style>@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-display:swap;font-weight:200 800;font-stretch:100%;src:url(/fuentes/bricolage.woff2) format("woff2-variations")}</style>
 
-<link rel="stylesheet" href="/herramienta.css?v=0810d1b0" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/herramienta.css?v=0810d1b0"></noscript>
+<link rel="stylesheet" href="/herramienta.css?v=4d8b1662" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/herramienta.css?v=4d8b1662"></noscript>
 <style>
 /* ═══ Diseño nuevo ═══ */
 
@@ -1338,6 +1338,12 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
             <button class="idioma-btn" onclick="selIdioma(this,'zh')"><span class="flag">🇨🇳</span> Chino</button>
           </div>
         </div>
+        <!-- Alérgenos -->
+        <div class="t2-feat-row" onclick="toggleAlergenos(); updateToolBubble(alergActivo ? 'Cuando tengas la carta, los marcas plato a plato ✨' : 'Sin alérgenos por ahora.')">
+          <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="t2-pf-label">Marcar alérgenos<span class="pro-pill">Pro</span><div class="t2-pf-sub">Iconos en la carta y tabla para inspección · pruébalo gratis</div></span>
+          <div class="toggle-wrap" id="alergToggle"><div class="toggle-dot"></div></div>
+        </div>
         <!-- Texto accordion -->
         <div class="t2-feat-row" onclick="toggleTexto(); updateToolBubble('¡Pega el texto de tu carta abajo! 📋')">
           <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
@@ -1831,11 +1837,11 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   </div>
 </div>
 
-<script src="/herramienta.js?v=a1291afd" defer></script>
+<script src="/herramienta.js?v=c0821b98" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/portada.js?v=a1291afd" defer></script>
+<script src="/portada.js?v=c0821b98" defer></script>
 </body>
 </html>
