@@ -74,7 +74,18 @@
     let racion = String(p.racion || '').trim();
     const m = nombre.match(RE_RACION);
     if (m) { nombre = nombre.slice(0, m.index).trim(); if (!racion) racion = m[1].trim(); }
-    return { nombre, racion, descripcion: sinGritos(p.descripcion), alergenos: String(p.alergenos || '').trim() };
+    return { nombre, racion, descripcion: sinGritos(p.descripcion), alergenos: String(p.alergenos || '').trim(), al: AL ? AL.limpiar(p.al) : [] };
+  }
+
+  /* ---------- Alérgenos marcados por el hostelero (ids 1–14 oficiales) ---------- */
+  const AL = global.Alergenos || null;
+  let MODO_AL = 'iconos'; // 'iconos' | 'numeros'
+  const usados = c => AL ? AL.limpiar((c.secciones || []).flatMap(s => (s.platos || []).flatMap(p => AL.limpiar(p.al)))) : [];
+  function leyenda(c) {
+    const ids = usados(c);
+    if (!ids.length) return '';
+    return `<div class="pie-al"><span class="pie-al-t">${esc(t('alergenos'))}</span>${ids.map(id =>
+      `<span class="pie-al-i">${MODO_AL === 'numeros' ? `<b>${id}</b>` : AL.icono(id)}${esc(AL.nombre(id, IDIOMA))}</span>`).join('')}</div>`;
   }
 
   // Todos los estilos comparten la misma estructura de plato; cambia la tipografía.
@@ -82,12 +93,13 @@
   function platoComun(p) {
     const d = partir(p);
     const pr = precio(p.precio);
+    const ico = d.al.length && MODO_AL === 'iconos' ? `<span class="pl-ali" aria-label="${esc(d.al.map(id => AL.nombre(id, IDIOMA)).join(', '))}">${d.al.map(id => AL.icono(id)).join('')}</span>` : '';
     return `<div class="pl${p.destacado ? ' pl-dest' : ''}">`
       + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
-      + `<div class="pl-l" style="--pw:${pr.length}"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
-      + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}</div>` : '')
+      + `<div class="pl-l" style="--pw:${pr.length}"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}${d.al.length && MODO_AL === 'numeros' ? `<sup class="pl-als">${d.al.join(' · ')}</sup>` : ''}${d.descripcion ? '' : ico}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
+      + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}${ico}</div>` : '')
       // Alérgenos en números (códigos de la carta): se rotulan para que se entiendan
-      + (d.alergenos ? `<div class="pl-a">${/^\d/.test(d.alergenos) ? esc(t('alergenos')) + ' ' : ''}${esc(d.alergenos)}</div>` : '')
+      + (!d.al.length && d.alergenos ? `<div class="pl-a">${/^\d/.test(d.alergenos) ? esc(t('alergenos')) + ' ' : ''}${esc(d.alergenos)}</div>` : '')
       + `</div>`;
   }
 
@@ -279,6 +291,7 @@
     if (!esUltima) return `<footer class="pie"></footer>`;
     const serv = (c.servicios || []).map(s => `<span>${esc(s.nombre)}${precio(s.precio) ? `<b>${precio(s.precio)}</b>` : ''}</span>`).join('');
     return `<footer class="pie">
+      ${leyenda(c)}
       ${serv ? `<div class="pie-serv">${serv}</div>` : ''}
       ${c.nota_pie ? `<div class="pie-nota">${esc(c.nota_pie)}</div>` : ''}
       ${credito ? `<div class="pie-credito">Carta compuesta con Carta Rápida · kartia.es</div>` : ''}
@@ -349,6 +362,7 @@
     // Solo se acepta un logo en data URL de imagen (evita inyectar HTML o cargar URLs externas)
     const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
     IDIOMA = String(carta.idioma || 'es').slice(0, 2);
+    MODO_AL = carta.alergenos_modo === 'numeros' ? 'numeros' : 'iconos';
     const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
     // Secciones largas (8 platos o más) se trocean en bloques de ~4 platos para que
     // puedan continuar en la columna siguiente; el título va solo en el primer bloque.
