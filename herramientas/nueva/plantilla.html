@@ -224,6 +224,12 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .fmts figcaption b{display:block;color:var(--ink);font-size:18px;font-weight:700;letter-spacing:-.02em}
 .fmts figcaption i{font-style:normal;font-size:12px;font-weight:700;color:var(--accent-ink,#C93A0E);border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
 .fmts figcaption span{display:block;font-size:13px;font-weight:600;color:#8A8A90;margin-bottom:2px}
+.rs-vista{position:relative;padding:0 0 10% 0}
+.rs-vista img{display:block;height:auto;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line),0 34px 64px -36px rgba(12,12,13,.5)}
+.rs-vista img.a{width:58%}
+.rs-vista img.b{position:absolute;right:0;top:9%;width:36%}
+.rs-vista img.c{position:absolute;right:8%;bottom:0;width:40%}
+@media (max-width:900px){.rs-vista{max-width:460px;margin:0 auto;width:100%}}
 @media (max-width:900px){.fmt-cab{grid-template-columns:minmax(0,1fr);align-items:start}.fmts{grid-template-columns:3fr 2fr;align-items:start}.fmts figure:last-child{grid-column:1/-1}}
 @media (max-width:900px){.alg{grid-template-columns:minmax(0,1fr)}.alg-vista{max-width:440px;margin:0 auto;width:100%}.alg-iconos{grid-template-columns:repeat(7,minmax(0,1fr));gap:18px 6px}.alg-iconos span{font-size:11px}.alg-iconos .al-i{width:28px;height:28px}}
 .pro{background:var(--soft);border-radius:clamp(24px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
@@ -616,6 +622,30 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
     </div>
   </section>
 
+  <section class="sec" id="redes" style="padding-top:0">
+    <div class="wrap">
+      <div class="alg">
+        <div>
+          <div class="eyebrow">Redes sociales · Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">Deja de hacerle fotos al papel. <span class="grey">Tu menú ya es una imagen.</span></h2>
+          <p class="alg-golpe">Lo que has escrito para imprimir, listo para publicar.</p>
+          <p class="t">Con la carta o el menú del día ya guardado, sacas la imagen para Instagram, Facebook o el estado de WhatsApp. Con el mismo estilo que en la mesa.</p>
+          <ol class="alg-pasos">
+            <li><span><b>Eliges qué enseñas.</b> El menú entero, una sección o un solo plato en grande.</span></li>
+            <li><span><b>Eliges el formato.</b> Cuadrada, vertical o historia.</span></li>
+            <li><span><b>Descargas y publicas.</b> Con el texto para acompañarla ya escrito a partir de tus platos.</span></li>
+          </ol>
+          <div class="alg-cta"><a class="btn btn-accent" href="#prueba">Pruébalo 7 días gratis</a><a class="mas" href="/menu-del-dia-para-instagram/">Cómo funciona, con ejemplos</a></div>
+        </div>
+        <div class="rs-vista">
+          <img class="a" src="/ejemplo/redes-menu-vertical-640.webp" srcset="/ejemplo/redes-menu-vertical-640.webp 640w, /ejemplo/redes-menu-vertical.webp 900w" sizes="(max-width: 900px) 55vw, 320px" width="900" height="1126" loading="lazy" decoding="async" alt="Menú del día en una imagen vertical para Instagram">
+          <img class="b" src="/ejemplo/redes-menu-historia-640.webp" width="640" height="1138" loading="lazy" decoding="async" alt="El menú del día en formato historia, para Instagram y el estado de WhatsApp">
+          <img class="c" src="/ejemplo/redes-plato-cuadrada-640.webp" width="640" height="640" loading="lazy" decoding="async" alt="Imagen cuadrada con el plato del día en grande y su precio">
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="precios" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
@@ -683,7 +713,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
       <a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a>
     </div>
     <nav class="foot-tipos" aria-label="Cartas por tipo de local"><b>Cartas por tipo de local</b><a href="/plantillas-carta-restaurante/">Plantillas de carta</a><a href="/carta-para-bar/">Bar</a><a href="/carta-para-cafeteria/">Cafetería</a><a href="/carta-para-pizzeria/">Pizzería</a><a href="/carta-para-marisqueria/">Marisquería</a><a href="/carta-para-hamburgueseria/">Hamburguesería</a><a href="/menu-del-dia/">Menú del día</a><a href="/menu-de-navidad-restaurante/">Menú de Navidad</a><a href="/carta-de-vinos/">Carta de vinos</a><a href="/carta-de-cocteles/">Cócteles</a></nav>
-    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/como-hacer-un-menu-del-dia/">Cómo hacer un menú del día</a><a href="/menu-del-dia-a5/">Menú del día en A5</a><a href="/menu-del-dia-con-alergenos/">Menú del día con alérgenos</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
+    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/como-hacer-un-menu-del-dia/">Cómo hacer un menú del día</a><a href="/menu-del-dia-a5/">Menú del día en A5</a><a href="/menu-del-dia-con-alergenos/">Menú del día con alérgenos</a><a href="/menu-del-dia-para-instagram/">Menú del día para Instagram</a><a href="/menu-del-dia-por-whatsapp/">Menú del día por WhatsApp</a><a href="/plato-del-dia-para-redes/">Plato del día para redes</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
     <footer class="foot">
       <span>Carta Rápida es de <a href="https://kartia.es" style="text-decoration:underline">Kartia</a>, portamenús hechos a mano en España.</span>
       <nav aria-label="Legal"><a href="#legal">Aviso legal</a><a href="#privacidad">Privacidad</a><a href="#cookies">Cookies</a><a href="#condiciones">Condiciones</a></nav>

@@ -511,6 +511,12 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.035em}
 .fmts figcaption b{display:block;color:var(--ink);font-size:18px;font-weight:700;letter-spacing:-.02em}
 .fmts figcaption i{font-style:normal;font-size:12px;font-weight:700;color:var(--accent-ink,#C93A0E);border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
 .fmts figcaption span{display:block;font-size:13px;font-weight:600;color:#8A8A90;margin-bottom:2px}
+.rs-vista{position:relative;padding:0 0 10% 0}
+.rs-vista img{display:block;height:auto;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line),0 34px 64px -36px rgba(12,12,13,.5)}
+.rs-vista img.a{width:58%}
+.rs-vista img.b{position:absolute;right:0;top:9%;width:36%}
+.rs-vista img.c{position:absolute;right:8%;bottom:0;width:40%}
+@media (max-width:900px){.rs-vista{max-width:460px;margin:0 auto;width:100%}}
 @media (max-width:900px){.fmt-cab{grid-template-columns:minmax(0,1fr);align-items:start}.fmts{grid-template-columns:3fr 2fr;align-items:start}.fmts figure:last-child{grid-column:1/-1}}
 @media (max-width:900px){.alg{grid-template-columns:minmax(0,1fr)}.alg-vista{max-width:440px;margin:0 auto;width:100%}.alg-iconos{grid-template-columns:repeat(7,minmax(0,1fr));gap:18px 6px}.alg-iconos span{font-size:11px}.alg-iconos .al-i{width:28px;height:28px}}
 .npro{background:var(--soft);border-radius:clamp(24px,3vw,40px);padding:clamp(28px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
@@ -1204,6 +1210,12 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
             </button>
             <div class="guardar-nota">Iconos o números en la carta, con su leyenda, y la tabla para inspección.</div>
 
+            <button class="guardar-btn" id="redesBtn" onclick="irARedes()" type="button" style="margin-top:16px">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r=".6" fill="currentColor"/></svg>
+              <span>Imágenes para redes</span><span class="pro-pill">Pro</span>
+            </button>
+            <div class="guardar-nota">Tu carta, una sección o un plato, en una imagen para Instagram y WhatsApp.</div>
+
             <div class="pro-caja" id="proCaja">
               <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio">desde <b>9,90 €</b>al mes</span></div>
               <div class="pro-titulo">Que parezca tuya. Y siempre al día.</div>
@@ -1371,6 +1383,12 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
           <span class="t2-pf-check"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="t2-pf-label">Marcar alérgenos<span class="pro-pill">Pro</span><div class="t2-pf-sub">Iconos en la carta y tabla para inspección · pruébalo gratis</div></span>
           <div class="toggle-wrap" id="alergToggle"><div class="toggle-dot"></div></div>
+        </div>
+        <!-- Redes sociales -->
+        <div class="t2-feat-row" onclick="irARedes()">
+          <span class="t2-pf-check" style="background:#F0EDE8;color:#888780;flex-shrink:0;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/></svg></span>
+          <span class="t2-pf-label">Imágenes para redes<span class="pro-pill">Pro</span><div class="t2-pf-sub">Tu menú o un plato para Instagram y WhatsApp · pruébalo gratis</div></span>
+          <svg aria-hidden="true" class="opcion-arrow t2-pf-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
         </div>
         <!-- Menú del día -->
         <div class="t2-feat-row" onclick="irAMenu()">
@@ -1759,6 +1777,30 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
     </div>
   </section>
 
+  <section class="sec" id="redes" style="padding-top:0">
+    <div class="nwrap">
+      <div class="alg">
+        <div>
+          <div class="eyebrow">Redes sociales · Carta Pro</div>
+          <h2 class="h-l2" style="margin-top:16px">Deja de hacerle fotos al papel. <span class="grey">Tu menú ya es una imagen.</span></h2>
+          <p class="alg-golpe">Lo que has escrito para imprimir, listo para publicar.</p>
+          <p class="t">Con la carta o el menú del día ya guardado, sacas la imagen para Instagram, Facebook o el estado de WhatsApp. Con el mismo estilo que en la mesa.</p>
+          <ol class="alg-pasos">
+            <li><span><b>Eliges qué enseñas.</b> El menú entero, una sección o un solo plato en grande.</span></li>
+            <li><span><b>Eliges el formato.</b> Cuadrada, vertical o historia.</span></li>
+            <li><span><b>Descargas y publicas.</b> Con el texto para acompañarla ya escrito a partir de tus platos.</span></li>
+          </ol>
+          <div class="alg-cta"><a class="btn btn-accent" href="#prueba">Pruébalo 7 días gratis</a><a class="mas" href="/menu-del-dia-para-instagram/">Cómo funciona, con ejemplos</a></div>
+        </div>
+        <div class="rs-vista">
+          <img class="a" src="/ejemplo/redes-menu-vertical-640.webp" srcset="/ejemplo/redes-menu-vertical-640.webp 640w, /ejemplo/redes-menu-vertical.webp 900w" sizes="(max-width: 900px) 55vw, 320px" width="900" height="1126" loading="lazy" decoding="async" alt="Menú del día en una imagen vertical para Instagram">
+          <img class="b" src="/ejemplo/redes-menu-historia-640.webp" width="640" height="1138" loading="lazy" decoding="async" alt="El menú del día en formato historia, para Instagram y el estado de WhatsApp">
+          <img class="c" src="/ejemplo/redes-plato-cuadrada-640.webp" width="640" height="640" loading="lazy" decoding="async" alt="Imagen cuadrada con el plato del día en grande y su precio">
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="precios" style="padding-top:0">
     <div class="nwrap">
       <div class="sec-head">
@@ -1834,7 +1876,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       <div class="n-final-ctas"><a class="btn btn-accent" href="#prueba">Sube una foto de tu carta</a><button class="btn n-btn-claro" type="button" onclick="probarPro()">Probar Pro 7 días gratis</button></div>
     </div>
     <nav class="foot-tipos" aria-label="Cartas por tipo de local"><b>Cartas por tipo de local</b><a href="/plantillas-carta-restaurante/">Plantillas de carta</a><a href="/carta-para-bar/">Bar</a><a href="/carta-para-cafeteria/">Cafetería</a><a href="/carta-para-pizzeria/">Pizzería</a><a href="/carta-para-marisqueria/">Marisquería</a><a href="/carta-para-hamburgueseria/">Hamburguesería</a><a href="/menu-del-dia/">Menú del día</a><a href="/menu-de-navidad-restaurante/">Menú de Navidad</a><a href="/carta-de-vinos/">Carta de vinos</a><a href="/carta-de-cocteles/">Cócteles</a></nav>
-    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/como-hacer-un-menu-del-dia/">Cómo hacer un menú del día</a><a href="/menu-del-dia-a5/">Menú del día en A5</a><a href="/menu-del-dia-con-alergenos/">Menú del día con alérgenos</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
+    <nav class="foot-tipos" aria-label="Guías" style="border-top:0;padding-top:0"><b>Guías</b><a href="/como-hacer-la-carta-de-un-restaurante/">Cómo hacer la carta</a><a href="/diseno-carta-restaurante/">Diseño de carta</a><a href="/carta-con-alergenos/">Carta con alérgenos</a><a href="/tabla-de-alergenos-restaurante/">Tabla de alérgenos</a><a href="/los-14-alergenos/">Los 14 alérgenos</a><a href="/traducir-carta-restaurante/">Traducir la carta</a><a href="/imprimir-carta-restaurante/">Imprimir la carta</a><a href="/como-hacer-un-menu-del-dia/">Cómo hacer un menú del día</a><a href="/menu-del-dia-a5/">Menú del día en A5</a><a href="/menu-del-dia-con-alergenos/">Menú del día con alérgenos</a><a href="/menu-del-dia-para-instagram/">Menú del día para Instagram</a><a href="/menu-del-dia-por-whatsapp/">Menú del día por WhatsApp</a><a href="/plato-del-dia-para-redes/">Plato del día para redes</a><a href="/tamanos-carta-restaurante/">Tamaños de carta</a><a href="/carta-restaurante-a4-slim/">Carta A4 slim</a><a href="/carta-restaurante-cuadernillo/">Carta en cuadernillo</a><a href="/crear-carta-restaurante-online/">Crear carta online</a><a href="/plantilla-carta-restaurante-word/">Plantilla en Word</a><a href="/alternativa-a-canva-para-cartas/">Alternativa a Canva</a></nav>
     <div class="n-kartia rv">
       <div><b>¿Y el portamenú?</b> Carta Rápida es de Kartia, el taller español que fabrica cartas y portamenús a mano para hostelería desde 2018.</div>
       <a class="btn btn-ghost" href="https://kartia.es/portamenus/?utm_source=cartarapida&amp;utm_medium=referral&amp;utm_campaign=banda" target="_blank" rel="noopener">Ver portamenús</a>
@@ -1952,11 +1994,11 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   </div>
 </div>
 
-<script src="/herramienta.js?v=4c29653f" defer></script>
+<script src="/herramienta.js?v=bba9af3d" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/portada.js?v=4c29653f" defer></script>
+<script src="/portada.js?v=bba9af3d" defer></script>
 </body>
 </html>

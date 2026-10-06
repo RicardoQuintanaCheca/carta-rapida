@@ -1295,6 +1295,20 @@
   }
 
   // Alérgenos: se marcan en el panel, así que la carta se guarda primero y se abre allí en esa pestaña
+  // Imágenes para redes: salen de una carta guardada. Con la carta en pantalla se guarda y se abre en «Redes»;
+  // sin carta todavía, quien ya tiene cuenta va a su panel y quien no, sube antes la suya.
+  async function irARedes() {
+    medir('redes_desde_herramienta');
+    if (!cartaActual) {
+      if (Cuenta.estado && Cuenta.estado.plan !== 'gratis') { location.href = '/panel'; return; }
+      return updateToolBubble('Sube primero tu carta. Cuando la tengas, sacas las imágenes para redes con un clic ✨');
+    }
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta para sacar las imágenes de tu carta para Instagram y WhatsApp.');
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('Las imágenes para redes son de Carta Pro.');
+    if (!cartaGuardadaId) await guardarEnPanel(true);
+    if (cartaGuardadaId) location.href = '/panel#carta=' + cartaGuardadaId + '&t=redes';
+  }
+
   // Menú del día: se hace en el panel, sin subir ninguna foto
   function irAMenu() {
     medir('menu_desde_herramienta');
