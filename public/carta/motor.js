@@ -376,6 +376,8 @@
     // puedan continuar en la columna siguiente; el título va solo en el primer bloque.
     const htmlSec = [];
     secciones.forEach((s, i) => {
+      // Sección sin nombre (el cartel de un solo plato): no se pinta el título vacío
+      if (!String(s.nombre || '').trim()) { htmlSec.push(estilo.seccion(s, i).replace('<section class="sec"', '<section class="sec sec-anon"')); return; }
       if (s.platos.length < 8) { htmlSec.push(estilo.seccion(s, i)); return; }
       const trozos = [];
       for (let j = 0; j < s.platos.length; j += 4) trozos.push(s.platos.slice(j, j + 4));
@@ -394,11 +396,14 @@
     // El slim se compone sobre una hoja proporcionalmente más grande y se reduce: así los márgenes
     // y adornos de cada estilo encogen a la vez que la hoja, y la letra se compensa con la escala.
     // «a5x2» (solo menú del día): la hoja se compone como un A4 y sale dos veces, reducida, en un folio apaisado para cortar.
-    const FORMATO = ['slim', 'elastico'].includes(opts.formato) || (opts.formato === 'a5x2' && M) ? opts.formato : 'a4';
+    // «rs-…»: imágenes para redes sociales (cuadrada, vertical 4:5 o historia). Una columna, letra grande
+    // y, si no cabe en una imagen, varias seguidas (un carrusel).
+    const RS = /^rs-(cuadrada|vertical|historia)$/.test(opts.formato) ? opts.formato : null;
+    const FORMATO = RS || (['slim', 'elastico'].includes(opts.formato) || (opts.formato === 'a5x2' && M) ? opts.formato : 'a4');
     const S = FORMATO === 'slim' ? 0.8 : FORMATO === 'a5x2' ? 0.7071 : 1;
     // en A5 se admite una letra algo menor (≈8,4 pt el plato): es una hoja que se lee de cerca
-    const kMin = (FORMATO === 'a5x2' ? 0.76 : K_MIN) / S, kComodo = (FORMATO === 'a5x2' ? 0.78 : K_COMODO) / S;
-    pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}${M ? ' es-menu' : ''}`;
+    const kMin = (RS ? 0.8 : FORMATO === 'a5x2' ? 0.76 : K_MIN) / S, kComodo = (RS ? 1 : FORMATO === 'a5x2' ? 0.78 : K_COMODO) / S;
+    pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}${RS ? ' fmt-rs' : ''}${M ? ' es-menu' : ''}`;
     destino.appendChild(pliego);
 
     // Crea una página vacía con N columnas y devuelve sus piezas
@@ -449,7 +454,7 @@
     function mejorK(cols, numPag) {
       // con varias páginas hay sitio: la letra puede crecer un poco más
       // un menú del día es una hoja corta: la letra puede ir más grande que en una carta
-      const K_MAX = (numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : M && cols === 1 ? Math.max(kMaxPara(totalPlatos), 1.75) : kMaxPara(totalPlatos)) / S;
+      const K_MAX = (RS ? (numPag > 1 ? 1.5 : totalPlatos <= 1 ? 3 : totalPlatos <= 6 ? 2.2 : 1.8) : numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : M && cols === 1 ? Math.max(kMaxPara(totalPlatos), 1.75) : kMaxPara(totalPlatos)) / S;
       let lo = kMin, hi = K_MAX, mejor = null;
       const alMax = probar(cols, numPag, hi);
       if (alMax.ratio <= HOLGURA) return alMax;
@@ -467,7 +472,7 @@
     // Candidatas: 1 columna solo tiene sentido en cartas cortas
     const candidatas = [];
     // la hoja estrecha va siempre a una columna; un menú del día normal, también (se lee de arriba abajo)
-    const COLS = FORMATO === 'slim' || (M && totalPlatos <= 16) ? 1 : 2;
+    const COLS = FORMATO === 'slim' || RS || (M && totalPlatos <= 16) ? 1 : 2;
     if (totalPlatos <= 14 || COLS === 1) candidatas.push([1, 1]);
     if (COLS === 2) candidatas.push([2, 1]);
     let elegida = null;

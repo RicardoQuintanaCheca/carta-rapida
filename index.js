@@ -3,7 +3,7 @@ const express = require('express');
 const compression = require('compression');
 const multer = require('multer');
 const OpenAI = require('openai');
-const { generarPDF, generarTablaAlergenos, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
+const { generarPDF, generarImagenes, generarTablaAlergenos, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
 const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
@@ -570,6 +570,46 @@ app.post('/tabla-alergenos', limitePDF, async (req, res) => {
   } catch (error) {
     console.error('[ALERGENOS] error:', error.message);
     res.status(500).json({ ok: false, error: 'No hemos podido generar la tabla. Inténtalo de nuevo.' });
+  }
+});
+
+// ── Imágenes para redes sociales (Carta Pro): el menú, una sección o un plato, a 1080 px ──
+app.post('/imagen-redes', limitePDF, async (req, res) => {
+  try {
+    const b = req.body || {};
+    const { carta, estilo, logo } = b;
+    if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
+    const plan = await planDe(req);
+    if (plan.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, motivo: 'redes', error: 'Las imágenes para redes son de Carta Pro. Pruébalo gratis 7 días.' });
+    const limpia = normalizarCarta(carta);
+    if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'No hay platos que enseñar.' });
+    const formato = ['rs-cuadrada', 'rs-vertical', 'rs-historia'].includes(b.formato) ? b.formato : 'rs-cuadrada';
+    const texto = (v, n) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, n);
+    let que = limpia;
+    if (b.tipo === 'seccion') {
+      const s = limpia.secciones[Number(b.seccion) | 0];
+      if (!s) return res.status(400).json({ ok: false, error: 'Elige una sección.' });
+      que = { ...limpia, secciones: [s], servicios: [], nota_pie: '' };
+      delete que.menu;
+    } else if (b.tipo === 'plato') {
+      const s = limpia.secciones[Number(b.seccion) | 0];
+      const p = s && s.platos[Number(b.plato) | 0];
+      if (!p) return res.status(400).json({ ok: false, error: 'Elige un plato.' });
+      // Un cartel de un solo plato: rótulo arriba, el plato en grande y su precio al pie
+      const suelto = /^\+/.test(p.precio || '') || !p.precio;
+      que = { ...limpia, servicios: [], nota_pie: '', secciones: [{ nombre: '', platos: [{ ...p, precio: '', destacado: false }] }],
+        menu: { titulo: texto(b.rotulo, 40) || 'Hoy recomendamos', fecha: '', precio: suelto ? '' : p.precio, incluye: '' } };
+    }
+    const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
+    const logoOk = typeof logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(logo) && logo.length < 2.5 * 1024 * 1024 ? logo : null;
+    const t0 = Date.now();
+    const { imagenes, total } = await generarImagenes(que, { estilo: estiloFinal, logo: logoOk, formato, max: 10 });
+    console.log(`[REDES] ${b.tipo || 'todo'} · ${formato} · ${estiloFinal} · ${imagenes.length}/${total} img · ${Date.now() - t0} ms`);
+    evento('imagen_redes', `${b.tipo || 'todo'}-${formato}`);
+    res.set('Cache-Control', 'no-store').json({ ok: true, total, nombre: slug(limpia.nombre_restaurante), imagenes: imagenes.map(i => 'data:image/png;base64,' + Buffer.from(i).toString('base64')) });
+  } catch (error) {
+    console.error('[REDES] error:', error.message);
+    res.status(500).json({ ok: false, error: 'No hemos podido generar la imagen. Inténtalo de nuevo.' });
   }
 });
 

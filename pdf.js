@@ -133,6 +133,41 @@ async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = tru
   }
 }
 
+/* ---------- Imágenes para redes sociales: 1080 px de ancho, una por «página» ---------- */
+const PROPORCION_RS = { 'rs-cuadrada': 1080, 'rs-vertical': 1350, 'rs-historia': 1920 };
+async function generarImagenes(carta, { estilo = 'mantel', logo = null, formato = 'rs-cuadrada', max = 10 } = {}) {
+  if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
+  if (!PROPORCION_RS[formato]) formato = 'rs-cuadrada';
+  const nav = await obtenerNavegador();
+  // 210 mm son 793,7 px: con este factor cada imagen sale a 1080 px de ancho
+  const contexto = await nav.newContext({ deviceScaleFactor: 1080 / (210 * 96 / 25.4), viewport: { width: 900, height: 1500 } });
+  try {
+    const pagina = await contexto.newPage();
+    await pagina.route('**/*', r => r.request().url().startsWith('data:') ? r.continue() : r.abort());
+    await pagina.setContent(PLANTILLA, { waitUntil: 'load' });
+    await pagina.evaluate(async (estilo) => {
+      await document.fonts.ready;
+      const propias = (MotorCarta.ESTILOS[estilo] || {}).fuentes;
+      if (propias) { await Promise.all(propias.map(f => document.fonts.load(f.replace('1em', '16px'), 'Áéñ1'))); return; }
+      const caras = ['16px "EB Garamond"', 'italic 16px "EB Garamond"', '500 16px "EB Garamond"', '600 16px "EB Garamond"',
+        '16px "Libre Caslon Display"', '16px "Instrument Sans"', '500 16px "Instrument Sans"', '600 16px "Instrument Sans"',
+        '16px "Instrument Serif"', 'italic 16px "Instrument Serif"', '500 16px "Bodoni Moda"',
+        '16px "Newsreader"', '500 16px "Newsreader"', 'italic 16px "Newsreader"'];
+      await Promise.all(caras.map(c => document.fonts.load(c, 'Áéñ')));
+    }, estilo);
+    const info = await pagina.evaluate(async ({ carta, estilo, logo, formato }) => {
+      if (logo) await new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = logo; window.__logo = i; });
+      return MotorCarta.componer(document.getElementById('d'), carta, { estilo, logo, credito: false, formato });
+    }, { carta, estilo, logo, formato });
+    const hojas = await pagina.$$('.pagina');
+    const imagenes = [];
+    for (const h of hojas.slice(0, max)) imagenes.push(await h.screenshot({ type: 'png' }));
+    return { imagenes, info, total: hojas.length };
+  } finally {
+    await contexto.close();
+  }
+}
+
 /* ---------- Tabla de alérgenos: documento A4 para sala e inspección ---------- */
 const escH = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const FUENTE_TABLA = CARAS_LISTA.filter(c => c.familia === 'Bricolage Grotesque').map(c => cara(c, `data:font/woff2;base64,${fs.readFileSync(ARCHIVOS_FUENTE.get(c.nombre)).toString('base64')}`)).join('');
@@ -200,4 +235,4 @@ async function generarTablaAlergenos(carta, { logo = null } = {}) {
 
 async function cerrar() { if (navegador) await navegador.close().catch(() => {}); }
 
-module.exports = { generarPDF, generarTablaAlergenos, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE };
+module.exports = { generarPDF, generarImagenes, generarTablaAlergenos, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE };

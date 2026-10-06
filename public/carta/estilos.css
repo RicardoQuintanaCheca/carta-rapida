@@ -530,6 +530,22 @@
 .contra-in { font-size: 7.6pt; letter-spacing: .3em; text-transform: uppercase; text-align: center; opacity: .6; }
 .contra-in img { display: block; max-height: 15mm; max-width: 48mm; object-fit: contain; }
 .hoja-a3 { width: 420mm; height: 297mm; display: flex; position: relative; background: #fff; }
+/* Imágenes para redes: misma anchura de composición que un folio y la altura de cada proporción */
+.fmt-rs-cuadrada .pagina { height: 210mm; }
+.fmt-rs-vertical .pagina { height: 262.5mm; }
+.fmt-rs-historia .pagina { height: 373.33mm; }
+/* En una historia, arriba y abajo los tapa la propia aplicación: el contenido se queda en la zona segura */
+.carta.fmt-rs-historia .pagina { padding-top: 50mm; padding-bottom: 50mm; }
+.fmt-rs .pagina .cuerpo { align-content: center; }
+.fmt-rs .pagina.cols-1 .cuerpo:has(.sec-anon) { grid-template-columns: minmax(0, 1fr); }
+.fmt-rs .pagina .sec-anon .pl-n { font-size: calc(19pt * var(--k)); line-height: 1.06; }
+.fmt-rs .pagina .sec-anon .pl-d { font-size: calc(8.6pt * var(--k)); line-height: 1.3; margin-top: calc(3pt * var(--k)); }
+/* En el cartel de un plato, el precio y el rótulo crecen con él */
+.fmt-rs .pagina .menu-precio .pl-p { font-size: calc(27pt * clamp(1, var(--k) * .6, 1.8)); }
+.fmt-rs .pagina .menu-tit .pl-n { font-size: calc(21pt * clamp(1, var(--k) * .45, 1.35)); }
+.carta.fmt-rs-historia.est-bloque .pagina { padding-top: 0; }
+.carta.fmt-rs-historia.est-bloque .pagina .cab { padding-top: 56mm; }
+.pagina .sec-anon .sec-t { display: none; }
 /* Menú del día: rótulo, precio único y lo que incluye. Heredan la letra del plato de cada estilo. */
 .menu-tit, .menu-precio { flex: 0 0 auto; text-align: center; }
 .pagina .menu-tit .pl-n { display: block; position: static; background: none; padding: 0; font-size: calc(21pt * min(var(--k), 1.25)); line-height: 1.1; }
