@@ -269,7 +269,7 @@
   function enviarVista() {
     vista.pendiente = false;
     vista.id++;
-    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera(), credito: !esPro() }, location.origin);
+    vista.iframe.contentWindow.postMessage({ tipo: 'componer', id: vista.id, carta: conColor(cartaActual), estilo: estiloActual, logo: logoEnCabecera(), credito: !esPro() }, location.origin);
   }
 
   function ajustarVista() {
@@ -308,6 +308,7 @@
       vista.alto = Math.ceil(e.data.alto) || 1123;
       ajustarVista();
       const i = e.data.info;
+      pintarColorTool(i);
       document.getElementById('resInfo').textContent = 'A4 · ' + i.paginas + (i.paginas > 1 ? ' páginas' : ' página') + ' · ' + i.platos + ' platos';
     }
   });
@@ -902,7 +903,7 @@
       const res = await fetch('/pdf', {
         method: 'POST',
         headers: cabeceras,
-        body: JSON.stringify({ carta: cartaActual, estilo: estiloActual, logo: logoEnCabecera(), email: emailDescarga })
+        body: JSON.stringify({ carta: conColor(cartaActual), estilo: estiloActual, logo: logoEnCabecera(), email: emailDescarga })
       });
       if (!res.ok) {
         let msg = 'No hemos podido generar el PDF. Inténtalo de nuevo.';
@@ -1194,6 +1195,29 @@
     });
   }
 
+  // Color propio: el de la marca en lugar del que trae el estilo. Viaja dentro de la carta.
+  let colorPropio = '';
+  function conColor(c) { if (!c) return c; const { color, ...resto } = c; return colorPropio ? { ...resto, color: colorPropio } : resto; }
+  function pintarColorTool(info) {
+    const c = colorPropio.toLowerCase();
+    let alguno = false;
+    document.querySelectorAll('#colorFila button').forEach(b => { const on = (b.dataset.c || '').toLowerCase() === c; alguno = alguno || on; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    const otro = document.querySelector('#colorFila .otro');
+    otro.classList.toggle('on', !!c && !alguno);
+    document.getElementById('colorOtroM').style.background = c && !alguno ? c : 'conic-gradient(#e33,#eb3,#3b6,#36c,#93c,#e33)';
+    const av = document.getElementById('colorAviso'), i = info || {};
+    av.textContent = !c ? 'El color de tu marca, gratis. El primero es el que trae el estilo.'
+      : i.sinColor ? 'Este estilo no cambia de color. Elige otro estilo para usar el tuyo.'
+      : i.colorOscurecido ? 'Lo hemos oscurecido un poco para que se lea bien sobre papel blanco.' : 'Así queda con tu color. Cámbialo las veces que quieras.';
+  }
+  function ponerColor(c) {
+    colorPropio = /^#[0-9a-f]{6}$/i.test(c) ? c : '';
+    pintarColorTool();
+    medir('color_propio', { color: colorPropio ? 'propio' : 'estilo' });
+    if (cartaActual) renderVista();
+  }
+  document.addEventListener('DOMContentLoaded', () => pintarColorTool());
+
   function logoEnCabecera() { return logoDataUrl && cabeceraModo === 'logo' ? logoDataUrl : null; }
 
   function pintarCabecera() {
@@ -1280,7 +1304,7 @@
     const btn = document.getElementById('guardarBtn');
     btn.disabled = true;
     document.getElementById('guardarTexto').textContent = 'Guardando…';
-    const d = await Cuenta.api('/cartas', { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, cabecera: cabeceraModo });
+    const d = await Cuenta.api('/cartas', { carta: conColor(cartaActual), estilo: estiloActual, logo: logoDataUrl, cabecera: cabeceraModo });
     btn.disabled = false;
     if (d.ok) {
       cartaGuardadaId = d.id;
@@ -1330,7 +1354,7 @@
   // Antes de ir a la pasarela guardamos la carta, para recuperarla al volver
   function guardarPendiente() {
     if (!cartaActual) return;
-    const completo = { carta: cartaActual, estilo: estiloActual, logo: logoDataUrl, modo: cabeceraModo, ajustes: ajustesUsados, guardada: cartaGuardadaId, t: Date.now() };
+    const completo = { carta: conColor(cartaActual), estilo: estiloActual, logo: logoDataUrl, modo: cabeceraModo, ajustes: ajustesUsados, guardada: cartaGuardadaId, t: Date.now() };
     if (!almacen.guardar('cr_pendiente', completo)) almacen.guardar('cr_pendiente', { ...completo, logo: null });
   }
 
@@ -1338,6 +1362,7 @@
     const p = almacen.leer('cr_pendiente');
     almacen.borrar('cr_pendiente');
     if (!p || !p.carta || Date.now() - p.t > 6 * 60 * 60 * 1000) return false;
+    colorPropio = /^#[0-9a-f]{6}$/i.test(p.carta.color || '') ? p.carta.color : '';
     if (p.logo) { logoDataUrl = p.logo; logoActivo = true; }
     if (ESTILOS_VALIDOS.includes(p.estilo)) selEstilo(document.querySelector('.t2-scard.' + p.estilo), p.estilo);
     ajustesUsados = p.ajustes || 0;
@@ -1432,7 +1457,7 @@
           email,
           telefono: document.getElementById('leadTel').value.trim(),
           origen: 'carta-rapida-montaje',
-          carta: cartaActual,
+          carta: conColor(cartaActual),
           logo: logoDataUrl,
           restaurante: cartaActual ? cartaActual.nombre_restaurante : '',
           estilo: estiloActual,

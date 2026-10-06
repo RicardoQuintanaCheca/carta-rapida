@@ -537,7 +537,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
     // Los alérgenos con iconos y leyenda son de Carta Pro: en la versión gratis no se pintan
-    if (!pro) { delete limpia.menu; delete limpia.color; delete limpia.idioma2; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
+    if (!pro) { delete limpia.menu; delete limpia.idioma2; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
     let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {
