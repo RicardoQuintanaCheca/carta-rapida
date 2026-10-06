@@ -163,6 +163,16 @@
   .vista-marco.cargando .vista-cargando { display: block; }
   .descargar { width: 100%; margin-top: 12px; min-height: 54px; font-size: 16.5px; }
   .acc-pdf { display: flex; gap: 10px; }
+  .imp-velo { position: fixed; inset: 0; z-index: 800; background: rgba(12,12,13,.55); display: grid; place-items: center; padding: 20px; animation: impVelo .16s ease-out; }
+  .imp-caja { width: min(100%, 460px); background: #fff; border-radius: 20px; padding: 28px 28px 24px; box-shadow: 0 30px 80px rgba(0,0,0,.35); animation: impCaja .2s ease-out; }
+  .imp-sobre { font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-coral); }
+  .imp-caja h2 { font-size: 24px; letter-spacing: -.03em; line-height: 1.15; margin: 8px 0 12px; }
+  .imp-caja p { margin: 0; font-size: 16.5px; line-height: 1.5; color: #3a3a3f; }
+  .imp-bot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+  .imp-bot .btn { min-height: 48px; }
+  @keyframes impVelo { from { opacity: 0; } }
+  @keyframes impCaja { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+  @media (prefers-reduced-motion: reduce) { .imp-velo, .imp-caja { animation: none; } }
   .acc-pdf .js-descargar { flex: 1 1 auto; }
   .acc-pdf .js-imprimir { flex: 0 0 auto; width: auto; padding: 0 26px; }
   /* Imprimir desde el navegador del móvil falla demasiado: ahí solo se descarga */
@@ -745,7 +755,6 @@
           <div class="vista-cab"><span class="vista-info" id="vistaInfo" aria-live="polite">Componiendo…</span></div>
           <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
           <div class="acc-pdf"><button class="btn primario descargar js-descargar" type="button">Descargar PDF</button><button class="btn descargar js-imprimir" type="button">Imprimir</button></div>
-          <div id="imprimirNota"></div>
           <div class="nota-vista" id="notaVista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
           <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Te enviamos gratis un montaje de esta carta en un portamenús Kartia, hecho a mano en España.</p><div id="kartiaEd"></div></div>
         </div>
@@ -1072,14 +1081,24 @@
     a5x2: 'Elige <strong>«tamaño real»</strong> (o 100 %) y orientación <strong>horizontal</strong>. Después cortas por la marca del centro.'
   };
   async function imprimir(avisado) {
-    const nota = document.getElementById('imprimirNota');
+    // Aviso en una ventana en el centro de la pantalla: no hay que buscarlo ni hacer scroll
     if (AVISO_IMPRIMIR[ed.formato] && !avisado) {
-      nota.innerHTML = `<div class="formato-nota"><b>Antes de imprimir</b>${AVISO_IMPRIMIR[ed.formato]}<div style="margin-top:10px"><button class="btn oscuro peq" type="button" id="imprimirYa">Entendido, imprimir</button></div></div>`;
-      document.getElementById('imprimirYa').onclick = () => imprimir(true);
-      nota.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      document.querySelectorAll('.imp-velo').forEach(x => x.remove());
+      const v = document.createElement('div');
+      v.className = 'imp-velo';
+      v.innerHTML = `<div class="imp-caja" role="dialog" aria-modal="true" aria-labelledby="impTit">
+        <div class="imp-sobre">Antes de imprimir</div>
+        <h2 id="impTit">${ed.formato === 'elastico' ? 'Pon estos ajustes en la impresora' : 'Pon este ajuste en la impresora'}</h2>
+        <p>${AVISO_IMPRIMIR[ed.formato]}</p>
+        <div class="imp-bot"><button class="btn" type="button" data-a="no">Cancelar</button><button class="btn primario" type="button" data-a="si">Entendido, imprimir</button></div></div>`;
+      const cerrar = () => { v.remove(); document.removeEventListener('keydown', tecla); };
+      const tecla = e => { if (e.key === 'Escape') cerrar(); };
+      v.addEventListener('click', e => { if (e.target === v || e.target.dataset.a === 'no') cerrar(); else if (e.target.dataset.a === 'si') { cerrar(); imprimir(true); } });
+      document.addEventListener('keydown', tecla);
+      document.body.appendChild(v);
+      v.querySelector('[data-a=si]').focus();
       return;
     }
-    if (nota) nota.innerHTML = '';
     const bs = [...document.querySelectorAll('.js-imprimir')];
     bs.forEach(b => { b.disabled = true; b.textContent = 'Preparando…'; });
     try {
