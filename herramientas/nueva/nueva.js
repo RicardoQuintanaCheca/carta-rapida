@@ -1,9 +1,7 @@
 // Opciones de la herramienta (plegables)
 function nOpciones(b) {
   const caja = document.getElementById('opciones');
-  const abierta = !caja.classList.contains('abierta');
-  caja.classList.toggle('abierta', abierta);
-  b.setAttribute('aria-expanded', String(abierta));
+  caja.classList.add('abierta'); // siempre a la vista: ya no hay cabecera plegable
 }
 
 (function () {
@@ -29,7 +27,7 @@ function nOpciones(b) {
   }
 
   // En ordenador hay sitio: las opciones se ven abiertas al lado de la subida
-  nOpciones($('.n-opc'));
+  nOpciones();
 
   // «Pegar texto» siempre abre las opciones, aunque se hayan cerrado
   if (typeof abrirTexto === 'function') {

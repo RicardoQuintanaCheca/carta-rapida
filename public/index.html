@@ -675,6 +675,8 @@ body.n .nnav{z-index:60}
 #herramienta .t2-toggles-card > :not(.n-opc){display:none!important}
 #herramienta .t2-toggles-card.abierta > .t2-nombre,#herramienta .t2-toggles-card.abierta > .t2-feat-row{display:flex!important}
 #herramienta .t2-toggles-card.abierta > .t2-nombre{flex-direction:column}
+#herramienta #opciones > .t2-nombre{border-top:0!important;padding-top:0!important}
+@media (max-width:900px){#herramienta #opciones > .t2-nombre{padding-top:18px!important}}
 #herramienta .t2-toggles-card.abierta > .logo-drop.on,#herramienta .t2-toggles-card.abierta > .logo-preview-row.on{display:flex!important}
 #herramienta .t2-toggles-card.abierta > .idioma-zone.on,#herramienta .t2-toggles-card.abierta > .texto-drop.on,#herramienta .t2-toggles-card.abierta > .idioma-zone.open,#herramienta .t2-toggles-card.abierta > .texto-drop.open{display:block!important}
 #herramienta .t2-toggles-card{border:0!important;padding-top:0!important}
@@ -1310,8 +1312,7 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
       <button class="ejemplo-btn" type="button" onclick="probarEjemplo()">¿No tienes la carta a mano? <b>Prueba con una de ejemplo</b></button>
       </div>
 
-      <div class="t2-card t2-toggles-card" id="opciones">
-        <button type="button" class="n-opc" aria-expanded="false" aria-controls="opciones" onclick="nOpciones(this)"><span>Opciones <small>nombre, logotipo, idioma…</small></span><i aria-hidden="true"></i></button>
+      <div class="t2-card t2-toggles-card abierta" id="opciones">
         <!-- Nombre del restaurante -->
         <div class="t2-nombre">
           <label class="t2-nombre-tit" for="nombreRest">Nombre del restaurante<small>si lo dejas vacío, lo leemos de tu carta</small></label>
@@ -1920,11 +1921,11 @@ body.n .nhero .h-xl{font-size:clamp(40px,21cqi,128px)}
   </div>
 </div>
 
-<script src="/herramienta.js?v=c0821b98" defer></script>
+<script src="/herramienta.js?v=1e787e28" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
-<script src="/portada.js?v=c0821b98" defer></script>
+<script src="/portada.js?v=1e787e28" defer></script>
 </body>
 </html>

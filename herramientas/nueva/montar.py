@@ -53,8 +53,8 @@ tool = tool.replace('<section class="tool-section" id="herramienta">\n  <div cla
 assert 'n-app-pasos' in tool
 # Ajustes plegables: menos fricción
 tool = tool.replace('<div class="t2-card t2-toggles-card">\n        <div class="t2-eyebrow">02 · AJUSTES <span class="t2-eyebrow-nota">· opcional</span></div>',
-  '<div class="t2-card t2-toggles-card" id="opciones">\n        <button type="button" class="n-opc" aria-expanded="false" aria-controls="opciones" onclick="nOpciones(this)"><span>Opciones <small>nombre, logotipo, idioma…</small></span><i aria-hidden="true"></i></button>')
-assert 'n-opc' in tool
+  '<div class="t2-card t2-toggles-card abierta" id="opciones">')
+assert 'id="opciones"' in tool
 tool = tool.replace('<div class="t2-eyebrow t2-eyebrow-subir">01 · SUBE TU CARTA</div>', '')
 tool = tool.replace('📸 Súbeme una foto primero', 'Sube una foto primero')
 tool = tool.replace('¿No tienes la carta a mano? <b>Pruébalo con una de ejemplo →</b>', '¿No tienes la carta a mano? <b>Prueba con una de ejemplo</b>')

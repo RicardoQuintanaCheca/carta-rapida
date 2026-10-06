@@ -54,6 +54,8 @@ body.n .nnav{z-index:60}
 #herramienta .t2-toggles-card > :not(.n-opc){display:none!important}
 #herramienta .t2-toggles-card.abierta > .t2-nombre,#herramienta .t2-toggles-card.abierta > .t2-feat-row{display:flex!important}
 #herramienta .t2-toggles-card.abierta > .t2-nombre{flex-direction:column}
+#herramienta #opciones > .t2-nombre{border-top:0!important;padding-top:0!important}
+@media (max-width:900px){#herramienta #opciones > .t2-nombre{padding-top:18px!important}}
 #herramienta .t2-toggles-card.abierta > .logo-drop.on,#herramienta .t2-toggles-card.abierta > .logo-preview-row.on{display:flex!important}
 #herramienta .t2-toggles-card.abierta > .idioma-zone.on,#herramienta .t2-toggles-card.abierta > .texto-drop.on,#herramienta .t2-toggles-card.abierta > .idioma-zone.open,#herramienta .t2-toggles-card.abierta > .texto-drop.open{display:block!important}
 #herramienta .t2-toggles-card{border:0!important;padding-top:0!important}
