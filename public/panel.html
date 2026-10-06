@@ -1307,22 +1307,48 @@
   // En una copia traducida se enseña siempre cómo volver a la original; en la original, sus copias.
   async function pintarVersiones() {
     const yo = ed, c = ed.carta, caja = document.getElementById('avisoCopia');
-    const idioma = String(c.idioma || 'es').slice(0, 2), esCopia = idioma !== 'es';
-    if (caja && esCopia) caja.innerHTML = `<div class="aviso-copia"><div><b>Estás en la copia en ${esc(IDIOMAS[idioma] || idioma)}</b><span>Tu carta en español sigue intacta, guardada aparte.</span></div><a class="btn oscuro peq" href="#" id="volverOriginal">Volver a la carta en español</a></div>`;
+    const idioma = String(c.idioma || 'es').slice(0, 2), esCopia = idioma !== 'es', nom = IDIOMAS[idioma] || idioma;
+    // Primero se busca la original: así el botón nunca queda a medias
     let lista = [];
     try { const d = await Cuenta.api('/cartas'); lista = d.cartas || []; } catch (e) {}
     if (ed !== yo) return;
+    const esp = x => (x.idioma || 'es').slice(0, 2) === 'es';
     if (esCopia) {
-      const base = ed.titulo.replace(/\s*\([^()]*\)\s*$/, '').trim();
-      const ori = (c.copia_de && lista.find(x => x.id === c.copia_de.id)) || lista.find(x => x.id !== ed.id && (x.idioma || 'es').slice(0, 2) === 'es' && x.titulo.trim() === base);
-      const a = document.getElementById('volverOriginal');
-      if (a) { a.href = ori ? '#carta=' + ori.id : '#'; if (!ori) { a.textContent = 'Ver mis cartas'; a.onclick = e => { e.preventDefault(); location.hash = ''; }; } }
+      const base = ed.titulo.replace(/(\s*\([^()]*\))+\s*$/, '').trim().toLowerCase();
+      const ori = (c.copia_de && lista.find(x => x.id === c.copia_de.id && esp(x)))
+        || lista.find(x => x.id !== ed.id && esp(x) && x.titulo.trim().toLowerCase() === base);
+      ed.original = ori ? ori.id : null;
+      if (caja) caja.innerHTML = ori
+        ? `<div class="aviso-copia"><div><b>Estás en la copia en ${esc(nom)}</b><span>Tu carta en español sigue intacta, guardada aparte.</span></div><a class="btn oscuro peq" href="#carta=${esc(ori.id)}">Volver a la carta en español</a></div>`
+        : `<div class="aviso-copia"><div><b>Esta carta está en ${esc(nom)} y no tiene versión en español</b><span>Se tradujo al leerla, así que el texto original no se guardó. Puedes crear ahora la versión en español: se traduce de vuelta y esta se queda como está.</span></div><button class="btn oscuro peq" type="button" id="crearEspanol">Crear la versión en español</button></div>`;
+      const b = document.getElementById('crearEspanol'); if (b) b.onclick = () => crearEspanol(b);
+      pintarBilingue();
       return;
     }
+    if (caja) caja.innerHTML = '';
     // En la original: las copias que ya existen, para saltar a ellas sin pasar por la lista
-    const copias = lista.filter(x => x.id !== ed.id && (x.idioma || 'es').slice(0, 2) !== 'es' && x.titulo.trim().startsWith(ed.titulo.trim() + ' ('));
+    const copias = lista.filter(x => x.id !== ed.id && !esp(x) && x.titulo.trim().toLowerCase().startsWith(ed.titulo.trim().toLowerCase() + ' ('));
     const hueco = document.getElementById('copiasHechas');
     if (hueco) hueco.innerHTML = copias.length ? `<div class="formato-nota"><b>Copias que ya tienes</b>${copias.map(x => `<a href="#carta=${esc(x.id)}">${esc(IDIOMAS[(x.idioma || '').slice(0, 2)] || x.idioma)}</a>`).join(' · ')}</div>` : '';
+  }
+  // Una carta que se guardó ya traducida no tiene original: se crea la versión en español traduciendo de vuelta
+  async function crearEspanol(b) {
+    const txt = b.textContent; b.disabled = true; b.textContent = 'Traduciendo al español…';
+    try {
+      const nueva = await pedirAjuste('Traduce TODA la carta al español de España con el vocabulario habitual de una carta de restaurante: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "es".');
+      nueva.idioma = 'es';
+      delete nueva.idioma2;
+      heredarAlergenos(ed.carta, nueva, true);
+      const base = ed.titulo.replace(/(\s*\([^()]*\))+\s*$/, '').trim() || ed.titulo;
+      const d = await Cuenta.api('/cartas', { titulo: base, carta: nueva, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera });
+      if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la versión en español.');
+      // Esta carta queda enlazada a la nueva, y con el idioma en el nombre para distinguirlas
+      ed.carta.copia_de = { id: d.id, titulo: base };
+      if (!/\([^()]*\)\s*$/.test(ed.titulo)) ed.titulo = `${ed.titulo} (${IDIOMAS[String(ed.carta.idioma).slice(0, 2)] || ed.carta.idioma})`.slice(0, 80);
+      ed.pendiente = true; await guardarYa();
+      Cuenta.aviso('Versión en español creada. Es una traducción de vuelta: repasa los nombres de los platos.');
+      location.hash = 'carta=' + d.id;
+    } catch (e) { Cuenta.aviso(e.message); if (b.isConnected) { b.disabled = false; b.textContent = txt; } }
   }
 
   // ── Carta bilingüe ──
@@ -1332,7 +1358,13 @@
     const caja = document.getElementById('biCaja');
     if (!caja) return;
     const c = ed.carta, cod = c.idioma2;
-    if ((c.idioma || 'es').slice(0, 2) !== 'es') { caja.innerHTML = '<p class="ayuda">Esta carta ya está traducida. La versión en dos idiomas se hace desde la carta en español.</p>'; return; }
+    if ((c.idioma || 'es').slice(0, 2) !== 'es') {
+      caja.innerHTML = ed.original
+        ? `<p class="ayuda">Esta es una copia traducida. La carta en dos idiomas se hace desde la versión en español.</p><a class="btn oscuro peq" href="#carta=${esc(ed.original)}&t=traducir">Ir a la carta en español</a>`
+        : `<p class="ayuda">Esta carta está traducida y no tiene versión en español. Créala primero y, desde ella, añade el segundo idioma.</p><button class="btn oscuro peq" type="button" id="crearEspanol2">Crear la versión en español</button>`;
+      const b2 = document.getElementById('crearEspanol2'); if (b2) b2.onclick = () => crearEspanol(b2);
+      return;
+    }
     if (!cod) {
       caja.innerHTML = `<div class="bi-fila"><select class="campo" id="biIdioma" aria-label="Segundo idioma">${Object.entries(IDIOMAS).map(([k, n]) => `<option value="${k}">${n.charAt(0).toUpperCase() + n.slice(1)}</option>`).join('')}</select><button class="btn oscuro" type="button" id="biPoner">Añadir segundo idioma</button></div>
         <p class="ayuda">Se traducen las secciones, los platos y las descripciones. Podrás corregir cada línea a mano. Si no dominas el idioma, pide a alguien que lo revise antes de imprimir.</p>`;
