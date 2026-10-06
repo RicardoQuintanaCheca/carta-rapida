@@ -1285,6 +1285,16 @@
     pintarPlan();
   }
 
+  // Alérgenos: se marcan en el panel, así que la carta se guarda primero y se abre allí en esa pestaña
+  async function irAAlergenos() {
+    if (!cartaActual) return;
+    medir('alergenos_desde_herramienta');
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta para marcar los alérgenos de cada plato y descargar la tabla para inspección.');
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('Marcar alérgenos y descargar la tabla es de Carta Pro.');
+    if (!cartaGuardadaId) await guardarEnPanel(true);
+    if (cartaGuardadaId) location.href = '/panel#carta=' + cartaGuardadaId + '&t=alergenos';
+  }
+
   // Antes de ir a la pasarela guardamos la carta, para recuperarla al volver
   function guardarPendiente() {
     if (!cartaActual) return;

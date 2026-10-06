@@ -1405,6 +1405,7 @@
   .guardar-btn .pro-pill { margin-left: 2px; }
   .guardar-btn.guardada { border-color: #2E7D32; color: #1F5E23; background: #EAF5EA; }
   .guardar-btn.guardada .pro-pill { display: none; }
+  #alergenosBtn { margin-top: 16px; }
   .guardar-nota { font-size: 12.5px; color: #6E6E6E; text-align: center; margin-top: 7px; line-height: 1.45; }
   .pro-lista b { font-weight: 700; color: #0E0E0E; }
   .pro-btn { background: var(--cta); font-size: 18.7px; box-shadow: 0 5px 0 #0E0E0E; }
@@ -1663,6 +1664,12 @@
               <span id="guardarTexto">Guardar en mis cartas</span><span class="pro-pill">Pro</span>
             </button>
             <div class="guardar-nota" id="guardarNota">Guárdala y cambia platos y precios cuando quieras, sin volver a empezar.</div>
+
+            <button class="guardar-btn" id="alergenosBtn" onclick="irAAlergenos()" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M12 8c-1.6-1.6-1.6-4 0-6 1.6 2 1.6 4.4 0 6z"/><path d="M12 12.6c-2.4.2-4-1-4.4-3.2 2.4-.2 4 1 4.4 3.2z"/><path d="M12 12.6c2.4.2 4-1 4.4-3.2-2.4-.2-4 1-4.4 3.2z"/><path d="M12 17.2c-2.4.2-4-1-4.4-3.2 2.4-.2 4 1 4.4 3.2z"/><path d="M12 17.2c2.4.2 4-1 4.4-3.2-2.4-.2-4 1-4.4 3.2z"/></svg>
+              <span>Marcar alérgenos</span><span class="pro-pill">Pro</span>
+            </button>
+            <div class="guardar-nota">Iconos o números en la carta, con su leyenda, y la tabla para inspección.</div>
 
             <div class="pro-caja" id="proCaja">
               <div class="pro-top"><span class="pro-eyebrow">Carta Pro</span><span class="pro-precio">desde <b>9,90 €</b>al mes</span></div>
@@ -3655,6 +3662,16 @@
       Cuenta.aviso(d.error || 'No se ha podido guardar.');
     }
     pintarPlan();
+  }
+
+  // Alérgenos: se marcan en el panel, así que la carta se guarda primero y se abre allí en esa pestaña
+  async function irAAlergenos() {
+    if (!cartaActual) return;
+    medir('alergenos_desde_herramienta');
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta para marcar los alérgenos de cada plato y descargar la tabla para inspección.');
+    if (Cuenta.estado.plan === 'gratis') return hacersePro('Marcar alérgenos y descargar la tabla es de Carta Pro.');
+    if (!cartaGuardadaId) await guardarEnPanel(true);
+    if (cartaGuardadaId) location.href = '/panel#carta=' + cartaGuardadaId + '&t=alergenos';
   }
 
   // Antes de ir a la pasarela guardamos la carta, para recuperarla al volver
