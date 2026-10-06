@@ -33,6 +33,31 @@ const CLAVE_STRIPE = process.env.STRIPE_SECRET_KEY || '';
 const MODO_DEMO = !CLAVE_STRIPE && process.env.PAGOS_DEMO === 'si';
 const PAGOS_ACTIVOS = !!CLAVE_STRIPE || MODO_DEMO;
 const stripe = CLAVE_STRIPE ? require('stripe')(CLAVE_STRIPE) : null;
+
+// La pantalla de pago con la imagen de Carta Rápida (nombre, icono y botón naranja) en vez de la de la cuenta de Stripe.
+// Solo afecta a estas sesiones de pago: la marca de la cuenta (la de la tienda) no se toca.
+// Si Stripe rechaza la personalización por lo que sea, el pago se crea igual, con la imagen de siempre.
+const MARCA_PAGO = process.env.PAGO_SIN_MARCA === 'si' ? null : {
+  display_name: 'Carta Rápida',
+  background_color: '#FFFFFF',
+  button_color: '#FF4A1C',
+  border_style: 'rounded',
+  icon: { type: 'url', url: (process.env.WEB_URL || 'https://www.cartarapida.es').replace(/\/$/, '') + '/icono-512.png' }
+};
+let marcaFalla = false;
+async function crearSesionPago(params) {
+  if (MARCA_PAGO && !marcaFalla) {
+    try {
+      return await stripe.checkout.sessions.create({ ...params, branding_settings: MARCA_PAGO }, { apiVersion: '2025-09-30.clover' });
+    } catch (e) {
+      const txt = String((e && (e.param || '')) + ' ' + (e && e.message || ''));
+      // Pase lo que pase con el intento personalizado, se prueba el pago normal: cobrar va antes que la imagen
+      if (/branding|api.?version/i.test(txt)) marcaFalla = true; // Stripe no la admite: no se reintenta en cada pago
+      console.warn('[PAGO] pantalla de pago sin imagen propia:', e.message);
+    }
+  }
+  return stripe.checkout.sessions.create(params);
+}
 const CUENTAS_ACTIVAS = !!db;
 
 // Secreto para firmar sesiones. Si no se configura, se deriva de la clave de OpenAI (estable entre reinicios)
@@ -479,11 +504,11 @@ function crearRutas({ limite, limiteCuenta }) {
       };
       let sesion;
       try {
-        sesion = await stripe.checkout.sessions.create({ ...base, payment_method_types: ['card', 'paypal'] });
+        sesion = await crearSesionPago({ ...base, payment_method_types: ['card', 'paypal'] });
       } catch (e) {
         // Si PayPal no admite cobros recurrentes en la cuenta, se ofrece solo tarjeta (con Apple Pay y Google Pay)
         console.warn('[PAGO] sin PayPal en suscripción:', e.message);
-        sesion = await stripe.checkout.sessions.create({ ...base, payment_method_types: ['card'] });
+        sesion = await crearSesionPago({ ...base, payment_method_types: ['card'] });
       }
       res.json({ ok: true, url: sesion.url });
     } catch (e) {
