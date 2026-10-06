@@ -555,6 +555,16 @@
 .es-menu .pagina .pie > * { margin-left: auto; margin-right: auto; text-align: center; }
 .es-menu .pagina .pie-al { width: 100%; justify-content: center; }
 .es-menu .pagina .pie-serv { justify-content: center; }
+/* La cabecera del menú (nombre y fecha) también va centrada. Cartel no: su nombre va en vertical en el lateral. */
+.es-menu:not(.est-cartel) .pagina .cab { text-align: center; }
+.es-menu.est-barra .pagina .cab, .es-menu.est-editorial .pagina .cab, .es-menu.est-riviera .pagina .cab, .es-menu.est-bloque .pagina .cab { flex-direction: column; align-items: center; justify-content: center; gap: 3mm; }
+.es-menu .pagina .cab .cab-meta, .es-menu .pagina .cab .cab-lado { align-items: center; text-align: center; max-width: none; padding-bottom: 0; }
+.es-menu:not(.est-cartel) .pagina .cab .cab-nombre { margin-left: 0; margin-right: 0; }
+.es-menu:not(.est-cartel) .pagina .cab .cab-sub { max-width: none; text-align: center; }
+.es-menu.est-bloque .pagina .cab .cab-sub { margin-bottom: 0; }
+.es-menu.est-pizarra .pagina .cab .cab-nombre { transform-origin: center bottom; padding-left: 3mm; }
+.es-menu.est-gaceta .pagina .gz-arriba { justify-content: center; }
+.es-menu.est-gaceta .pagina .gz-arriba span:last-child, .es-menu.est-ticket .pagina .cab .tk-linea:last-child { display: none; }
 /* Plato sin precio: sin puntos guía ni hueco reservado */
 .pagina .pl-sp .pl-g, .pagina .pl-sp .pl-l::after, .pagina .pl-sp .pl-l::before { display: none; }
 .pagina .pl-sp .pl-l { padding-right: 0; }
