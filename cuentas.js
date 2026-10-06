@@ -177,7 +177,7 @@ function limpiarDatosCarta(b) {
     estilo: ESTILO_OK.test(b.estilo || '') ? b.estilo : 'sobremesa',
     logo,
     cabecera: b.cabecera === 'nombre' ? 'nombre' : 'logo',
-    ...(['slim', 'elastico'].includes(b.formato) ? { formato: b.formato } : {})
+    ...(['slim', 'elastico', 'a5x2'].includes(b.formato) ? { formato: b.formato } : {})
   };
   const json = JSON.stringify(datos);
   if (json.length > MAX_DATOS) return { error: 'La carta o el logotipo son demasiado grandes para guardarlos.' };
@@ -185,14 +185,15 @@ function limpiarDatosCarta(b) {
   return { json, titulo, estilo: datos.estilo };
 }
 function resumenCarta(c) {
-  let platos = 0, secciones = 0, idioma = 'es';
+  let platos = 0, secciones = 0, idioma = 'es', menu = false;
   try {
     const d = JSON.parse(c.datos);
     secciones = d.carta.secciones.length;
     platos = d.carta.secciones.reduce((n, s) => n + (s.platos || []).length, 0);
     idioma = d.carta.idioma || 'es';
+    menu = !!d.carta.menu;
   } catch {}
-  return { id: c.id, titulo: c.titulo, estilo: c.estilo, creado: c.creado, actualizado: c.actualizado, platos, secciones, idioma };
+  return { id: c.id, titulo: c.titulo, estilo: c.estilo, creado: c.creado, actualizado: c.actualizado, platos, secciones, idioma, ...(menu ? { menu: true } : {}) };
 }
 
 // ── Recuperar contraseña: enlace firmado que caduca en 1 hora y deja de valer al cambiar la contraseña ──

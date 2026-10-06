@@ -86,6 +86,18 @@ function normalizarCarta(c) {
     secciones: secciones.filter(s => s.platos.length),
     ...(['numeros', 'no'].includes(c.alergenos_modo) ? { alergenos_modo: c.alergenos_modo } : {})
   };
+  // Menú del día: precio único, lo que incluye, la fecha y los platos habituales del local (para escribirlos más rápido)
+  if (c.menu && typeof c.menu === 'object') {
+    const m = c.menu;
+    out.menu = {
+      titulo: limpio(m.titulo).slice(0, 40) || 'Menú del día',
+      fecha: limpio(m.fecha).slice(0, 60),
+      precio: limpiarPrecio(m.precio).slice(0, 20),
+      incluye: limpio(m.incluye).slice(0, 160),
+      ...(m.fecha_auto === true ? { fecha_auto: true } : {}),
+      ...(Array.isArray(m.habituales) ? { habituales: [...new Set(m.habituales.map(x => limpio(x).slice(0, 120)).filter(Boolean))].slice(0, 120) } : {})
+    };
+  }
   // Criterio de diseño: destacar poco para que destaque. Máx. 1 por sección y 3 en total.
   let quedan = 3;
   out.secciones.forEach(s => {

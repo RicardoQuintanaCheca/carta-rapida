@@ -54,7 +54,8 @@
     pt: { rec: 'Recomendado', carta: 'Ementa', alergenos: 'Alergénios' },
     zh: { rec: '推荐', carta: '菜单', alergenos: '过敏原' }
   };
-  const t = k => (TXT[IDIOMA] || TXT.es)[k];
+  let ROTULO = null; // en un menú del día, donde la cabecera diría «Carta» dice «Menú del día»
+  const t = k => k === 'carta' && ROTULO ? ROTULO : (TXT[IDIOMA] || TXT.es)[k];
 
   // "LOMO BAJO DE VACA" → "Lomo bajo de vaca" (un diseñador nunca compone la carta entera en mayúsculas)
   function sinGritos(texto) {
@@ -92,9 +93,10 @@
   // Regla de orden: el precio SIEMPRE en la línea del nombre, en la misma posición.
   function platoComun(p) {
     const d = partir(p);
-    const pr = precio(p.precio);
+    let pr = precio(p.precio);
+    if (ROTULO && /^\+\s?\d+(,\d+)?$/.test(pr)) pr += ' €'; // suplemento en un menú del día: «+4 €»
     const ico = d.al.length && MODO_AL === 'iconos' ? `<span class="pl-ali" aria-label="${esc(d.al.map(id => AL.nombre(id, IDIOMA)).join(', '))}">${d.al.map(id => AL.icono(id)).join('')}</span>` : '';
-    return `<div class="pl${p.destacado ? ' pl-dest' : ''}">`
+    return `<div class="pl${p.destacado ? ' pl-dest' : ''}${pr ? '' : ' pl-sp'}">`
       + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
       + `<div class="pl-l" style="--pw:${pr.length}"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}${d.al.length && MODO_AL === 'numeros' ? `<sup class="pl-als">${d.al.join(' · ')}</sup>` : ''}${d.descripcion ? '' : ico}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
       + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}${ico}</div>` : '')
@@ -363,7 +365,13 @@
     const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
     IDIOMA = String(carta.idioma || 'es').slice(0, 2);
     MODO_AL = ['numeros', 'no'].includes(carta.alergenos_modo) ? carta.alergenos_modo : 'iconos';
-    const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
+    // Menú del día: un precio para todo, lo que incluye y la fecha. Los platos van sin precio (o con suplemento).
+    const mm = carta.menu && typeof carta.menu === 'object' ? carta.menu : null;
+    const txt = (v, n) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, n);
+    const M = mm ? { titulo: txt(mm.titulo, 40) || 'Menú del día', fecha: txt(mm.fecha, 60), precio: txt(mm.precio, 20), incluye: txt(mm.incluye, 160) } : null;
+    ROTULO = M ? M.titulo : null;
+    const cartaCab = M ? { ...carta, subtitulo: M.fecha || '' } : carta;
+    const secciones = (carta.secciones || []).map(s => ({ ...s, platos: (s.platos || []).filter(p => p && String(p.nombre || '').trim()) })).filter(s => s.platos.length);
     // Secciones largas (8 platos o más) se trocean en bloques de ~4 platos para que
     // puedan continuar en la columna siguiente; el título va solo en el primer bloque.
     const htmlSec = [];
@@ -385,21 +393,29 @@
     // Formato: A4 (por defecto), A4 slim (140 × 297 mm) o cuadernillo A4 en pliegos A3 con hendido.
     // El slim se compone sobre una hoja proporcionalmente más grande y se reduce: así los márgenes
     // y adornos de cada estilo encogen a la vez que la hoja, y la letra se compensa con la escala.
-    const FORMATO = ['slim', 'elastico'].includes(opts.formato) ? opts.formato : 'a4';
-    const S = FORMATO === 'slim' ? 0.8 : 1;
-    const kMin = K_MIN / S, kComodo = K_COMODO / S;
+    // «a5x2» (solo menú del día): la hoja se compone como un A4 y sale dos veces, reducida, en un folio apaisado para cortar.
+    const FORMATO = ['slim', 'elastico'].includes(opts.formato) || (opts.formato === 'a5x2' && M) ? opts.formato : 'a4';
+    const S = FORMATO === 'slim' ? 0.8 : FORMATO === 'a5x2' ? 0.7071 : 1;
+    // en A5 se admite una letra algo menor (≈8,4 pt el plato): es una hoja que se lee de cerca
+    const kMin = (FORMATO === 'a5x2' ? 0.76 : K_MIN) / S, kComodo = (FORMATO === 'a5x2' ? 0.78 : K_COMODO) / S;
     pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}`;
     destino.appendChild(pliego);
 
     // Crea una página vacía con N columnas y devuelve sus piezas
-    function pagina(cols, conCabecera, esUltima, k) {
+    function pagina(cols, conCabecera, esUltima, k, primera) {
       const p = document.createElement('div');
       p.className = `pagina cols-${cols}`;
       p.style.setProperty('--letras', Math.max(6, String(carta.nombre_restaurante || '').length));
       p.style.setProperty('--k', k);
-      p.innerHTML = `${conCabecera ? estilo.cabecera(carta, logo) : `<header class="cab-corta">${esc(carta.nombre_restaurante || '')}</header>`}
+      const cab = conCabecera ? estilo.cabecera(cartaCab, logo) : `<header class="cab-corta">${esc(carta.nombre_restaurante || '')}</header>`;
+      // El rótulo «Menú del día»: si el estilo ya lo lleva en su cabecera, no se repite
+      const rotulo = M && primera && !(conCabecera && cab.includes(esc(M.titulo)))
+        ? `<div class="menu-tit"><span class="pl-n">${esc(M.titulo)}</span></div>` : '';
+      const pm = M && esUltima && (M.precio || M.incluye)
+        ? `<div class="menu-precio">${M.precio ? `<div class="pl-p">${precio(M.precio)}${/^\d+([.,]\d+)?$/.test(M.precio.replace(/€/g, '').trim()) ? ' €' : ''}</div>` : ''}${M.incluye ? `<div class="pl-d">${sinViuda(M.incluye)}</div>` : ''}</div>` : '';
+      p.innerHTML = `${cab}${rotulo}
         <main class="cuerpo">${Array.from({ length: cols }, () => '<div class="col"></div>').join('')}</main>
-        ${pie(carta, esUltima, opts.credito !== false)}`;
+        ${pm}${pie(carta, esUltima, opts.credito !== false)}`;
       pliego.appendChild(p);
       return p;
     }
@@ -409,7 +425,7 @@
       pliego.innerHTML = '';
       const paginas = [];
       // En cuadernillo la cabecera grande va en la portada: dentro, solo el nombre en pequeño
-      for (let i = 0; i < numPag; i++) paginas.push(pagina(cols, i === 0 && FORMATO !== 'elastico', i === numPag - 1, k));
+      for (let i = 0; i < numPag; i++) paginas.push(pagina(cols, i === 0 && FORMATO !== 'elastico', i === numPag - 1, k, i === 0));
       // Alturas de cada sección, medidas en una columna real
       const colRef = paginas[0].querySelector('.col');
       const alturas = htmlSec.map(h => {
@@ -432,7 +448,8 @@
 
     function mejorK(cols, numPag) {
       // con varias páginas hay sitio: la letra puede crecer un poco más
-      const K_MAX = (numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : kMaxPara(totalPlatos)) / S;
+      // un menú del día es una hoja corta: la letra puede ir más grande que en una carta
+      const K_MAX = (numPag > 1 ? Math.min(1.3, kMaxPara(totalPlatos / numPag) * 1.1) : M && cols === 1 ? Math.max(kMaxPara(totalPlatos), 1.75) : kMaxPara(totalPlatos)) / S;
       let lo = kMin, hi = K_MAX, mejor = null;
       const alMax = probar(cols, numPag, hi);
       if (alMax.ratio <= HOLGURA) return alMax;
@@ -449,7 +466,8 @@
 
     // Candidatas: 1 columna solo tiene sentido en cartas cortas
     const candidatas = [];
-    const COLS = FORMATO === 'slim' ? 1 : 2; // la hoja estrecha va siempre a una columna
+    // la hoja estrecha va siempre a una columna; un menú del día normal, también (se lee de arriba abajo)
+    const COLS = FORMATO === 'slim' || (M && totalPlatos <= 16) ? 1 : 2;
     if (totalPlatos <= 14 || COLS === 1) candidatas.push([1, 1]);
     if (COLS === 2) candidatas.push([2, 1]);
     let elegida = null;
@@ -526,7 +544,7 @@
         return p;
       };
       const blancas = enBlanco(final.paginas.length);
-      const portada = suelta('portada', `<div class="portada-in">${estilo.cabecera(carta, logo)}</div>`);
+      const portada = suelta('portada', `<div class="portada-in">${estilo.cabecera(cartaCab, logo)}</div>`);
       const contra = suelta('contra', `<div class="contra-in">${logo ? `<img class="cab-logo" src="${logo}" alt="">` : esc(carta.nombre_restaurante || '')}</div>`);
       pliego.insertBefore(portada, pliego.firstChild);
       // Las páginas en blanco, donde menos molestan: el reverso de la portada y el de la contraportada
@@ -548,8 +566,12 @@
         pliego.replaceChildren(...caras);
       }
     }
+    // Dos por folio: cada página sale dos veces, lado a lado, en un A4 apaisado con marca de corte
+    if (FORMATO === 'a5x2' && opts.imponer) {
+      pliego.replaceChildren(...[...pliego.children].map(p => { const h = document.createElement('div'); h.className = 'hoja-a4x2'; h.append(p, p.cloneNode(true)); return h; }));
+    }
     const numPaginas = FORMATO === 'elastico' ? hojas * 4 : elegida.numPag;
-    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: numPaginas, escala: +(elegida.k * S).toFixed(3), platos: totalPlatos, formato: FORMATO, ...(hojas ? { hojas } : {}) });
+    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: numPaginas, escala: +(elegida.k * S).toFixed(3), platos: totalPlatos, formato: FORMATO, ...(hojas ? { hojas } : {}), ...(M ? { menu: true } : {}) });
     return JSON.parse(pliego.dataset.info);
   }
 

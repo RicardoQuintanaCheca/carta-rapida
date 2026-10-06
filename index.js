@@ -483,7 +483,7 @@ function slug(s) {
 app.post('/pdf', limitePDF, async (req, res) => {
   try {
     const { carta, estilo, logo } = req.body || {};
-    const formato = ['slim', 'elastico'].includes((req.body || {}).formato) ? req.body.formato : 'a4';
+    const formato = ['slim', 'elastico', 'a5x2'].includes((req.body || {}).formato) ? req.body.formato : 'a4';
     if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
@@ -493,7 +493,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
     // Los alérgenos con iconos y leyenda son de Carta Pro: en la versión gratis no se pintan
-    if (!pro) { limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
+    if (!pro) { delete limpia.menu; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
     let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {
@@ -501,7 +501,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
         return res.status(402).json({ ok: false, pro: true, motivo: 'idioma', error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
       }
       if (formato !== 'a4') {
-        return res.status(402).json({ ok: false, pro: true, motivo: 'formato', error: 'El A4 slim y el cuadernillo son de Carta Pro. Pruébalo gratis 7 días o descárgala en A4.' });
+        return res.status(402).json({ ok: false, pro: true, motivo: 'formato', error: 'Este formato es de Carta Pro. Pruébalo gratis 7 días o descárgala en A4.' });
       }
       if (ESTILOS_PRO.includes(estiloFinal)) {
         return res.status(402).json({ ok: false, pro: true, motivo: 'estilo', error: 'Este estilo es de Carta Pro. Pruébalo gratis 7 días o elige uno de los estilos gratis.' });
@@ -524,7 +524,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="carta-${slug(limpia.nombre_restaurante)}${formato === 'slim' ? '-slim' : formato === 'elastico' ? '-cuadernillo-a3' : ''}.pdf"`,
+      'Content-Disposition': `attachment; filename="${limpia.menu ? 'menu-del-dia' : 'carta'}-${slug(limpia.nombre_restaurante)}${formato === 'slim' ? '-slim' : formato === 'elastico' ? '-cuadernillo-a3' : formato === 'a5x2' ? '-a5-dos-por-folio' : ''}.pdf"`,
       'Cache-Control': 'no-store'
     });
     // Versión gratis: la carta se envía al email (así el email es de verdad). Si el correo falla, se descarga igual.

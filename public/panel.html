@@ -243,6 +243,9 @@
 
   /* Formato de la hoja */
   .formatos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .menu-campos { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 0 14px; }
+  .etq-menu { font-weight: 700; color: var(--tinta-coral); }
+  @media (max-width: 560px) { .menu-campos { grid-template-columns: minmax(0, 1fr); } }
   .formato-b { border: none; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 14px; background: #fff; padding: 16px 14px 14px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; transition: box-shadow .15s, background-color .15s; }
   .formato-b:hover { box-shadow: inset 0 0 0 1.5px #CFC6BA; }
   .formato-b.on { box-shadow: inset 0 0 0 2px var(--ink); background: var(--suave); }
@@ -444,7 +447,7 @@
     const n = cartas.length;
     app.innerHTML = `
       <div class="cab-lista"><div><h1>Mis cartas</h1><p>${n ? n + (n === 1 ? ' carta guardada' : ' cartas guardadas') : 'Aún no has guardado ninguna carta'}</p></div>
-        <a class="btn primario" href="/#herramienta">+ Nueva carta desde una foto</a></div>
+        <div class="fila-botones" style="margin:0"><button class="btn" type="button" id="nuevoMenu">+ Menú del día</button><a class="btn primario" href="/#herramienta">+ Nueva carta desde una foto</a></div></div>
       ${avisoPlanHTML()}
       ${franjaProHTML(cartas)}
       ${n ? `<div class="rejilla">${cartas.map(c => `
@@ -452,7 +455,7 @@
           <div class="tarjeta-img" data-id="${esc(c.id)}" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
           <div class="tarjeta-cuerpo">
             <div class="tarjeta-tit">${esc(c.titulo)}</div>
-            <div class="tarjeta-meta">${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
+            <div class="tarjeta-meta">${c.menu ? '<b class="etq-menu">Menú del día</b> · ' : ''}${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
             <div class="tarjeta-acc">
               <a class="btn peq oscuro" href="#carta=${esc(c.id)}">Editar</a>
               <button class="icono-btn" type="button" title="Duplicar" aria-label="Duplicar ${esc(c.titulo)}" onclick="duplicar('${esc(c.id)}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
@@ -468,6 +471,7 @@
           <p>Te enviamos gratis un montaje de tu carta dentro de un portamenús Kartia, en el material que mejor encaje con tu local. Lo ves antes de decidir nada.</p></div>
         <div id="kartiaCaja"></div></section>` : ''}`;
     if (n) cajaMontaje(document.getElementById('kartiaCaja'), cartas, 'panel');
+    document.getElementById('nuevoMenu').onclick = e => nuevoMenu(cartas, e.currentTarget);
     app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } }));
     miniaturas();
   }
@@ -548,6 +552,26 @@
     app.querySelectorAll('.tarjeta-img[data-id]').forEach(el => io.observe(el));
   }
 
+  // ── Menú del día ──
+  const hoyTexto = () => { const f = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }); return f.charAt(0).toUpperCase() + f.slice(1); };
+  // Menú nuevo: hereda nombre, estilo y logotipo de tu última carta, para que salga con la misma imagen
+  async function nuevoMenu(cartas, b) {
+    if (!Cuenta.esPro()) return Cuenta.planes({ motivo: 'El menú del día es de Carta Pro.', vuelta: 'panel' });
+    b.disabled = true;
+    let base = {};
+    const ref = cartas.find(c => !c.menu) || cartas[0];
+    if (ref) { const d = await Cuenta.api('/cartas/' + ref.id); if (d.ok) base = d; }
+    const bc = base.carta || {};
+    const carta = { nombre_restaurante: bc.nombre_restaurante || '', subtitulo: '', idioma: 'es', nota_pie: bc.nota_pie || '', servicios: [],
+      menu: { titulo: 'Menú del día', fecha: hoyTexto(), fecha_auto: true, precio: '', incluye: 'Pan, bebida y postre o café', habituales: [] },
+      secciones: ['Primeros', 'Segundos', 'Postres'].map(nombre => ({ nombre, platos: [plato(), plato(), plato()] })) };
+    const d = await Cuenta.api('/cartas', { titulo: 'Menú del día', carta, estilo: base.estilo || 'pizarra', logo: base.logo || null, cabecera: base.cabecera || 'logo' });
+    b.disabled = false;
+    if (d.status === 402) return Cuenta.planes({ motivo: 'El menú del día es de Carta Pro.', vuelta: 'panel' });
+    if (!d.ok) return Cuenta.aviso(d.error || 'No se ha podido crear el menú.');
+    location.hash = 'carta=' + d.id + '&t=platos';
+  }
+
   async function duplicar(id) {
     const d = await Cuenta.api('/cartas/' + id + '/duplicar', {});
     if (d.status === 402) return Cuenta.planes({ motivo: 'Duplicar y editar cartas es de Carta Pro.', vuelta: 'panel' });
@@ -579,9 +603,13 @@
     const aEs = p => /^\d+\.\d+$/.test(String(p || '')) ? parseFloat(p).toFixed(2).replace('.', ',') : (p || '');
     carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
     carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
-    const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|frase|traducir)/) || [])[1];
+    const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|frase|traducir)/) || [])[1] || (carta.menu ? 'platos' : '');
+    // La fecha «de hoy» se pone sola cada vez que abres el menú
+    let fechaCambiada = false;
+    if (carta.menu && carta.menu.fecha_auto && carta.menu.fecha !== hoyTexto()) { carta.menu.fecha = hoyTexto(); fechaCambiada = true; }
     ed = { id, titulo: d.titulo, carta, estilo: d.estilo, formato: d.formato || 'a4', logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
     pintarEditor();
+    if (fechaCambiada) cambio();
   }
 
   function puedeEditar() { return Cuenta.esPro(); }
@@ -600,7 +628,7 @@
       <div class="ed solo-form" id="ed">
         <div class="ed-form">
           <div class="ed-tabs" role="tablist" aria-label="Qué quieres cambiar">
-            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">Platos y precios</button><button type="button" role="tab" data-t="alergenos">Alérgenos</button><button type="button" role="tab" data-t="frase">Cambios rápidos</button><button type="button" role="tab" data-t="traducir">Traducir</button>
+            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">${c.menu ? 'Menú de hoy' : 'Platos y precios'}</button><button type="button" role="tab" data-t="alergenos">Alérgenos</button><button type="button" role="tab" data-t="frase">Cambios rápidos</button><button type="button" role="tab" data-t="traducir">Traducir</button>
           </div>
           <fieldset id="edFs" data-t="${ed.tab}">
             <section class="bloque" data-t="diseno">
@@ -634,6 +662,9 @@
                 <button type="button" class="formato-b" data-f="elastico">
                   <svg viewBox="0 0 132 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M66 9L10 3v88l56 6 56-6V3z" fill="#fff"/><path d="M66 9v88" stroke-dasharray="3 3" stroke-width="1.2"/><path d="M66 3v100" stroke="#FF4A1C" stroke-width="2.4" stroke-linecap="round"/><path d="M22 22h30M22 30h30M22 38h30M22 50h30M22 58h30M80 26h30M80 34h30M80 42h30M80 54h30M80 62h30" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg>
                   <div><b>Cuadernillo con elástico</b><span>Hojas A3 dobladas por el centro, con portada y contraportada.</span><i>A4 cerrado · A3 abierto</i></div></button>
+                ${c.menu ? `<button type="button" class="formato-b" data-f="a5x2">
+                  <svg viewBox="0 0 132 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="8" width="120" height="84" rx="1.5" fill="#fff"/><path d="M66 4v92" stroke="#FF4A1C" stroke-width="1.6" stroke-dasharray="4 3" stroke-linecap="round"/><path d="M24 22h24M18 36h36M18 44h36M18 52h36M18 64h36M18 72h36M84 22h24M78 36h36M78 44h36M78 52h36M78 64h36M78 72h36" stroke-width="1.2" stroke-linecap="round" opacity=".45"/></svg>
+                  <div><b>A5 · dos por folio</b><span>El menú sale dos veces en cada folio. Cortas por el centro y gastas la mitad de papel.</span><i>14,8 × 21 cm cada uno</i></div></button>` : ''}
               </div>
               <div id="formatoNota"></div>
             </section>
@@ -643,8 +674,22 @@
               <div class="estilos">${ESTILOS.map(([k, n]) => `<button type="button" class="estilo-b${k === ed.estilo ? ' on' : ''}" data-estilo="${k}"><span style="background-image:url(/carta/muestra-${k}.webp)"></span><span>${n}</span>${ESTILOS_PRO.includes(k) ? '<em>Pro</em>' : ''}</button>`).join('')}</div>
             </section>
 
+            ${c.menu ? `<section class="bloque" data-t="platos">
+              <h2 class="bloque-tit">Menú del día</h2>
+              <p class="bloque-intro">Cada mañana cambias los platos y descargas. El precio, lo que incluye y el diseño se quedan como los dejaste.</p>
+              <div class="menu-campos">
+                <div class="grupo"><label class="etq" for="mPrecio">Precio del menú</label><input class="campo grande" id="mPrecio" data-m="precio" maxlength="20" inputmode="decimal" placeholder="14,50" value="${esc(c.menu.precio || '')}"></div>
+                <div class="grupo"><label class="etq" for="mIncluye">Qué incluye</label><input class="campo" id="mIncluye" data-m="incluye" maxlength="160" placeholder="Pan, bebida y postre o café" value="${esc(c.menu.incluye || '')}"></div>
+              </div>
+              <div class="grupo"><span class="etq">Fecha en la hoja</span>
+                <div class="segmento" id="segFecha"><button type="button" data-v="auto">La de hoy</button><button type="button" data-v="mano">Otro texto</button><button type="button" data-v="no">Sin fecha</button></div>
+                <input class="campo" id="mFecha" data-m="fecha" maxlength="60" placeholder="De lunes a viernes, mediodía" value="${esc(c.menu.fecha || '')}" style="margin-top:10px" aria-label="Fecha o texto que sale bajo el nombre"></div>
+              <div class="grupo"><label class="etq" for="mTitulo">Rótulo</label><input class="campo" id="mTitulo" data-m="titulo" maxlength="40" placeholder="Menú del día" value="${esc(c.menu.titulo || '')}"></div>
+              <datalist id="habituales"></datalist>
+            </section>` : ''}
+
             <section class="bloque" data-t="platos">
-              <h2 class="bloque-tit">Platos y precios <span style="font-size:13.5px;letter-spacing:0;color:var(--gris);font-weight:500">Los cambios se guardan solos</span></h2>
+              <h2 class="bloque-tit">${c.menu ? 'Platos de hoy' : 'Platos y precios'} <span style="font-size:13.5px;letter-spacing:0;color:var(--gris);font-weight:500">Los cambios se guardan solos</span></h2>
               <div id="secciones"></div>
               <button class="anadir seccion-nueva" type="button" id="nuevaSeccion">+ Añadir sección</button>
             </section>
@@ -728,6 +773,23 @@
     });
     app.querySelectorAll('.formato-b').forEach(b => b.onclick = () => { ed.formato = b.dataset.f; pintarFormato(); cambio(); });
     pintarFormato();
+    if (c.menu) {
+      const m = c.menu;
+      app.querySelectorAll('[data-m]').forEach(inp => inp.oninput = () => { m[inp.dataset.m] = inp.value; cambio(); });
+      const segF = document.getElementById('segFecha'), fF = document.getElementById('mFecha');
+      const modoF = () => m.fecha_auto ? 'auto' : m.fecha_no ? 'no' : 'mano';
+      const pintarF = () => { segF.querySelectorAll('button').forEach(b => { const on = b.dataset.v === modoF(); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }); fF.hidden = modoF() !== 'mano'; };
+      segF.querySelectorAll('button').forEach(b => b.onclick = () => {
+        delete m.fecha_auto; delete m.fecha_no;
+        if (b.dataset.v === 'auto') { m.fecha_auto = true; m.fecha = hoyTexto(); }
+        else if (b.dataset.v === 'no') { m.fecha_no = true; m.fecha = ''; }
+        else { m.fecha = ''; fF.value = ''; }
+        pintarF(); cambio(); if (b.dataset.v === 'mano') fF.focus();
+      });
+      if (!m.fecha_auto && !m.fecha) m.fecha_no = true;
+      pintarF();
+      pintarHabituales();
+    }
     document.getElementById('nuevaSeccion').onclick = () => { ed.carta.secciones.push({ nombre: '', platos: [plato()] }); pintarSecciones(true); cambio(); };
     document.getElementById('nuevoServicio').onclick = () => { ed.carta.servicios.push({ nombre: '', precio: '' }); pintarServicios(true); cambio(); };
     document.getElementById('tablaAl').onclick = descargarTabla;
@@ -764,6 +826,19 @@
   }
 
   const plato = () => ({ nombre: '', descripcion: '', precio: '', racion: '', alergenos: '', destacado: false });
+  // Platos habituales del menú: los que ya has puesto otros días, para escribirlos con dos letras
+  function pintarHabituales() {
+    const dl = document.getElementById('habituales');
+    if (dl && ed.carta.menu) dl.innerHTML = (ed.carta.menu.habituales || []).map(n => `<option value="${esc(n)}">`).join('');
+  }
+  function anotarHabituales() {
+    const m = ed && ed.carta.menu;
+    if (!m) return;
+    const hoy = ed.carta.secciones.flatMap(s => (s.platos || []).map(p => String(p.nombre || '').trim())).filter(n => n.length > 2);
+    const clave = n => n.toLocaleLowerCase('es');
+    const vistos = new Set(hoy.map(clave));
+    m.habituales = [...hoy, ...(m.habituales || []).filter(n => !vistos.has(clave(n)))].slice(0, 120);
+  }
 
   function pintarSecciones(enfocarUltimo) {
     const cont = document.getElementById('secciones');
@@ -778,8 +853,8 @@
         </div>
         ${(s.platos || []).map((p, pi) => `
           <div class="plato" data-pi="${pi}">
-            <input class="campo nombre" data-p="nombre" value="${esc(p.nombre)}" placeholder="Plato" maxlength="120" aria-label="Nombre del plato">
-            <input class="campo precio" data-p="precio" value="${esc(p.precio)}" placeholder="Precio" maxlength="20" inputmode="decimal" aria-label="Precio">
+            <input class="campo nombre" data-p="nombre" value="${esc(p.nombre)}" placeholder="Plato" maxlength="120" aria-label="Nombre del plato"${ed.carta.menu ? ' list="habituales" autocomplete="off"' : ''}>
+            <input class="campo precio" data-p="precio" value="${esc(p.precio)}" placeholder="${ed.carta.menu ? 'Supl.' : 'Precio'}" maxlength="20" ${ed.carta.menu ? '' : 'inputmode="decimal" '}aria-label="${ed.carta.menu ? 'Suplemento, si lo tiene (por ejemplo +3)' : 'Precio'}">
             <div class="acciones">
               <button class="mini-btn" type="button" data-acc="p-arriba" title="Subir" aria-label="Subir" ${pi === 0 ? 'disabled' : ''}>↑</button>
               <button class="mini-btn" type="button" data-acc="p-abajo" title="Bajar" aria-label="Bajar" ${pi === s.platos.length - 1 ? 'disabled' : ''}>↓</button>
@@ -877,6 +952,7 @@
     ed.guardando = true; ed.pendiente = false;
     const g = document.getElementById('guardado');
     if (g) g.textContent = 'Guardando…';
+    anotarHabituales();
     const d = await Cuenta.api('/cartas/' + ed.id, { titulo: ed.titulo, carta: ed.carta, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera }, 'PUT');
     ed.guardando = false;
     const g2 = document.getElementById('guardado');
@@ -939,7 +1015,7 @@
       ajustarVista();
       const i = e.data.info;
       const vi = document.getElementById('vistaInfo');
-      const que = i.formato === 'elastico' ? `Cuadernillo · ${i.paginas} páginas · ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'} A3` : `${i.formato === 'slim' ? 'A4 slim' : 'A4'} · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'}`;
+      const que = i.formato === 'elastico' ? `Cuadernillo · ${i.paginas} páginas · ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'} A3` : `${i.formato === 'slim' ? 'A4 slim' : i.formato === 'a5x2' ? 'A5, dos por folio' : 'A4'} · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'}`;
       if (vi) vi.textContent = `${que} · ${i.platos} platos · ${NOMBRE_ESTILO[ed.estilo] || ed.estilo}`;
       ed.info = i; pintarFormato();
     }
@@ -981,8 +1057,9 @@
     if (nota) nota.innerHTML = ed.formato === 'elastico' ? `<div class="formato-nota"><b>Cómo se imprime el cuadernillo</b>
       El PDF sale ya montado en A3 apaisado${i ? `: ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'}, ${i.paginas} páginas` : ''}, con las páginas en el orden correcto para que al doblar queden seguidas.
       <ol><li>Imprime en A3 a doble cara, volteando por el <b style="display:inline">borde corto</b>.</li><li>Hiende y dobla cada hoja por el centro.</li><li>Mete unas dentro de otras, en orden, y pasa el elástico.</li></ol></div>`
+      : ed.formato === 'a5x2' ? `<div class="formato-nota"><b>Cómo se imprime</b>El PDF es un folio apaisado con el menú dos veces. Imprime «a tamaño real» y corta por la marca del centro: salen dos hojas A5.</div>`
       : ed.formato === 'slim' ? `<div class="formato-nota"><b>Cómo se imprime el A4 slim</b>El PDF mide 14 × 29,7 cm. En imprenta, pídelo a ese tamaño. En una impresora de casa, imprime «a tamaño real» en un folio y corta el sobrante.</div>` : '';
-    if (pie) pie.textContent = ed.formato === 'elastico' ? 'Aquí la ves página a página. El PDF sale montado en A3 para imprimir y doblar.'
+    if (pie) pie.textContent = ed.formato === 'a5x2' ? 'Aquí ves una hoja. En el PDF sale dos veces en un folio apaisado, para cortar.' : ed.formato === 'elastico' ? 'Aquí la ves página a página. El PDF sale montado en A3 para imprimir y doblar.'
       : ed.formato === 'slim' ? 'A4 slim, 14 × 29,7 cm. Antes de imprimir, revisa precios y alérgenos.' : 'A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.';
   }
 
@@ -1071,11 +1148,12 @@
 
   async function pedirAjuste(ajuste) {
     // A la máquina no se le mandan los alérgenos: ni los necesita ni debe tocarlos
-    const sinAl = { ...ed.carta, secciones: ed.carta.secciones.map(s => ({ ...s, platos: s.platos.map(({ al, al_ok, ...p }) => p) })) };
+    const { menu, ...sinMenu } = ed.carta;
+    const sinAl = { ...sinMenu, secciones: ed.carta.secciones.map(s => ({ ...s, platos: s.platos.map(({ al, al_ok, ...p }) => p) })) };
     delete sinAl.alergenos_modo;
     const r = await Cuenta.api('/rehacer', { carta: sinAl, ajuste });
     if (!r.ok) throw new Error(r.error || 'No ha sido posible aplicar el cambio.');
-    return r.carta;
+    return menu ? { ...r.carta, menu } : r.carta;
   }
   async function aplicarFrase() {
     const t = document.getElementById('fFrase');

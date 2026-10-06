@@ -92,7 +92,7 @@ async function obtenerNavegador() {
 const ESTILOS_VALIDOS = new Set(['mantel', 'barra', 'autor', 'noche', 'sobremesa', 'brasserie', 'editorial', 'sumi', 'riviera', 'deco', 'azulejo', 'trattoria', 'cartel', 'ticket', 'gaceta', 'serigrafia', 'bloque', 'marinero', 'brunch', 'vermut', 'pizarra']);
 
 // Tamaño de la hoja del PDF según el formato (el cuadernillo sale ya impuesto en A3 apaisado)
-const HOJA = { a4: { width: '210mm', height: '297mm' }, slim: { width: '140mm', height: '297mm' }, elastico: { width: '420mm', height: '297mm' } };
+const HOJA = { a4: { width: '210mm', height: '297mm' }, slim: { width: '140mm', height: '297mm' }, elastico: { width: '420mm', height: '297mm' }, a5x2: { width: '297mm', height: '210mm' } };
 
 async function generarPDF(carta, { estilo = 'mantel', logo = null, credito = true, conVista = false, formato = 'a4' } = {}) {
   if (!ESTILOS_VALIDOS.has(estilo)) estilo = 'mantel';
