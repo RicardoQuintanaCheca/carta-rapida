@@ -455,6 +455,50 @@ ${REGLAS_CAMPOS}`;
   }
 });
 
+// ── Carta bilingüe (Carta Pro): traduce secciones y platos al segundo idioma, texto a texto y en el mismo orden ──
+const IDIOMA2 = { en: 'inglés', fr: 'francés', de: 'alemán', it: 'italiano', pt: 'portugués', zh: 'chino simplificado' };
+app.post('/segundo-idioma', limiteRehacer, async (req, res) => {
+  try {
+    const b = req.body || {};
+    const cod = String(b.idioma || '');
+    if (!IDIOMA2[cod]) return res.json({ ok: false, error: 'Elige un idioma.' });
+    const plan = await planDe(req);
+    if (plan.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, motivo: 'bilingue', error: 'La carta bilingüe es de Carta Pro. Pruébalo gratis 7 días.' });
+    const textos = (Array.isArray(b.textos) ? b.textos : []).slice(0, 600).map(x => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, 220));
+    if (!textos.some(Boolean)) return res.json({ ok: false, error: 'No hay nada que traducir.' });
+    let salida;
+    if (process.env.TRADUCCION_DEMO === 'si') salida = textos.map(x => x ? `[${cod}] ${x}` : '');
+    else {
+      const r = await openai.chat.completions.create({
+        model: MODELO, max_completion_tokens: 16000,
+        messages: [
+          { role: 'system', content: `Eres traductor profesional de cartas de restaurante. Recibes una lista numerada de textos en español (nombres de sección, nombres de plato y descripciones) y devuelves su traducción al ${IDIOMA2[cod]}, con el vocabulario que usa la hostelería en ese idioma.
+REGLAS:
+- Devuelve EXACTAMENTE el mismo número de elementos y en el mismo orden. El elemento i es la traducción del texto i.
+- Un texto vacío se devuelve vacío.
+- No añadas ingredientes, explicaciones ni nada que no esté en el original. No inventes.
+- Los nombres propios de platos sin traducción asentada (salmorejo, pisto, cachopo, paella…) se dejan en su idioma original.
+- Marcas, denominaciones de origen y nombres de vinos no se traducen.
+- No traduzcas precios ni cantidades; conserva números y unidades.` },
+          { role: 'user', content: JSON.stringify(textos.map((x, i) => ({ i, texto: x }))) }
+        ],
+        response_format: { type: 'json_schema', json_schema: { name: 'traduccion', strict: true, schema: { type: 'object', additionalProperties: false, required: ['traducciones'], properties: { traducciones: { type: 'array', items: { type: 'string' } } } } } }
+      });
+      const m = r.choices[0].message;
+      if (m.refusal || r.choices[0].finish_reason === 'length') throw new Error('La carta es demasiado larga para traducirla de una vez.');
+      salida = JSON.parse(m.content).traducciones;
+    }
+    // Si no vuelven los mismos textos que se enviaron, no se puede saber cuál es de cuál: mejor no poner nada
+    if (!Array.isArray(salida) || salida.length !== textos.length) return res.json({ ok: false, error: 'La traducción no ha vuelto completa. Inténtalo de nuevo.' });
+    console.log(`[BILINGUE] ${cod} · ${textos.length} textos · ${plan.plan}`);
+    evento('segundo_idioma', cod);
+    res.json({ ok: true, traducciones: salida.map((x, i) => textos[i] ? String(x || '').replace(/\s+/g, ' ').trim().slice(0, 240) : '') });
+  } catch (error) {
+    console.error('[BILINGUE] error:', error.message);
+    res.json({ ok: false, error: mensajeError(error) });
+  }
+});
+
 // Imagen de la carta para el correo: se guarda un mes y se sirve en /v/<id>.jpg
 const DIR_VISTAS = require('path').join(process.env.DATA_DIR || require('path').join(__dirname, 'datos'), 'vistas');
 try { require('fs').mkdirSync(DIR_VISTAS, { recursive: true }); } catch (e) {}
@@ -493,7 +537,7 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
     // Los alérgenos con iconos y leyenda son de Carta Pro: en la versión gratis no se pintan
-    if (!pro) { delete limpia.menu; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
+    if (!pro) { delete limpia.menu; delete limpia.color; delete limpia.idioma2; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
     let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {

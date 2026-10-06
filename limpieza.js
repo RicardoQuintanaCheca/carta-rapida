@@ -48,13 +48,17 @@ function limpiarPlato(p) {
   return {
     nombre, racion, descripcion: descripcion === nombre ? '' : descripcion,
     precio, alergenos: sinPuntoFinal(alergenos), destacado: p.destacado === true,
-    ...(al.length ? { al } : (p.al_ok === true ? { al_ok: true } : {}))
+    ...(al.length ? { al } : (p.al_ok === true ? { al_ok: true } : {})),
+    // Segundo idioma (carta bilingüe): se conserva tal cual lo deja el hostelero
+    ...(typeof p.nombre2 === 'string' ? { nombre2: sinPuntoFinal(limpio(p.nombre2)).slice(0, 140) } : {}),
+    ...(typeof p.descripcion2 === 'string' && limpio(p.descripcion2) ? { descripcion2: sinPuntoFinal(limpio(p.descripcion2)).slice(0, 220) } : {})
   };
 }
 
 function normalizarCarta(c) {
   c = c || {};
   const secciones = (c.secciones || []).map(s => ({
+    ...(typeof s.nombre2 === 'string' ? { nombre2: sinPuntoFinal(limpio(s.nombre2)).slice(0, 90) } : {}),
     nombre: sinPuntoFinal(limpio(s.nombre)),
     platos: (s.platos || []).map(limpiarPlato).filter(p => p.nombre)
   })).filter(s => s.platos.length);
@@ -86,6 +90,8 @@ function normalizarCarta(c) {
     secciones: secciones.filter(s => s.platos.length),
     ...(['numeros', 'no'].includes(c.alergenos_modo) ? { alergenos_modo: c.alergenos_modo } : {})
   };
+  if (/^(en|fr|de|it|pt|zh)$/.test(String(c.idioma2 || ''))) out.idioma2 = c.idioma2;
+  if (/^#[0-9a-f]{6}$/i.test(String(c.color || ''))) out.color = String(c.color).toLowerCase();
   // Menú del día: precio único, lo que incluye, la fecha y los platos habituales del local (para escribirlos más rápido)
   if (c.menu && typeof c.menu === 'object') {
     const m = c.menu;

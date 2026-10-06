@@ -129,7 +129,7 @@
   .estilo-b span:last-child { font-size: 12.5px; font-weight: 650; text-align: center; }
   .estilo-b.on { box-shadow: inset 0 0 0 2px var(--ink); }
   .seccion { border-radius: 14px; padding: 16px; margin-bottom: 12px; background: var(--suave); }
-  .seccion-cab { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .seccion-cab { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
   .seccion-cab .campo { flex: 1; font-weight: 700; }
   .plato { display: grid; grid-template-columns: minmax(0, 1fr) 96px auto; gap: 6px 8px; padding: 12px 0; border-top: 1px solid #E4DDD2; }
   .plato:first-of-type { border-top: none; }
@@ -163,6 +163,19 @@
   .vista-marco.cargando .vista-cargando { display: block; }
   .descargar { width: 100%; margin-top: 12px; min-height: 54px; font-size: 16.5px; }
   .acc-pdf { display: flex; gap: 10px; }
+  .campo.dos { font-style: italic; background: #FBFAF7; font-size: 14.5px; }
+  .seccion-cab .campo.dos { flex: 1 1 100%; order: 5; }
+  .dos-fila { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 8px; }
+  .bi-fila { display: flex; gap: 10px; flex-wrap: wrap; }
+  .bi-fila select { flex: 1 1 180px; }
+  @media (max-width: 560px) { .dos-fila { grid-template-columns: minmax(0, 1fr); } }
+  .colores { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .color-b { border: none; background: #fff; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 99px; padding: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13.5px; font-weight: 600; color: var(--ink); position: relative; }
+  .color-b span { display: block; width: 28px; height: 28px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+  .color-b.estilo, .color-b.otro { padding-right: 14px; }
+  .color-b.estilo span { background: linear-gradient(135deg, #fff 46%, #C9C4BC 46% 54%, #fff 54%); }
+  .color-b.on { box-shadow: inset 0 0 0 2.5px var(--ink); }
+  .color-b.otro input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; border: 0; padding: 0; }
   .rs-elige { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
   .rs-formatos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .rs-formatos button { border: none; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 14px; background: #fff; padding: 14px 12px 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; font: inherit; color: inherit; }
@@ -725,6 +738,17 @@
               <datalist id="habituales"></datalist>
             </section>` : ''}
 
+            <section class="bloque" data-t="diseno">
+              <h2 class="bloque-tit">Color</h2>
+              <p class="bloque-intro">El color de tu marca en títulos, precios y adornos, en lugar del que trae el estilo.</p>
+              <div class="colores" id="colores">
+                <button type="button" class="color-b estilo" data-c="" title="El color del estilo" aria-label="El color del estilo"><span></span>El del estilo</button>
+                ${[['#7A1F2B', 'Burdeos'], ['#C2352B', 'Rojo'], ['#B3532A', 'Teja'], ['#9A6B12', 'Mostaza'], ['#5E6B2F', 'Oliva'], ['#1F4A3A', 'Verde botella'], ['#1D3557', 'Azul marino'], ['#1E4FA0', 'Azul'], ['#5B3A82', 'Morado'], ['#3A3A3A', 'Carbón']].map(([h, n]) => `<button type="button" class="color-b" data-c="${h}" title="${n}" aria-label="${n}"><span style="background:${h}"></span></button>`).join('')}
+                <label class="color-b otro" title="Otro color"><input type="color" id="colorOtro" value="${esc(c.color || '#1E4FA0')}" aria-label="Elegir otro color"><span id="colorOtroM"></span>Otro</label>
+              </div>
+              <p class="ayuda" id="colorNota"></p>
+            </section>
+
             <section class="bloque" data-t="platos">
               <h2 class="bloque-tit">${c.menu ? 'Platos de hoy' : 'Platos y precios'} <span style="font-size:13.5px;letter-spacing:0;color:var(--gris);font-weight:500">Los cambios se guardan solos</span></h2>
               <div id="secciones"></div>
@@ -783,6 +807,12 @@
             </section>
 
             <section class="bloque" data-t="traducir">
+              <h2 class="bloque-tit">Carta en dos idiomas</h2>
+              <p class="bloque-intro">Cada plato en español y, debajo y en pequeño, en otro idioma. Una sola carta para todos tus clientes.</p>
+              <div id="biCaja"></div>
+            </section>
+
+            <section class="bloque" data-t="traducir">
               <h2 class="bloque-tit">Traducir la carta</h2>
               <p class="bloque-intro">Elige idioma y se crea una copia traducida, con vocabulario de hostelería. Esta carta se queda como está.</p>
               <div class="idiomas">${Object.entries(IDIOMAS).map(([k, n]) => `<button type="button" data-idioma="${k}">${n}</button>`).join('')}</div>
@@ -833,6 +863,10 @@
       cambio();
     });
     app.querySelectorAll('.formato-b').forEach(b => b.onclick = () => { ed.formato = b.dataset.f; pintarFormato(); cambio(); });
+    app.querySelectorAll('#colores button').forEach(b => b.onclick = () => { if (b.dataset.c) ed.carta.color = b.dataset.c; else delete ed.carta.color; pintarColor(); cambio(); });
+    document.getElementById('colorOtro').oninput = e => { ed.carta.color = e.target.value; pintarColor(); cambio(); };
+    pintarColor();
+    pintarBilingue();
     pintarFormato();
     if (c.menu) {
       const m = c.menu;
@@ -866,7 +900,7 @@
     app.querySelectorAll('.js-imprimir').forEach(b => b.onclick = () => imprimir(false));
     const fs = document.getElementById('edFs');
     prepararRedes();
-    const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); if (t === 'redes') { rsOpciones(); rsPedir(0); } app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
+    const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); if (t === 'redes') { rsOpciones(); rsPedir(0); } if (t === 'traducir') pintarBilingue(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
     app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
     ponTab(ed.tab);
     cajaMontaje(document.getElementById('kartiaEd'), [], 'editor', () => ({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }));
@@ -910,6 +944,7 @@
       <div class="seccion" data-si="${si}">
         <div class="seccion-cab">
           <input class="campo grande" data-s="nombre" value="${esc(s.nombre)}" placeholder="Nombre de la sección (Entrantes, Carnes…)" maxlength="80" aria-label="Nombre de la sección">
+          ${ed.carta.idioma2 ? `<input class="campo dos" data-s2="nombre2" value="${esc(s.nombre2 || '')}" placeholder="Sección en ${IDIOMAS[ed.carta.idioma2]}" maxlength="80" aria-label="Nombre de la sección en ${IDIOMAS[ed.carta.idioma2]}" lang="${ed.carta.idioma2}">` : ''}
           <button class="mini-btn" type="button" data-acc="s-arriba" title="Subir sección" aria-label="Subir sección" ${si === 0 ? 'disabled' : ''}>↑</button>
           <button class="mini-btn" type="button" data-acc="s-abajo" title="Bajar sección" aria-label="Bajar sección" ${si === S.length - 1 ? 'disabled' : ''}>↓</button>
           <button class="mini-btn rojo" type="button" data-acc="s-borrar" title="Borrar sección" aria-label="Borrar sección">✕</button>
@@ -924,6 +959,7 @@
               <button class="mini-btn rojo" type="button" data-acc="p-borrar" title="Quitar plato" aria-label="Quitar plato">✕</button>
             </div>
             <input class="campo desc" data-p="descripcion" value="${esc(p.descripcion)}" placeholder="Descripción (opcional)" maxlength="200" aria-label="Descripción">
+            ${ed.carta.idioma2 ? `<div class="dos-fila"><input class="campo dos" data-p="nombre2" value="${esc(p.nombre2 || '')}" placeholder="Plato en ${IDIOMAS[ed.carta.idioma2]}" maxlength="140" aria-label="Plato en ${IDIOMAS[ed.carta.idioma2]}" lang="${ed.carta.idioma2}"><input class="campo dos" data-p="descripcion2" value="${esc(p.descripcion2 || '')}" placeholder="Descripción en ${IDIOMAS[ed.carta.idioma2]}" maxlength="220" aria-label="Descripción en ${IDIOMAS[ed.carta.idioma2]}" lang="${ed.carta.idioma2}"></div>` : ''}
             <div class="mas-datos">
               <input class="campo" data-p="racion" value="${esc(p.racion)}" placeholder="Ración (80 g, 6 uds.)" maxlength="40" aria-label="Ración">
               <input class="campo" data-p="alergenos" value="${esc(p.alergenos)}" placeholder="Alérgenos" maxlength="80" aria-label="Alérgenos">
@@ -936,6 +972,7 @@
     cont.querySelectorAll('.seccion').forEach(secEl => {
       const si = +secEl.dataset.si;
       secEl.querySelector('[data-s="nombre"]').oninput = e => { S[si].nombre = e.target.value; cambio(); };
+      const s2i = secEl.querySelector('[data-s2]'); if (s2i) s2i.oninput = e => { S[si].nombre2 = e.target.value; cambio(); };
       secEl.querySelectorAll('.plato').forEach(pEl => {
         const pi = +pEl.dataset.pi;
         pEl.querySelectorAll('[data-p]').forEach(inp => {
@@ -1080,7 +1117,7 @@
       const vi = document.getElementById('vistaInfo');
       const que = i.formato === 'elastico' ? `Cuadernillo · ${i.paginas} páginas · ${i.hojas} ${i.hojas > 1 ? 'hojas' : 'hoja'} A3` : `${i.formato === 'slim' ? 'A4 slim' : i.formato === 'a5x2' ? 'A5, dos por folio' : 'A4'} · ${i.paginas} ${i.paginas > 1 ? 'páginas' : 'página'}`;
       if (vi) vi.textContent = `${que} · ${i.platos} platos · ${NOMBRE_ESTILO[ed.estilo] || ed.estilo}`;
-      ed.info = i; pintarFormato();
+      ed.info = i; pintarFormato(); pintarColor();
     }
   });
   window.addEventListener('resize', ajustarVista);
@@ -1256,6 +1293,72 @@
 
 
   // ── Formato de la hoja ──
+  // ── Carta bilingüe ──
+  // Lo que queda por traducir: secciones y platos con nombre que aún no tienen segundo idioma
+  const biFaltan = () => ed.carta.secciones.reduce((n, s) => n + (s.nombre && s.nombre2 === undefined ? 1 : 0) + (s.platos || []).filter(p => String(p.nombre || '').trim() && p.nombre2 === undefined).length, 0);
+  function pintarBilingue() {
+    const caja = document.getElementById('biCaja');
+    if (!caja) return;
+    const c = ed.carta, cod = c.idioma2;
+    if ((c.idioma || 'es').slice(0, 2) !== 'es') { caja.innerHTML = '<p class="ayuda">Esta carta ya está traducida. La versión en dos idiomas se hace desde la carta en español.</p>'; return; }
+    if (!cod) {
+      caja.innerHTML = `<div class="bi-fila"><select class="campo" id="biIdioma" aria-label="Segundo idioma">${Object.entries(IDIOMAS).map(([k, n]) => `<option value="${k}">${n.charAt(0).toUpperCase() + n.slice(1)}</option>`).join('')}</select><button class="btn oscuro" type="button" id="biPoner">Añadir segundo idioma</button></div>
+        <p class="ayuda">Se traducen las secciones, los platos y las descripciones. Podrás corregir cada línea a mano. Si no dominas el idioma, pide a alguien que lo revise antes de imprimir.</p>`;
+      document.getElementById('biPoner').onclick = e => biTraducir(document.getElementById('biIdioma').value, false, e.currentTarget);
+      return;
+    }
+    const faltan = biFaltan();
+    caja.innerHTML = `<div class="formato-nota"><b>Segundo idioma: ${IDIOMAS[cod]}</b>Cada línea se corrige en la pestaña «${c.menu ? 'Menú de hoy' : 'Platos y precios'}», debajo de su plato. Si dejas una en blanco, ese plato sale solo en español.${faltan ? `<br><strong>${faltan === 1 ? 'Hay 1 texto' : 'Hay ' + faltan + ' textos'} sin traducir.</strong>` : ''}</div>
+      <div class="fila-botones" style="margin-top:12px">${faltan ? '<button class="btn oscuro peq" type="button" id="biFaltan">Traducir lo que falta</button>' : ''}<button class="btn peq" type="button" id="biTodo">Volver a traducir todo</button><button class="btn peq" type="button" id="biQuitar">Quitar el segundo idioma</button></div>`;
+    const f = document.getElementById('biFaltan'); if (f) f.onclick = e => biTraducir(cod, true, e.currentTarget);
+    document.getElementById('biTodo').onclick = e => { const b = e.currentTarget; if (b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = 'Se pierden tus correcciones. ¿Seguro?'; return; } biTraducir(cod, false, b); };
+    document.getElementById('biQuitar').onclick = e => { const b = e.currentTarget; if (b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = '¿Quitar y borrar las traducciones?'; return; }
+      delete c.idioma2; c.secciones.forEach(s => { delete s.nombre2; (s.platos || []).forEach(p => { delete p.nombre2; delete p.descripcion2; }); }); cambio(); pintarEditor(); };
+  }
+  async function biTraducir(cod, soloFaltan, boton) {
+    const c = ed.carta, destinos = [], textos = [];
+    const pon = (obj, campo, origen) => { destinos.push([obj, campo]); textos.push(String(origen || '').trim()); };
+    c.secciones.forEach(s => {
+      if (s.nombre && !(soloFaltan && s.nombre2 !== undefined)) pon(s, 'nombre2', s.nombre);
+      (s.platos || []).forEach(p => { if (String(p.nombre || '').trim() && !(soloFaltan && p.nombre2 !== undefined)) { pon(p, 'nombre2', p.nombre); pon(p, 'descripcion2', p.descripcion); } });
+    });
+    if (!textos.length) return;
+    const txt = boton.textContent; boton.disabled = true; boton.textContent = 'Traduciendo…';
+    try {
+      const d = await Cuenta.api('/segundo-idioma', { idioma: cod, textos });
+      if (d.status === 402) return Cuenta.planes({ motivo: d.error, vuelta: 'panel' });
+      if (!d.ok) throw new Error(d.error || 'No se ha podido traducir.');
+      const igual = (a, b) => String(a).trim().toLocaleLowerCase() === String(b).trim().toLocaleLowerCase();
+      // Si la traducción es idéntica al original (un «salmorejo»), no se repite la línea
+      destinos.forEach(([obj, campo], i) => { obj[campo] = igual(d.traducciones[i], textos[i]) ? '' : d.traducciones[i]; });
+      c.idioma2 = cod;
+      cambio(); pintarEditor();
+      Cuenta.aviso('Segundo idioma añadido. Revísalo antes de imprimir.');
+    } catch (e) { Cuenta.aviso(e.message); if (boton.isConnected) { boton.disabled = false; boton.textContent = txt; } }
+  }
+  // Tras un cambio con una frase, cada plato que conserva su nombre conserva también su traducción
+  function heredarSegunda(vieja, nueva) {
+    if (!vieja.idioma2) return;
+    nueva.idioma2 = vieja.idioma2;
+    const k = x => String(x || '').toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
+    const sec = new Map(), pl = new Map();
+    (vieja.secciones || []).forEach(s => { if (s.nombre2 !== undefined) sec.set(k(s.nombre), s.nombre2); (s.platos || []).forEach(p => { if (p.nombre2 !== undefined) pl.set(k(p.nombre) + '|' + k(p.descripcion), p); }); });
+    (nueva.secciones || []).forEach(s => { if (sec.has(k(s.nombre))) s.nombre2 = sec.get(k(s.nombre)); (s.platos || []).forEach(p => { const v = pl.get(k(p.nombre) + '|' + k(p.descripcion)); if (v) { p.nombre2 = v.nombre2; if (v.descripcion2) p.descripcion2 = v.descripcion2; } }); });
+  }
+
+  // ── Color propio ──
+  function pintarColor() {
+    if (!ed) return;
+    const c = String(ed.carta.color || '').toLowerCase();
+    let alguno = false;
+    document.querySelectorAll('#colores button').forEach(b => { const on = (b.dataset.c || '').toLowerCase() === c; alguno = alguno || on; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    const otro = document.querySelector('#colores .otro'), m = document.getElementById('colorOtroM');
+    if (otro) { otro.classList.toggle('on', !!c && !alguno); m.style.background = c && !alguno ? c : 'conic-gradient(#e33,#eb3,#3b6,#36c,#93c,#e33)'; }
+    const nota = document.getElementById('colorNota'), i = ed.info || {};
+    if (nota) nota.textContent = !c ? '' : i.sinColor ? `El estilo ${NOMBRE_ESTILO[ed.estilo] || ed.estilo} no cambia de color. Elige otro estilo para usar el tuyo.`
+      : i.colorOscurecido ? 'Lo hemos oscurecido un poco para que se lea bien sobre papel blanco.' : '';
+  }
+
   function pintarFormato() {
     if (!ed) return;
     document.querySelectorAll('.formato-b').forEach(b => { const on = b.dataset.f === ed.formato; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
@@ -1356,11 +1459,14 @@
   async function pedirAjuste(ajuste) {
     // A la máquina no se le mandan los alérgenos: ni los necesita ni debe tocarlos
     const { menu, ...sinMenu } = ed.carta;
-    const sinAl = { ...sinMenu, secciones: ed.carta.secciones.map(s => ({ ...s, platos: s.platos.map(({ al, al_ok, ...p }) => p) })) };
+    const sinAl = { ...sinMenu, secciones: ed.carta.secciones.map(({ nombre2, ...s }) => ({ ...s, platos: s.platos.map(({ al, al_ok, nombre2, descripcion2, ...p }) => p) })) };
+    delete sinAl.idioma2; delete sinAl.color;
     delete sinAl.alergenos_modo;
     const r = await Cuenta.api('/rehacer', { carta: sinAl, ajuste });
     if (!r.ok) throw new Error(r.error || 'No ha sido posible aplicar el cambio.');
-    return menu ? { ...r.carta, menu } : r.carta;
+    const vuelta = menu ? { ...r.carta, menu } : r.carta;
+    if (ed.carta.color) vuelta.color = ed.carta.color;
+    return vuelta;
   }
   async function aplicarFrase() {
     const t = document.getElementById('fFrase');
@@ -1371,6 +1477,7 @@
     try {
       const nueva = await pedirAjuste(ajuste);
       const perdidos = heredarAlergenos(ed.carta, nueva, false);
+      heredarSegunda(ed.carta, nueva);
       ed.carta = { ...ed.carta, ...nueva, nombre_restaurante: nueva.nombre_restaurante || ed.carta.nombre_restaurante };
       t.value = '';
       cambio(); pintarEditor();

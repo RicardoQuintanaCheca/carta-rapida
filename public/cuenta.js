@@ -327,6 +327,7 @@
         <li><b>Formatos</b>: A4, A4 slim y cuadernillo con elástico</li>
         <li><b>Menú del día</b> con la fecha de hoy y tus platos de siempre</li>
         <li><b>Imágenes para redes</b>: Instagram, Facebook y estado de WhatsApp</li>
+        <li><b>Carta en dos idiomas</b> y con el color de tu marca</li>
         <li><b>Cambios ilimitados</b> con una frase: «sube las croquetas a 13»</li>
       </ul>
       <label class="cu-check" id="cuPagoLbl"><input type="checkbox" id="cuPagoAcepto"> <span>Acepto las <a href="/legal/condiciones.html" target="_blank" rel="noopener">condiciones de Carta Pro</a>: se renueva sola hasta que la cancele y, como empieza ya, renuncio al desistimiento.</span></label>

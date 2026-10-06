@@ -54,6 +54,7 @@
     pt: { rec: 'Recomendado', carta: 'Ementa', alergenos: 'Alergénios' },
     zh: { rec: '推荐', carta: '菜单', alergenos: '过敏原' }
   };
+  let BILINGUE = ''; // código del segundo idioma cuando la carta va en dos
   let ROTULO = null; // en un menú del día, donde la cabecera diría «Carta» dice «Menú del día»
   const t = k => k === 'carta' && ROTULO ? ROTULO : (TXT[IDIOMA] || TXT.es)[k];
 
@@ -100,6 +101,8 @@
       + (p.destacado ? `<div class="pl-etq">${esc(t('rec'))}</div>` : '')
       + `<div class="pl-l" style="--pw:${pr.length}"><span class="pl-n">${sinViuda(d.nombre)}${d.racion ? `<span class="pl-r">${esc(d.racion)}</span>` : ''}${d.al.length && MODO_AL === 'numeros' ? `<sup class="pl-als">${d.al.join(' · ')}</sup>` : ''}${d.descripcion ? '' : ico}</span>${pr ? `<span class="pl-g"></span><span class="pl-p">${pr}</span>` : ''}</div>`
       + (d.descripcion ? `<div class="pl-d">${sinViuda(d.descripcion)}${ico}</div>` : '')
+      // Carta bilingüe: el plato en el segundo idioma, debajo y en pequeño
+      + (BILINGUE && String(p.nombre2 || '').trim() ? `<div class="pl-2" lang="${esc(BILINGUE)}">${sinViuda(sinGritos(p.nombre2))}${String(p.descripcion2 || '').trim() ? `<span> · ${sinViuda(sinGritos(p.descripcion2))}</span>` : ''}</div>` : '')
       // Alérgenos en números (códigos de la carta): se rotulan para que se entiendan
       + (!d.al.length && d.alergenos ? `<div class="pl-a">${/^\d/.test(d.alergenos) ? esc(t('alergenos')) + ' ' : ''}${esc(d.alergenos)}</div>` : '')
       + `</div>`;
@@ -356,6 +359,34 @@
     return grupos;
   }
 
+  /* ---------- Color propio (Carta Pro): el color de la marca en lugar del acento del estilo ---------- */
+  // Estilos que no lo admiten: Gaceta va a una tinta, Bloque usa el acento como fondo de texto y Medianoche es en negro.
+  const SIN_COLOR = ['gaceta', 'bloque', 'noche'];
+  const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const lum = h => { const [r, g, b] = hexRgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const contraste = h => 1.05 / (lum(h) + 0.05); // contra papel blanco
+  const mezclar = (h, con, t) => '#' + hexRgb(h).map((v, i) => Math.round(v + (con[i] - v) * t).toString(16).padStart(2, '0')).join('');
+  // Un amarillo o un pastel no se leen sobre blanco: se oscurece lo justo para que el texto aguante
+  function colorLegible(h) {
+    let c = h.toLowerCase(), pasos = 0;
+    while (contraste(c) < 3.2 && pasos++ < 30) c = mezclar(c, [0, 0, 0], 0.07);
+    return c;
+  }
+  // Los adornos dibujados (cenefa, olas, garabatos) llevan el color dentro del dibujo: se vuelven a emitir con el nuevo
+  function recolorear(estilo, de, a) {
+    const viejo = document.getElementById('color-propio');
+    if (viejo) viejo.remove();
+    if (!a || !de || de.toLowerCase() === a.toLowerCase()) return;
+    const cod = '%23' + de.replace('#', ''), re = new RegExp(cod, 'gi');
+    let css = '';
+    for (const hoja of document.styleSheets) {
+      let reglas; try { reglas = hoja.cssRules; } catch (e) { continue; }
+      for (const r of reglas || []) if (r.selectorText && r.selectorText.includes('.est-' + estilo) && re.test(r.cssText)) { re.lastIndex = 0; css += r.cssText.replace(re, '%23' + a.replace('#', '')) + '\n'; }
+    }
+    if (!css) return;
+    const st = document.createElement('style'); st.id = 'color-propio'; st.textContent = css; document.head.appendChild(st);
+  }
+
   /* ---------- Composición ---------- */
   function componer(destino, carta, opts) {
     opts = opts || {};
@@ -371,20 +402,23 @@
     const M = mm ? { titulo: txt(mm.titulo, 40) || 'Menú del día', fecha: txt(mm.fecha, 60), precio: txt(mm.precio, 20), incluye: txt(mm.incluye, 160) } : null;
     ROTULO = M ? M.titulo : null;
     const cartaCab = M ? { ...carta, subtitulo: M.fecha || '' } : carta;
+    BILINGUE = /^[a-z]{2}$/.test(String(carta.idioma2 || '')) ? carta.idioma2 : '';
+    // El nombre de la sección en el segundo idioma va justo debajo del título, sin tocar el diseño de cada estilo
+    const seccionHTML = (s, i) => { const h = estilo.seccion(s, i); return BILINGUE && String(s.nombre2 || '').trim() ? h.replace('</h2>', `</h2><div class="sec-2" lang="${esc(BILINGUE)}">${esc(sinGritos(s.nombre2))}</div>`) : h; };
     const secciones = (carta.secciones || []).map(s => ({ ...s, platos: (s.platos || []).filter(p => p && String(p.nombre || '').trim()) })).filter(s => s.platos.length);
     // Secciones largas (8 platos o más) se trocean en bloques de ~4 platos para que
     // puedan continuar en la columna siguiente; el título va solo en el primer bloque.
     const htmlSec = [];
     secciones.forEach((s, i) => {
       // Sección sin nombre (el cartel de un solo plato): no se pinta el título vacío
-      if (!String(s.nombre || '').trim()) { htmlSec.push(estilo.seccion(s, i).replace('<section class="sec"', '<section class="sec sec-anon"')); return; }
-      if (s.platos.length < 8) { htmlSec.push(estilo.seccion(s, i)); return; }
+      if (!String(s.nombre || '').trim()) { htmlSec.push(seccionHTML(s, i).replace('<section class="sec"', '<section class="sec sec-anon"')); return; }
+      if (s.platos.length < 8) { htmlSec.push(seccionHTML(s, i)); return; }
       const trozos = [];
       for (let j = 0; j < s.platos.length; j += 4) trozos.push(s.platos.slice(j, j + 4));
       if (trozos.length > 1 && trozos[trozos.length - 1].length < 2) trozos[trozos.length - 2].push(...trozos.pop());
       trozos.forEach((platos, j) => {
         const sigue = j < trozos.length - 1 ? ' sec-sigue' : '';
-        if (j === 0) htmlSec.push(estilo.seccion({ ...s, platos }, i).replace('<section class="sec"', `<section class="sec${sigue}"`));
+        if (j === 0) htmlSec.push(seccionHTML({ ...s, platos }, i).replace('<section class="sec"', `<section class="sec${sigue}"`));
         else htmlSec.push(`<section class="sec sec-cont${sigue}">${platos.map(platoComun).join('')}</section>`);
       });
     });
@@ -405,6 +439,16 @@
     const kMin = (RS ? 0.8 : FORMATO === 'a5x2' ? 0.76 : K_MIN) / S, kComodo = (RS ? 1 : FORMATO === 'a5x2' ? 0.78 : K_COMODO) / S;
     pliego.className = `carta est-${claveEstilo} fmt-${FORMATO}${RS ? ' fmt-rs' : ''}${M ? ' es-menu' : ''}`;
     destino.appendChild(pliego);
+    const pedido = /^#[0-9a-f]{6}$/i.test(String(carta.color || '')) && !SIN_COLOR.includes(claveEstilo) ? carta.color : null;
+    const colorFinal = pedido ? colorLegible(pedido) : null;
+    const acentoEstilo = getComputedStyle(pliego).getPropertyValue('--acento').trim();
+    if (colorFinal) {
+      pliego.style.setProperty('--acento', colorFinal);
+      // Estilos donde las líneas (o toda la tinta) van del color del acento
+      if (['azulejo', 'deco', 'trattoria', 'riviera'].includes(claveEstilo)) pliego.style.setProperty('--linea', colorFinal);
+      if (claveEstilo === 'riviera') { pliego.style.setProperty('--tinta', colorFinal); pliego.style.setProperty('--suave', mezclar(colorFinal, [255, 255, 255], 0.28)); }
+    }
+    recolorear(claveEstilo, /^#[0-9a-f]{6}$/i.test(acentoEstilo) ? acentoEstilo : null, colorFinal);
 
     // Crea una página vacía con N columnas y devuelve sus piezas
     function pagina(cols, conCabecera, esUltima, k, primera) {
@@ -576,7 +620,7 @@
       pliego.replaceChildren(...[...pliego.children].map(p => { const h = document.createElement('div'); h.className = 'hoja-a4x2'; h.append(p, p.cloneNode(true)); return h; }));
     }
     const numPaginas = FORMATO === 'elastico' ? hojas * 4 : elegida.numPag;
-    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: numPaginas, escala: +(elegida.k * S).toFixed(3), platos: totalPlatos, formato: FORMATO, ...(hojas ? { hojas } : {}), ...(M ? { menu: true } : {}) });
+    pliego.dataset.info = JSON.stringify({ columnas: elegida.cols, paginas: numPaginas, escala: +(elegida.k * S).toFixed(3), platos: totalPlatos, formato: FORMATO, ...(hojas ? { hojas } : {}), ...(M ? { menu: true } : {}), ...(BILINGUE ? { bilingue: BILINGUE } : {}), ...(colorFinal ? { color: colorFinal, ...(colorFinal !== pedido.toLowerCase() ? { colorOscurecido: true } : {}) } : {}), ...(carta.color && SIN_COLOR.includes(claveEstilo) ? { sinColor: true } : {}) });
     return JSON.parse(pliego.dataset.info);
   }
 
