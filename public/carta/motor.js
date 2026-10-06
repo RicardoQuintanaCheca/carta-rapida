@@ -79,10 +79,10 @@
 
   /* ---------- Alérgenos marcados por el hostelero (ids 1–14 oficiales) ---------- */
   const AL = global.Alergenos || null;
-  let MODO_AL = 'iconos'; // 'iconos' | 'numeros'
+  let MODO_AL = 'iconos'; // 'iconos' | 'numeros' | 'no' (solo en la tabla)
   const usados = c => AL ? AL.limpiar((c.secciones || []).flatMap(s => (s.platos || []).flatMap(p => AL.limpiar(p.al)))) : [];
   function leyenda(c) {
-    const ids = usados(c);
+    const ids = MODO_AL === 'no' ? [] : usados(c);
     if (!ids.length) return '';
     return `<div class="pie-al"><span class="pie-al-t">${esc(t('alergenos'))}</span>${ids.map(id =>
       `<span class="pie-al-i">${MODO_AL === 'numeros' ? `<b>${id}</b>` : AL.icono(id)}${esc(AL.nombre(id, IDIOMA))}</span>`).join('')}</div>`;
@@ -362,7 +362,7 @@
     // Solo se acepta un logo en data URL de imagen (evita inyectar HTML o cargar URLs externas)
     const logo = typeof opts.logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(opts.logo) ? opts.logo : null;
     IDIOMA = String(carta.idioma || 'es').slice(0, 2);
-    MODO_AL = carta.alergenos_modo === 'numeros' ? 'numeros' : 'iconos';
+    MODO_AL = ['numeros', 'no'].includes(carta.alergenos_modo) ? carta.alergenos_modo : 'iconos';
     const secciones = (carta.secciones || []).filter(s => s.platos && s.platos.length);
     // Secciones largas (8 platos o más) se trocean en bloques de ~4 platos para que
     // puedan continuar en la columna siguiente; el título va solo en el primer bloque.

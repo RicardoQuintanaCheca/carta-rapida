@@ -43,9 +43,12 @@ function limpiarPlato(p) {
   descripcion = mayusInicial(descripcion);
   let alergenos = limpio(p.alergenos).replace(/^al[eé]rgenos\s*:?\s*/i, '');
   alergenos = alergenos ? mayusInicial(alergenos.toLocaleLowerCase('es')) : '';
+  // Alérgenos marcados por el hostelero: ids oficiales 1–14. "al_ok" = revisado y sin alérgenos.
+  const al = [...new Set((Array.isArray(p.al) ? p.al : []).map(Number).filter(x => Number.isInteger(x) && x >= 1 && x <= 14))].sort((a, b) => a - b);
   return {
     nombre, racion, descripcion: descripcion === nombre ? '' : descripcion,
-    precio, alergenos: sinPuntoFinal(alergenos), destacado: p.destacado === true
+    precio, alergenos: sinPuntoFinal(alergenos), destacado: p.destacado === true,
+    ...(al.length ? { al } : (p.al_ok === true ? { al_ok: true } : {}))
   };
 }
 
@@ -80,7 +83,8 @@ function normalizarCarta(c) {
     idioma: limpio(c.idioma).slice(0, 5) || 'es',
     nota_pie: limpio(c.nota_pie),
     servicios: (c.servicios || []).map(s => ({ nombre: sinPuntoFinal(limpio(s.nombre)), precio: limpiarPrecio(s.precio) })).filter(s => s.nombre),
-    secciones: secciones.filter(s => s.platos.length)
+    secciones: secciones.filter(s => s.platos.length),
+    ...(['numeros', 'no'].includes(c.alergenos_modo) ? { alergenos_modo: c.alergenos_modo } : {})
   };
   // Criterio de diseño: destacar poco para que destaque. Máx. 1 por sección y 3 en total.
   let quedan = 3;

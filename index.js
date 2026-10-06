@@ -3,7 +3,7 @@ const express = require('express');
 const compression = require('compression');
 const multer = require('multer');
 const OpenAI = require('openai');
-const { generarPDF, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
+const { generarPDF, generarTablaAlergenos, cerrar, CSS_FUENTES_WEB, ARCHIVOS_FUENTE } = require('./pdf');
 const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
@@ -491,6 +491,8 @@ app.post('/pdf', limitePDF, async (req, res) => {
     // Logo, sin firma, traducción y estilos Pro son de Carta Pro (o de la prueba de 7 días)
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
+    // Los alérgenos con iconos y leyenda son de Carta Pro: en la versión gratis no se pintan
+    if (!pro) { limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
     let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {
@@ -544,6 +546,26 @@ app.post('/pdf', limitePDF, async (req, res) => {
   } catch (error) {
     console.error('[PDF] error:', error.message);
     res.status(500).json({ ok: false, error: 'No hemos podido generar el PDF. Inténtalo de nuevo.' });
+  }
+});
+
+// ── Tabla de alérgenos en PDF (Carta Pro) ──
+app.post('/tabla-alergenos', limitePDF, async (req, res) => {
+  try {
+    const { carta, logo } = req.body || {};
+    if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
+    const plan = await planDe(req);
+    if (plan.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, motivo: 'alergenos', error: 'La tabla de alérgenos es de Carta Pro. Pruébalo gratis 7 días.' });
+    const limpia = normalizarCarta(carta);
+    if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
+    const logoOk = typeof logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(logo) && logo.length < 2.5 * 1024 * 1024 ? logo : null;
+    const { pdf, pendientes } = await generarTablaAlergenos(limpia, { logo: logoOk });
+    evento('tabla_alergenos', pendientes ? 'con-pendientes' : 'completa');
+    res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="alergenos-${slug(limpia.nombre_restaurante)}.pdf"`, 'Cache-Control': 'no-store' });
+    res.send(Buffer.from(pdf));
+  } catch (error) {
+    console.error('[ALERGENOS] error:', error.message);
+    res.status(500).json({ ok: false, error: 'No hemos podido generar la tabla. Inténtalo de nuevo.' });
   }
 });
 

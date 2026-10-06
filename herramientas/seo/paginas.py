@@ -163,14 +163,16 @@ PAGINAS = [
   estilos=['gaceta','sobremesa','brasserie','editorial'],
   bloques=[
    ('Cómo se indican en la carta', 'Lo habitual es poner los alérgenos junto a cada plato, con su nombre o con un número o código que se explica al pie. Si tu carta ya los lleva así, aquí se mantienen tal cual: nombres como nombres, números como números.'),
-   ('Lo que esta herramienta hace y lo que no', 'Recoge los alérgenos que ya figuran en tu carta y los coloca ordenados bajo cada plato. No los calcula ni los adivina: qué alérgenos lleva cada plato lo sabes tú, por tus recetas y tus proveedores.'),
+   ('Lo que esta herramienta hace y lo que no', 'Recoge los alérgenos que ya figuran en tu carta y los coloca ordenados bajo cada plato. Con Carta Pro, además, los marcas tú plato a plato y salen en la carta con un pictograma discreto o con un número, y con su leyenda al pie. No los calcula ni los adivina: qué alérgenos lleva cada plato lo sabes tú, por tus recetas y tus proveedores.'),
+   ('La tabla de alérgenos, en un PDF', 'Con Carta Pro descargas además la tabla completa: tus platos en filas y los catorce alérgenos en columnas, en un A4 con espacio para fecha y firma. Es el documento que se tiene en sala y se enseña cuando lo piden.'),
    ('La nota al pie', 'Frases como "Disponemos de información sobre alérgenos, consulte a nuestro personal" se conservan en el pie de la carta, junto al IVA o el servicio de pan.'),
   ],
   secciones=[
    ('Los catorce alérgenos de declaración obligatoria', 'Cereales con gluten, crustáceos, huevos, pescado, cacahuetes, soja, leche, frutos de cáscara, apio, mostaza, sésamo, dióxido de azufre y sulfitos, altramuces y moluscos. Son los que recoge el anexo II del Reglamento (UE) 1169/2011.'),
    ('¿Tienen que estar por escrito en la carta?', 'La norma española permite dar la información de forma oral siempre que haya un cartel visible que indique dónde pedirla y exista un registro escrito o electrónico a disposición del cliente y de la inspección. Aun así, ponerlos en la carta evita preguntas en pleno servicio y errores de comunicación. Si tienes dudas sobre tu caso, consulta a la autoridad sanitaria de tu comunidad autónoma.'),
   ],
-  faq=[('¿La herramienta añade los alérgenos por mí?', 'No. Solo reproduce los que ya aparecen en tu carta. La información sobre alérgenos es responsabilidad del establecimiento.'),
+  faq=[('¿La herramienta añade los alérgenos por mí?', 'No. Reproduce los que ya aparecen en tu carta y, con Carta Pro, pinta los que tú marques. La información sobre alérgenos es responsabilidad del establecimiento.'),
+       ('¿Los iconos de alérgenos y la tabla son gratis?', 'Son de Carta Pro, que puedes probar 7 días gratis y sin tarjeta. En la versión gratis se mantienen los alérgenos tal como vienen escritos en tu carta.'),
        ('¿Mi carta usa números para los alérgenos, se respetan?', 'Sí. Si usas números o códigos, se mantienen como números.')]),
  dict(slug='traducir-carta-restaurante', menu='Traducir la carta',
   title='Traducir la carta de tu restaurante al inglés, francés o alemán',

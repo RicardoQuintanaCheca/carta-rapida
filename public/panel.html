@@ -201,7 +201,7 @@
   .ed-tabs button:hover { color: var(--ink); }
   .ed-tabs button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(12,12,13,.12); }
   #edFs[data-t="diseno"] .bloque:not([data-t="diseno"]), #edFs[data-t="platos"] .bloque:not([data-t="platos"]),
-  #edFs[data-t="frase"] .bloque:not([data-t="frase"]), #edFs[data-t="traducir"] .bloque:not([data-t="traducir"]) { display: none; }
+  #edFs[data-t="alergenos"] .bloque:not([data-t="alergenos"]), #edFs[data-t="frase"] .bloque:not([data-t="frase"]), #edFs[data-t="traducir"] .bloque:not([data-t="traducir"]) { display: none; }
   #edFs .bloque { border-bottom: none; }
   #edFs[data-t="platos"] .bloque + .bloque[data-t="platos"], #edFs[data-t="diseno"] .bloque + .bloque[data-t="diseno"] { border-top: 1px solid var(--linea); }
   .bloque-intro { color: var(--gris); font-size: 15.5px; margin: -6px 0 16px; max-width: 36em; }
@@ -214,6 +214,32 @@
   .idiomas button:disabled { opacity: .5; cursor: default; }
   .estilo-b { position: relative; }
   .estilo-b em { position: absolute; top: 9px; right: 9px; font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; background: var(--ink); color: #fff; padding: 2px 5px; border-radius: 4px; }
+
+  /* Alérgenos: una fila por plato, los 14 en columna */
+  .al-aviso { background: #FDF1EA; border-radius: 14px; padding: 14px 18px; font-size: 14.5px; margin-bottom: 20px; line-height: 1.5; }
+  .al-aviso b { display: block; }
+  .al-barra { display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 10px; }
+  .al-barra .etq { margin: 0; }
+  .al-barra .btn { margin-left: auto; }
+  .al-cuenta { font-size: 13.5px; color: var(--gris); margin: 0 0 14px; }
+  .al-cuenta b { color: var(--ink); }
+  .al-cols, .al-celdas { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; }
+  .al-cols { position: sticky; top: 68px; z-index: 5; background: #fff; padding: 10px 0 8px; border-bottom: 1.5px solid var(--ink); }
+  .al-cols span { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 8.6px; font-weight: 600; letter-spacing: -.02em; color: var(--gris); text-align: center; line-height: 1.15; white-space: nowrap; }
+  .al-cols .al-i, .al-c .al-i { width: 20px; height: 20px; }
+  .al-cols .al-i { color: var(--ink); }
+  .al-sec { font-weight: 750; font-size: 12.5px; text-transform: uppercase; letter-spacing: .12em; padding: 22px 0 4px; }
+  .al-plato { padding: 12px 0; border-bottom: 1px solid var(--linea); }
+  .al-plato-cab { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .al-plato-cab b { font-size: 15px; font-weight: 650; letter-spacing: -.01em; flex: 1; min-width: 0; }
+  .al-plato-cab small { font-size: 12.5px; color: var(--gris); font-weight: 500; margin-left: 8px; }
+  .al-ok { border: none; background: none; font-size: 13px; font-weight: 600; color: var(--gris); cursor: pointer; padding: 4px 0; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--linea); }
+  .al-ok:hover { color: var(--ink); }
+  .al-ok.on { color: #1F5E33; text-decoration: none; }
+  .al-c { aspect-ratio: 1; max-height: 40px; width: 100%; border-radius: 9px; border: none; box-shadow: inset 0 0 0 1.5px var(--linea); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #C9C9CF; padding: 0; transition: background-color .12s, box-shadow .12s, color .12s; }
+  .al-c:hover { box-shadow: inset 0 0 0 1.5px var(--ink); color: var(--ink); }
+  .al-c.on { background: var(--ink); box-shadow: none; color: #fff; }
+  .al-nombres { display: none; font-size: 13px; color: var(--gris); margin-top: 8px; }
   .ed-barra .btn { flex: 0 0 auto; }
 
   .cargando-pag { text-align: center; padding: 80px 20px; color: var(--gris); }
@@ -227,6 +253,7 @@
     .ed.solo-form .ed-vista { position: absolute; left: -10000px; top: 0; width: 360px; visibility: hidden; } /* sigue maquetando aunque no se vea */
     .ed.solo-vista .ed-form { display: none; }
     .kartia { grid-template-columns: minmax(0, 1fr); }
+    .al-cols { top: 126px; }
     .vista-marco { max-height: none; }
   }
   @media (max-width: 600px) {
@@ -236,6 +263,11 @@
     .plan-pill { display: none; }
     .ed-titulo { font-size: 22px; order: 3; flex-basis: 100%; }
     .ed-barra .btn { display: none; }
+    .al-cols { position: static; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px 6px; border-bottom: none; background: var(--suave); border-radius: 12px; padding: 12px 8px; }
+    .al-celdas { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .al-c { max-height: 46px; }
+    .al-nombres { display: block; }
+    .al-barra .btn { margin-left: 0; width: 100%; }
     .pro-accesos { grid-template-columns: 1fr 1fr; gap: 8px; }
     .pro-acceso { padding: 14px; }
     .pro-acceso small, .pro-acceso i { display: none; }
@@ -293,6 +325,7 @@
 </main>
 
 <script src="/cuenta.js"></script>
+<script src="/carta/alergenos.js"></script>
 <script>
   const ESTILOS = [['riviera','Riviera'],['azulejo','Azulejo'],['serigrafia','Serigrafía'],['cartel','Cartel'],['bloque','Bloque'],['marinero','Marinero'],['brunch','Brunch'],['vermut','Vermut'],['pizarra','Pizarra'],['ticket','Ticket'],['gaceta','Gaceta'],['trattoria','Trattoria'],['editorial','Editorial'],['sobremesa','Sobremesa'],['sumi','Sumi'],['brasserie','Brasserie'],['deco','Déco'],['mantel','Mantel'],['barra','Barra'],['autor','Autor']];
   const NOMBRE_ESTILO = Object.fromEntries(ESTILOS);
@@ -440,7 +473,7 @@
         <a class="pro-acceso" href="${a('traducir')}"><strong>Tradúcela a 6 idiomas</strong><small>Inglés, francés, alemán, italiano, portugués y chino, con vocabulario de hostelería.</small><i>${ir}</i></a>
         <a class="pro-acceso" href="${a('frase')}"><strong>Cambia precios con una frase</strong><small>Escribe el cambio como se lo dirías a una persona y se aplica a toda la carta.</small><i>${ir}</i></a>
         <a class="pro-acceso" href="${a('diseno')}"><strong>Tu logotipo y los 20 estilos</strong><small>Los 8 estilos Pro y tu logo arriba, sin la firma de Carta Rápida.</small><i>${ir}</i></a>
-        <a class="pro-acceso" href="${a('platos')}"><strong>Edita platos al momento</strong><small>Sube, baja, añade o quita platos y descarga el PDF nuevo en segundos.</small><i>${ir}</i></a>
+        <a class="pro-acceso" href="${a('alergenos')}"><strong>Marca los alérgenos</strong><small>Iconos o números en la carta, con su leyenda, y la tabla para sala e inspección.</small><i>${ir}</i></a>
       </div></section>`;
   }
 
@@ -528,7 +561,7 @@
     const aEs = p => /^\d+\.\d+$/.test(String(p || '')) ? parseFloat(p).toFixed(2).replace('.', ',') : (p || '');
     carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
     carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
-    const t0 = (location.hash.match(/[&]t=(diseno|platos|frase|traducir)/) || [])[1];
+    const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|frase|traducir)/) || [])[1];
     ed = { id, titulo: d.titulo, carta, estilo: d.estilo, logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
     pintarEditor();
   }
@@ -549,7 +582,7 @@
       <div class="ed solo-form" id="ed">
         <div class="ed-form">
           <div class="ed-tabs" role="tablist" aria-label="Qué quieres cambiar">
-            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">Platos y precios</button><button type="button" role="tab" data-t="frase">Cambios rápidos</button><button type="button" role="tab" data-t="traducir">Traducir</button>
+            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">Platos y precios</button><button type="button" role="tab" data-t="alergenos">Alérgenos</button><button type="button" role="tab" data-t="frase">Cambios rápidos</button><button type="button" role="tab" data-t="traducir">Traducir</button>
           </div>
           <fieldset id="edFs" data-t="${ed.tab}">
             <section class="bloque" data-t="diseno">
@@ -586,6 +619,18 @@
               <div id="servicios"></div>
               <button class="anadir" type="button" id="nuevoServicio">+ Añadir pan, cubierto o suplemento</button>
               <div class="grupo" style="margin-top:14px"><label class="etq" for="fPie">Nota al pie</label><input class="campo" id="fPie" maxlength="300" value="${esc(c.nota_pie || '')}" data-k="nota_pie" placeholder="IVA incluido. Consulte la información sobre alérgenos a nuestro personal."></div>
+            </section>
+
+            <section class="bloque" data-t="alergenos">
+              <h2 class="bloque-tit">Alérgenos de cada plato</h2>
+              <p class="bloque-intro">Marca los que lleva cada plato. Salen en la carta con su leyenda y se genera la tabla para sala e inspección.</p>
+              <div class="al-aviso"><b>Los marcas tú.</b>Carta Rápida no deduce ingredientes ni alérgenos: lo que no marques, no aparece.</div>
+              <div class="al-barra"><span class="etq">En la carta se ven como</span>
+                <div class="segmento" id="segAl"><button type="button" data-v="iconos">Iconos</button><button type="button" data-v="numeros">Números</button><button type="button" data-v="no">No mostrar</button></div>
+                <button class="btn peq" type="button" id="tablaAl">Descargar tabla de alérgenos (PDF)</button></div>
+              <p class="al-cuenta" id="alCuenta" aria-live="polite"></p>
+              <div class="al-cols" aria-hidden="true">${Alergenos.ALERGENOS.map(a => `<span>${Alergenos.icono(a.id)}${a.es === 'Frutos de cáscara' ? 'Fr. cáscara' : a.es}</span>`).join('')}</div>
+              <div id="alLista"></div>
             </section>
 
             <section class="bloque" data-t="frase">
@@ -648,12 +693,18 @@
     });
     document.getElementById('nuevaSeccion').onclick = () => { ed.carta.secciones.push({ nombre: '', platos: [plato()] }); pintarSecciones(true); cambio(); };
     document.getElementById('nuevoServicio').onclick = () => { ed.carta.servicios.push({ nombre: '', precio: '' }); pintarServicios(true); cambio(); };
+    document.getElementById('tablaAl').onclick = descargarTabla;
+    const segAl = document.getElementById('segAl');
+    const pintarSegAl = () => segAl.querySelectorAll('button').forEach(b => { const on = b.dataset.v === (ed.carta.alergenos_modo || 'iconos'); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    segAl.querySelectorAll('button').forEach(b => b.onclick = () => { if (b.dataset.v === 'iconos') delete ed.carta.alergenos_modo; else ed.carta.alergenos_modo = b.dataset.v; pintarSegAl(); cambio(); });
+    pintarSegAl();
+    pintarAlergenos();
     document.getElementById('aplicarFrase').onclick = aplicarFrase;
     app.querySelectorAll('[data-ej]').forEach(b => b.onclick = () => { const t = document.getElementById('fFrase'); t.value = b.dataset.ej; t.focus(); });
     app.querySelectorAll('[data-idioma]').forEach(b => b.onclick = () => traducir(b.dataset.idioma, b));
     app.querySelectorAll('.js-descargar').forEach(b => b.onclick = descargar);
     const fs = document.getElementById('edFs');
-    const ponTab = t => { ed.tab = t; fs.dataset.t = t; app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
+    const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
     app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
     ponTab(ed.tab);
     cajaMontaje(document.getElementById('kartiaEd'), [], 'editor', () => ({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }));
@@ -879,8 +930,95 @@
     finally { bs.forEach(b => { b.disabled = false; b.textContent = 'Descargar PDF'; }); }
   }
 
+
+  // ── Alérgenos ──
+  const AL = Alergenos;
+  function pintarAlergenos() {
+    const caja = document.getElementById('alLista');
+    if (!caja) return;
+    caja.innerHTML = ed.carta.secciones.map((s, si) => `<div class="al-sec">${esc(s.nombre || 'Sin nombre')}</div>` + s.platos.map((p, pi) => {
+      const al = AL.limpiar(p.al);
+      return `<div class="al-plato" data-s="${si}" data-p="${pi}">
+        <div class="al-plato-cab"><b>${esc(p.nombre || 'Plato sin nombre')}${p.alergenos ? `<small>En tu carta ponía: ${esc(p.alergenos)}</small>` : ''}</b>
+          ${al.length ? '' : `<button type="button" class="al-ok${p.al_ok ? ' on' : ''}" aria-pressed="${!!p.al_ok}">${p.al_ok ? '✓ Sin alérgenos' : 'Marcar «sin alérgenos»'}</button>`}</div>
+        <div class="al-celdas">${AL.ALERGENOS.map(a => `<button type="button" class="al-c${al.includes(a.id) ? ' on' : ''}" data-id="${a.id}" title="${esc(a.es)}" aria-label="${esc(a.es)}" aria-pressed="${al.includes(a.id)}">${AL.icono(a.id)}</button>`).join('')}</div>
+        <div class="al-nombres">${al.length ? esc(al.map(id => AL.nombre(id, 'es')).join(' · ')) : ''}</div></div>`;
+    }).join('')).join('');
+    contarAlergenos();
+  }
+  function contarAlergenos() {
+    const el = document.getElementById('alCuenta');
+    if (!el) return;
+    const todos = ed.carta.secciones.flatMap(s => s.platos);
+    const pend = todos.filter(p => !AL.limpiar(p.al).length && !p.al_ok).length;
+    el.innerHTML = pend ? `<b>${todos.length - pend} de ${todos.length}</b> platos revisados · quedan ${pend} sin revisar` : `<b>Los ${todos.length} platos están revisados.</b>`;
+  }
+  document.addEventListener('click', e => {
+    if (!ed) return;
+    const fila = e.target.closest && e.target.closest('.al-plato');
+    if (!fila) return;
+    const p = ed.carta.secciones[+fila.dataset.s].platos[+fila.dataset.p];
+    const c = e.target.closest('.al-c'), ok = e.target.closest('.al-ok');
+    if (c) {
+      const id = +c.dataset.id, al = new Set(AL.limpiar(p.al));
+      if (al.has(id)) al.delete(id); else al.add(id);
+      p.al = [...al].sort((a, b) => a - b);
+      if (p.al.length) delete p.al_ok; else delete p.al;
+    } else if (ok) {
+      if (p.al_ok) delete p.al_ok; else p.al_ok = true;
+    } else return;
+    pintarAlergenos(); cambio();
+  });
+  async function descargarTabla() {
+    const b = document.getElementById('tablaAl');
+    b.disabled = true; b.textContent = 'Preparando la tabla…';
+    try {
+      if (ed.pendiente) await guardarYa();
+      const r = await fetch('/tabla-alergenos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ carta: ed.carta, logo: logoActivo() }) });
+      if (!r.ok) {
+        let d = {}; try { d = await r.json(); } catch (e) {}
+        if (r.status === 402) return Cuenta.planes({ motivo: d.error, vuelta: 'panel' });
+        throw new Error(d.error || 'No hemos podido generar la tabla.');
+      }
+      const blob = await r.blob();
+      const n = (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = n ? n[1] : 'alergenos.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      medir('tabla_alergenos');
+      Cuenta.aviso('Tabla descargada.');
+    } catch (e) { Cuenta.aviso(e.message); }
+    finally { const b2 = document.getElementById('tablaAl'); if (b2) { b2.disabled = false; b2.textContent = 'Descargar tabla de alérgenos (PDF)'; } }
+  }
+  // Tras un cambio hecho por la máquina (frase o traducción) los alérgenos marcados se conservan solo cuando
+  // no hay duda de a qué plato pertenecen. Devuelve cuántos platos los han perdido, para avisar.
+  function heredarAlergenos(vieja, nueva, porPosicion) {
+    const tenia = p => AL.limpiar(p.al).length || p.al_ok;
+    const copiar = (de, a) => { if (AL.limpiar(de.al).length) a.al = AL.limpiar(de.al); else if (de.al_ok) a.al_ok = true; };
+    if (vieja.alergenos_modo) nueva.alergenos_modo = vieja.alergenos_modo;
+    const vs = vieja.secciones || [], ns = nueva.secciones || [];
+    if (porPosicion) {
+      const igual = vs.length === ns.length && vs.every((s, i) => s.platos.length === ns[i].platos.length);
+      if (igual) { vs.forEach((s, i) => s.platos.forEach((p, j) => copiar(p, ns[i].platos[j]))); return 0; }
+    }
+    const clave = p => String(p.nombre || '').toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
+    const cuenta = (lista, k) => lista.filter(p => clave(p) === k).length;
+    const viejos = vs.flatMap(s => s.platos), nuevos = ns.flatMap(s => s.platos);
+    let perdidos = 0;
+    viejos.filter(tenia).forEach(p => {
+      const k = clave(p);
+      const dest = k && cuenta(viejos, k) === 1 && cuenta(nuevos, k) === 1 ? nuevos.find(x => clave(x) === k) : null;
+      if (dest) copiar(p, dest); else perdidos++;
+    });
+    return perdidos;
+  }
+
   async function pedirAjuste(ajuste) {
-    const r = await Cuenta.api('/rehacer', { carta: ed.carta, ajuste });
+    // A la máquina no se le mandan los alérgenos: ni los necesita ni debe tocarlos
+    const sinAl = { ...ed.carta, secciones: ed.carta.secciones.map(s => ({ ...s, platos: s.platos.map(({ al, al_ok, ...p }) => p) })) };
+    delete sinAl.alergenos_modo;
+    const r = await Cuenta.api('/rehacer', { carta: sinAl, ajuste });
     if (!r.ok) throw new Error(r.error || 'No ha sido posible aplicar el cambio.');
     return r.carta;
   }
@@ -892,10 +1030,11 @@
     b.disabled = true; b.textContent = 'Aplicando…';
     try {
       const nueva = await pedirAjuste(ajuste);
+      const perdidos = heredarAlergenos(ed.carta, nueva, false);
       ed.carta = { ...ed.carta, ...nueva, nombre_restaurante: nueva.nombre_restaurante || ed.carta.nombre_restaurante };
       t.value = '';
       cambio(); pintarEditor();
-      Cuenta.aviso('Cambio aplicado. Revisa la carta.');
+      Cuenta.aviso(perdidos ? `Cambio aplicado. ${perdidos === 1 ? 'Un plato ha' : perdidos + ' platos han'} cambiado de nombre: vuelve a marcar sus alérgenos.` : 'Cambio aplicado. Revisa la carta.');
     } catch (e) { Cuenta.aviso(e.message); }
     finally { const b2 = document.getElementById('aplicarFrase'); if (b2) { b2.disabled = false; b2.textContent = 'Aplicar'; } }
   }
@@ -905,9 +1044,10 @@
     try {
       const nueva = await pedirAjuste(`Traduce TODA la carta al ${IDIOMAS[cod]} (código ${cod}) con terminología profesional de hostelería: secciones, platos, descripciones, subtítulo, servicios y nota al pie. No traduzcas el nombre del restaurante ni los precios. Pon "idioma" a "${cod}".`);
       nueva.idioma = cod;
+      const perdidos = heredarAlergenos(ed.carta, nueva, true);
       const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, logo: ed.logo, cabecera: ed.cabecera });
       if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la copia.');
-      Cuenta.aviso('Copia traducida guardada.');
+      Cuenta.aviso(perdidos ? 'Copia traducida guardada. Revisa los alérgenos: la traducción ha cambiado platos de sitio.' : 'Copia traducida guardada.');
       location.hash = 'carta=' + d.id;
     } catch (e) { Cuenta.aviso(e.message); }
     finally { todos.forEach(x => { if (x.isConnected) { x.disabled = false; x.textContent = IDIOMAS[x.dataset.idioma]; } }); }
