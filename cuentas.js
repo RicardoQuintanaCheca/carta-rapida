@@ -45,15 +45,25 @@ const MARCA_PAGO = process.env.PAGO_SIN_MARCA === 'si' ? null : {
   icon: { type: 'url', url: (process.env.WEB_URL || 'https://www.cartarapida.es').replace(/\/$/, '') + '/icono-512.png' }
 };
 let marcaFalla = false;
+let cifFalla = false;
 async function crearSesionPago(params) {
-  if (MARCA_PAGO && !marcaFalla) {
+  // CIF opcional en el pago ("Compro como empresa"): sale en la factura. Si Stripe no lo admite, se cobra igual sin él
+  const fiscal = cifFalla ? {} : {
+    tax_id_collection: { enabled: true },
+    ...(params.customer ? { customer_update: { name: 'auto', address: 'auto' } } : {})
+  };
+  const intentos = [];
+  if (MARCA_PAGO && !marcaFalla) intentos.push([{ ...params, ...fiscal, branding_settings: MARCA_PAGO }, { apiVersion: '2025-09-30.clover' }]);
+  if (!cifFalla) intentos.push([{ ...params, ...fiscal }]);
+  for (const [datos, opciones] of intentos) {
     try {
-      return await stripe.checkout.sessions.create({ ...params, branding_settings: MARCA_PAGO }, { apiVersion: '2025-09-30.clover' });
+      return await stripe.checkout.sessions.create(datos, opciones);
     } catch (e) {
       const txt = String((e && (e.param || '')) + ' ' + (e && e.message || ''));
-      // Pase lo que pase con el intento personalizado, se prueba el pago normal: cobrar va antes que la imagen
-      if (/branding|api.?version/i.test(txt)) marcaFalla = true; // Stripe no la admite: no se reintenta en cada pago
-      console.warn('[PAGO] pantalla de pago sin imagen propia:', e.message);
+      // Pase lo que pase con el intento completo, se prueba el pago normal: cobrar va antes que lo demás
+      if (/branding|api.?version/i.test(txt)) marcaFalla = true;
+      if (/tax_id|customer_update/i.test(txt)) cifFalla = true;
+      console.warn('[PAGO] pantalla de pago simplificada:', e.message);
     }
   }
   return stripe.checkout.sessions.create(params);
