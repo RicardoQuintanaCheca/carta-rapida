@@ -170,6 +170,18 @@
   .seccion-cab .campo.dos { flex: 1 1 100%; order: 5; }
   .dos-fila { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 8px; }
   .bi-fila { display: flex; gap: 10px; flex-wrap: wrap; }
+  .bi-ej { margin: 4px 0 22px; }
+  .bi-ej figcaption { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); margin-bottom: 10px; }
+  .bi-ej-hoja { background: #fff; box-shadow: inset 0 0 0 1px var(--linea), 0 14px 30px -22px rgba(12,12,13,.3); border-radius: 10px; padding: 22px clamp(18px, 4vw, 34px) 12px; max-width: 460px; font-family: Georgia, 'Times New Roman', serif; color: #1F1B18; }
+  .bi-ej-sec { font-size: 19px; font-style: italic; color: #8A1C1C; border-bottom: 1px solid #E4DDD2; padding-bottom: 8px; margin-bottom: 4px; }
+  .bi-ej-sec small { display: block; font: 600 10.5px/1.2 var(--f); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: #8B847C; margin-top: 3px; }
+  .bi-ej-pl { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; align-items: baseline; }
+  .bi-ej-pl + .bi-ej-pl { border-top: 1px dotted #E4DDD2; }
+  .bi-ej-pl b { display: block; font-size: 16.5px; font-weight: 700; }
+  .bi-ej-pl span { display: block; font-size: 13.5px; color: #5E554C; margin-top: 1px; }
+  .bi-ej-pl i { display: block; font-size: 13px; color: #8B847C; margin-top: 3px; position: relative; padding-left: 12px; }
+  .bi-ej-pl i::before { content: ''; position: absolute; left: 0; top: .2em; bottom: .2em; width: 2px; border-radius: 2px; background: var(--cta); opacity: .55; }
+  .bi-ej-pl em { font-style: normal; font-weight: 700; font-size: 16px; color: #8A1C1C; white-space: nowrap; }
   .bi-fila select { flex: 1 1 180px; }
   @media (max-width: 560px) { .dos-fila { grid-template-columns: minmax(0, 1fr); } }
   .colores { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -248,11 +260,11 @@
   /* Pestañas del editor */
   .ed-tabs { display: flex; gap: 4px; background: var(--suave); border-radius: 12px; padding: 4px; margin: 18px 0 0; overflow-x: auto; scrollbar-width: none; }
   .ed-tabs::-webkit-scrollbar { display: none; }
-  .ed-tabs button { flex: 1 0 auto; border: none; background: transparent; padding: 10px 16px; border-radius: 9px; font-size: 14.5px; font-weight: 650; color: var(--gris); cursor: pointer; white-space: nowrap; }
+  .ed-tabs button { flex: 1 0 auto; border: none; background: transparent; padding: 10px 11px; border-radius: 9px; font-size: 14px; font-weight: 650; color: var(--gris); cursor: pointer; white-space: nowrap; }
   .ed-tabs button:hover { color: var(--ink); }
   .ed-tabs button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(12,12,13,.12); }
   #edFs[data-t="diseno"] .bloque:not([data-t="diseno"]), #edFs[data-t="platos"] .bloque:not([data-t="platos"]),
-  #edFs[data-t="alergenos"] .bloque:not([data-t="alergenos"]), #edFs[data-t="redes"] .bloque:not([data-t="redes"]), #edFs[data-t="frase"] .bloque:not([data-t="frase"]), #edFs[data-t="traducir"] .bloque:not([data-t="traducir"]) { display: none; }
+  #edFs[data-t="alergenos"] .bloque:not([data-t="alergenos"]), #edFs[data-t="redes"] .bloque:not([data-t="redes"]), #edFs[data-t="bilingue"] .bloque:not([data-t="bilingue"]), #edFs[data-t="frase"] .bloque:not([data-t="frase"]), #edFs[data-t="traducir"] .bloque:not([data-t="traducir"]) { display: none; }
   #edFs .bloque { border-bottom: none; }
   #edFs[data-t="platos"] .bloque + .bloque[data-t="platos"], #edFs[data-t="diseno"] .bloque + .bloque[data-t="diseno"] { border-top: 1px solid var(--linea); }
   .bloque-intro { color: var(--gris); font-size: 15.5px; margin: -6px 0 16px; max-width: 36em; }
@@ -550,7 +562,7 @@
         <a class="pro-acceso" href="#menu=nuevo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span><span><strong>El menú del día</strong><small>La fecha se pone sola. Cada mañana solo cambias los platos.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
         <a class="pro-acceso" href="${a('redes')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.7" cy="7.3" r=".7" fill="currentColor"/></svg></span><span><strong>Imágenes para redes</strong><small>El menú o un plato, listos para Instagram y WhatsApp.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
         <a class="pro-acceso" href="${a('alergenos')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9"/><path d="M12 9c-1.7-1.7-1.7-4.2 0-6.2 1.7 2 1.7 4.5 0 6.2z"/><path d="M12 14c-2.6.2-4.3-1.1-4.7-3.5 2.6-.2 4.3 1.1 4.7 3.5z"/><path d="M12 14c2.6.2 4.3-1.1 4.7-3.5-2.6-.2-4.3 1.1-4.7 3.5z"/></svg></span><span><strong>Alérgenos</strong><small>Iconos en la carta y la tabla para sala e inspección.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-        <a class="pro-acceso" href="${a('traducir')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c.6 3.4 2.6 6 6 7.4M11.5 6c-.6 3.4-2.8 6.2-6.5 7.6"/><path d="M13 20l3.6-8.4L20.2 20M14.3 17h4.6"/></svg></span><span><strong>Dos idiomas</strong><small>Cada plato en español y en otro idioma, o una copia traducida.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="pro-acceso" href="${a('bilingue')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c.6 3.4 2.6 6 6 7.4M11.5 6c-.6 3.4-2.8 6.2-6.5 7.6"/><path d="M13 20l3.6-8.4L20.2 20M14.3 17h4.6"/></svg></span><span><strong>Dos idiomas</strong><small>Cada plato en español y en otro idioma, o una copia traducida.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
         <a class="pro-acceso" href="${a('frase')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19l3.6-.8L19 7.8a2 2 0 0 0-2.8-2.8L5.8 15.4 5 19z"/><path d="M14.5 6.7l2.8 2.8"/></svg></span><span><strong>Cambios con una frase</strong><small>Sube precios o reordena la carta escribiéndolo como lo dirías.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       </div></section>`;
   }
@@ -659,7 +671,7 @@
     const aEs = p => /^\d+\.\d+$/.test(String(p || '')) ? parseFloat(p).toFixed(2).replace('.', ',') : (p || '');
     carta.secciones.forEach(s => (s.platos || []).forEach(p => { p.precio = aEs(p.precio); }));
     carta.servicios.forEach(s => { s.precio = aEs(s.precio); });
-    const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|redes|frase|traducir)/) || [])[1] || (carta.menu ? 'platos' : '');
+    const t0 = (location.hash.match(/[&]t=(diseno|platos|alergenos|redes|frase|bilingue|traducir)/) || [])[1] || (carta.menu ? 'platos' : '');
     // La fecha «de hoy» se pone sola cada vez que abres el menú
     let fechaCambiada = false;
     if (carta.menu && carta.menu.fecha_auto && carta.menu.fecha !== hoyTexto()) { carta.menu.fecha = hoyTexto(); fechaCambiada = true; }
@@ -686,7 +698,7 @@
       <div class="ed solo-form" id="ed">
         <div class="ed-form">
           <div class="ed-tabs" role="tablist" aria-label="Qué quieres cambiar">
-            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">${c.menu ? 'Menú de hoy' : 'Platos y precios'}</button><button type="button" role="tab" data-t="alergenos">Alérgenos</button><button type="button" role="tab" data-t="redes">Redes</button><button type="button" role="tab" data-t="frase">Cambios</button><button type="button" role="tab" data-t="traducir">Traducir</button>
+            <button type="button" role="tab" data-t="diseno">Diseño</button><button type="button" role="tab" data-t="platos">${c.menu ? 'Menú de hoy' : 'Platos'}</button><button type="button" role="tab" data-t="alergenos">Alérgenos</button><button type="button" role="tab" data-t="redes">Redes</button><button type="button" role="tab" data-t="frase">Cambios</button><button type="button" role="tab" data-t="bilingue">Dos idiomas</button><button type="button" role="tab" data-t="traducir">Traducir</button>
           </div>
           <fieldset id="edFs" data-t="${ed.tab}">
             <section class="bloque" data-t="diseno">
@@ -814,9 +826,19 @@
               <p class="ayuda">Revisa el resultado antes de imprimir: precios y alérgenos son responsabilidad tuya.</p>
             </section>
 
-            <section class="bloque" data-t="traducir">
+            <section class="bloque" data-t="bilingue">
               <h2 class="bloque-tit">Carta en dos idiomas</h2>
-              <p class="bloque-intro">Cada plato en español y, debajo y en pequeño, en otro idioma. Una sola carta para todos tus clientes.</p>
+              <p class="bloque-intro">Cada plato en español y, debajo y en pequeño, en otro idioma. Una sola carta para todos tus clientes, sin imprimir dos.</p>
+              <figure class="bi-ej" aria-label="Ejemplo de carta en dos idiomas">
+                <figcaption>Así queda cada plato</figcaption>
+                <div class="bi-ej-hoja">
+                  <div class="bi-ej-sec">Del mar<small>From the sea</small></div>
+                  <div class="bi-ej-pl"><div><b>Pulpo a feira</b><span>Con cachelos y pimentón</span><i>Galician-style octopus · With potatoes and paprika</i></div><em>19,50</em></div>
+                  <div class="bi-ej-pl"><div><b>Calamares a la andaluza</b><i>Andalusian-style fried squid</i></div><em>14</em></div>
+                  <div class="bi-ej-pl"><div><b>Salmorejo</b><span>Con jamón y huevo</span><i>With ham and egg</i></div><em>8</em></div>
+                </div>
+                <p class="ayuda">Es un ejemplo. El último plato no repite el nombre porque «salmorejo» no se traduce.</p>
+              </figure>
               <div id="biCaja"></div>
             </section>
 
@@ -910,7 +932,7 @@
     app.querySelectorAll('.js-imprimir').forEach(b => b.onclick = () => imprimir(false));
     const fs = document.getElementById('edFs');
     prepararRedes();
-    const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); if (t === 'redes') { rsOpciones(); rsPedir(0); } if (t === 'traducir') pintarBilingue(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }); };
+    const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); if (t === 'redes') { rsOpciones(); rsPedir(0); } if (t === 'bilingue') pintarBilingue(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); if (on) { const c = b.parentElement; c.scrollLeft = Math.max(0, b.offsetLeft - (c.clientWidth - b.offsetWidth) / 2); } }); };
     app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
     ponTab(ed.tab);
     cajaMontaje(document.getElementById('kartiaEd'), [], 'editor', () => ({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }));
@@ -1360,7 +1382,7 @@
     const c = ed.carta, cod = c.idioma2;
     if ((c.idioma || 'es').slice(0, 2) !== 'es') {
       caja.innerHTML = ed.original
-        ? `<p class="ayuda">Esta es una copia traducida. La carta en dos idiomas se hace desde la versión en español.</p><a class="btn oscuro peq" href="#carta=${esc(ed.original)}&t=traducir">Ir a la carta en español</a>`
+        ? `<p class="ayuda">Esta es una copia traducida. La carta en dos idiomas se hace desde la versión en español.</p><a class="btn oscuro peq" href="#carta=${esc(ed.original)}&t=bilingue">Ir a la carta en español</a>`
         : `<p class="ayuda">Esta carta está traducida y no tiene versión en español. Créala primero y, desde ella, añade el segundo idioma.</p><button class="btn oscuro peq" type="button" id="crearEspanol2">Crear la versión en español</button>`;
       const b2 = document.getElementById('crearEspanol2'); if (b2) b2.onclick = () => crearEspanol(b2);
       return;
@@ -1372,7 +1394,7 @@
       return;
     }
     const faltan = biFaltan();
-    caja.innerHTML = `<div class="formato-nota"><b>Segundo idioma: ${IDIOMAS[cod]}</b>Cada línea se corrige en la pestaña «${c.menu ? 'Menú de hoy' : 'Platos y precios'}», debajo de su plato. Si dejas una en blanco, ese plato sale solo en español.${faltan ? `<br><strong>${faltan === 1 ? 'Hay 1 texto' : 'Hay ' + faltan + ' textos'} sin traducir.</strong>` : ''}</div>
+    caja.innerHTML = `<div class="formato-nota"><b>Segundo idioma: ${IDIOMAS[cod]}</b>Cada línea se corrige en la pestaña «${c.menu ? 'Menú de hoy' : 'Platos'}», debajo de su plato. Si dejas una en blanco, ese plato sale solo en español.${faltan ? `<br><strong>${faltan === 1 ? 'Hay 1 texto' : 'Hay ' + faltan + ' textos'} sin traducir.</strong>` : ''}</div>
       <div class="fila-botones" style="margin-top:12px">${faltan ? '<button class="btn oscuro peq" type="button" id="biFaltan">Traducir lo que falta</button>' : ''}<button class="btn peq" type="button" id="biTodo">Volver a traducir todo</button><button class="btn peq" type="button" id="biQuitar">Quitar el segundo idioma</button></div>`;
     const f = document.getElementById('biFaltan'); if (f) f.onclick = e => biTraducir(cod, true, e.currentTarget);
     document.getElementById('biTodo').onclick = e => { const b = e.currentTarget; if (b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = 'Se pierden tus correcciones. ¿Seguro?'; return; } biTraducir(cod, false, b); };
