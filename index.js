@@ -114,7 +114,7 @@ function topeLectura(req, plan, quien) {
   if (n >= LECTURAS[tipo]) {
     if (tipo === 'pro') return { error: 'Has llegado al máximo de 30 cartas nuevas este mes. Puedes seguir editando y descargando las que ya tienes guardadas.' };
     if (tipo === 'prueba') return { pro: true, error: 'Has usado las 5 cartas de tu prueba. Activa Carta Pro para seguir creando cartas nuevas.' };
-    return { pro: true, error: 'Ya has hecho tus 2 cartas gratis de este mes. Con Carta Pro creas, guardas y editas las que necesites: pruébala gratis 7 días.' };
+    return { pro: true, error: 'Ya has hecho tus 2 cartas gratis de este mes. Con Carta Pro haces todas las que necesites: pruébala gratis 7 días.' };
   }
   if (tipo === 'gratis' && usados('ip:' + (req.ip || '?'), 'lectura', ahora - DIA_MS) >= LECTURAS_IP_DIA) {
     return { pro: true, error: 'Desde esta conexión ya se han hecho varias cartas hoy. Vuelve mañana o pruébalo con Carta Pro, gratis 7 días.' };
@@ -463,7 +463,7 @@ app.post('/segundo-idioma', limiteRehacer, async (req, res) => {
     const cod = String(b.idioma || '');
     if (!IDIOMA2[cod]) return res.json({ ok: false, error: 'Elige un idioma.' });
     const plan = await planDe(req);
-    if (plan.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, motivo: 'bilingue', error: 'La carta bilingüe es de Carta Pro. Pruébalo gratis 7 días.' });
+    if (!plan.usuario && plan.plan === 'gratis') return res.status(401).json({ ok: false, sesion: false, error: 'Entra en tu cuenta para continuar.' });
     const textos = (Array.isArray(b.textos) ? b.textos : []).slice(0, 600).map(x => String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, 220));
     if (!textos.some(Boolean)) return res.json({ ok: false, error: 'No hay nada que traducir.' });
     let salida;
@@ -532,24 +532,14 @@ app.post('/pdf', limitePDF, async (req, res) => {
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
 
-    // Versión gratis: con firma, sin logo, en español y con los estilos gratis; a cambio del email.
-    // Logo, sin firma, traducción y estilos Pro son de Carta Pro (o de la prueba de 7 días)
+    // Versión gratis: la carta completa (logo, estilos, idiomas, formatos y alérgenos), con la firma de Carta Rápida.
+    // De Carta Pro (o de la prueba de 7 días): el menú del día, guardar más de una carta y quitar la firma.
     const plan = await planDe(req);
     const pro = plan.plan !== 'gratis';
-    // Los alérgenos con iconos y leyenda son de Carta Pro: en la versión gratis no se pintan
-    if (!pro) { delete limpia.menu; delete limpia.idioma2; limpia.alergenos_modo = 'no'; limpia.secciones.forEach(s => s.platos.forEach(p => { delete p.al; delete p.al_ok; })); }
+    if (!pro && limpia.menu) return res.status(402).json({ ok: false, pro: true, motivo: 'menu', error: 'El menú del día es de Carta Pro. Pruébalo gratis 7 días.' });
     let destino = '';
     const estiloFinal = ESTILOS.includes(estilo) ? estilo : 'mantel';
     if (!pro) {
-      if (String(limpia.idioma || 'es').slice(0, 2).toLowerCase() !== 'es') {
-        return res.status(402).json({ ok: false, pro: true, motivo: 'idioma', error: 'La carta traducida es de Carta Pro. Pruébalo gratis 7 días o descárgala en español.' });
-      }
-      if (formato !== 'a4') {
-        return res.status(402).json({ ok: false, pro: true, motivo: 'formato', error: 'Este formato es de Carta Pro. Pruébalo gratis 7 días o descárgala en A4.' });
-      }
-      if (ESTILOS_PRO.includes(estiloFinal)) {
-        return res.status(402).json({ ok: false, pro: true, motivo: 'estilo', error: 'Este estilo es de Carta Pro. Pruébalo gratis 7 días o elige uno de los estilos gratis.' });
-      }
       const email = String((req.body || {}).email || '').trim().toLowerCase();
       if (!plan.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ ok: false, email: true, error: 'Déjanos tu email para descargar la carta.' });
@@ -562,8 +552,8 @@ app.post('/pdf', limitePDF, async (req, res) => {
     }
 
     const t0 = Date.now();
-    const porCorreo = !pro && destino && CORREO_ACTIVO;
-    const { pdf, info, vista } = await generarPDF(limpia, { estilo: estiloFinal, logo: pro ? logo : null, credito: !pro, conVista: !!porCorreo, formato });
+    const porCorreo = !pro && !plan.usuario && destino && CORREO_ACTIVO; // con cuenta se descarga directamente
+    const { pdf, info, vista } = await generarPDF(limpia, { estilo: estiloFinal, logo, credito: !pro, conVista: !!porCorreo, formato });
     console.log(`[PDF] ${estiloFinal} · ${formato} · ${info.paginas} pág · ${info.columnas} col · ${info.platos} platos · ${plan.plan} · ${Date.now() - t0} ms`);
 
     res.set({
@@ -603,7 +593,6 @@ app.post('/tabla-alergenos', limitePDF, async (req, res) => {
     const { carta, logo } = req.body || {};
     if (!carta || !Array.isArray(carta.secciones)) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
     const plan = await planDe(req);
-    if (plan.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, motivo: 'alergenos', error: 'La tabla de alérgenos es de Carta Pro. Pruébalo gratis 7 días.' });
     const limpia = normalizarCarta(carta);
     if (!limpia.secciones.length) return res.status(400).json({ ok: false, error: 'La carta está vacía.' });
     const logoOk = typeof logo === 'string' && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(logo) && logo.length < 2.5 * 1024 * 1024 ? logo : null;

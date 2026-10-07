@@ -102,8 +102,8 @@ ${fila('03', 'En papel blanco. Si es algo más grueso que el de oficina, mejor.'
 </table></td></tr>
 <tr><td style="padding:30px 36px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0C0C0D;border-radius:12px"><tr><td style="padding:26px 26px 28px">
 <div style="${F};font-size:21px;font-weight:bold;line-height:1.2;letter-spacing:-0.5px;color:#FFFFFF">¿Mañana cambia un precio?</div>
-<div style="${F};padding-top:8px;font-size:15.5px;line-height:1.55;color:#C9C9D0">Con Carta Pro la guardas, cambias lo que haga falta y la descargas otra vez. Sin firma, con tu logotipo y con los 20 estilos.</div>
-<div style="padding-top:18px"><a href="${web}/#pro" style="${F};display:inline-block;background:#FF4A1C;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:15.5px;padding:14px 22px;border-radius:10px">Probar 7 días gratis</a></div>
+<div style="${F};padding-top:8px;font-size:15.5px;line-height:1.55;color:#C9C9D0">Crea tu cuenta, que es gratis, y la carta se queda guardada: cambias lo que haga falta y la descargas otra vez.</div>
+<div style="padding-top:18px"><a href="${web}/panel" style="${F};display:inline-block;background:#FF4A1C;color:#FFFFFF;text-decoration:none;font-weight:bold;font-size:15.5px;padding:14px 22px;border-radius:10px">Guardar mi carta gratis</a></div>
 ${conPase ? `<div style="${F};padding-top:14px;font-size:14px;line-height:1.5;color:#9A9AA3">¿Sin suscripciones? <a href="${web}/?pase=quiero" style="color:#FFFFFF">Pase de 7 días por 15 €, una sola vez</a>.</div>` : ''}
 </td></tr></table></td></tr>
 <tr><td style="padding:26px 36px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E6EA;border-radius:12px"><tr><td style="padding:22px 24px">

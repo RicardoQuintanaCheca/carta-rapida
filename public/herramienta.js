@@ -885,8 +885,6 @@
   let descargando = false;
   async function descargar() {
     if (!cartaActual || descargando) return;
-    if (!esPro() && cartaTraducida()) { mostrarPro('Tu carta está traducida, y la traducción es de Carta Pro. Pruébalo gratis 7 días para descargarla.'); return; }
-    if (!esPro() && esEstiloPro(estiloActual)) { mostrarPro('Riviera, Sumi, Cartel, Serigrafía y Azulejo son estilos Pro. Pruébalos gratis 7 días o elige otro estilo para descargarla gratis.'); return; }
     let emailDescarga = '';
     if (!esPro() && !(window.Cuenta && Cuenta.estado)) {
       emailDescarga = await pedirEmail();
@@ -937,8 +935,7 @@
       setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
       updateToolBubble('¡Tu carta está descargada! 🎉');
       medir('pdf_descargado', { plan: planActual(), estilo: estiloActual });
-      if (!esPro() && logoEnCabecera()) mostrarPro('Descargada con tu nombre en lugar del logo: el logo es de Carta Pro. Pruébalo gratis 7 días y vuelve a descargarla.');
-      else if (!esPro()) mostrarPro('¿Te ha gustado? Con Pro la guardas y cambias los precios cuando quieras, sin firma y con tu logo.');
+      if (!esPro()) mostrarPro('¿Haces menú del día? Con Pro lo sacas cada mañana en un minuto. Y tienes todas las cartas que necesites, sin firma.');
     } catch (err) {
       status(mensajeAmable(err));
     } finally {
@@ -1138,7 +1135,7 @@
     const estado = document.getElementById('planEstado');
     if (c && c.plan !== 'gratis') {
       estado.innerHTML = '<b>✓ ' + Cuenta.esc(Cuenta.textoPlan()) + '</b>'
-        + (c.plan === 'prueba' ? ' · Tu carta sale sin firma, con tu logo y en el idioma que elijas. <button type="button" class="enlace-pro" onclick="hacersePro()">Hazte Pro</button>' : '')
+        + (c.plan === 'prueba' ? ' · Tienes el menú del día y todas las cartas que necesites, sin firma. <button type="button" class="enlace-pro" onclick="hacersePro()">Hazte Pro</button>' : '')
         + '<br><a href="/panel">Ir a mis cartas →</a>';
       estado.classList.add('on');
     } else if (licencia && pro) {
@@ -1150,28 +1147,20 @@
     const texto = document.getElementById('dlTexto');
     const nota = document.getElementById('dlNota');
     const boton = document.getElementById('dlBtn');
-    const traducida = cartaTraducida();
-    const estiloPro = esEstiloPro(estiloActual);
-    boton.classList.toggle('dl-secundario', !pro && (traducida || estiloPro));
+    boton.classList.remove('dl-secundario');
     if (pro) {
       texto.textContent = 'Descargar PDF';
-      nota.textContent = 'A4 listo para imprimir · sin firma' + (logoEnCabecera() ? ' · con tu logo' : '') + ' · cambia de estilo y vuelve a descargar cuando quieras';
-    } else if (traducida) {
-      texto.textContent = 'Desbloquear la carta traducida';
-      nota.textContent = 'La traducción es de Carta Pro. Pruébala gratis 7 días, sin tarjeta.';
-    } else if (estiloPro) {
-      texto.textContent = 'Desbloquear el estilo ' + nombreEstilo(estiloActual);
-      nota.textContent = 'Es un estilo Pro. Pruébalo gratis 7 días o elige un estilo sin la etiqueta Pro.';
+      nota.textContent = 'A4 listo para imprimir · sin firma · cambia de estilo y vuelve a descargar cuando quieras';
     } else {
       texto.textContent = 'Descargar gratis';
-      nota.textContent = 'Versión gratis: A4 con una firma pequeña de Carta Rápida al pie' + (logoEnCabecera() ? '. Sale con tu nombre en lugar del logo' : '') + '.';
+      nota.textContent = 'A4 listo para imprimir, con una firma pequeña de Carta Rápida al pie.';
     }
     document.getElementById('proCaja').classList.toggle('on', !pro);
     const plan = planActual();
     document.getElementById('guardarTexto').textContent = cartaGuardadaId ? 'Guardada ✓ · abrir en mi panel' : 'Guardar en mis cartas';
     document.getElementById('guardarBtn').classList.toggle('guardada', !!cartaGuardadaId);
     document.getElementById('guardarNota').textContent = cartaGuardadaId ? 'Los cambios que hagas aquí no se guardan solos: edítala desde tu panel.'
-      : plan === 'gratis' ? 'Guárdala y cambia platos y precios cuando quieras. Pruébalo gratis 7 días.' : 'Guárdala en tu panel y cambia platos y precios cuando quieras.';
+      : plan === 'gratis' ? 'Gratis: guárdala y cambia platos y precios cuando quieras.' : 'Guárdala en tu panel y cambia platos y precios cuando quieras.';
     pintarCabecera();
     const quedan = Math.max(0, AJUSTES_GRATIS - ajustesUsados);
     document.getElementById('ajusteCuenta').innerHTML = pro ? 'Ajustes ilimitados con Carta Pro'
@@ -1188,7 +1177,8 @@
     const pro = esPro();
     document.querySelectorAll('.t2-scard, .res-estilo, .res-mini').forEach(el => {
       const e = el.dataset.estilo || ESTILOS_VALIDOS.find(x => el.classList.contains(x));
-      if (!esEstiloPro(e)) return;
+      const viejo = el.querySelector('.etq-pro'); if (viejo) viejo.remove();
+      return;
       let t = el.querySelector('.etq-pro');
       if (!t) { t = document.createElement('span'); t.className = 'etq-pro'; t.textContent = 'Pro'; el.appendChild(t); }
       t.hidden = pro;
@@ -1226,14 +1216,14 @@
     if (document.activeElement !== n) n.value = cartaActual.nombre_restaurante || '';
     if (document.activeElement !== sub) sub.value = cartaActual.subtitulo || '';
     const conLogo = !!logoEnCabecera();
-    n.classList.toggle('vacio', !n.value.trim() && (!conLogo || !esPro()));
+    n.classList.toggle('vacio', !n.value.trim() && !conLogo);
     document.getElementById('cabeceraModo').classList.toggle('on', !!logoDataUrl);
     document.querySelectorAll('#cabeceraModo button').forEach(b => b.classList.toggle('on', b.dataset.modo === (conLogo ? 'logo' : 'nombre')));
     // Con el logotipo arriba, el nombre y la frase no pintan nada: se esconden
     n.style.display = sub.style.display = conLogo ? 'none' : '';
     const aviso = document.getElementById('cabeceraAviso');
     aviso.textContent = conLogo
-      ? (esPro() ? 'Arriba sale tu logotipo.' : 'Estás viendo tu logotipo, que es de Carta Pro. En la versión gratis sale el nombre: pulsa «Nombre» para revisarlo.')
+      ? 'Arriba sale tu logotipo.'
       : (!n.value.trim() ? 'No hemos encontrado el nombre en tu carta. Escríbelo y aparece al momento.' : 'Cambia el nombre cuando quieras: gratis y al momento.');
   }
 
@@ -1271,8 +1261,9 @@
   }
 
   // Prueba de 7 días: crear cuenta (o entrar) y, si hay carta, guardarla en el panel
-  function probarPro(motivo) {
+  function probarPro(motivo, sinPlan) {
     if (window.Cuenta && Cuenta.estado) {
+      if (sinPlan === true) return;
       if (Cuenta.estado.plan === 'gratis') return hacersePro(motivo);
       return;
     }
@@ -1280,13 +1271,12 @@
       modo: 'crear', motivo: typeof motivo === 'string' ? motivo : '', datos: datosCarta,
       alEntrar: async (c, modo) => {
         pintarPlan(); renderVista();
-        if (c.plan === 'gratis') { hacersePro(modo === 'entrar' ? 'Tu prueba ya terminó. Activa Pro para seguir.' : ''); return; }
         setPose('riendo'); setTimeout(() => setPose('feliz'), 2500);
         if (cartaActual) {
           await guardarEnPanel(true);
-          updateToolBubble(modo === 'crear' ? '¡Prueba activada! Tu carta ya está guardada ✨' : '¡Hola de nuevo! Carta guardada ✨');
+          if (cartaGuardadaId) updateToolBubble(modo === 'crear' ? '¡Cuenta creada! Tu carta ya está guardada ✨' : '¡Hola de nuevo! Carta guardada ✨');
         } else {
-          updateToolBubble('¡Prueba activada! Sube tu carta ✨');
+          updateToolBubble('¡Cuenta creada! Sube tu carta ✨');
         }
       }
     });
@@ -1299,8 +1289,7 @@
   async function guardarEnPanel(silencio) {
     if (!cartaActual) return;
     if (cartaGuardadaId && silencio !== true) { location.href = '/panel#carta=' + cartaGuardadaId; return; }
-    if (!Cuenta.estado) return probarPro('Crea tu cuenta y tu carta se guarda en tu panel para editarla cuando quieras.');
-    if (Cuenta.estado.plan === 'gratis') return hacersePro('Guardar y editar tus cartas es de Carta Pro.');
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta gratis y tu carta se guarda en tu panel para editarla cuando quieras.', true);
     const btn = document.getElementById('guardarBtn');
     btn.disabled = true;
     document.getElementById('guardarTexto').textContent = 'Guardando…';
@@ -1345,8 +1334,7 @@
   async function irAAlergenos() {
     if (!cartaActual) return;
     medir('alergenos_desde_herramienta');
-    if (!Cuenta.estado) return probarPro('Crea tu cuenta para marcar los alérgenos de cada plato y descargar la tabla para inspección.');
-    if (Cuenta.estado.plan === 'gratis') return hacersePro('Marcar alérgenos y descargar la tabla es de Carta Pro.');
+    if (!Cuenta.estado) return probarPro('Crea tu cuenta gratis para marcar los alérgenos de cada plato y descargar la tabla para inspección.', true);
     if (!cartaGuardadaId) await guardarEnPanel(true);
     if (cartaGuardadaId) location.href = '/panel#carta=' + cartaGuardadaId + '&t=alergenos';
   }

@@ -126,7 +126,7 @@
     let modo = op.modo === 'entrar' ? 'entrar' : 'crear';
     alCerrar = op.alCerrar || null;
     const caja = abrir(`
-      <div class="cu-eyebrow">Carta Pro · 7 días gratis</div>
+      <div class="cu-eyebrow">Tu cuenta · gratis</div>
       <h2 class="cu-titulo" id="cuTit"></h2>
       <p class="cu-sub" id="cuSub"></p>
       <div class="cu-motivo">${esc(op.motivo || '')}</div>
@@ -155,9 +155,9 @@
     function pintar() {
       caja.querySelectorAll('.cu-tabs button').forEach(b => b.classList.toggle('on', b.dataset.m === modo));
       const crear = modo === 'crear';
-      caja.querySelector('#cuTit').textContent = crear ? (op.titulo || 'Prueba Carta Pro 7 días gratis') : 'Entra en tu cuenta';
+      caja.querySelector('#cuTit').textContent = crear ? (op.titulo || 'Crea tu cuenta gratis') : 'Entra en tu cuenta';
       caja.querySelector('#cuSub').textContent = crear
-        ? 'Sin tarjeta. Tus cartas guardadas en tu panel, editables cuando cambien los precios, con tu logo, sin firma, traducidas y con los 20 estilos. Si no te convence, no pasa nada: sigues con la versión gratis.'
+        ? 'Sin tarjeta. Tu carta guardada en tu panel, para cambiarla cuando cambien los precios. Además, 7 días de Carta Pro para probar el menú del día.'
         : 'Tus cartas guardadas te esperan en tu panel.';
       caja.querySelector('#cuClaveTxt').textContent = crear ? 'Crea una contraseña (mínimo 8 caracteres)' : 'Contraseña';
       f.clave.autocomplete = crear ? 'new-password' : 'current-password';
@@ -311,23 +311,18 @@
     const prueba = Cuenta.estado.plan === 'prueba';
     const caja = abrir(`
       <div class="cu-eyebrow">Carta Pro</div>
-      <h2 class="cu-titulo">Tu carta, siempre al día. Y siempre tuya.</h2>
-      <p class="cu-sub">${prueba ? 'Estás en tu prueba gratis. Asegura Pro para no perder tus cartas editables cuando termine.' : 'Guarda tus cartas y cámbialas cuando quieras: precios, platos, temporada. En segundos.'}</p>
+      <h2 class="cu-titulo">El menú de cada día. Y todas tus cartas.</h2>
+      <p class="cu-sub">${prueba ? 'Estás en tu prueba gratis. Con Pro sigues con el menú del día y con todas tus cartas cuando termine.' : 'Tu primera carta es gratis, con todo. Pro es para el menú del día y para tener más de una.'}</p>
       <div class="cu-motivo">${esc(op.motivo || '')}</div>
       <div class="cu-planes">
         <button type="button" class="cu-plan" data-p="ano"><span class="cu-ahorro">Ahorra 36 €</span><div class="cu-plan-nombre">Anual</div><div class="cu-plan-precio">${PRECIOS.ano}<small> /mes</small></div><div class="cu-plan-nota">Un pago de ${PRECIOS.anoTotal} al año</div></button>
         <button type="button" class="cu-plan" data-p="mes"><div class="cu-plan-nombre">Mensual</div><div class="cu-plan-precio">${PRECIOS.mes}<small> /mes</small></div><div class="cu-plan-nota">Cancela cuando quieras</div></button>
       </div>
       <ul class="cu-lista">
-        <li><b>Panel con tus cartas</b>: cambia platos y precios y descarga al momento</li>
-        <li><b>Los 20 estilos</b>, también Riviera, Sumi, Cartel, Serigrafía y Azulejo</li>
-        <li><b>Tu logotipo</b> y <b>sin la firma</b> de Carta Rápida</li>
-        <li><b>Traducida</b> a inglés, francés, alemán, italiano, portugués o chino</li>
-        <li><b>Alérgenos</b> con iconos en la carta y tabla para inspección</li>
-        <li><b>Formatos</b>: A4, A4 slim y cuadernillo con elástico</li>
-        <li><b>Menú del día</b> con la fecha de hoy y tus platos de siempre</li>
-        <li><b>Carta en dos idiomas</b>: cada plato en español y en otro idioma</li>
-        <li><b>Cambios ilimitados</b> con una frase: «sube las croquetas a 13»</li>
+        <li><b>Menú del día</b>: precio único, la fecha de hoy y tus platos de siempre</li>
+        <li><b>Todas las cartas que necesites</b>: vinos, terraza, grupos, otro local</li>
+        <li><b>Copias traducidas</b> de tu carta, cada una en su idioma</li>
+        <li><b>Sin la firma</b> de Carta Rápida y con cambios ilimitados</li>
       </ul>
       <label class="cu-check" id="cuPagoLbl"><input type="checkbox" id="cuPagoAcepto"> <span>Acepto las <a href="/legal/condiciones.html" target="_blank" rel="noopener">condiciones de Carta Pro</a>: se renueva sola hasta que la cancele y, como empieza ya, renuncio al desistimiento.</span></label>
       <button class="cu-btn" type="button" id="cuPagar"></button>

@@ -234,6 +234,12 @@ function limpiarDatosCarta(b) {
   const titulo = String(b.titulo || carta.nombre_restaurante || 'Mi carta').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Mi carta';
   return { json, titulo, estilo: datos.estilo };
 }
+// La carta de la versión gratis: la primera que se guardó y que no es un menú del día
+function cartaLibre(uid) {
+  const filas = db.prepare('SELECT id, datos FROM cartas WHERE usuario_id = ? ORDER BY creado ASC').all(uid);
+  for (const f of filas) { try { if (!JSON.parse(f.datos).carta.menu) return f.id; } catch {} }
+  return '';
+}
 function resumenCarta(c) {
   let platos = 0, secciones = 0, idioma = 'es', menu = false;
   try {
@@ -285,12 +291,16 @@ function crearRutas({ limite, limiteCuenta }) {
     if (!u) return res.status(401).json({ ok: false, sesion: false, error: 'Entra en tu cuenta para continuar.' });
     req.usuario = u; next();
   };
+  // Gratis: una carta guardada, con todo. Pro (o la prueba): las que quieras y el menú del día.
   const conPlan = async (req, res, next) => {
     req.usuario = await sincronizar(req.usuario);
-    const p = planDeUsuario(req.usuario);
-    if (p.plan === 'gratis') return res.status(402).json({ ok: false, pro: true, error: 'Tu Carta Pro no está activa. Actívala para guardar y editar tus cartas.' });
-    req.plan = p; next();
+    req.plan = planDeUsuario(req.usuario);
+    req.gratis = req.plan.plan === 'gratis';
+    next();
   };
+  const esMenuJson = json => { try { return !!JSON.parse(json).carta.menu; } catch { return false; } };
+  const NO_MENU = { ok: false, pro: true, motivo: 'menu', error: 'El menú del día es de Carta Pro.' };
+  const NO_MAS = { ok: false, pro: true, motivo: 'cartas', error: 'Con la versión gratis guardas una carta. Con Carta Pro, todas las que necesites.' };
 
   // ── Cuenta ──
   r.post('/cuenta/registro', limiteCuenta, sinCuentas, (req, res) => {
@@ -443,14 +453,17 @@ function crearRutas({ limite, limiteCuenta }) {
   r.get('/cartas', sinCuentas, conSesion, (req, res) => {
     res.set('Cache-Control', 'no-store');
     const filas = db.prepare('SELECT id, titulo, estilo, datos, creado, actualizado FROM cartas WHERE usuario_id = ? ORDER BY actualizado DESC').all(req.usuario.id);
-    res.json({ ok: true, cartas: filas.map(resumenCarta) });
+    const libre = planDeUsuario(req.usuario).plan === 'gratis' ? cartaLibre(req.usuario.id) : null;
+    res.json({ ok: true, cartas: filas.map(resumenCarta).map(c => libre !== null && c.id !== libre ? { ...c, cerrada: true } : c) });
   });
 
   r.get('/cartas/:id', sinCuentas, conSesion, (req, res) => {
     res.set('Cache-Control', 'no-store');
     const c = db.prepare('SELECT * FROM cartas WHERE id = ? AND usuario_id = ?').get(String(req.params.id), req.usuario.id);
     if (!c) return res.status(404).json({ ok: false, error: 'No encontramos esa carta.' });
-    res.json({ ok: true, id: c.id, titulo: c.titulo, actualizado: c.actualizado, ...JSON.parse(c.datos) });
+    const datos = JSON.parse(c.datos);
+    const cerrada = planDeUsuario(req.usuario).plan === 'gratis' && (!!(datos.carta && datos.carta.menu) || cartaLibre(req.usuario.id) !== c.id);
+    res.json({ ok: true, id: c.id, titulo: c.titulo, actualizado: c.actualizado, ...datos, ...(cerrada ? { cerrada: true } : {}) });
   });
 
   r.post('/cartas', limite, sinCuentas, conSesion, conPlan, (req, res) => {
@@ -459,6 +472,8 @@ function crearRutas({ limite, limiteCuenta }) {
     const d = limpiarDatosCarta(req.body);
     if (!d) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
     if (d.error) return res.json({ ok: false, error: d.error });
+    if (req.gratis && esMenuJson(d.json)) return res.status(402).json(NO_MENU);
+    if (req.gratis && cartaLibre(req.usuario.id)) return res.status(402).json(NO_MAS);
     const id = crypto.randomBytes(9).toString('base64url');
     const ahora = Date.now();
     db.prepare('INSERT INTO cartas (id, usuario_id, titulo, estilo, datos, creado, actualizado) VALUES (?, ?, ?, ?, ?, ?, ?)')
@@ -470,6 +485,8 @@ function crearRutas({ limite, limiteCuenta }) {
     const d = limpiarDatosCarta(req.body);
     if (!d) return res.status(400).json({ ok: false, error: 'Falta la carta.' });
     if (d.error) return res.json({ ok: false, error: d.error });
+    if (req.gratis && esMenuJson(d.json)) return res.status(402).json(NO_MENU);
+    if (req.gratis && cartaLibre(req.usuario.id) !== String(req.params.id)) return res.status(402).json(NO_MAS);
     const ahora = Date.now();
     const info = db.prepare('UPDATE cartas SET titulo = ?, estilo = ?, datos = ?, actualizado = ? WHERE id = ? AND usuario_id = ?')
       .run(d.titulo, d.estilo, d.json, ahora, String(req.params.id), req.usuario.id);
@@ -480,6 +497,7 @@ function crearRutas({ limite, limiteCuenta }) {
   r.post('/cartas/:id/duplicar', limite, sinCuentas, conSesion, conPlan, (req, res) => {
     const c = db.prepare('SELECT * FROM cartas WHERE id = ? AND usuario_id = ?').get(String(req.params.id), req.usuario.id);
     if (!c) return res.status(404).json({ ok: false, error: 'No encontramos esa carta.' });
+    if (req.gratis) return res.status(402).json(NO_MAS);
     const n = db.prepare('SELECT COUNT(*) AS n FROM cartas WHERE usuario_id = ?').get(req.usuario.id).n;
     if (n >= MAX_CARTAS) return res.json({ ok: false, error: `Has llegado al máximo de ${MAX_CARTAS} cartas.` });
     const id = crypto.randomBytes(9).toString('base64url');

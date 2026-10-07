@@ -497,11 +497,15 @@
     if (c.plan === 'pro') return '';
     if (c.plan === 'prueba') {
       const dias = Math.max(1, Math.ceil((c.hasta - Date.now()) / 864e5));
-      return `<div class="aviso-plan prueba"><div><b>Tu prueba de Pro: ${dias === 1 ? 'queda 1 día' : 'quedan ' + dias + ' días'}</b><span>Hazte Pro para seguir editando tus cartas cuando termine. Desde 9,90 € al mes.</span></div>
+      return `<div class="aviso-plan prueba"><div><b>Tu prueba de Pro: ${dias === 1 ? 'queda 1 día' : 'quedan ' + dias + ' días'}</b><span>Cuando termine te quedas con una carta gratis. Con Pro sigues con el menú del día y con todas. Desde 9,90 € al mes.</span></div>
         <button class="btn primario" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Hazte Pro</button></div>`;
     }
-    return `<div class="aviso-plan caducado"><div><b>${c.habiaPro ? 'Tu Carta Pro ha terminado' : 'Tu prueba de Pro ha terminado'}</b><span>Tus cartas siguen aquí. Actívala para editarlas, cambiar precios y descargarlas sin firma.</span></div>
+    // Gratis: dentro de una carta cerrada se explica por qué; en la lista, una línea y nada más
+    if (ed && ed.cerrada) return `<div class="aviso-plan caducado"><div><b>${ed.carta.menu ? 'El menú del día es de Carta Pro' : 'Esta carta está cerrada'}</b><span>${ed.carta.menu ? 'Actívala para cambiarlo y descargarlo cada día.' : 'La versión gratis incluye una carta, la primera que guardaste. Con Pro abres todas.'}</span></div>
       <button class="btn primario" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Activar Pro</button></div>`;
+    if (ed) return '';
+    return `<div class="aviso-plan"><div><b>Versión gratis: una carta, con todo</b><span>Con Carta Pro tienes el menú del día y todas las cartas que necesites.</span></div>
+      <button class="btn" type="button" onclick="Cuenta.planes({ vuelta: 'panel' })">Ver Carta Pro</button></div>`;
   }
 
   async function pintarLista() {
@@ -521,9 +525,9 @@
           <div class="tarjeta-img" data-id="${esc(c.id)}" onclick="location.hash='carta=${esc(c.id)}'" role="button" tabindex="0" aria-label="Editar ${esc(c.titulo)}"></div>
           <div class="tarjeta-cuerpo">
             <div class="tarjeta-tit">${esc(c.titulo)}</div>
-            <div class="tarjeta-meta">${c.menu ? '<b class="etq-menu">Menú del día</b> · ' : ''}${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
+            <div class="tarjeta-meta">${c.menu ? '<b class="etq-menu">Menú del día</b> · ' : ''}${c.cerrada ? '<b class="etq-menu">Solo con Pro</b> · ' : ''}${c.platos} platos · ${esc(NOMBRE_ESTILO[c.estilo] || c.estilo)}${c.idioma && c.idioma !== 'es' ? ' · ' + esc(IDIOMAS[c.idioma] || c.idioma) : ''} · ${haceCuanto(c.actualizado)}</div>
             <div class="tarjeta-acc">
-              <a class="btn peq oscuro" href="#carta=${esc(c.id)}">Editar</a>
+              <a class="btn peq oscuro" href="#carta=${esc(c.id)}">${c.cerrada ? 'Ver' : 'Editar'}</a>
               <button class="icono-btn" type="button" title="Duplicar" aria-label="Duplicar ${esc(c.titulo)}" onclick="duplicar('${esc(c.id)}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
               <button class="icono-btn rojo" type="button" title="Borrar" aria-label="Borrar ${esc(c.titulo)}" onclick="borrarCarta('${esc(c.id)}', this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
             </div>
@@ -545,7 +549,7 @@
 
 
   // Con Pro (o en la prueba): lo que tienes desbloqueado, a un clic de la carta más reciente
-  const ESTILOS_PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
+  const ESTILOS_PRO = []; // todos los estilos son gratis
   function franjaProHTML(cartas) {
     const c = Cuenta.estado;
     if (c.plan !== 'pro' && c.plan !== 'prueba') return '';
@@ -553,16 +557,12 @@
     const a = t => id ? `#carta=${esc(id)}&t=${t}` : '/#herramienta';
     const sub = c.plan === 'pro'
       ? (c.cancela ? `Activa hasta el ${Cuenta.fmtFecha(c.hasta)}. No se renovará.` : `Plan ${c.periodo === 'ano' ? 'anual' : 'mensual'} · se renueva el ${Cuenta.fmtFecha(c.hasta)}`)
-      : 'Estás probando todo lo de Pro. Esto es lo que incluye.';
+      : 'Estás probando Pro: menú del día y todas las cartas que necesites.';
     return `<section class="pro-franja" aria-label="Tu Carta Pro">
       <div class="pro-franja-cab"><div><b><span class="pro-sello">Pro</span>${c.plan === 'pro' ? 'Carta Pro activa' : 'Carta Pro, en prueba'}</b><span class="sub">${esc(sub)}</span></div>
         ${c.plan === 'pro' && c.puedePortal ? '<button type="button" onclick="Cuenta.portal()">Facturas, tarjeta y baja</button>' : ''}</div>
       <div class="pro-accesos">
-        <a class="pro-acceso" href="${a('diseno')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="8.6" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="7.8" r="1" fill="currentColor"/><circle cx="15.4" cy="10" r="1" fill="currentColor"/><path d="M12 20.5c-1.6 0-2-1.6-1-2.6 1-1 .4-2.4 1.4-2.4h2.4c2.6 0 5.7-1 5.7-3.5"/></svg></span><span><strong>Diseño, logotipo y color</strong><small>Los 20 estilos, tu logotipo arriba y el color de tu marca.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
         <a class="pro-acceso" href="#menu=nuevo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span><span><strong>El menú del día</strong><small>La fecha se pone sola. Cada mañana solo cambias los platos.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-        <a class="pro-acceso" href="${a('alergenos')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9"/><path d="M12 9c-1.7-1.7-1.7-4.2 0-6.2 1.7 2 1.7 4.5 0 6.2z"/><path d="M12 14c-2.6.2-4.3-1.1-4.7-3.5 2.6-.2 4.3 1.1 4.7 3.5z"/><path d="M12 14c2.6.2 4.3-1.1 4.7-3.5-2.6-.2-4.3 1.1-4.7 3.5z"/></svg></span><span><strong>Alérgenos</strong><small>Iconos en la carta y la tabla para sala e inspección.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-        <a class="pro-acceso" href="${a('bilingue')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M8.5 4v2M6 6c.6 3.4 2.6 6 6 7.4M11.5 6c-.6 3.4-2.8 6.2-6.5 7.6"/><path d="M13 20l3.6-8.4L20.2 20M14.3 17h4.6"/></svg></span><span><strong>Dos idiomas</strong><small>Cada plato en español y en otro idioma, o una copia traducida.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-        <a class="pro-acceso" href="${a('frase')}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19l3.6-.8L19 7.8a2 2 0 0 0-2.8-2.8L5.8 15.4 5 19z"/><path d="M14.5 6.7l2.8 2.8"/></svg></span><span><strong>Cambios con una frase</strong><small>Sube precios o reordena la carta escribiéndolo como lo dirías.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       </div></section>`;
   }
 
@@ -641,7 +641,7 @@
 
   async function duplicar(id) {
     const d = await Cuenta.api('/cartas/' + id + '/duplicar', {});
-    if (d.status === 402) return Cuenta.planes({ motivo: 'Duplicar y editar cartas es de Carta Pro.', vuelta: 'panel' });
+    if (d.status === 402) return Cuenta.planes({ motivo: d.error || 'Tener más de una carta es de Carta Pro.', vuelta: 'panel' });
     if (!d.ok) return Cuenta.aviso(d.error || 'No se ha podido duplicar.');
     Cuenta.aviso('Carta duplicada.');
     pintarLista();
@@ -674,12 +674,12 @@
     // La fecha «de hoy» se pone sola cada vez que abres el menú
     let fechaCambiada = false;
     if (carta.menu && carta.menu.fecha_auto && carta.menu.fecha !== hoyTexto()) { carta.menu.fecha = hoyTexto(); fechaCambiada = true; }
-    ed = { id, titulo: d.titulo, carta, estilo: d.estilo, formato: d.formato || 'a4', logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
+    ed = { id, cerrada: !!d.cerrada, titulo: d.titulo, carta, estilo: d.estilo, formato: d.formato || 'a4', logo: d.logo, cabecera: d.cabecera || 'logo', pendiente: false, guardando: false, vista: null, tab: t0 || 'diseno' };
     pintarEditor();
     if (fechaCambiada) cambio();
   }
 
-  function puedeEditar() { return Cuenta.esPro(); }
+  function puedeEditar() { return Cuenta.esPro() || !!(ed && !ed.cerrada); }
 
   function pintarEditor() {
     const c = ed.carta;
@@ -1362,6 +1362,7 @@
       heredarAlergenos(ed.carta, nueva, true);
       const base = ed.titulo.replace(/(\s*\([^()]*\))+\s*$/, '').trim() || ed.titulo;
       const d = await Cuenta.api('/cartas', { titulo: base, carta: nueva, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera });
+      if (d.pro) { Cuenta.planes({ motivo: d.error, vuelta: 'panel' }); throw new Error(d.error); }
       if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la versión en español.');
       // Esta carta queda enlazada a la nueva, y con el idioma en el nombre para distinguirlas
       ed.carta.copia_de = { id: d.id, titulo: base };
@@ -1579,6 +1580,7 @@
       nueva.copia_de = { id: ed.id, titulo: ed.titulo }; // para poder volver a la original desde la copia
       const perdidos = heredarAlergenos(ed.carta, nueva, true);
       const d = await Cuenta.api('/cartas', { titulo: `${ed.titulo} (${IDIOMAS[cod]})`, carta: nueva, estilo: ed.estilo, formato: ed.formato, logo: ed.logo, cabecera: ed.cabecera });
+      if (d.pro) { Cuenta.planes({ motivo: 'La copia traducida es una carta más, y la versión gratis incluye una. Con Pro tienes todas. Si solo quieres añadir el idioma debajo de cada plato, usa «Dos idiomas».', vuelta: 'panel' }); throw new Error(d.error); }
       if (!d.ok) throw new Error(d.error || 'No se ha podido guardar la copia.');
       Cuenta.aviso(perdidos ? 'Copia traducida guardada. Tu carta en español sigue intacta. Revisa los alérgenos: la traducción ha cambiado platos de sitio.' : 'Copia traducida guardada. Tu carta en español sigue intacta.');
       location.hash = 'carta=' + d.id;
