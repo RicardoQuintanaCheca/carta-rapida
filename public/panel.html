@@ -226,7 +226,7 @@
 
   /* Franja de Pro: lo que tienes, a un clic */
   .pro-franja { background: #fff; color: var(--ink); border-radius: 20px; box-shadow: inset 0 0 0 1px var(--linea), 0 18px 40px -30px rgba(12,12,13,.25); padding: 0; margin-bottom: 28px; overflow: hidden; }
-  .pro-franja-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px 20px; flex-wrap: wrap; padding: clamp(18px, 2.4vw, 24px) clamp(18px, 2.6vw, 28px); background: linear-gradient(180deg, #FFF8F4, #fff); border-bottom: 1px solid var(--linea); }
+  .pro-franja-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px 20px; flex-wrap: wrap; padding: clamp(18px, 2.4vw, 24px) clamp(18px, 2.6vw, 28px); background: linear-gradient(180deg, #FFF8F4, #fff); border-bottom: 0; }
   .pro-franja-cab b { font-size: clamp(19px, 2vw, 23px); letter-spacing: -.025em; font-weight: 700; display: flex; align-items: center; gap: 10px; }
   .pro-sello { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: none; color: var(--tinta-coral); box-shadow: inset 0 0 0 1.5px currentColor; padding: 3px 8px; border-radius: 99px; }
   .pro-franja-cab span.sub { color: var(--gris); font-size: 14px; display: block; margin-top: 3px; font-weight: 500; letter-spacing: 0; }
@@ -552,7 +552,7 @@
   const ESTILOS_PRO = []; // todos los estilos son gratis
   function franjaProHTML(cartas) {
     const c = Cuenta.estado;
-    if (c.plan !== 'pro' && c.plan !== 'prueba') return '';
+    if (c.plan !== 'pro') return ''; // en la prueba ya está el aviso de los días que quedan
     const id = cartas[0] && cartas[0].id;
     const a = t => id ? `#carta=${esc(id)}&t=${t}` : '/#herramienta';
     const sub = c.plan === 'pro'
@@ -561,9 +561,7 @@
     return `<section class="pro-franja" aria-label="Tu Carta Pro">
       <div class="pro-franja-cab"><div><b><span class="pro-sello">Pro</span>${c.plan === 'pro' ? 'Carta Pro activa' : 'Carta Pro, en prueba'}</b><span class="sub">${esc(sub)}</span></div>
         ${c.plan === 'pro' && c.puedePortal ? '<button type="button" onclick="Cuenta.portal()">Facturas, tarjeta y baja</button>' : ''}</div>
-      <div class="pro-accesos">
-        <a class="pro-acceso" href="#menu=nuevo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M4 11h16"/></svg></span><span><strong>El menú del día</strong><small>La fecha se pone sola. Cada mañana solo cambias los platos.</small></span><svg class="fl" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      </div></section>`;
+      </section>`;
   }
 
   // Montaje gratis en un portamenús Kartia: se envía la carta tal cual está guardada
