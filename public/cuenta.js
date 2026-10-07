@@ -326,7 +326,6 @@
         <li><b>Alérgenos</b> con iconos en la carta y tabla para inspección</li>
         <li><b>Formatos</b>: A4, A4 slim y cuadernillo con elástico</li>
         <li><b>Menú del día</b> con la fecha de hoy y tus platos de siempre</li>
-        <li><b>Imágenes para redes</b>: Instagram, Facebook y estado de WhatsApp</li>
         <li><b>Carta en dos idiomas</b>: cada plato en español y en otro idioma</li>
         <li><b>Cambios ilimitados</b> con una frase: «sube las croquetas a 13»</li>
       </ul>

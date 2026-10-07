@@ -669,6 +669,8 @@ app.use(rutasAdmin);
 // Panel del cliente (Mis cartas)
 // El diseño nuevo ya es la portada: la dirección de pruebas lleva a ella
 app.get(['/nueva', '/nueva/'], (req, res) => res.redirect(301, '/'));
+// Páginas de imágenes para redes, retiradas: llevan al menú del día
+app.get(['/menu-del-dia-para-instagram', '/menu-del-dia-por-whatsapp', '/plato-del-dia-para-redes'].flatMap(u => [u, u + '/']), (req, res) => res.redirect(301, '/menu-del-dia/'));
 app.get(['/panel', '/panel/'], (req, res) => { res.set('Cache-Control', 'no-cache'); res.sendFile(require('path').join(__dirname, 'public', 'panel.html')); });
 
 app.post('/guardar-email', limiteLeads, async (req, res) => {
