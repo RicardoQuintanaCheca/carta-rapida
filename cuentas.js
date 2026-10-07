@@ -46,12 +46,27 @@ const MARCA_PAGO = process.env.PAGO_SIN_MARCA === 'si' ? null : {
 };
 let marcaFalla = false;
 let cifFalla = false;
+// Busca en Stripe el tipo "IVA 21 % incluido" y, si no existe, lo crea una vez. Si algo falla, se cobra sin desglose
+let ivaId = process.env.STRIPE_IVA || null, ivaVisto = false;
+async function tipoIva() {
+  if (ivaId || ivaVisto || process.env.PAGO_SIN_IVA === 'si') return ivaId;
+  ivaVisto = true;
+  try {
+    const lista = await stripe.taxRates.list({ active: true, inclusive: true, limit: 100 });
+    const ya = lista.data.find(t => t.percentage === 21 && t.country === 'ES');
+    ivaId = (ya || await stripe.taxRates.create({ display_name: 'IVA', percentage: 21, inclusive: true, country: 'ES', description: 'IVA España 21 % (incluido en el precio)' })).id;
+  } catch (e) { console.warn('[PAGO] sin desglose de IVA:', e.message); }
+  return ivaId;
+}
 async function crearSesionPago(params) {
   // CIF opcional en el pago ("Compro como empresa"): sale en la factura. Si Stripe no lo admite, se cobra igual sin él
   const fiscal = cifFalla ? {} : {
     tax_id_collection: { enabled: true },
     ...(params.customer ? { customer_update: { name: 'auto', address: 'auto' } } : {})
   };
+  // IVA incluido en el precio: la factura desglosa base y cuota (21 %)
+  const iva = params.mode === 'subscription' ? await tipoIva() : null;
+  if (iva) fiscal.subscription_data = { ...(params.subscription_data || {}), default_tax_rates: [iva] };
   const intentos = [];
   if (MARCA_PAGO && !marcaFalla) intentos.push([{ ...params, ...fiscal, branding_settings: MARCA_PAGO }, { apiVersion: '2025-09-30.clover' }]);
   if (!cifFalla) intentos.push([{ ...params, ...fiscal }]);
@@ -62,7 +77,7 @@ async function crearSesionPago(params) {
       const txt = String((e && (e.param || '')) + ' ' + (e && e.message || ''));
       // Pase lo que pase con el intento completo, se prueba el pago normal: cobrar va antes que lo demás
       if (/branding|api.?version/i.test(txt)) marcaFalla = true;
-      if (/tax_id|customer_update/i.test(txt)) cifFalla = true;
+      if (/tax_id|customer_update|tax_rate/i.test(txt)) cifFalla = true;
       console.warn('[PAGO] pantalla de pago simplificada:', e.message);
     }
   }
