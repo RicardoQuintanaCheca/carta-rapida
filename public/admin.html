@@ -44,7 +44,8 @@
   .herr input { flex: 1; min-width: 200px; padding: 10px 12px; border: none; box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 10px; font: 15px 'Bricolage Grotesque', sans-serif; outline: none; }
   .herr input:focus { box-shadow: inset 0 0 0 1.5px var(--tinta); }
   .herr a { font-weight: 600; color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--linea); border-radius: 10px; padding: 9px 14px; text-decoration: none; font-size: 13px; white-space: nowrap; }
-  .herr a:hover { background: var(--tinta); color: #fff; }
+  .herr a:hover, .herr a.on { background: var(--tinta); color: #fff; }
+  th.num { text-align: right; }
   .barras div { display: grid; grid-template-columns: 110px 1fr 40px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
   .barras i { display: block; height: 10px; border-radius: 99px; background: var(--cta); min-width: 3px; }
   .barras em { font-style: normal; text-align: right; color: var(--gris); font-variant-numeric: tabular-nums; }
@@ -61,6 +62,12 @@
 <main>
   <p id="cargando">Cargando datos…</p>
   <div id="todo" hidden>
+    <h2 id="campanas">Campañas: de dónde vienen y hasta dónde llegan</h2>
+    <div class="herr" id="campPeriodo"><a href="#" data-p="hoy">Hoy</a><a href="#" data-p="d7">7 días</a><a href="#" data-p="d30">30 días</a></div>
+    <div class="tabla"><table><thead><tr><th>Origen</th><th class="num">Visitas</th><th class="num">Cartas hechas</th><th class="num">Descargas</th><th class="num">Cuentas</th><th class="num">Pro</th><th class="num">Montajes</th><th class="num">Visita → carta</th></tr></thead><tbody id="campTabla"></tbody></table></div>
+    <p class="nota">Origen = <b>utm_source / utm_medium / utm_campaign · utm_content</b> del enlace. Sin utm: clic de anuncio de Google (gclid), Meta (fbclid) o TikTok (ttclid), o la web de la que viene. «directo»: sin pista (enlace escrito a mano, correo sin utm, app que no pasa la procedencia). Visita = una sesión de navegador; los robots no cuentan. Cuentas y Pro se atribuyen al origen con el que se creó la cuenta.</p>
+    <div class="caja" style="margin-top:16px"><b>Páginas de entrada · 7 días</b><div class="barras" id="paginas"></div></div>
+
     <h2>Negocio</h2>
     <div class="kpis" id="kpisNegocio"></div>
     <h2>Uso de la herramienta</h2>
@@ -76,7 +83,7 @@
 
     <h2>Clientes</h2>
     <div class="herr"><input id="buscaU" placeholder="Buscar por email…" aria-label="Buscar cliente"><a href="/admin/usuarios.csv">Descargar Excel (CSV)</a></div>
-    <div class="tabla"><table><thead><tr><th>Email</th><th>Alta</th><th>Plan</th><th>Hasta</th><th>Cartas</th><th>Última edición</th><th>Novedades</th></tr></thead><tbody id="usuarios"></tbody></table></div>
+    <div class="tabla"><table><thead><tr><th>Email</th><th>Alta</th><th>Origen</th><th>Plan</th><th>Hasta</th><th>Cartas</th><th>Última edición</th><th>Novedades</th></tr></thead><tbody id="usuarios"></tbody></table></div>
 
     <h2>Leads (últimos 200)</h2>
     <div class="herr"><input id="buscaL" placeholder="Buscar por email o restaurante…" aria-label="Buscar lead"><a href="/admin/leads.csv">Descargar todos (CSV)</a></div>
@@ -115,12 +122,23 @@
   };
   barras(document.getElementById('origenes'), d.leadsPor, x => ORIGEN[x.origen] || x.origen || '—');
   barras(document.getElementById('estilos'), d.estilos, x => x.estilo || '—');
+  barras(document.getElementById('paginas'), d.paginas || [], x => x.pagina || '—');
+  const pct = (a, b) => b ? Math.round(a / b * 100) + ' %' : '—';
+  const pintarC = (p) => {
+    document.querySelectorAll('#campPeriodo a').forEach(a => a.classList.toggle('on', a.dataset.p === p));
+    const filas = (d.campanas || {})[p] || [];
+    const T = filas.reduce((t, f) => { for (const k of ['visitas', 'cartas', 'descargas', 'cuentas', 'pro', 'montajes']) t[k] += f[k]; return t; }, { origen: 'TOTAL', visitas: 0, cartas: 0, descargas: 0, cuentas: 0, pro: 0, montajes: 0 });
+    const tr = (f, b) => `<tr${b ? ' style="font-weight:750"' : ''}><td>${esc(f.origen)}</td><td class="num">${f.visitas}</td><td class="num">${f.cartas}</td><td class="num">${f.descargas}</td><td class="num">${f.cuentas}</td><td class="num">${f.pro}</td><td class="num">${f.montajes}</td><td class="num">${pct(f.cartas, f.visitas)}</td></tr>`;
+    document.getElementById('campTabla').innerHTML = filas.length ? filas.map(f => tr(f)).join('') + tr(T, true) : '<tr><td colspan="8" class="vacio">Aún sin visitas registradas en este periodo.</td></tr>';
+  };
+  document.querySelectorAll('#campPeriodo a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); pintarC(a.dataset.p); }));
+  pintarC('d7');
   const pintarU = (q = '') => {
     const filas = d.usuarios.filter(u => u.email.includes(q.toLowerCase()));
-    document.getElementById('usuarios').innerHTML = filas.length ? filas.map(u => `<tr><td>${esc(u.email)}</td><td>${fd(u.alta)}</td>
+    document.getElementById('usuarios').innerHTML = filas.length ? filas.map(u => `<tr><td>${esc(u.email)}</td><td>${fd(u.alta)}</td><td>${esc(u.origen || '—')}</td>
       <td><span class="pill ${u.plan}">${u.plan === 'pro' ? 'Pro ' + (u.periodo === 'ano' ? 'anual' : 'mensual') + (u.cancela ? ' · cancela' : '') : u.plan === 'prueba' ? 'Prueba' : 'Gratis'}</span></td>
       <td>${u.plan === 'gratis' ? '—' : fd(u.hasta)}</td><td class="num">${u.cartas}</td><td>${fd(u.ultima)}</td><td>${u.novedades ? 'Sí' : 'No'}</td></tr>`).join('')
-      : '<tr><td colspan="7" class="vacio">Sin clientes todavía.</td></tr>';
+      : '<tr><td colspan="8" class="vacio">Sin clientes todavía.</td></tr>';
   };
   const pintarL = (q = '') => {
     q = q.toLowerCase();

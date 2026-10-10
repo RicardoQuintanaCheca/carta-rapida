@@ -148,7 +148,7 @@ r.get('/admin/datos', (req, res) => {
   const lista = usuarios.map(u => {
     const p = planDeUsuario(u, ahora);
     return { email: u.email, alta: u.creado, plan: p.plan, periodo: p.periodo || '', hasta: p.hasta || u.prueba_hasta || 0,
-      cancela: !!p.cancela, cartas: u.n_cartas, ultima: u.ultima_carta || 0, novedades: !!u.novedades, estado_stripe: u.sub_estado || '' };
+      cancela: !!p.cancela, origen: u.origen || '', cartas: u.n_cartas, ultima: u.ultima_carta || 0, novedades: !!u.novedades, estado_stripe: u.sub_estado || '' };
   });
   const pro = lista.filter(u => u.plan === 'pro');
   const mrr = pro.reduce((t, u) => t + (u.periodo === 'ano' ? PRECIO.ano / 12 : PRECIO.mes), 0);
@@ -159,6 +159,22 @@ r.get('/admin/datos', (req, res) => {
   const leadsPor = db.prepare('SELECT origen, COUNT(*) AS n FROM leads WHERE fecha >= ? GROUP BY origen ORDER BY n DESC').all(periodos.d30);
   const ultimosLeads = db.prepare('SELECT email, origen, restaurante, estilo, platos, novedades, fecha FROM leads ORDER BY fecha DESC LIMIT 200').all();
   const solicitudes = db.prepare(`SELECT id, email, telefono, restaurante, estilo, platos, fecha, atendida, (json_extract(datos, '$.logo') IS NOT NULL) AS conLogo FROM solicitudes ORDER BY atendida ASC, fecha DESC LIMIT 200`).all();
+  // Campañas: cada origen con su embudo (visita → carta → descarga → cuenta → Pro) en hoy, 7 y 30 días
+  const campanas = {};
+  for (const [k, desde] of Object.entries(periodos)) {
+    const filas = {};
+    const fila = o => (filas[o || 'directo'] = filas[o || 'directo'] || { origen: o || 'directo', visitas: 0, cartas: 0, descargas: 0, cuentas: 0, pro: 0, montajes: 0 });
+    for (const e of db.prepare("SELECT origen, tipo, COUNT(*) AS n FROM eventos WHERE fecha >= ? AND tipo IN ('visita','carta_generada','pdf_gratis','pdf_pro','montaje_solicitado') GROUP BY origen, tipo").all(desde)) {
+      const f = fila(e.origen);
+      if (e.tipo === 'visita') f.visitas += e.n; else if (e.tipo === 'carta_generada') f.cartas += e.n; else if (e.tipo === 'montaje_solicitado') f.montajes += e.n; else f.descargas += e.n;
+    }
+    for (const u of usuarios.filter(u => u.creado >= desde)) {
+      const f = fila(u.origen); f.cuentas++;
+      if (planDeUsuario(u, ahora).plan === 'pro') f.pro++;
+    }
+    campanas[k] = Object.values(filas).sort((a, b) => b.visitas - a.visitas || b.cuentas - a.cuentas);
+  }
+  const paginas = db.prepare("SELECT detalle AS pagina, COUNT(*) AS n FROM eventos WHERE tipo = 'visita' AND fecha >= ? GROUP BY detalle ORDER BY n DESC LIMIT 12").all(periodos.d7);
   const estilos = db.prepare("SELECT detalle AS estilo, COUNT(*) AS n FROM eventos WHERE tipo = 'carta_generada' AND fecha >= ? GROUP BY detalle ORDER BY n DESC").all(periodos.d30);
   res.json({
     ok: true,
@@ -176,7 +192,7 @@ r.get('/admin/datos', (req, res) => {
       leads: { total: cuenta('SELECT COUNT(*) AS n FROM leads'), d7: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d7), d30: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d30) }
     },
     uso: { cartas: serie('carta_generada'), pdfGratis: serie('pdf_gratis'), pdfPro: serie('pdf_pro') },
-    leadsPor, estilos, usuarios: lista, leads: ultimosLeads, solicitudes
+    campanas, paginas, leadsPor, estilos, usuarios: lista, leads: ultimosLeads, solicitudes
   });
 });
 

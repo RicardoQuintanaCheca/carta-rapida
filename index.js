@@ -7,6 +7,7 @@ const { generarPDF, generarImagenes, generarTablaAlergenos, cerrar, CSS_FUENTES_
 const { crearRutas: rutasCuenta, planDe, ESTILOS_PRO, MODO_DEMO, CUENTAS_ACTIVAS, persistente, PASE_ACTIVO } = require('./cuentas');
 const { enviarLead, LISTMONK_ACTIVO } = require('./leads');
 const { evento } = require('./db');
+const { marcarOrigen, origenDe } = require('./origen');
 const rutasAdmin = require('./admin');
 const { enviarCorreo, plantilla, plantillaCarta, CORREO_ACTIVO, WEB } = require('./correo');
 
@@ -34,6 +35,8 @@ app.use((req, res, next) => {
 app.use(compression());
 app.use(express.json({ limit: '6mb' }));
 // HTML siempre fresco; imágenes y fuentes una semana; CSS y JS una hora (cambian con cada versión)
+// Trazabilidad: origen de cada visita (campañas, redes, buscadores)
+app.use(marcarOrigen(evento));
 app.use(express.static('public', {
   setHeaders(res, ruta) {
     if (/\.html?$/.test(ruta)) res.setHeader('Cache-Control', 'no-cache');
@@ -407,7 +410,7 @@ app.post('/procesar', limiteProcesar, upload.any(), async (req, res) => {
 
     anotarUso(quien, 'lectura');
     if (planLee.plan === 'gratis') anotarUso('ip:' + (req.ip || '?'), 'lectura');
-    evento('carta_generada', estilo);
+    evento('carta_generada', estilo, origenDe(req));
     res.json({ ok: true, carta, logo });
   } catch (error) {
     console.error('[PROCESAR] error:', error.message);
@@ -574,12 +577,12 @@ app.post('/pdf', limitePDF, async (req, res) => {
       });
       if (enviado) {
         anotarUso('e:' + destino, 'envio');
-        evento('pdf_gratis', estiloFinal);
+        evento('pdf_gratis', estiloFinal, origenDe(req));
         res.removeHeader('Content-Disposition'); res.type('application/json');
         return res.json({ ok: true, enviado: true, email: destino });
       }
     }
-    evento(pro ? 'pdf_pro' : 'pdf_gratis', estiloFinal);
+    evento(pro ? 'pdf_pro' : 'pdf_gratis', estiloFinal, origenDe(req));
     res.send(Buffer.from(pdf));
   } catch (error) {
     console.error('[PDF] error:', error.message);
@@ -701,7 +704,7 @@ app.post('/solicitar-montaje', limiteLeads, async (req, res) => {
   db.prepare('INSERT INTO solicitudes (id, email, telefono, restaurante, estilo, platos, datos, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
     .run(id, email, telefono, restaurante, estilo, platos, JSON.stringify({ carta, estilo, logo }), Date.now());
   enviarLead({ email, origen: 'carta-rapida-montaje', restaurante, estilo, platos, novedades: false, fecha: new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }) });
-  evento('montaje_solicitado', estilo);
+  evento('montaje_solicitado', estilo, origenDe(req));
   res.json({ ok: true });
 
   // Avisos (después de responder: el cliente no espera al PDF)

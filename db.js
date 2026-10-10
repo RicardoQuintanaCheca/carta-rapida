@@ -82,6 +82,10 @@ try {
   const cols = db.prepare('PRAGMA table_info(usuarios)').all().map(c => c.name);
   if (!cols.includes('google_sub')) db.exec('ALTER TABLE usuarios ADD COLUMN google_sub TEXT');
   if (!cols.includes('sin_clave')) db.exec('ALTER TABLE usuarios ADD COLUMN sin_clave INTEGER NOT NULL DEFAULT 0');
+  if (!cols.includes('origen')) db.exec('ALTER TABLE usuarios ADD COLUMN origen TEXT');
+  // Origen de campaña en cada evento (trazabilidad)
+  if (!db.prepare('PRAGMA table_info(eventos)').all().some(c => c.name === 'origen')) db.exec('ALTER TABLE eventos ADD COLUMN origen TEXT');
+  db.exec('CREATE INDEX IF NOT EXISTS eventos_fecha ON eventos(fecha)');
 } catch (e) {
   motivo = e.message;
   db = null;
@@ -92,9 +96,9 @@ try {
 const persistente = !process.env.RAILWAY_ENVIRONMENT || !!process.env.RAILWAY_VOLUME_MOUNT_PATH;
 
 // Contador sencillo de uso (cartas generadas, PDF descargados…) para el panel de administración
-function evento(tipo, detalle = '') {
+function evento(tipo, detalle = '', origen = null) {
   if (!db) return;
-  try { db.prepare('INSERT INTO eventos (tipo, fecha, detalle) VALUES (?, ?, ?)').run(tipo, Date.now(), String(detalle).slice(0, 60)); } catch {}
+  try { db.prepare('INSERT INTO eventos (tipo, fecha, detalle, origen) VALUES (?, ?, ?, ?)').run(tipo, Date.now(), String(detalle).slice(0, 60), origen ? String(origen).slice(0, 140) : null); } catch {}
 }
 
 // ── Copias de seguridad ──

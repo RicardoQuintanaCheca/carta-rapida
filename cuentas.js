@@ -3,7 +3,8 @@
 // Sin STRIPE_SECRET_KEY y con PAGOS_DEMO=si, el pago se simula (solo para pruebas locales).
 const crypto = require('crypto');
 const express = require('express');
-const { db, persistente } = require('./db');
+const { db, persistente, evento } = require('./db');
+const { origenDe: campanaDe } = require('./origen');
 const { enviarLead } = require('./leads');
 const { enviarCorreo, plantilla, CORREO_ACTIVO } = require('./correo');
 
@@ -314,8 +315,9 @@ function crearRutas({ limite, limiteCuenta }) {
     }
     const { sal, hash } = hashClave(clave);
     const ahora = Date.now();
-    const info = db.prepare('INSERT INTO usuarios (email, hash, sal, creado, novedades, prueba_hasta) VALUES (?, ?, ?, ?, ?, ?)')
-      .run(email, hash, sal, ahora, b.novedades === true ? 1 : 0, ahora + DIAS_PRUEBA * DIA);
+    const info = db.prepare('INSERT INTO usuarios (email, hash, sal, creado, novedades, prueba_hasta, origen) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .run(email, hash, sal, ahora, b.novedades === true ? 1 : 0, ahora + DIAS_PRUEBA * DIA, campanaDe(req));
+    evento('alta', 'email', campanaDe(req));
     const u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(info.lastInsertRowid);
     ponerSesion(req, res, u);
     console.log(`CUENTA: ${JSON.stringify({ email, fecha: ahoraMadrid(), origen: String(b.origen || '').slice(0, 40) })}`);
@@ -361,8 +363,9 @@ function crearRutas({ limite, limiteCuenta }) {
       // Cuenta nueva: contraseña aleatoria que nadie conoce (puede crear una desde «Olvidé mi contraseña» o desde su panel)
       const { sal, hash } = hashClave(crypto.randomBytes(24).toString('hex'));
       const ahora = Date.now();
-      const info = db.prepare('INSERT INTO usuarios (email, hash, sal, creado, novedades, prueba_hasta, google_sub, sin_clave) VALUES (?, ?, ?, ?, ?, ?, ?, 1)')
-        .run(g.email, hash, sal, ahora, b.novedades === true ? 1 : 0, ahora + DIAS_PRUEBA * DIA, g.sub);
+      const info = db.prepare('INSERT INTO usuarios (email, hash, sal, creado, novedades, prueba_hasta, google_sub, sin_clave, origen) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)')
+        .run(g.email, hash, sal, ahora, b.novedades === true ? 1 : 0, ahora + DIAS_PRUEBA * DIA, g.sub, campanaDe(req));
+      evento('alta', 'google', campanaDe(req));
       nueva = true;
       console.log(`CUENTA: ${JSON.stringify({ email: g.email, fecha: ahoraMadrid(), origen: 'google' })}`);
       enviarLead({
