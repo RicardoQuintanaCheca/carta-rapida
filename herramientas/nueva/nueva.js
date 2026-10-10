@@ -9,7 +9,7 @@ function nOpciones(b) {
   const $$ = s => Array.from(document.querySelectorAll(s));
   const NOMBRES = { riviera: 'Riviera', azulejo: 'Azulejo', serigrafia: 'Serigrafía', cartel: 'Cartel', bloque: 'Bloque', marinero: 'Marinero', brunch: 'Brunch', vermut: 'Vermut', pizarra: 'Pizarra', ticket: 'Ticket', gaceta: 'Gaceta', trattoria: 'Trattoria', editorial: 'Editorial', sobremesa: 'Sobremesa', sumi: 'Sumi', brasserie: 'Brasserie', deco: 'Déco', mantel: 'Mantel', barra: 'Barra', autor: 'Autor' };
 
-  const PRO = ['riviera', 'sumi', 'cartel', 'serigrafia', 'azulejo', 'marinero', 'brunch', 'vermut'];
+  const PRO = [];
   function esPro_(k) { return PRO.includes(k) && !(typeof esPro === 'function' && esPro()); }
   function pintarEstiloElegido(k) {
     const n = $('#nEstilo'); if (!n || !NOMBRES[k]) return;
