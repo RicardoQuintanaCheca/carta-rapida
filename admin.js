@@ -192,8 +192,38 @@ r.get('/admin/datos', (req, res) => {
       leads: { total: cuenta('SELECT COUNT(*) AS n FROM leads'), d7: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d7), d30: cuenta('SELECT COUNT(*) AS n FROM leads WHERE fecha >= ?', periodos.d30) }
     },
     uso: { cartas: serie('carta_generada'), pdfGratis: serie('pdf_gratis'), pdfPro: serie('pdf_pro') },
-    campanas, paginas, leadsPor, estilos, usuarios: lista, leads: ultimosLeads, solicitudes
+    campanas, paginas, leadsPor, estilos, usuarios: lista, cartas: cartasClientes(), leads: ultimosLeads, solicitudes
   });
+});
+
+// Cartas guardadas por los clientes, para revisar que salen bien (control de calidad)
+function cartasClientes() {
+  return db.prepare('SELECT c.id, c.titulo, c.estilo, c.datos, c.creado, c.actualizado, u.email FROM cartas c JOIN usuarios u ON u.id = c.usuario_id ORDER BY c.actualizado DESC LIMIT 150').all().map(c => {
+    let platos = 0, secciones = 0, idioma = 'es', menu = false, formato = 'a4', logo = false, sinPrecio = 0;
+    try {
+      const d = JSON.parse(c.datos);
+      secciones = d.carta.secciones.length;
+      d.carta.secciones.forEach(s => (s.platos || []).forEach(p => { platos++; if (!String(p.precio || '').trim()) sinPrecio++; }));
+      idioma = d.carta.idioma || 'es'; menu = !!d.carta.menu; formato = d.formato || 'a4'; logo = !!d.logo && d.cabecera !== 'nombre';
+    } catch {}
+    return { id: c.id, email: c.email, titulo: c.titulo, estilo: c.estilo, creado: c.creado, actualizado: c.actualizado, platos, secciones, sinPrecio, idioma, menu, formato, logo };
+  });
+}
+// La carta tal cual la descarga el cliente (con firma si es de la versión gratis), para verla en el navegador
+r.get('/admin/cartas/:id.pdf', async (req, res) => {
+  if (!db || !esAdmin(req)) return res.status(403).end();
+  const c = db.prepare('SELECT c.datos, u.* FROM cartas c JOIN usuarios u ON u.id = c.usuario_id WHERE c.id = ?').get(String(req.params.id));
+  if (!c) return res.status(404).end();
+  try {
+    const d = JSON.parse(c.datos);
+    const gratis = planDeUsuario(c, Date.now()).plan === 'gratis';
+    const { pdf } = await require('./pdf').generarPDF(d.carta, { estilo: d.estilo, logo: d.cabecera === 'nombre' ? null : d.logo, credito: gratis, formato: d.formato || 'a4' });
+    res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="carta.pdf"', 'Cache-Control': 'no-store' });
+    res.send(Buffer.from(pdf));
+  } catch (e) {
+    console.error('[ADMIN] PDF de carta:', e.message);
+    res.status(500).send('No se ha podido generar el PDF.');
+  }
 });
 
 // Solicitudes de montaje: PDF de la carta tal cual la pidió el cliente (con su logo y sin firma)

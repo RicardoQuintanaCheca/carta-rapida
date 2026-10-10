@@ -81,6 +81,10 @@
     <div class="tabla"><table><thead><tr><th>Fecha</th><th>Restaurante</th><th>Email</th><th>Teléfono</th><th>Estilo</th><th>Platos</th><th>Carta</th><th>Estado</th></tr></thead><tbody id="solis"></tbody></table></div>
     <p class="nota">Prometido al cliente: montaje en 1–2 días laborables. Descarga el PDF (con su logo) para hacer el montaje y márcala como atendida al enviarla.</p>
 
+    <h2 id="cartas">Cartas de los clientes</h2>
+    <div class="tabla"><table><thead><tr><th>Última edición</th><th>Carta</th><th>Cliente</th><th>Estilo</th><th>Formato</th><th class="num">Platos</th><th class="num">Sin precio</th><th>Idioma</th><th>Ver</th></tr></thead><tbody id="cartasCli"></tbody></table></div>
+    <p class="nota">Las cartas que los clientes han guardado en su panel, la más reciente arriba. «Ver» abre el PDF tal cual lo descarga el cliente. Las cartas que se descargan sin cuenta no se guardan, así que no aparecen aquí.</p>
+
     <h2>Clientes</h2>
     <div class="herr"><input id="buscaU" placeholder="Buscar por email…" aria-label="Buscar cliente"><a href="/admin/usuarios.csv">Descargar Excel (CSV)</a></div>
     <div class="tabla"><table><thead><tr><th>Email</th><th>Alta</th><th>Origen</th><th>Plan</th><th>Hasta</th><th>Cartas</th><th>Última edición</th><th>Novedades</th></tr></thead><tbody id="usuarios"></tbody></table></div>
@@ -133,6 +137,9 @@
   };
   document.querySelectorAll('#campPeriodo a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); pintarC(a.dataset.p); }));
   pintarC('d7');
+  const cartasC = d.cartas || [];
+  document.getElementById('cartasCli').innerHTML = cartasC.length ? cartasC.map(c => `<tr><td>${fd(c.actualizado)}</td><td>${esc(c.titulo)}${c.menu ? ' <span class="pill prueba">Menú del día</span>' : ''}${c.logo ? ' <span class="pill gratis">Logo</span>' : ''}</td><td>${esc(c.email)}</td><td>${esc(c.estilo)}</td><td>${esc(c.formato)}</td><td class="num">${c.platos}</td><td class="num">${c.sinPrecio || '—'}</td><td>${esc(c.idioma)}</td><td><a href="/admin/cartas/${encodeURIComponent(c.id)}.pdf" target="_blank" rel="noopener">Ver PDF</a></td></tr>`).join('')
+    : '<tr><td colspan="9" class="vacio">Aún no hay cartas guardadas.</td></tr>';
   const pintarU = (q = '') => {
     const filas = d.usuarios.filter(u => u.email.includes(q.toLowerCase()));
     document.getElementById('usuarios').innerHTML = filas.length ? filas.map(u => `<tr><td>${esc(u.email)}</td><td>${fd(u.alta)}</td><td>${esc(u.origen || '—')}</td>
