@@ -131,7 +131,7 @@ cuerpo = cuerpo[:i_a] + prueba + cuerpo[i_b:]
 
 # Estilos: el botón lleva el estilo elegido a la herramienta
 cuerpo = cuerpo.replace('<a class="btn btn-ink" href="#prueba">Probar con mi carta</a>',
-  '<button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera · Pro</span> con mi carta</span></button>')
+  '<button class="btn btn-ink" type="button" id="probarEstilo"><span>Probar <span id="probarEstiloNom">Riviera</span> con mi carta</span></button>')
 
 # Pro: llamadas reales
 cuerpo = cuerpo.replace('''          </ul>
