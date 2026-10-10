@@ -744,7 +744,9 @@ app.get('/salud', (req, res) => res.json({ ok: true, modelo: MODELO, pagos: MODO
 
 // Configuración pública para la web (analítica solo si está configurada; se carga tras el consentimiento)
 const GA4 = /^G-[A-Z0-9]{4,20}$/.test(process.env.GA4_ID || '') ? process.env.GA4_ID : '';
-app.get('/config', (req, res) => res.set('Cache-Control', 'public, max-age=300').json({ ga4: GA4 }));
+// Píxel de Meta (el de kartia.es). META_PIXEL_ID=no lo apaga.
+const META_PIXEL = process.env.META_PIXEL_ID === 'no' ? '' : (/^\d{10,20}$/.test(process.env.META_PIXEL_ID || '') ? process.env.META_PIXEL_ID : '2427943164102345');
+app.get('/config', (req, res) => res.set('Cache-Control', 'public, max-age=300').json({ ga4: GA4, meta: META_PIXEL }));
 
 // Errores de subida (archivo demasiado grande, etc.)
 app.use((err, req, res, next) => {
