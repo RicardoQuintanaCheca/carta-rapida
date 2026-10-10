@@ -90,11 +90,11 @@ PAGINAS = [
   faq=[('¿Puedo cambiar de plantilla después de subir mi carta?', 'Sí. Subes la carta una vez y vas probando estilos sobre tus propios platos hasta que uno te encaje.'),
        ('¿Las plantillas son editables?', 'Sí. Guardas la carta en tu panel, gratis, y cambias platos y precios cuando quieras, sin volver a empezar.')]),
  dict(slug='carta-para-bar', menu='Carta para bar',
-  title='Carta para bar: diseña e imprime la tuya en 30 segundos',
+  title='Carta para bar: diseña e imprime la tuya en 10 segundos',
   desc='Haz la carta de tu bar sin diseñar nada: foto a la que tienes, eliges estilo y la imprimes en A4. Raciones, tapas y bebidas ordenadas solas.',
   h1='La carta de tu bar, lista antes de que se enfríe el café.',
   golpe='Tienes un bar. No tienes una tarde libre para maquetar.',
-  intro='La carta de un bar cambia más que la de nadie: sube la caña, entra una ración nueva, se acaba el producto de temporada. Si cada cambio te cuesta una tarde, la carta se queda vieja y con tachones. Aquí es una foto y medio minuto.',
+  intro='La carta de un bar cambia más que la de nadie: sube la caña, entra una ración nueva, se acaba el producto de temporada. Si cada cambio te cuesta una tarde, la carta se queda vieja y con tachones. Aquí es una foto y diez segundos.',
   estilos=['vermut','pizarra','barra','ticket'],
   bloques=[
    ('Tapas, raciones y bebidas, cada cosa en su sitio', 'La carta se ordena por secciones tal y como la tienes: para picar, raciones, bocadillos, bebidas. Si un plato tiene media ración y ración, salen los dos precios alineados.'),
@@ -104,7 +104,7 @@ PAGINAS = [
   faq=[('¿Sirve si mi carta está escrita a mano o en una pizarra?', 'Sí, mientras se lea bien en la foto. Hazla de frente y con luz. Si algún plato sale mal, lo corriges antes de pedir el PDF.'),
        ('¿Puedo poner la carta en dos idiomas?', 'Sí. En tu panel añades un segundo idioma y cada plato sale en español y, debajo, en el otro.')]),
  dict(slug='carta-para-cafeteria', menu='Carta para cafetería',
-  title='Carta para cafetería y brunch: maquetada en 30 segundos',
+  title='Carta para cafetería y brunch: maquetada en 10 segundos',
   desc='Carta de cafetería o brunch con diseño cuidado y sin diseñar: foto a tu carta, eliges estilo y la recibes en PDF A4 para imprimir.',
   h1='Una carta de cafetería que apetece leer.',
   golpe='El café lo haces bien. La carta no debería ser lo que desentona.',
@@ -133,10 +133,10 @@ PAGINAS = [
        ('¿Puedo marcar las pizzas más vendidas?', 'Hay una opción para destacar tus platos fuertes, que los coloca primero en cada sección.')]),
  dict(slug='carta-para-marisqueria', menu='Carta para marisquería',
   title='Carta para marisquería: diseño marinero listo para imprimir',
-  desc='Carta de marisquería o restaurante de pescado con diseño marinero, hecha desde una foto de tu carta. PDF A4 para imprimir en 30 segundos.',
+  desc='Carta de marisquería o restaurante de pescado con diseño marinero, hecha desde una foto de tu carta. PDF A4 para imprimir en 10 segundos.',
   h1='La carta de tu marisquería, con el precio de hoy.',
   golpe='El marisco cambia de precio cada semana. La carta también debería poder.',
-  intro='En una marisquería el producto manda y el precio se mueve. Una carta que cuesta rehacer acaba llena de pegatinas o con el "s/m" en media página. Aquí rehaces la carta en medio minuto cada vez que cambia la lonja.',
+  intro='En una marisquería el producto manda y el precio se mueve. Una carta que cuesta rehacer acaba llena de pegatinas o con el "s/m" en media página. Aquí rehaces la carta en diez segundos cada vez que cambia la lonja.',
   estilos=['marinero','riviera','azulejo','brasserie'],
   bloques=[
    ('Precio por peso, por unidad o por ración', 'Si tu carta dice "€/kg", "unidad" o "ración", sale igual en la carta nueva, alineado con el precio.'),
@@ -146,7 +146,7 @@ PAGINAS = [
   faq=[('¿Puedo poner "según mercado" en lugar de precio?', 'Sí. Si en tu carta un plato va a precio según mercado, en la carta nueva se mantiene así, sin número.'),
        ('¿Se imprime bien en una impresora normal?', 'Sí. Las cartas van sobre fondo blanco y en A4, pensadas para una impresora de oficina.')]),
  dict(slug='carta-para-hamburgueseria', menu='Carta para hamburguesería',
-  title='Carta para hamburguesería: diseño con carácter en 30 segundos',
+  title='Carta para hamburguesería: diseño con carácter en 10 segundos',
   desc='Haz la carta de tu hamburguesería sin diseñador: foto a tu carta, eliges un estilo con carácter y la imprimes en A4.',
   h1='Una carta con tanto carácter como tu hamburguesa.',
   golpe='Una smash burger no se presenta con letra de informe.',
@@ -260,7 +260,7 @@ PAGINAS = [
   bloques=[
    ('La diferencia, en una frase', 'En una herramienta de diseño tú maquetas. Aquí subes una foto de la carta que ya tienes y la maquetación sale hecha.'),
    ('Cuándo te conviene cada una', 'Si quieres diseñar un cartel, una publicación para redes o algo a tu medida, usa una herramienta de diseño. Si quieres tu carta en A4, bien compuesta y hoy, usa esto.'),
-   ('Lo que cuesta de verdad', 'El precio de hacer una carta a mano no es la suscripción: son las horas. Aquí son treinta segundos, y dos cartas al mes son gratis.'),
+   ('Lo que cuesta de verdad', 'El precio de hacer una carta a mano no es la suscripción: son las horas. Aquí son diez segundos, y dos cartas al mes son gratis.'),
   ],
   faq=[('¿Puedo retocar el diseño a mano?', 'No es un editor de diseño: eliges entre 20 estilos y la carta se compone sola. Lo que sí puedes corregir es el contenido: platos, precios y secciones.'),
        ('¿Necesito registrarme?', 'Para probar y ver tu carta maquetada, no. Para recibir el PDF te pedimos un email, que es donde te lo enviamos.')]),
@@ -279,11 +279,11 @@ PAGINAS = [
   faq=[('¿Me dan un archivo de Word editable?', 'No. Recibes un PDF en A4 listo para imprimir. Si quieres cambiar platos y precios más adelante sin empezar de cero, la carta queda guardada en tu panel y la editas desde el navegador.'),
        ('¿Puedo pegar el texto en lugar de subir una foto?', 'Sí. Si tienes la carta escrita en Word, en un correo o en una nota, la pegas tal cual.')]),
  dict(slug='crear-carta-restaurante-online', menu='Crear carta online',
-  title='Crear la carta de tu restaurante online y gratis, en 30 segundos',
+  title='Crear la carta de tu restaurante online y gratis, en 10 segundos',
   desc='Crea la carta de tu restaurante online sin instalar nada: subes una foto de la que tienes, eliges estilo y la recibes en PDF A4 para imprimir. Dos al mes, gratis.',
   h1='Crea tu carta online. Sin instalar nada. Sin diseñar nada.',
   golpe='Desde el móvil, entre el servicio de comidas y el de cenas.',
-  intro='No hace falta programa, ni cuenta, ni ordenador. Abres la web desde el móvil, haces una foto a la carta que tienes ahora mismo en la mesa y en medio minuto la ves maquetada. Si te gusta, pides el PDF y te llega al email.',
+  intro='No hace falta programa, ni cuenta, ni ordenador. Abres la web desde el móvil, haces una foto a la carta que tienes ahora mismo en la mesa y en diez segundos la ves maquetada. Si te gusta, pides el PDF y te llega al email.',
   estilos=['riviera','sobremesa','bloque','pizarra'],
   bloques=[
    ('Qué necesitas', 'La carta que ya tienes, aunque esté impresa hace años, escrita a mano o en un documento. Y un email para recibir el PDF. Nada más.'),
@@ -389,7 +389,7 @@ PAGINAS = [
   faq=[('¿Puedo hacer la carta de vinos separada de la de comida?', 'Sí. Cada carta que subes es un PDF independiente.'),
        ('¿Sirve para cervezas, cócteles o destilados?', 'Sí. Funciona con cualquier lista de productos con nombre y precio organizada por secciones.')]),
  dict(slug='carta-de-cocteles', menu='Carta de cócteles',
-  title='Carta de cócteles para bar o coctelería: lista para imprimir en 30 segundos',
+  title='Carta de cócteles para bar o coctelería: lista para imprimir en 10 segundos',
   desc='Diseña la carta de cócteles de tu bar sin maquetar: pegas la lista, eliges estilo y la recibes en PDF A4. Ingredientes debajo de cada cóctel.',
   h1='La carta de cócteles, tan cuidada como el cóctel.',
   golpe='Nadie paga doce euros por algo que viene en una hoja de cálculo.',
@@ -416,7 +416,7 @@ PAGINAS = [
   ],
   secciones=[
    ('Cómo presentarla en la mesa', 'Una hoja suelta dura poco: se mancha, se dobla y da sensación de provisional. Un portamenús la protege, permite cambiar la hoja cuando cambian los precios y hace que la carta se perciba como parte del local. Carta Rápida es de Kartia, taller español que fabrica portamenús a mano desde 2018; las cartas en A4 que salen de aquí están pensadas para ir dentro.'),
-   ('Cada cuánto reimprimir', 'Cada vez que cambie un precio o un plato. Una carta con tachones o pegatinas transmite dejadez. Por eso conviene que rehacerla cueste medio minuto y no una tarde.'),
+   ('Cada cuánto reimprimir', 'Cada vez que cambie un precio o un plato. Una carta con tachones o pegatinas transmite dejadez. Por eso conviene que rehacerla cueste diez segundos y no una tarde.'),
   ],
   faq=[('¿La carta se puede imprimir a doble cara?', 'Sí. Si tu carta ocupa dos páginas, puedes imprimirlas a doble cara desde las opciones de tu impresora. Si lo que quieres es un cuadernillo que se dobla, el formato cuadernillo te da el PDF con las páginas ya colocadas para eso.'),
        ('¿Hacéis vosotros la impresión?', 'No imprimimos cartas. Recibes el PDF y lo imprimes donde prefieras. Lo que sí fabrica Kartia son los portamenús.')]),
@@ -514,7 +514,7 @@ PAGINAS = [
   desc='Haz el menú de Navidad de tu restaurante sin maquetar: pegas los platos y el precio, eliges estilo y lo recibes en PDF A4. Para comidas de empresa, Nochebuena y Nochevieja.',
   h1='El menú de Navidad, hecho antes de que llamen las empresas.',
   golpe='En octubre te piden el menú. En noviembre ya han reservado en otro sitio.',
-  intro='Las comidas de empresa se deciden con el menú delante. Quien lo manda primero, y bien presentado, se lleva la reserva. Aquí pegas los platos, el precio por persona y lo que incluye, y en medio minuto tienes un PDF que puedes imprimir, enviar por correo o por WhatsApp.',
+  intro='Las comidas de empresa se deciden con el menú delante. Quien lo manda primero, y bien presentado, se lleva la reserva. Aquí pegas los platos, el precio por persona y lo que incluye, y en diez segundos tienes un PDF que puedes imprimir, enviar por correo o por WhatsApp.',
   estilos=['deco','brasserie','autor','sobremesa'],
   bloques=[
    ('Menú cerrado, precio por persona', 'Entrantes a compartir, principal a elegir, postre y bebida. Lo escribes como lo vas a servir y sale ordenado, con el precio por persona bien visible y la nota de lo que incluye al pie.'),
@@ -528,7 +528,7 @@ PAGINAS = [
   faq=[('¿Puedo enviar el menú por WhatsApp o por correo?', 'Sí. Recibes un PDF en A4 que puedes reenviar a tus clientes o imprimir.'),
        ('¿Puedo hacer varios menús de Navidad?', 'La versión gratis guarda una carta. Si vas a preparar varios menús y quieres tenerlos todos guardados para retocarlos según te pidan, eso es Carta Pro, y puedes probarlo 7 días gratis.')]),
  dict(slug='diseno-carta-restaurante', menu='Diseño de carta',
-  title='Diseño de carta de restaurante sin diseñador: 20 estilos en 30 segundos',
+  title='Diseño de carta de restaurante sin diseñador: 20 estilos en 10 segundos',
   desc='Diseño de carta de restaurante con tipografía y retícula de imprenta, sin contratar a nadie: subes tu carta, eliges entre 20 estilos y la recibes en PDF A4.',
   h1='Diseño de carta de restaurante, sin esperar al diseñador.',
   golpe='Un diseñador tarda una semana. Tu carta cambia cada mes.',
@@ -672,7 +672,7 @@ def pagina(p):
     <p class="golpe">{e(p['golpe'])}</p>
     <p class="lead">{e(p['intro'])}</p>
     <div class="ctas"><a class="btn" href="{cta[1]}">{cta[0]}</a><a class="btn o" href="#estilos">Ver los estilos</a></div>
-    <ul class="trust">{''.join('<li>%s</li>' % e(x) for x in p['trust']) if p.get('trust') else '<li>7 días gratis</li><li>Sin tarjeta</li><li>Sin subir fotos</li>' if p.get('cta') else '<li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 30 segundos</li>'}</ul>
+    <ul class="trust">{''.join('<li>%s</li>' % e(x) for x in p['trust']) if p.get('trust') else '<li>7 días gratis</li><li>Sin tarjeta</li><li>Sin subir fotos</li>' if p.get('cta') else '<li>Gratis</li><li>Sin tarjeta</li><li>PDF A4 en 10 segundos</li>'}</ul>
   </div>
   <figure class="hoja"{hero_estilo}>{('<img src="/ejemplo/%s-640.webp" srcset="/ejemplo/%s-640.webp %dw, /ejemplo/%s.webp %dw" sizes="(max-width: 860px) 78vw, 420px" width="%d" height="%d" alt="%s" fetchpriority="high">' % (hero_base, hero_base, round(hero_w * 640 / 900), hero_base, hero_w, hero_w, hero_h, e(hero[1]))) if hero else img(primero, '(max-width: 860px) 78vw, 420px', prioridad=True)}<figcaption>{e(hero[2]) if hero else 'Carta de ejemplo en estilo ' + e(NOMBRE[primero])}</figcaption></figure>
 </div>

@@ -29,7 +29,7 @@ head = head.replace('<meta name="theme-color" content="#FF6B35">', '<meta name="
 head = re.sub(r'<link rel="preload" as="image"[^>]*>\n', '', head)
 # Vista previa al compartir, con la identidad nueva
 for viejo, nuevo in [
-    ('content="Deja Canva: tu carta, lista para imprimir en 30 segundos"', 'content="Tu carta, maquetada como en una imprenta · Carta Rápida"'),
+    ('content="Deja Canva: tu carta, lista para imprimir en 10 segundos"', 'content="Tu carta, maquetada como en una imprenta · Carta Rápida"'),
     ('content="https://www.cartarapida.es/og-deja-canva.jpg"', 'content="https://www.cartarapida.es/og-portada.jpg"'),
     ('content="Deja Canva: una carta de restaurante antes y después de pasar por Carta Rápida"', 'content="Una carta de restaurante hecha en Word, antes y después de pasar por Carta Rápida"'),
 ]:
@@ -58,7 +58,7 @@ assert 'id="opciones"' in tool
 tool = tool.replace('<div class="t2-eyebrow t2-eyebrow-subir">01 · SUBE TU CARTA</div>', '')
 tool = tool.replace('📸 Súbeme una foto primero', 'Sube una foto primero')
 tool = tool.replace('¿No tienes la carta a mano? <b>Pruébalo con una de ejemplo →</b>', '¿No tienes la carta a mano? <b>Prueba con una de ejemplo</b>')
-tool = tool.replace('<div class="t2-microcopy">Gratis · sin registro · listo en 30 s</div>',
+tool = tool.replace('<div class="t2-microcopy">Gratis · sin registro · listo en 10 s</div>',
   '<div class="t2-microcopy">Gratis · sin tarjeta · estilo: <b id="nEstilo">Sobremesa</b> <span>(lo cambias al ver tu carta)</span></div>')
 
 # ── Piezas finales de la portada (modal, cookies, visor, script) ──

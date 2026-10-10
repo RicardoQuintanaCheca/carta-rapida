@@ -1478,7 +1478,7 @@
   (function() {
     var el = document.getElementById('speechBubble');
     if (!el) return;
-    var msgs = ['¡Hola! ¿Empezamos? 🥑', '¡Lánzame tu carta! 📷', 'Cocinando magia… ✨', '¡30 segundos! ⏱️'];
+    var msgs = ['¡Hola! ¿Empezamos? 🥑', '¡Lánzame tu carta! 📷', 'Cocinando magia… ✨', '¡10 segundos! ⏱️'];
     var idx = 0;
     setInterval(function() {
       idx = (idx + 1) % msgs.length;
