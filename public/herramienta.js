@@ -871,12 +871,6 @@
     selEstilo(document.querySelector('.t2-scard.sobremesa'), 'sobremesa');
 
     // Reset montaje
-    document.getElementById('leadForm').style.display = '';
-    document.getElementById('leadLegal').style.display = '';
-    document.getElementById('leadOk').style.display = 'none';
-    document.getElementById('leadBtn').disabled = false;
-    document.getElementById('leadBtn').textContent = 'Quiero verla';
-    document.getElementById('leadTel').value = '';
 
     // Scroll arriba
     document.getElementById('herramienta').scrollIntoView({ behavior: 'smooth' });

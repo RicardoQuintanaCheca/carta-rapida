@@ -538,9 +538,8 @@
       ${n ? `<section class="kartia" aria-labelledby="kartiaTit">
         <div><div class="kartia-marca">Kartia · portamenús hechos a mano en España</div>
           <h2 id="kartiaTit">Tu carta ya está. Ahora, dónde la presentas.</h2>
-          <p>Te enviamos gratis un montaje de tu carta dentro de un portamenús Kartia, en el material que mejor encaje con tu local. Lo ves antes de decidir nada.</p></div>
-        <div id="kartiaCaja"></div></section>` : ''}`;
-    if (n) cajaMontaje(document.getElementById('kartiaCaja'), cartas, 'panel');
+          <p>Carta Rápida es de Kartia, que fabrica portamenús a mano en España. Para que tu carta luzca en la mesa.</p></div>
+        <div><a class="btn oscuro" href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=panel" target="_blank" rel="noopener">Ver los portamenús</a></div></section>` : ''}`;
     document.getElementById('nuevoMenu').onclick = e => nuevoMenu(cartas, e.currentTarget);
     app.querySelectorAll('.tarjeta-img').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } }));
     miniaturas();
@@ -854,7 +853,7 @@
           <div class="vista-marco" id="vistaMarco"><div class="vista-escala" id="vistaEscala"></div><div class="vista-cargando" role="status">Actualizando…</div></div>
           <div class="acc-pdf"><button class="btn primario descargar js-descargar" type="button">Descargar PDF</button><button class="btn descargar js-imprimir" type="button">Imprimir</button></div>
           <div class="nota-vista" id="notaVista">A4 listo para imprimir. Antes de imprimir, revisa precios y alérgenos.</div>
-          <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Te enviamos gratis un montaje de esta carta en un portamenús Kartia, hecho a mano en España.</p><div id="kartiaEd"></div></div>
+          <div class="kartia-mini"><b>¿Y dónde la vas a presentar?</b><p>Kartia fabrica portamenús a mano en España. <a href="https://kartia.es/portamenus/?utm_source=cartarapida&utm_medium=referral&utm_campaign=editor" target="_blank" rel="noopener">Ver los portamenús →</a></p></div>
         </div>
       </div>`;
 
@@ -932,7 +931,6 @@
     const ponTab = t => { ed.tab = t; fs.dataset.t = t; if (t === 'alergenos') pintarAlergenos(); if (t === 'redes') { rsOpciones(); rsPedir(0); } if (t === 'bilingue') pintarBilingue(); app.querySelectorAll('.ed-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); if (on) { const c = b.parentElement; c.scrollLeft = Math.max(0, b.offsetLeft - (c.clientWidth - b.offsetWidth) / 2); } }); };
     app.querySelectorAll('.ed-tabs button').forEach(b => b.onclick = () => ponTab(b.dataset.t));
     ponTab(ed.tab);
-    cajaMontaje(document.getElementById('kartiaEd'), [], 'editor', () => ({ carta: ed.carta, estilo: ed.estilo, logo: logoActivo() }));
     pintarSecciones();
     pintarServicios();
     pintarBloqueo();

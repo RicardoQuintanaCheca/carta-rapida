@@ -688,6 +688,8 @@ app.post('/guardar-email', limiteLeads, async (req, res) => {
 const AVISOS_EMAIL = (process.env.AVISOS_EMAIL || 'info@kartia.es').split(',').map(e => e.trim()).filter(Boolean);
 
 app.post('/solicitar-montaje', limiteLeads, async (req, res) => {
+  // Retirado (Richy, 15-10-2026): no hacemos montajes. Si una página antigua lo pide, se responde sin guardar nada
+  if (process.env.MONTAJE_ACTIVO !== 'si') return res.status(410).json({ ok: false, error: 'Esta opción ya no está disponible. Mira los portamenús en kartia.es.' });
   const b = req.body || {};
   const email = String(b.email || '').trim().toLowerCase().slice(0, 200);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.json({ ok: false, campo: 'email', error: 'Revisa el email.' });
