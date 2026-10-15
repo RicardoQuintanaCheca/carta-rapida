@@ -718,7 +718,8 @@ app.post('/solicitar-montaje', limiteLeads, async (req, res) => {
     ['Restaurante', restaurante || '(sin nombre)'], ['Email', email], ['Teléfono', telefono || '—'],
     ['Estilo', estilo], ['Platos', platos], ['Logotipo', logo ? 'Sí (va en el PDF)' : 'No']
   ];
-  for (const para of AVISOS_EMAIL) {
+  // Aviso por email de cada solicitud: apagado (Richy, 15-10-2026). Se ven en /admin. Para volver a recibirlo: AVISO_MONTAJE=si
+  if (process.env.AVISO_MONTAJE === 'si') for (const para of AVISOS_EMAIL) {
     enviarCorreo({
       para, responderA: email,
       asunto: `Nueva solicitud de montaje · ${restaurante || email}`,
